@@ -1,0 +1,499 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9546 (Fix SCD reduction problems)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9545.html" title="Ticket #9545" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9546?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9546?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9546?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9547.html" title="Ticket #9547" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9546, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9545.html" title="Ticket #9545">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="9547.html" title="Ticket #9547">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9546.html">Ticket #9546</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-29T19%3A07%3A47%2B01%3A00&amp;precision=second" title="2014-05-29T19:07:47+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A22%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T03:22:45+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Fix SCD reduction problems</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Vickie+Lynch">Vickie Lynch</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Vickie+Lynch">Vickie Lynch</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              petersonpf@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Wenduo Zhou
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Default on AllowPermutations should be true not false.  Also getting error that ls files cannot be overwritten when rerunning after broken pipe.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9546.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T13%3A39%3A42%2B01%3A00&amp;precision=second" title="2014-05-30T13:39:42+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Look at error for Monoclinic P in log to see if this is fixed.  It should be less than 0.04.  Also check that AllowPermutations works on 4th tab of SCD Event Data Reduction Interface
+</p>
+<pre class="wiki">######################################################################
+#Python Script Generated by GeneratePythonScript Algorithm
+######################################################################
+Load(Filename=r'/SNS/TOPAZ/IPTS-10321/0/9765/NeXus/TOPAZ_9765_event.nxs',OutputWorkspace='TOPAZ_9765_event',LoadMonitors='1')
+ConvertToMD(InputWorkspace='TOPAZ_9765_event',QDimensions='Q3D',dEAnalysisMode='Elastic',Q3DFrames='Q_sample',LorentzCorrection='1',OutputWorkspace='TOPAZ_9765_md',MinValues='-25,-25,-25',MaxValues='25,25,25',SplitInto='2',SplitThreshold='50',MaxRecursionDepth='13',MinRecursionDepth='7')
+FindPeaksMD(InputWorkspace='TOPAZ_9765_md',PeakDistanceThreshold='0.12559999999999999',MaxPeaks='50',DensityThresholdFactor='100',OutputWorkspace='TOPAZ_9765_peaks')
+LoadIsawUB(InputWorkspace='TOPAZ_9765_peaks',Filename=r'/SNS/TOPAZ/IPTS-10321/shared/xtal2vial1_e09_b002/merge.mat')
+IndexPeaks(PeaksWorkspace='TOPAZ_9765_peaks',Tolerance='0.12')
+SelectCellOfType(PeaksWorkspace='TOPAZ_9765_peaks',CellType='Monoclinic',Apply='1')
+
+</pre>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T14%3A55%3A55%2B01%3A00&amp;precision=second" title="2014-05-30T14:55:55+01:00 in Timeline">6 years</a> ago
+                      by Vickie Lynch
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9546?cversion=0&amp;cnum_hist=1#comment:1">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9546?action=comment-diff&amp;cnum=1&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9546.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T13%3A41%3A16%2B01%3A00&amp;precision=second" title="2014-05-30T13:41:16+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>Fix SCD reduction proglems</em> to <em>Fix SCD reduction problems</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9546.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T15%3A25%3A16%2B01%3A00&amp;precision=second" title="2014-05-30T15:25:16+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9546.html" title="enhancement: Fix SCD reduction problems (closed: fixed)">#9546</a> option for AllowPermutations with default of true
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/84e983f996d5ccd78563dbaaa5af092f431dff3e" title="84e983f996d5ccd78563dbaaa5af092f431dff3e">84e983f996d5ccd78563dbaaa5af092f431dff3e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9546.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T16%3A28%3A58%2B01%3A00&amp;precision=second" title="2014-05-30T16:28:58+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9546.html" title="enhancement: Fix SCD reduction problems (closed: fixed)">#9546</a> only write ls files when PerRun is checked
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f3180eff4ca65942e34073d4db3c79b3d15c836f" title="f3180eff4ca65942e34073d4db3c79b3d15c836f">f3180eff4ca65942e34073d4db3c79b3d15c836f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9546.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T16%3A38%3A30%2B01%3A00&amp;precision=second" title="2014-05-30T16:38:30+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+To Test second commit:
+</p>
+<p>
+{{
+LoadIsawPeaks(Filename=r'/SNS/TOPAZ/shared/Sapphire/2mmSapphire.peaks',OutputWorkspace='Sapphire')
+LoadIsawUB(InputWorkspace='Sapphire',Filename=r'/SNS/TOPAZ/shared/Sapphire/2mm.mat')
+OptimizeLatticeForCellType(PeaksWorkspace='Sapphire',CellType='Hexagonal',Apply='1')
+OptimizeLatticeForCellType(PeaksWorkspace='Sapphire',CellType='Hexagonal',Apply='1',PerRun='1')
+}}}
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9546.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T16%3A39%3A32%2B01%3A00&amp;precision=second" title="2014-05-30T16:39:32+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>petersonpf@…</em> added
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+These changes should fix the problems Mads and Christina were having with user's data this week.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9546.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T16%3A42%3A44%2B01%3A00&amp;precision=second" title="2014-05-30T16:42:44+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9546.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T19%3A21%3A33%2B01%3A00&amp;precision=second" title="2014-05-30T19:21:33+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Wenduo Zhou</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9546.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T19%3A29%3A09%2B01%3A00&amp;precision=second" title="2014-05-30T19:29:09+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Well done.  Ticket is thus closed. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9546.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T19%3A29%3A25%2B01%3A00&amp;precision=second" title="2014-05-30T19:29:25+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9546_SCD_reduction'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/dee5c4e8a15dabf7222bb27978bc71cef74abcee"><span class="icon">​</span>dee5c4e8a15dabf7222bb27978bc71cef74abcee</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9546.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A22%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T03:22:45+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10389"><span class="icon">​</span>10389</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9546?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9546?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9546?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

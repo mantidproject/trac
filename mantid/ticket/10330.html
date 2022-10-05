@@ -1,0 +1,919 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10330 (Get ThreadPool working under OS X + clang)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10329.html" title="Ticket #10329" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10330?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10330?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10330?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10331.html" title="Ticket #10331" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10330, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10329.html" title="Ticket #10329">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="10331.html" title="Ticket #10331">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10330.html">Ticket #10330</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T22%3A45%3A43%2B01%3A00&amp;precision=second" title="2014-10-08T22:45:43+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A54%3A11%2B01%3A00&amp;precision=second" title="2015-06-04T03:54:11+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Get ThreadPool working under OS X + clang</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Steven+Hahn">Steven Hahn</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Steven+Hahn">Steven Hahn</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Pete Peterson
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+clang lacks openmp and currently runs everything serially. The ThreadPool class only depends minimally on openmp (determining the number of processors and managing logging from individual threads) and therefore may be easy to get working with clang. 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10330.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-14T23%3A06%3A42%2B01%3A00&amp;precision=second" title="2014-10-14T23:06:42+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. ThreadPool should no longer depend on openmp
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/66365f3ceb4bf6029ffd18134228edd298b93d7d" title="66365f3ceb4bf6029ffd18134228edd298b93d7d">66365f3ceb4bf6029ffd18134228edd298b93d7d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10330.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T15%3A23%3A23%2B01%3A00&amp;precision=second" title="2014-10-16T15:23:23+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. replaced PARALLEL_CRITICAl with mutexed getters/setters.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/32e94a2f7258fc7384d117e9a7909cdc0a270219" title="32e94a2f7258fc7384d117e9a7909cdc0a270219">32e94a2f7258fc7384d117e9a7909cdc0a270219</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10330.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T16%3A11%3A46%2B01%3A00&amp;precision=second" title="2014-10-16T16:11:46+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. make tof limits private. fix typo
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0919e6188fcae7911f5faef4496a44380dc7ad86" title="0919e6188fcae7911f5faef4496a44380dc7ad86">0919e6188fcae7911f5faef4496a44380dc7ad86</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10330.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T22%3A50%3A32%2B01%3A00&amp;precision=second" title="2014-10-16T22:50:32+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. Cleaned up formatting and switched Mutex to FastMutex
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d819805ba1990649171478787ab807339083a71f" title="d819805ba1990649171478787ab807339083a71f">d819805ba1990649171478787ab807339083a71f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10330.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T22%3A51%3A53%2B01%3A00&amp;precision=second" title="2014-10-16T22:51:53+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. Fixed comment
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/18f4fcc87d0f6aabe68184106d02acad6ecbed88" title="18f4fcc87d0f6aabe68184106d02acad6ecbed88">18f4fcc87d0f6aabe68184106d02acad6ecbed88</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10330.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-17T15%3A12%3A27%2B01%3A00&amp;precision=second" title="2014-10-17T15:12:27+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. Only use openmp optimized sort when openmp is present
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c389d085920e258cac96e0bcab03b2b0e9cf56f7" title="c389d085920e258cac96e0bcab03b2b0e9cf56f7">c389d085920e258cac96e0bcab03b2b0e9cf56f7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10330.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-17T20%3A30%3A32%2B01%3A00&amp;precision=second" title="2014-10-17T20:30:32+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. Threadpool respects MaxCores value from ConfigService
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ff63c4522c6e14c919d29660eed0ab41a35e50ef" title="ff63c4522c6e14c919d29660eed0ab41a35e50ef">ff63c4522c6e14c919d29660eed0ab41a35e50ef</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10330.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-17T21%3A44%3A58%2B01%3A00&amp;precision=second" title="2014-10-17T21:44:58+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. Too many getters/setters, using mutex around block
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/df8e9269d13e85585f6dd62f387edbf186541739" title="df8e9269d13e85585f6dd62f387edbf186541739">df8e9269d13e85585f6dd62f387edbf186541739</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10330.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T16%3A30%3A52%2B01%3A00&amp;precision=second" title="2014-10-20T16:30:52+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. Fix merge conflict in LoadEventNexus.cpp
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b22b3cbdada1a905be2eb2089f93d880fab3a4d5" title="b22b3cbdada1a905be2eb2089f93d880fab3a4d5">b22b3cbdada1a905be2eb2089f93d880fab3a4d5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10330.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T20%3A01%3A46%2B01%3A00&amp;precision=second" title="2014-10-20T20:01:46+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/47"><span class="icon">​</span>pull request #47</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10330.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T20%3A01%3A49%2B01%3A00&amp;precision=second" title="2014-10-20T20:01:49+01:00 in Timeline">6 years</a> ago by anonymous
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Can one of the admins verify this patch?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10330.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T20%3A17%3A29%2B01%3A00&amp;precision=second" title="2014-10-20T20:17:29+01:00 in Timeline">6 years</a> ago by Ross Whitfield
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+test this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10330.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T20%3A18%3A20%2B01%3A00&amp;precision=second" title="2014-10-20T20:18:20+01:00 in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+test this please 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10330.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T20%3A19%3A29%2B01%3A00&amp;precision=second" title="2014-10-20T20:19:29+01:00 in Timeline">6 years</a> ago by Ross Whitfield
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10330.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T20%3A19%3A59%2B01%3A00&amp;precision=second" title="2014-10-20T20:19:59+01:00 in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10330.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T20%3A21%3A13%2B01%3A00&amp;precision=second" title="2014-10-20T20:21:13+01:00 in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+test this please 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10330.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-22T20%3A25%3A39%2B01%3A00&amp;precision=second" title="2014-10-22T20:25:39+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. used scopedlock in place of raw mutex
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19e8992fba469576c5f8254718f7bc9b555c291a" title="19e8992fba469576c5f8254718f7bc9b555c291a">19e8992fba469576c5f8254718f7bc9b555c291a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10330.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-23T16%3A44%3A46%2B01%3A00&amp;precision=second" title="2014-10-23T16:44:46+01:00 in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+test this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10330.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T15%3A43%3A41Z&amp;precision=second" title="2014-10-27T15:43:41Z in Timeline">6 years</a> ago by Pete Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Pete Peterson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10330.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T19%3A22%3A00Z&amp;precision=second" title="2014-10-27T19:22:00Z in Timeline">6 years</a> ago by Pete Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The things that have both <tt>PARALLEL_CRITICAL</tt> and <tt>ThreadPool</tt> are:
+</p>
+<ul><li><tt>LoadEventNexus.cpp</tt> (already done)
+</li><li><tt>MultiThreaded.h</tt>
+</li><li><tt>BinMD.cpp</tt>
+</li><li><tt>ConvertToDiffractionMDWorkspace.cpp</tt>
+</li><li><tt>ResolutionConvolvedCrossSection.cpp</tt>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10330.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-28T18%3A15%3A10Z&amp;precision=second" title="2014-10-28T18:15:10Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>. BinMD uses macro instead of threadpool
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f793d154df72ec78c48bdfac4eefc8d397b61165" title="f793d154df72ec78c48bdfac4eefc8d397b61165">f793d154df72ec78c48bdfac4eefc8d397b61165</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10330.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-28T18%3A16%3A27Z&amp;precision=second" title="2014-10-28T18:16:27Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+test this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10330.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-05T16%3A40%3A54Z&amp;precision=second" title="2014-11-05T16:40:54Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Swap PARALLEL_CRITICAL for a Poco::FastMutex.
+</p>
+<p>
+It will have the same effect but not require the look to run under OpenMP
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eb513f28a13397a56862905c749fb5912ebf3aa4" title="eb513f28a13397a56862905c749fb5912ebf3aa4">eb513f28a13397a56862905c749fb5912ebf3aa4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10330.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-05T16%3A40%3A55Z&amp;precision=second" title="2014-11-05T16:40:55Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove OMP from custom macros
+</p>
+<p>
+They have nothing to do with OpenMP so avoid any ambiguity.
+Refs <a class="closed ticket" href="10330.html" title="Get ThreadPool working under OS X + clang (closed: fixed)">#10330</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3e07fb0e68c60590a94dda673ae62b864a7e1a8d" title="3e07fb0e68c60590a94dda673ae62b864a7e1a8d">3e07fb0e68c60590a94dda673ae62b864a7e1a8d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10330.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-05T16%3A44%3A20Z&amp;precision=second" title="2014-11-05T16:44:20Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+test this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10330.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-12T15%3A56%3A44Z&amp;precision=second" title="2014-11-12T15:56:44Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10330_threadpool_working_with_clang
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/c4408e0a4e433069de59303a2c0587483acd2887"><span class="icon">​</span>c4408e0a4e433069de59303a2c0587483acd2887</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10330.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-12T15%3A56%3A44Z&amp;precision=second" title="2014-11-12T15:56:44Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10330_threadpool_working_with_clang
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/aa11bcbd7cbb5ed3b406d1954d504908fff3ee56"><span class="icon">​</span>aa11bcbd7cbb5ed3b406d1954d504908fff3ee56</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10330.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-12T15%3A56%3A44Z&amp;precision=second" title="2014-11-12T15:56:44Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10330_threadpool_working_with_clang
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/2fb161cab75cf1c3d216fb53dde3d534952435f1"><span class="icon">​</span>2fb161cab75cf1c3d216fb53dde3d534952435f1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10330.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-12T15%3A56%3A44Z&amp;precision=second" title="2014-11-12T15:56:44Z in Timeline">6 years</a> ago by Pete Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/10330_threadpool_working_with_clang'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/4f04309cc299d11d73fdf789b39946b60c0a8550"><span class="icon">​</span>4f04309cc299d11d73fdf789b39946b60c0a8550</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10330.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T09%3A20%3A36Z&amp;precision=second" title="2015-02-20T09:20:36Z in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+moved to r 3.4 as tickets are closed
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10330.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T10%3A21%3A42%2B01%3A00&amp;precision=second" title="2015-04-22T10:21:42+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Somehow these slipped through without a resolution.  Set to Fixed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10330.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A54%3A11%2B01%3A00&amp;precision=second" title="2015-06-04T03:54:11+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11172"><span class="icon">​</span>11172</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10330?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10330?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10330?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

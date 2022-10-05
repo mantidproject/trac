@@ -1,0 +1,1719 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #5782 (Unit tests needed for CopyInstrumentParameters Algorithm)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="5781.html" title="Ticket #5781" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5782?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5782?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5782?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="5783.html" title="Ticket #5783" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 5782, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="5781.html" title="Ticket #5781">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="5783.html" title="Ticket #5783">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="5782.html">Ticket #5782</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-21T16%3A02%3A15%2B01%3A00&amp;precision=second" title="2012-08-21T16:02:15+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A46%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T00:46:45+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Unit tests needed for CopyInstrumentParameters Algorithm</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Karl+Palmen">Karl Palmen</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Karl+Palmen">Karl Palmen</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.5.html">Release 2.5</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              anders.markvardsen@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Owen Arnold
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-04-17 10:02:55.206395+00:00">
+        (last modified by Karl Palmen)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/5782?action=diff&amp;version=8">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+There'll need to be a test to successfully transfer a simple instrument whose parameters have been modified and see that the modified parameters show up in the output workspace. 
+</p>
+<p>
+Also a test to show it throws an exception if the output workspace has a different base instrument to the input workspace.
+</p>
+<p>
+Finally ExperimentInfo may need a test for its new function replaceInstrument. This could be very simple, because the algorithm test would test its functionality.
+</p>
+<p>
+TransferInstrument was created in ticket <a class="closed ticket" href="5670.html" title="enhancement: New algorithm: CopyInstrumentParameters (closed: fixed)">#5670</a> (and renamed CopyInstrumentParameters in <a class="closed ticket" href="5904.html" title="enhancement: Rename TransferInstrument to CopyInstrumentParameters (closed: fixed)">#5904</a>)
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="5782.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-21T16%3A02%3A30%2B01%3A00&amp;precision=second" title="2012-08-21T16:02:30+01:00 in Timeline">8 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Owner</strong>
+        set to <em>Karl Palmen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="5782.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-21T16%3A04%3A06%2B01%3A00&amp;precision=second" title="2012-08-21T16:04:06+01:00 in Timeline">8 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>anders.markvardsen@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="5782.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-30T10%3A32%3A43%2B01%3A00&amp;precision=second" title="2012-08-30T10:32:43+01:00 in Timeline">8 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Priority</strong>
+        changed from <em>major</em> to <em>critical</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="5782.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-05T15%3A38%3A52%2B01%3A00&amp;precision=second" title="2012-10-05T15:38:52+01:00 in Timeline">8 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This is best done after renaming as in ticket <a class="closed ticket" href="5904.html" title="enhancement: Rename TransferInstrument to CopyInstrumentParameters (closed: fixed)">#5904</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="5782.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-28T11%3A38%3A24Z&amp;precision=second" title="2012-10-28T11:38:24Z in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.3</em> to <em>Release 2.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to milestone 2.4
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="5782.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-29T10%3A55%3A12Z&amp;precision=second" title="2012-10-29T10:55:12Z in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/5782?action=diff&amp;version=6">diff</a>)
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>Unit tests needed for TransferInstrument Algorithm</em> to <em>Unit tests needed for CopyInstrumentParameters Algorithm</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="5782.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-23T11%3A33%3A05Z&amp;precision=second" title="2013-01-23T11:33:05Z in Timeline">8 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.4</em> to <em>Release 2.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="5782.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-17T11%3A02%3A55%2B01%3A00&amp;precision=second" title="2013-04-17T11:02:55+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/5782?action=diff&amp;version=8">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="5782.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-17T11%3A47%3A25%2B01%3A00&amp;precision=second" title="2013-04-17T11:47:25+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="5782.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-17T16%3A27%3A22%2B01%3A00&amp;precision=second" title="2013-04-17T16:27:22+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skeleton test re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0" title="1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0">1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="5782.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-17T16%3A27%3A23%2B01%3A00&amp;precision=second" title="2013-04-17T16:27:23+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add workspaces and test properties with them re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6e0fbb531be0cfdb7ce686f1414baf59e124e13" title="f6e0fbb531be0cfdb7ce686f1414baf59e124e13">f6e0fbb531be0cfdb7ce686f1414baf59e124e13</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="5782.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T08%3A50%3A30%2B01%3A00&amp;precision=second" title="2013-04-18T08:50:30+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skeleton test re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0" title="1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0">1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="5782.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T08%3A50%3A31%2B01%3A00&amp;precision=second" title="2013-04-18T08:50:31+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add workspaces and test properties with them re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6e0fbb531be0cfdb7ce686f1414baf59e124e13" title="f6e0fbb531be0cfdb7ce686f1414baf59e124e13">f6e0fbb531be0cfdb7ce686f1414baf59e124e13</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="5782.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T10%3A52%3A08%2B01%3A00&amp;precision=second" title="2013-04-18T10:52:08+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Completer TestExec re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f14a2dce2804decabd0e6ff2f6fd7c73aef0026" title="5f14a2dce2804decabd0e6ff2f6fd7c73aef0026">5f14a2dce2804decabd0e6ff2f6fd7c73aef0026</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="5782.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A42%3A45%2B01%3A00&amp;precision=second" title="2013-04-18T15:42:45+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Completer TestExec re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f14a2dce2804decabd0e6ff2f6fd7c73aef0026" title="5f14a2dce2804decabd0e6ff2f6fd7c73aef0026">5f14a2dce2804decabd0e6ff2f6fd7c73aef0026</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="5782.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A42%3A45%2B01%3A00&amp;precision=second" title="2013-04-18T15:42:45+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add test for exception if base instruments are different re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Also in previous test, verified to two workspaces do have different instruments,
+even though the base instrument is the same.
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6b555d89f51289e99fccd307ab10d23fe81633f" title="a6b555d89f51289e99fccd307ab10d23fe81633f">a6b555d89f51289e99fccd307ab10d23fe81633f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="5782.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-19T08%3A54%3A41%2B01%3A00&amp;precision=second" title="2013-04-19T08:54:41+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+To test, look at the code to check that CopyInstrumentPsarametersTest.h exists and actually tests the CopyInstrumentParameters algorithm.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="5782.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-19T13%3A47%3A22%2B01%3A00&amp;precision=second" title="2013-04-19T13:47:22+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="5782.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-19T14%3A00%3A42%2B01%3A00&amp;precision=second" title="2013-04-19T14:00:42+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The tests look fine and the they pass. The only thing that needs improving is that the temporary workspaces that have been created should be removed at the end of the test. This makes sure that things are as clean as possible when run in conjunction with other tests.
+</p>
+<p>
+Something like dataStore.remove(wsName1) etc will do the trick.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="5782.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-22T14%3A01%3A28%2B01%3A00&amp;precision=second" title="2013-04-22T14:01:28+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="5782.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-22T15%3A52%3A18%2B01%3A00&amp;precision=second" title="2013-04-22T15:52:18+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove workspaces after use re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8366187852dd8e3424db2762c439e38e18f99fd" title="b8366187852dd8e3424db2762c439e38e18f99fd">b8366187852dd8e3424db2762c439e38e18f99fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="5782.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-22T15%3A53%3A53%2B01%3A00&amp;precision=second" title="2013-04-22T15:53:53+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove workspaces after use re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8366187852dd8e3424db2762c439e38e18f99fd" title="b8366187852dd8e3424db2762c439e38e18f99fd">b8366187852dd8e3424db2762c439e38e18f99fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="5782.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-22T16%3A23%3A57%2B01%3A00&amp;precision=second" title="2013-04-22T16:23:57+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="5782.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-22T17%3A30%3A31%2B01%3A00&amp;precision=second" title="2013-04-22T17:30:31+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        changed from <em>Martyn Gigg</em> to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="5782.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-23T09%3A59%3A03%2B01%3A00&amp;precision=second" title="2013-04-23T09:59:03+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skeleton test re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0" title="1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0">1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="5782.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-23T09%3A59%3A04%2B01%3A00&amp;precision=second" title="2013-04-23T09:59:04+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add workspaces and test properties with them re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6e0fbb531be0cfdb7ce686f1414baf59e124e13" title="f6e0fbb531be0cfdb7ce686f1414baf59e124e13">f6e0fbb531be0cfdb7ce686f1414baf59e124e13</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="5782.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-23T09%3A59%3A04%2B01%3A00&amp;precision=second" title="2013-04-23T09:59:04+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Completer TestExec re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f14a2dce2804decabd0e6ff2f6fd7c73aef0026" title="5f14a2dce2804decabd0e6ff2f6fd7c73aef0026">5f14a2dce2804decabd0e6ff2f6fd7c73aef0026</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="5782.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-23T09%3A59%3A04%2B01%3A00&amp;precision=second" title="2013-04-23T09:59:04+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add test for exception if base instruments are different re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Also in previous test, verified to two workspaces do have different instruments,
+even though the base instrument is the same.
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6b555d89f51289e99fccd307ab10d23fe81633f" title="a6b555d89f51289e99fccd307ab10d23fe81633f">a6b555d89f51289e99fccd307ab10d23fe81633f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="5782.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-23T09%3A59%3A04%2B01%3A00&amp;precision=second" title="2013-04-23T09:59:04+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove workspaces after use re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8366187852dd8e3424db2762c439e38e18f99fd" title="b8366187852dd8e3424db2762c439e38e18f99fd">b8366187852dd8e3424db2762c439e38e18f99fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="5782.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-23T10%3A00%3A48%2B01%3A00&amp;precision=second" title="2013-04-23T10:00:48+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Tests pass. Changes suggest that issue raised by Martyn has been addressed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="5782.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T15%3A46%3A43%2B01%3A00&amp;precision=second" title="2013-04-24T15:46:43+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skeleton test re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0" title="1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0">1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="5782.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T15%3A46%3A44%2B01%3A00&amp;precision=second" title="2013-04-24T15:46:44+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add workspaces and test properties with them re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6e0fbb531be0cfdb7ce686f1414baf59e124e13" title="f6e0fbb531be0cfdb7ce686f1414baf59e124e13">f6e0fbb531be0cfdb7ce686f1414baf59e124e13</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="5782.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T15%3A46%3A44%2B01%3A00&amp;precision=second" title="2013-04-24T15:46:44+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Completer TestExec re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f14a2dce2804decabd0e6ff2f6fd7c73aef0026" title="5f14a2dce2804decabd0e6ff2f6fd7c73aef0026">5f14a2dce2804decabd0e6ff2f6fd7c73aef0026</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="5782.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T15%3A46%3A45%2B01%3A00&amp;precision=second" title="2013-04-24T15:46:45+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add test for exception if base instruments are different re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Also in previous test, verified to two workspaces do have different instruments,
+even though the base instrument is the same.
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6b555d89f51289e99fccd307ab10d23fe81633f" title="a6b555d89f51289e99fccd307ab10d23fe81633f">a6b555d89f51289e99fccd307ab10d23fe81633f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="5782.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T15%3A46%3A54%2B01%3A00&amp;precision=second" title="2013-04-24T15:46:54+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove workspaces after use re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8366187852dd8e3424db2762c439e38e18f99fd" title="b8366187852dd8e3424db2762c439e38e18f99fd">b8366187852dd8e3424db2762c439e38e18f99fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="5782.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T19%3A14%3A12%2B01%3A00&amp;precision=second" title="2013-04-24T19:14:12+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skeleton test re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0" title="1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0">1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="5782.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T19%3A14%3A12%2B01%3A00&amp;precision=second" title="2013-04-24T19:14:12+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add workspaces and test properties with them re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6e0fbb531be0cfdb7ce686f1414baf59e124e13" title="f6e0fbb531be0cfdb7ce686f1414baf59e124e13">f6e0fbb531be0cfdb7ce686f1414baf59e124e13</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="5782.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T19%3A14%3A12%2B01%3A00&amp;precision=second" title="2013-04-24T19:14:12+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Completer TestExec re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f14a2dce2804decabd0e6ff2f6fd7c73aef0026" title="5f14a2dce2804decabd0e6ff2f6fd7c73aef0026">5f14a2dce2804decabd0e6ff2f6fd7c73aef0026</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="5782.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T19%3A14%3A12%2B01%3A00&amp;precision=second" title="2013-04-24T19:14:12+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add test for exception if base instruments are different re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Also in previous test, verified to two workspaces do have different instruments,
+even though the base instrument is the same.
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6b555d89f51289e99fccd307ab10d23fe81633f" title="a6b555d89f51289e99fccd307ab10d23fe81633f">a6b555d89f51289e99fccd307ab10d23fe81633f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="5782.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T19%3A14%3A17%2B01%3A00&amp;precision=second" title="2013-04-24T19:14:17+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove workspaces after use re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8366187852dd8e3424db2762c439e38e18f99fd" title="b8366187852dd8e3424db2762c439e38e18f99fd">b8366187852dd8e3424db2762c439e38e18f99fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="5782.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A42%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:42+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skeleton test re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0" title="1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0">1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="5782.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A42%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:42+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add workspaces and test properties with them re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6e0fbb531be0cfdb7ce686f1414baf59e124e13" title="f6e0fbb531be0cfdb7ce686f1414baf59e124e13">f6e0fbb531be0cfdb7ce686f1414baf59e124e13</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="5782.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A43%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:43+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Completer TestExec re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f14a2dce2804decabd0e6ff2f6fd7c73aef0026" title="5f14a2dce2804decabd0e6ff2f6fd7c73aef0026">5f14a2dce2804decabd0e6ff2f6fd7c73aef0026</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="5782.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A44%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:44+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add test for exception if base instruments are different re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Also in previous test, verified to two workspaces do have different instruments,
+even though the base instrument is the same.
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6b555d89f51289e99fccd307ab10d23fe81633f" title="a6b555d89f51289e99fccd307ab10d23fe81633f">a6b555d89f51289e99fccd307ab10d23fe81633f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="5782.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A53%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:53+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove workspaces after use re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8366187852dd8e3424db2762c439e38e18f99fd" title="b8366187852dd8e3424db2762c439e38e18f99fd">b8366187852dd8e3424db2762c439e38e18f99fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="5782.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T14%3A12%3A13%2B01%3A00&amp;precision=second" title="2013-04-26T14:12:13+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skeleton test re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0" title="1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0">1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="5782.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T14%3A12%3A14%2B01%3A00&amp;precision=second" title="2013-04-26T14:12:14+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add workspaces and test properties with them re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6e0fbb531be0cfdb7ce686f1414baf59e124e13" title="f6e0fbb531be0cfdb7ce686f1414baf59e124e13">f6e0fbb531be0cfdb7ce686f1414baf59e124e13</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="5782.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T14%3A12%3A16%2B01%3A00&amp;precision=second" title="2013-04-26T14:12:16+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Completer TestExec re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f14a2dce2804decabd0e6ff2f6fd7c73aef0026" title="5f14a2dce2804decabd0e6ff2f6fd7c73aef0026">5f14a2dce2804decabd0e6ff2f6fd7c73aef0026</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="5782.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T14%3A12%3A18%2B01%3A00&amp;precision=second" title="2013-04-26T14:12:18+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add test for exception if base instruments are different re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Also in previous test, verified to two workspaces do have different instruments,
+even though the base instrument is the same.
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6b555d89f51289e99fccd307ab10d23fe81633f" title="a6b555d89f51289e99fccd307ab10d23fe81633f">a6b555d89f51289e99fccd307ab10d23fe81633f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="5782.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T14%3A12%3A27%2B01%3A00&amp;precision=second" title="2013-04-26T14:12:27+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove workspaces after use re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8366187852dd8e3424db2762c439e38e18f99fd" title="b8366187852dd8e3424db2762c439e38e18f99fd">b8366187852dd8e3424db2762c439e38e18f99fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="5782.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A39%3A26%2B01%3A00&amp;precision=second" title="2013-05-16T22:39:26+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skeleton test re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0" title="1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0">1d6d86a2596ca9598464c6b4b44e0e394cbb8ab0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="5782.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A39%3A28%2B01%3A00&amp;precision=second" title="2013-05-16T22:39:28+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add workspaces and test properties with them re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6e0fbb531be0cfdb7ce686f1414baf59e124e13" title="f6e0fbb531be0cfdb7ce686f1414baf59e124e13">f6e0fbb531be0cfdb7ce686f1414baf59e124e13</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="5782.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A39%3A30%2B01%3A00&amp;precision=second" title="2013-05-16T22:39:30+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Completer TestExec re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f14a2dce2804decabd0e6ff2f6fd7c73aef0026" title="5f14a2dce2804decabd0e6ff2f6fd7c73aef0026">5f14a2dce2804decabd0e6ff2f6fd7c73aef0026</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="5782.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A39%3A34%2B01%3A00&amp;precision=second" title="2013-05-16T22:39:34+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add test for exception if base instruments are different re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Also in previous test, verified to two workspaces do have different instruments,
+even though the base instrument is the same.
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6b555d89f51289e99fccd307ab10d23fe81633f" title="a6b555d89f51289e99fccd307ab10d23fe81633f">a6b555d89f51289e99fccd307ab10d23fe81633f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="5782.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A39%3A54%2B01%3A00&amp;precision=second" title="2013-05-16T22:39:54+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove workspaces after use re <a class="closed ticket" href="5782.html" title="defect: Unit tests needed for CopyInstrumentParameters Algorithm (closed: fixed)">#5782</a>
+</p>
+<p>
+Signed-off-by: Karl Palmen &lt;karl.palmen@…&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8366187852dd8e3424db2762c439e38e18f99fd" title="b8366187852dd8e3424db2762c439e38e18f99fd">b8366187852dd8e3424db2762c439e38e18f99fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="5782.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A46%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T00:46:45+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/6628"><span class="icon">​</span>6628</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5782?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5782?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5782?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

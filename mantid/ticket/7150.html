@@ -1,0 +1,827 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7150 (Debug reduction with splitters workspace and remove printing and debug statements from SNSPowderReduction)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7149.html" title="Ticket #7149" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7150?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7150?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7150?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7151.html" title="Ticket #7151" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7150, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7149.html" title="Ticket #7149">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="7151.html" title="Ticket #7151">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7150.html">Ticket #7150</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-20T21%3A39%3A14%2B01%3A00&amp;precision=second" title="2013-05-20T21:39:14+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A43%3A24%2B01%3A00&amp;precision=second" title="2015-06-04T01:43:24+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Debug reduction with splitters workspace and remove printing and debug statements from SNSPowderReduction</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Peter+Peterson">Peter Peterson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.5.3.html">Release 2.5.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~PatchCandidate">PatchCandidate</a>,<a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~Released">Released</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Peter Peterson
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-05-21 15:21:01.013615+00:00">
+        (last modified by Wenduo Zhou)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/7150?action=diff&amp;version=2">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+SNSPowderReduction failed to generate multiple workspaces from run 14721 with a splitters workspace generated by proton charge.  
+</p>
+<p>
+There is a ridiculous amount of debug "print" statements in <tt>SNSPowderReduction</tt>. Got through the file and change all of the "<tt>print</tt>" to "<tt>self.log().information()</tt>" and "<tt>self.log().debug()</tt>" as appropriate. Generally the ones that start with "<tt>DB</tt>" should be at the debug log level.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7150.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T16%3A19%3A35%2B01%3A00&amp;precision=second" title="2013-05-21T16:19:35+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7150.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T16%3A21%3A01%2B01%3A00&amp;precision=second" title="2013-05-21T16:21:01+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/7150?action=diff&amp;version=2">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="7150.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T16%3A26%3A22%2B01%3A00&amp;precision=second" title="2013-05-21T16:26:22+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>Remove printing and debug statements from SNSPowderReduction</em> to <em>Debug reduction with splitters workspace and remove printing and debug statements from SNSPowderReduction</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="7150.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T16%3A32%3A03%2B01%3A00&amp;precision=second" title="2013-05-21T16:32:03+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <blockquote class="citation">
+<p>
+git checkout --no-track -b bugfix/7150_split_workspace v2.5.0
+</p>
+</blockquote>
+<p>
+Switched to a new branch 'bugfix/7150_split_workspace'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="7150.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T16%3A33%3A11%2B01%3A00&amp;precision=second" title="2013-05-21T16:33:11+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Solved the split workspaces bug.  Refs <a class="closed ticket" href="7150.html" title="defect: Debug reduction with splitters workspace and remove printing and debug ... (closed: fixed)">#7150</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8b4727cf29c05328b3449f99ec141e827315cf8b" title="8b4727cf29c05328b3449f99ec141e827315cf8b">8b4727cf29c05328b3449f99ec141e827315cf8b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="7150.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T18%3A12%3A54%2B01%3A00&amp;precision=second" title="2013-05-21T18:12:54+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge difference.  Refs <a class="closed ticket" href="7150.html" title="defect: Debug reduction with splitters workspace and remove printing and debug ... (closed: fixed)">#7150</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5ac722a6ae7e5bc28ec2dd2844b605f6211accbf" title="5ac722a6ae7e5bc28ec2dd2844b605f6211accbf">5ac722a6ae7e5bc28ec2dd2844b605f6211accbf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="7150.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T18%3A12%3A54%2B01%3A00&amp;precision=second" title="2013-05-21T18:12:54+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove or relevel debug output.  Refs <a class="closed ticket" href="7150.html" title="defect: Debug reduction with splitters workspace and remove printing and debug ... (closed: fixed)">#7150</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3b4232279069021fbdeb1afefd2ac2e8535bf53b" title="3b4232279069021fbdeb1afefd2ac2e8535bf53b">3b4232279069021fbdeb1afefd2ac2e8535bf53b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="7150.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T18%3A20%3A30%2B01%3A00&amp;precision=second" title="2013-05-21T18:20:30+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved merging conflict.  Refs <a class="closed ticket" href="7150.html" title="defect: Debug reduction with splitters workspace and remove printing and debug ... (closed: fixed)">#7150</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ae8535f197664fade700f42655cda94eecccfd5d" title="ae8535f197664fade700f42655cda94eecccfd5d">ae8535f197664fade700f42655cda94eecccfd5d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="7150.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T18%3A20%3A31%2B01%3A00&amp;precision=second" title="2013-05-21T18:20:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'develop' of github.com:mantidproject/mantid into develop
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7150.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T18%3A32%3A49%2B01%3A00&amp;precision=second" title="2013-05-21T18:32:49+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <h2 id="Howtoverify">How to verify</h2>
+<p>
+Run the script below: 
+</p>
+<blockquote>
+<p>
+cal_file   = "PG3_PAC_d12358_2013_01_23.cal"
+char_file  = "PG3_characterization_2012_11_29-HR-mods.txt"
+savedir = "/home/wzz/Projects/MantidTests/Tickets/Ticket7112/Temp/"
+</p>
+</blockquote>
+<blockquote>
+<p>
+# Load data
+Load(Filename=r'PG3_14721_event.nxs', OutputWorkspace='PG3_14721_log', LoadLogs=True)
+</p>
+</blockquote>
+<blockquote>
+<p>
+# Generate event filter
+GenerateEventsFilter(
+</p>
+<blockquote>
+<p>
+InputWorkspace='PG3_14721_log',
+OutputWorkspace='ProtonChargeFilter',
+InformationWorkspace='ProtonChargeFilterInfo',
+LogName='proton_charge',
+MinimumLogValue='0',
+MaximumLogValue='20000000',
+LogValueInterval=8900000,
+TitleOfSplitters='Proton Charge')
+</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>
+# Filter events to as a reference
+if False: 
+</p>
+<blockquote>
+<p>
+FilterEvents(InputWorkspace='PG3_14721_event',
+</p>
+<blockquote>
+<p>
+OutputWorkspaceBaseName='PG3',
+InformationWorkspace='ProtonChargeFilterInfo',
+SplitterWorkspace='ProtonChargeFilter',GroupWorkspaces='1')
+</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>
+        
+</p>
+<blockquote>
+<p>
+# reduce a series of runs
+SNSPowderReduction(
+</p>
+<blockquote>
+<p>
+VanadiumNumber=-1,
+Instrument="PG3", 
+RunNumber=<a class="missing changeset" title="No default repository defined">[14721]</a>, 
+Extension="_event.nxs", 
+PreserveEvents=True, 
+CalibrationFile=cal_file, 
+CharacterizationRunsFile=char_file, 
+LowResRef=15000, 
+RemovePromptPulseWidth=50, 
+Binning=-0.0004, 
+BinInDspace=True, FilterBadPulses=False, 
+SaveAs="gsas", 
+OutputDirectory=savedir, 
+NormalizeByCurrent=True, 
+FinalDataUnits="dSpacing",
+SplittersWorkspace="ProtonChargeFilter",
+Sum = False)
+</p>
+</blockquote>
+</blockquote>
+<p>
+You should find 3 reduced workspaces as the result.  PG3_14721_0 cannot be normalized by current because the proton charges are zero.  PG3_14721_1 has 1 event.  PG3_14721_2 is normalized.  But the signal is poor. 
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T18%3A43%3A30%2B01%3A00&amp;precision=second" title="2013-05-21T18:43:30+01:00 in Timeline">7 years</a> ago
+                      by Wenduo Zhou
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/7150?cversion=0&amp;cnum_hist=10#comment:10">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/7150?action=comment-diff&amp;cnum=10&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7150.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-21T21%3A39%3A17%2B01%3A00&amp;precision=second" title="2013-05-21T21:39:17+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This was branched off of the <a class="ext-link" href="http://github.com/mantidproject/mantid/tree/v2.5.0"><span class="icon">​</span>v2.5.0</a> tag and is in the <a class="ext-link" href="http://github.com/mantidproject/mantid/tree/bugfix/7150_split_workspace"><span class="icon">​</span>bugfix/7150_split_workspace</a> branch.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7150.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-22T11%3A10%3A20%2B01%3A00&amp;precision=second" title="2013-05-22T11:10:20+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'develop' of github.com:mantidproject/mantid into develop into 6856_ConvertToDiffractionMDWS_v2
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="7150.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-22T11%3A45%3A57%2B01%3A00&amp;precision=second" title="2013-05-22T11:45:57+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'develop' of github.com:mantidproject/mantid into develop into 6856_ConvertToDiffractionMDWS_v2
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="7150.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-22T13%3A42%3A22%2B01%3A00&amp;precision=second" title="2013-05-22T13:42:22+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Peterson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="7150.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-23T13%3A51%3A45%2B01%3A00&amp;precision=second" title="2013-05-23T13:51:45+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/bugfix/7150_split_workspace'
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/SNSPowderReduction.py
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="7150.html" title="defect: Debug reduction with splitters workspace and remove printing and debug ... (closed: fixed)">#7150</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cd0030a02f24f7eeec766506694b261da5ee0448" title="cd0030a02f24f7eeec766506694b261da5ee0448">cd0030a02f24f7eeec766506694b261da5ee0448</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="7150.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-23T13%3A59%3A08%2B01%3A00&amp;precision=second" title="2013-05-23T13:59:08+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/bugfix/7150_split_workspace' into release/2.5.x
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/SNSPowderReduction.py
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="7150.html" title="defect: Debug reduction with splitters workspace and remove printing and debug ... (closed: fixed)">#7150</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1a147277ba694449b5c372853372e2c67d755897" title="1a147277ba694449b5c372853372e2c67d755897">1a147277ba694449b5c372853372e2c67d755897</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="7150.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-23T13%3A59%3A28%2B01%3A00&amp;precision=second" title="2013-05-23T13:59:28+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+While verifying this ticket <a class="closed ticket" href="7183.html" title="defect: Invalid value in Powder Diffraction reduction gui (closed: fixed)">#7183</a> and <a class="closed ticket" href="7184.html" title="enhancement: Add splitters information workspace to SNSPowderReduction (closed: fixed)">#7184</a> were created.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="7150.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-24T14%3A01%3A57%2B01%3A00&amp;precision=second" title="2013-05-24T14:01:57+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/7155_migrate_PearlMCAbsorption' into develop
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="7150.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-28T13%3A41%3A43%2B01%3A00&amp;precision=second" title="2013-05-28T13:41:43+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/7155_migrate_PearlMCAbsorption' into 7090_runpythonscript
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="7150.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-29T09%3A03%3A47%2B01%3A00&amp;precision=second" title="2013-05-29T09:03:47+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/bugfix/7150_split_workspace' into release/2.5.x
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/SNSPowderReduction.py
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="7150.html" title="defect: Debug reduction with splitters workspace and remove printing and debug ... (closed: fixed)">#7150</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1a147277ba694449b5c372853372e2c67d755897" title="1a147277ba694449b5c372853372e2c67d755897">1a147277ba694449b5c372853372e2c67d755897</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="7150.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-06T15%3A22%3A56%2B01%3A00&amp;precision=second" title="2013-06-06T15:22:56+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Keywords</strong>
+        <em>PatchCandidate,Released</em> added; <em>PatchCandidate</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="7150.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A43%3A24%2B01%3A00&amp;precision=second" title="2015-06-04T01:43:24+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/7996"><span class="icon">​</span>7996</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7150?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7150?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7150?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

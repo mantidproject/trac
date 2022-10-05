@@ -1,0 +1,928 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9030 (Use the covariance matrix for fitting error propagation)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9029.html" title="Ticket #9029" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9030?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9030?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9030?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9031.html" title="Ticket #9031" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9030, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9029.html" title="Ticket #9029">Previous Ticket</a></span></li><li><span><a class="next" href="9031.html" title="Ticket #9031">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/9030.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9030.html">Ticket #9030</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T11%3A24%3A12Z&amp;precision=second" title="2014-02-18T11:24:12Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A01%3A16%2B01%3A00&amp;precision=second" title="2015-06-04T03:01:16+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Use the covariance matrix for fitting error propagation</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Roman+Tolchenov">Roman Tolchenov</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Roman+Tolchenov">Roman Tolchenov</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              gesner.passos@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="inprogress ticket" href="8977.html" title="Calculate Transmission Polynomial">#8977</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Wenduo Zhou
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-02-18 15:45:02.866398+00:00">
+        (last modified by Roman Tolchenov)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/9030?action=diff&amp;version=2">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+At the moment to estimate the errors of the calculated values we are using the formula:
+</p>
+<blockquote>
+<p>
+err = sqrt( sigma<sup>2</sup> * J * J<sup>T</sup> )
+</p>
+</blockquote>
+<p>
+where sigma are standard deviations of the parameters and J is the Jacobian. This doesn't take into account correlation between the parameters and may lead to overestimated errors. I want to try to use a more accurate formula:
+</p>
+<blockquote>
+<p>
+err = sqrt( J * C * J<sup>T</sup> )
+</p>
+</blockquote>
+<p>
+where C is the covariance matrix.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/9030/compare_errors.py.html" title="View attachment">compare_errors.py</a><a href="../raw-attachment/ticket/9030/compare_errors.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="2009 bytes">2.0 KB</span>) -
+      added by <em>Gesner Passos</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-04T12%3A11%3A50Z&amp;precision=second" title="2014-03-04T12:11:50Z in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                File that highlight the systemtests that will change with the new error propagation
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9030.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T14%3A36%3A47Z&amp;precision=second" title="2014-02-18T14:36:47Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>infoneeded</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Could you add a bit more description please.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9030.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T15%3A45%3A02Z&amp;precision=second" title="2014-02-18T15:45:02Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/9030?action=diff&amp;version=2">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9030.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T08%3A12%3A39Z&amp;precision=second" title="2014-02-19T08:12:39Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>infoneeded</em> to <em>new</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9030.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T09%3A34%3A28Z&amp;precision=second" title="2014-02-19T09:34:28Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9030.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T16%3A29%3A42Z&amp;precision=second" title="2014-02-19T16:29:42Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>gesner.passos@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9030.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T16%3A30%3A07Z&amp;precision=second" title="2014-02-19T16:30:07Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Removed unused classes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/65a9f64fe4620062059b0f83f9f30e7a3fb586fc" title="65a9f64fe4620062059b0f83f9f30e7a3fb586fc">65a9f64fe4620062059b0f83f9f30e7a3fb586fc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9030.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T16%3A30%3A07Z&amp;precision=second" title="2014-02-19T16:30:07Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Use covariance matrix to estimate errors of calc. values
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/390e8021a205792408b1f86517aa1df87aee4270" title="390e8021a205792408b1f86517aa1df87aee4270">390e8021a205792408b1f86517aa1df87aee4270</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9030.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-20T11%3A29%3A50Z&amp;precision=second" title="2014-02-20T11:29:50Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Added a unit test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/18b7c64594ced719140c932ff96103f198f96f6d" title="18b7c64594ced719140c932ff96103f198f96f6d">18b7c64594ced719140c932ff96103f198f96f6d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9030.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-20T13%3A17%3A19Z&amp;precision=second" title="2014-02-20T13:17:19Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Changed getCovarianceMatrix to return a const Matrix
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a09765134950053c58031b555cae637822450238" title="a09765134950053c58031b555cae637822450238">a09765134950053c58031b555cae637822450238</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9030.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-20T15%3A54%3A26Z&amp;precision=second" title="2014-02-20T15:54:26Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Use chi squared in error calculation
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/db9ab977afc71f1788826529a0943b73fe432cd7" title="db9ab977afc71f1788826529a0943b73fe432cd7">db9ab977afc71f1788826529a0943b73fe432cd7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9030.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-24T09%3A36%3A17Z&amp;precision=second" title="2014-02-24T09:36:17Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9011</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="closed ticket" href="9011.html" title="defect: CalculateTransmission error propagation (closed: invalid)">#9011</a>) The entire fit will change the way it calculates error. It will have impact on CalculateTransmission.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9030.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-24T09%3A57%3A14Z&amp;precision=second" title="2014-02-24T09:57:14Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Removed unused classes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f4e931b6b86783b92b2008dcead357a8465cca4e" title="f4e931b6b86783b92b2008dcead357a8465cca4e">f4e931b6b86783b92b2008dcead357a8465cca4e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9030.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-24T09%3A57%3A15Z&amp;precision=second" title="2014-02-24T09:57:15Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Use covariance matrix to estimate errors of calc. values
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ed25aa030a67b2ca375cc4dcfd12f96bcd979fce" title="ed25aa030a67b2ca375cc4dcfd12f96bcd979fce">ed25aa030a67b2ca375cc4dcfd12f96bcd979fce</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9030.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-03T15%3A04%3A59Z&amp;precision=second" title="2014-03-03T15:04:59Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>: New reference results after changing fit error calculation
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2e8562e590c618e48cec80657cae71a139a51b23" title="2e8562e590c618e48cec80657cae71a139a51b23">2e8562e590c618e48cec80657cae71a139a51b23</a>
+</p>
+<p>
+systemtest: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/2e8562e590c618e48cec80657cae71a139a51b23"><span class="icon">​</span>https://github.com/mantidproject/systemtests/commit/2e8562e590c618e48cec80657cae71a139a51b23</a>
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-03T15%3A05%3A46Z&amp;precision=second" title="2014-03-03T15:05:46Z in Timeline">7 years</a> ago
+                      by Gesner Passos
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9030?cversion=0&amp;cnum_hist=14#comment:14">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9030?action=comment-diff&amp;cnum=14&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9030.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-03T15%3A06%3A48Z&amp;precision=second" title="2014-03-03T15:06:48Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The last was not merged to develop, it is just a branch created in case Roman will need to merge them to develop later. The compare_errors.py was the file I used to compare the current results of SystemTests and the new ones when applying this ticket. Testers may be interested in using something like.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-04T12%3A13%3A03Z&amp;precision=second" title="2014-03-04T12:13:03Z in Timeline">7 years</a> ago
+                      by Gesner Passos
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9030?cversion=0&amp;cnum_hist=15#comment:15">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9030?action=comment-diff&amp;cnum=15&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-04T12%3A11%3A50Z&amp;precision=second" title="2014-03-04T12:11:50Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/9030/compare_errors.py.html"><em>compare_errors.py</em></a><a href="../raw-attachment/ticket/9030/compare_errors.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+File that highlight the systemtests that will change with the new error propagation
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9030.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-05T10%3A51%3A38Z&amp;precision=second" title="2014-03-05T10:51:38Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8977</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9030.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-05T11%3A19%3A44Z&amp;precision=second" title="2014-03-05T11:19:44Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9011</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9030.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-28T15%3A50%3A50%2B01%3A00&amp;precision=second" title="2014-04-28T15:50:50+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/9030_fitting_error_propagation
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/API/inc/MantidAPI/IDomainCreator.h
+Code/Mantid/Framework/CurveFitting/inc/MantidCurveFitting/FitMW.h
+Code/Mantid/Framework/CurveFitting/inc/MantidCurveFitting/MultiDomainCreator.h
+Code/Mantid/Framework/CurveFitting/src/FitMW.cpp
+Code/Mantid/Framework/MDEvents/inc/MantidMDEvents/FitMD.h
+Code/Mantid/Framework/MDEvents/src/FitMD.cpp
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/939b68caa756a22acd24c5a783d0dad9af34a6c5" title="939b68caa756a22acd24c5a783d0dad9af34a6c5">939b68caa756a22acd24c5a783d0dad9af34a6c5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9030.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-28T15%3A50%3A50%2B01%3A00&amp;precision=second" title="2014-04-28T15:50:50+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Fixed an error after a merge with master.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/df6aaf38132040ec98e993c059fb66c40aa98bde" title="df6aaf38132040ec98e993c059fb66c40aa98bde">df6aaf38132040ec98e993c059fb66c40aa98bde</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9030.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-30T08%3A54%3A21%2B01%3A00&amp;precision=second" title="2014-04-30T08:54:21+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Fix a doxygen warning
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/34c1e2e3e6891da4ae1e75b72128ee30101cadc8" title="34c1e2e3e6891da4ae1e75b72128ee30101cadc8">34c1e2e3e6891da4ae1e75b72128ee30101cadc8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9030.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-30T14%3A43%3A09%2B01%3A00&amp;precision=second" title="2014-04-30T14:43:09+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Replaced files to avoid merge conflicts.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5d448583305f341145c55f8f6ebacb2dc5784238" title="5d448583305f341145c55f8f6ebacb2dc5784238">5d448583305f341145c55f8f6ebacb2dc5784238</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9030.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-30T15%3A26%3A12%2B01%3A00&amp;precision=second" title="2014-04-30T15:26:12+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9030.html" title="enhancement: Use the covariance matrix for fitting error propagation (closed: fixed)">#9030</a>. Updated ref files due to change in fitting errors.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa399288d2fa4758e84b4b2337bd65b2b4741aff" title="fa399288d2fa4758e84b4b2337bd65b2b4741aff">fa399288d2fa4758e84b4b2337bd65b2b4741aff</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9030.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-01T13%3A17%3A35%2B01%3A00&amp;precision=second" title="2014-05-01T13:17:35+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+To test:
+</p>
+<ol><li>Load MUSR00015189 from AutoTestData. 
+</li><li>Fit its 1st spectrum with a Polynomial(n=5) on interval 0.3-30.
+</li><li>Plot the calculated spectrum with error bars.
+</li><li>The error bars should be reasonable.
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9030.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-01T16%3A00%3A39%2B01%3A00&amp;precision=second" title="2014-05-01T16:00:39+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Wenduo Zhou</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9030.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-02T09%3A47%3A36%2B01%3A00&amp;precision=second" title="2014-05-02T09:47:36+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9030_fitting_error_propagation'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/74c7ae4bcdaf3aae0402e19e604f141b68c7129b"><span class="icon">​</span>74c7ae4bcdaf3aae0402e19e604f141b68c7129b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="9030.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-02T09%3A48%3A48%2B01%3A00&amp;precision=second" title="2014-05-02T09:48:48+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9030_fitting_error_propagation'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/38c7de6d6b91630fbc36d06052a87fd20d5f87b6"><span class="icon">​</span>38c7de6d6b91630fbc36d06052a87fd20d5f87b6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="9030.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A01%3A16%2B01%3A00&amp;precision=second" title="2015-06-04T03:01:16+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9873"><span class="icon">​</span>9873</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9030?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9030?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9030?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

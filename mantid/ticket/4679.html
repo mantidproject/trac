@@ -1,0 +1,532 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #4679 (segfault while setting non-cubic reciprocal lattice.)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="4678.html" title="Ticket #4678" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4679?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4679?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4679?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="4680.html" title="Ticket #4680" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 4679, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="4678.html" title="Ticket #4678">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="4680.html" title="Ticket #4680">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="4679.html">Ticket #4679</a>
+          <span class="status">(closed: invalid)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-27T20%3A50%3A15Z&amp;precision=second" title="2012-01-27T20:50:15Z in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A00%3A58%2B01%3A00&amp;precision=second" title="2015-06-04T00:00:58+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">segfault while setting non-cubic reciprocal lattice.</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Alex+Buts">Alex Buts</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Andrei+Savici">Andrei Savici</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.0.html">Release 2.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              saviciat@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Ronald Fowler
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+The code below segfaults Mantid on SetupUB while inverting some internal matrix. 
+</p>
+<p>
+WS_Name = 'CNCS_7860_event'
+Load(Filename='CNCS_7860_event.nxs',OutputWorkspace=WS_Name ) 
+</p>
+<p>
+AddSampleLog(Workspace=WS_Name,LogName='Ei',LogText='3',LogType='Number')
+MD_Name='MD1'
+SetUB(Workspace=WS_Name,a='10.4165',b='3.4165',c='10.4165',alpha=30,beta=45,gamma=80,u='1,0,0',v='0,1,0')
+ConvertToMDEvents(InputWorkspace=WS_Name,OutputWorkspace=MD_Name,QDimensions='QhQkQl',QinHKL=False,dEAnalysisMode='Direct',MinValues='-2,-2,-3,-1',MaxValues='2,2,3,3',SplitInto="20,20,20,1")
+ps=plotSlice(MD_Name, xydim=["Q1","Q2"], slicepoint=<a class="missing source" title="No default repository defined">[0,0]</a> ) 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="4679.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-27T21%3A22%3A37Z&amp;precision=second" title="2012-01-27T21:22:37Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Segfault occurs in UnitCell when  inverting some matrices while Gstar become #IND
+</p>
+<p>
+no permutation is calculated and undefined indexes cause segfailt. 
+</p>
+<p>
+May go unnoticed and cause just wrong results if arrays are initated by 0 during allocation. 
+</p>
+<p>
+Have to go today. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="4679.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-30T15%3A41%3A51Z&amp;precision=second" title="2012-01-30T15:41:51Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        set to <em>Alex Buts</em>
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="4679.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-30T20%3A17%3A57Z&amp;precision=second" title="2012-01-30T20:17:57Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4679.html" title="defect: segfault while setting non-cubic reciprocal lattice. (closed: invalid)">#4679</a> unit test which crashes on win 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/52c7354c798d7b3e15b86c98369718c430d6dcde" title="52c7354c798d7b3e15b86c98369718c430d6dcde">52c7354c798d7b3e15b86c98369718c430d6dcde</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="4679.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-31T18%3A53%3A14Z&amp;precision=second" title="2012-01-31T18:53:14Z in Timeline">9 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>saviciat@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="4679.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-31T19%3A14%3A45Z&amp;precision=second" title="2012-01-31T19:14:45Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Alex Buts</em> to <em>Andrei Savici</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="4679.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-01T03%3A07%3A26Z&amp;precision=second" title="2012-02-01T03:07:26Z in Timeline">9 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Maybe we should test this, but for any lattice to be physical the following inequalities should be true:
+</p>
+<pre class="wiki">alpha&lt;beta+gamma
+beta&lt;alpha+gamma
+gamma&lt;alpha+beta
+</pre><p>
+If one of these changes to equality, than the lattice vectors are all in plane
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="4679.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-01T03%3A14%3A01Z&amp;precision=second" title="2012-02-01T03:14:01Z in Timeline">9 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>invalid</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+if the inequalities above do not hold, you would get a negative volume for the unit cell. For the example above, change alpha to 50. If we want to throw an explicit "angles invalid", we can write a ticket, and put the check in void UnitCell::recalculate(). 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="4679.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-01T03%3A31%3A51Z&amp;precision=second" title="2012-02-01T03:31:51Z in Timeline">9 years</a> ago by Andrei Savici
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Euclid proved the above statement. <a class="ext-link" href="http://aleph0.clarku.edu/~djoyce/java/elements/bookXI/propXI20.html"><span class="icon">​</span>http://aleph0.clarku.edu/~djoyce/java/elements/bookXI/propXI20.html</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="4679.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-01T11%3A18%3A25Z&amp;precision=second" title="2012-02-01T11:18:25Z in Timeline">9 years</a> ago by Ronald Fowler
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Ronald Fowler</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="4679.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-01T12%3A18%3A35Z&amp;precision=second" title="2012-02-01T12:18:35Z in Timeline">9 years</a> ago by Ronald Fowler
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The input values given in the test case are invalid, as can be seen from the references. Using valid angle values the algorithm runs OK, even down to the case of alpha==beta==gamma/2 (i.e. coplanar vectors).
+Mantid should not crash on invalid inputs such as this and the ticket to update UnitCell:recalculate is a high priority. The test that Alex has added, currently commented out, should be enabled and throw "angles invalid".
+If the angles are such that the vectors are co-planar, or close to this, a warning message would be useful.
+</p>
+<p>
+The two debug lines that were added to UnitCell.cpp in the above checkin should be removed.
+</p>
+<p>
+While checking the input data is physical is important, it is hard to cover all cases. Hence UnitCell should also check that inversion has not failed and throw something suitable in that case.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="4679.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T11%3A56%3A35Z&amp;precision=second" title="2012-02-13T11:56:35Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4679.html" title="defect: segfault while setting non-cubic reciprocal lattice. (closed: invalid)">#4679</a> debugging operations 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fb6ee04b04acefa86234593fc40d6c7647267804" title="fb6ee04b04acefa86234593fc40d6c7647267804">fb6ee04b04acefa86234593fc40d6c7647267804</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="4679.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A00%3A58%2B01%3A00&amp;precision=second" title="2015-06-04T00:00:58+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/5526"><span class="icon">​</span>5526</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4679?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4679?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4679?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

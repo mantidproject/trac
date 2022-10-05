@@ -1,0 +1,1191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9022 (Run CheckWorkspaceMatch serially when investigating comparison logs)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9021.html" title="Ticket #9021" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9022?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9022?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9022?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9023.html" title="Ticket #9023" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9022, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9021.html" title="Ticket #9021">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="9023.html" title="Ticket #9023">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9022.html">Ticket #9022</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T14%3A01%3A25Z&amp;precision=second" title="2014-02-17T14:01:25Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A00%3A56%2B01%3A00&amp;precision=second" title="2015-06-04T03:00:56+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Run CheckWorkspaceMatch serially when investigating comparison logs</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Alex+Buts">Alex Buts</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Alex+Buts">Alex Buts</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Changes to checkWorkspaceMatch allowing to run it in parallel certainly accelerate things and fine when things are correct but are absolutely unhelpful if one wants to look why and were things went wrong. 
+logs are produced in parallel and it is impossible to understand what they are reporting. 
+</p>
+<p>
+This is why it is worth to run comparison serially (or build serial logs which is much more difficult task) if one is interested in looking at comparison logs (on debug level)
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9022.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T14%3A04%3A54Z&amp;precision=second" title="2014-02-17T14:04:54Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Should solve the problem
+</p>
+<p>
+by prohibiting parallel execution for CheckWorkspacesMatch in one selects "debug" and "trace" log levels
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac40ab632f7a3f12da8161f265b9bf5c78e234f6" title="ac40ab632f7a3f12da8161f265b9bf5c78e234f6">ac40ab632f7a3f12da8161f265b9bf5c78e234f6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9022.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T14%3A45%3A26Z&amp;precision=second" title="2014-02-17T14:45:26Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Incorrect comparison fixed
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/21e067b8216ba6ec172894c7ace2441e1413e765" title="21e067b8216ba6ec172894c7ace2441e1413e765">21e067b8216ba6ec172894c7ace2441e1413e765</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9022.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T15%3A09%3A40Z&amp;precision=second" title="2014-02-17T15:09:40Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Histogram data comparison also serialized when requested
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6e07846b15f4166beb6f495e94f6587b5bab6dc1" title="6e07846b15f4166beb6f495e94f6587b5bab6dc1">6e07846b15f4166beb6f495e94f6587b5bab6dc1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9022.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T15%3A37%3A46Z&amp;precision=second" title="2014-02-17T15:37:46Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Unit test for log levels
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/451a7a29e119f8a3797845b21deab690683b8193" title="451a7a29e119f8a3797845b21deab690683b8193">451a7a29e119f8a3797845b21deab690683b8193</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9022.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T16%3A16%3A34Z&amp;precision=second" title="2014-02-17T16:16:34Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Should solve the problem
+</p>
+<p>
+by prohibiting parallel execution for CheckWorkspacesMatch in one selects "debug" and "trace" log levels
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2964bea150fccae89214bc9dbdf999b68898aca0" title="2964bea150fccae89214bc9dbdf999b68898aca0">2964bea150fccae89214bc9dbdf999b68898aca0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9022.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T16%3A16%3A34Z&amp;precision=second" title="2014-02-17T16:16:34Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Incorrect comparison fixed
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1e3a3f6b00f7cccaced054178dbb692ce3414155" title="1e3a3f6b00f7cccaced054178dbb692ce3414155">1e3a3f6b00f7cccaced054178dbb692ce3414155</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9022.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T16%3A16%3A35Z&amp;precision=second" title="2014-02-17T16:16:35Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Histogram data comparison also serialized when requested
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7996832f28bd258a27c6ceabbeb0bb8fa81a8ac8" title="7996832f28bd258a27c6ceabbeb0bb8fa81a8ac8">7996832f28bd258a27c6ceabbeb0bb8fa81a8ac8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9022.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T16%3A16%3A35Z&amp;precision=second" title="2014-02-17T16:16:35Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Unit test for log levels
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f68a043808334cb3ae33ef415a32e78393276ca0" title="f68a043808334cb3ae33ef415a32e78393276ca0">f68a043808334cb3ae33ef415a32e78393276ca0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9022.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T17%3A13%3A55Z&amp;precision=second" title="2014-02-17T17:13:55Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> fixing unix build
+</p>
+<p>
+by removing references to POCO methods which do not exist on Unix
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4746ee7705f867548a0effe339359810c697b0c4" title="4746ee7705f867548a0effe339359810c697b0c4">4746ee7705f867548a0effe339359810c697b0c4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9022.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T17%3A35%3A58Z&amp;precision=second" title="2014-02-17T17:35:58Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+To test:
+</p>
+<p>
+find 2 histogram workspaces which are different on data level* and run CheckWorkspaceMatch on multiprocessor machine before and after applying this patch. 
+</p>
+<p>
+Choose Debug level on results window to see the reason for the data mismatch. 
+</p>
+<p>
+Before the patch CheckWorkspaceMatch generates some gibberish composed by output from different threads. 
+After the patch you will be able to see single (first) mismatched spectra with clear view for what the differences are. 
+</p>
+<p>
+*(easy way to do get such workspaces is to take ISISDirectInelasti system test e.g. MARIReductionFromWorkspace -- it is very fast,  set self.sample_mass = 11 (row 176)) and run the test -- it will generate MARIReductionFromFile-mismatch.nxs  which is slightly different from the sample MARIReduction.nxs)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T18%3A30%3A24Z&amp;precision=second" title="2014-02-17T18:30:24Z in Timeline">7 years</a> ago
+                      by Alex Buts
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9022?cversion=1&amp;cnum_hist=10#comment:10">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9022?action=comment-diff&amp;cnum=10&amp;version=2">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9022.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T18%3A28%3A32Z&amp;precision=second" title="2014-02-17T18:28:32Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+this ticket has been created to help with another ticket where it has been initially resided and then rebased to master. As the result track is in mess. Look in Git for code changes -- they are small. 
+</p>
+<p>
+Should be easy to understand and test the changes. Testing guidance -- in the message above. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9022.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T20%3A18%3A22Z&amp;precision=second" title="2014-02-18T20:18:22Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Reverting CheckWorkspacesMatch to division under fabs
+</p>
+<p>
+Somebody did a good job making this algorithm look nice but useless, so I spent long time looking in amazement why workspaces which look identical do not match.
+A coordinate (and sometimes signal and error! can be negative!) This fixes this problem.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7012b8a76eb0dc350247bf6b0749d290cbd7f49f" title="7012b8a76eb0dc350247bf6b0749d290cbd7f49f">7012b8a76eb0dc350247bf6b0749d290cbd7f49f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9022.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T20%3A22%3A45Z&amp;precision=second" title="2014-02-18T20:22:45Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> No, this actually fixes negative values problem
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cbb4cd6f4f768ab22bc0b51b626474f6b2d13cea" title="cbb4cd6f4f768ab22bc0b51b626474f6b2d13cea">cbb4cd6f4f768ab22bc0b51b626474f6b2d13cea</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9022.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T10%3A31%3A22Z&amp;precision=second" title="2014-02-19T10:31:22Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Proper error estimation
+</p>
+<p>
+Evaluating problem I am having comparing two similar inelastic workspaces I've modified comparison algorithm to work with relative and absolute error. This is actually what you want comparing two workspaces and some kind of this approach was already in place for values close to 0
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02176858c3c201cfe94e99e15e6f3150022acef3" title="02176858c3c201cfe94e99e15e6f3150022acef3">02176858c3c201cfe94e99e15e6f3150022acef3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9022.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T13%3A20%3A28Z&amp;precision=second" title="2014-02-19T13:20:28Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> after some thinking, I've decided that standard definition
+</p>
+<p>
+of Relerr with more careful treatment of values near 0 is preferable implementation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0d47d5b2525525e208d68e17f316f8464342d610" title="0d47d5b2525525e208d68e17f316f8464342d610">0d47d5b2525525e208d68e17f316f8464342d610</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9022.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T13%3A20%3A28Z&amp;precision=second" title="2014-02-19T13:20:28Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> A simple comment
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0fdfa950b9874ba1350becebcdc190e9b69d367a" title="0fdfa950b9874ba1350becebcdc190e9b69d367a">0fdfa950b9874ba1350becebcdc190e9b69d367a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9022.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T14%3A21%3A29Z&amp;precision=second" title="2014-02-19T14:21:29Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Trying to compare two complex workspaces I tried different ways of comparing the data and calculating the error. Final result which suits the purpose is the standard relative error with careful treatment of small values. As the change is minor and related to CheckWorkspaceMatch algorithm it well fits within this ticket.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9022.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-07T14%3A59%3A27Z&amp;precision=second" title="2014-03-07T14:59:27Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Nick Draper</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The branch
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9022.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-07T15%3A01%3A03Z&amp;precision=second" title="2014-03-07T15:01:03Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This branch has not Fully been merged to develop, please run a checkbuild and send for testing again.
+</p>
+<p>
+This wasted 15 minutes of my life, as I foolishly started testing the current state before running git test start.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9022.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-07T15%3A01%3A09Z&amp;precision=second" title="2014-03-07T15:01:09Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9022.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-07T15%3A12%3A12Z&amp;precision=second" title="2014-03-07T15:12:12Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9022.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-17T14%3A47%3A07Z&amp;precision=second" title="2014-03-17T14:47:07Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        changed from <em>Nick Draper</em> to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9022.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-17T14%3A57%3A41Z&amp;precision=second" title="2014-03-17T14:57:41Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The changes generally look fine but the new function, TOL_ERR, is named incorrectly and is not in the right place. Can it be moved to the first thing inside Algorithms namespace and inside an anonymous namespace. Also please remove the inline keyword and use the proper camelCase standard for the names. I think the function name could be improved slightly while we're here too:
+</p>
+<ul><li>TOL_ERR -&gt; relErrInLimit
+</li><li>ERROR_VAL -&gt; errVal 
+</li></ul><pre class="wiki">namespace Algorithms
+{
+  namespace
+  {
+    /**
+     * Function which calculates relative error between two values and analyses if this error is within the limits
+     * requested
+     * @param x1 -- first value to check difference
+     * @param x2 -- second value to check difference
+     * @param errVal -- the value of the error, to check against. Should  be positive != 0
+     * @returns true if error or false if the value is within the limits requested
+     */
+     bool relErrInLimit(const double &amp;x1, const double &amp;x2, const double &amp;errVal)
+     {
+ 
+       double num= std::fabs(x1-x2);
+       // how to treat x1&lt;0 and x2 &gt; 0 ?  probably this way
+       double den=0.5*(std::fabs(x1)+std::fabs(x2));
+       if (den&lt;errVal) 
+         return (num&gt;errVal);
+ 
+       return (num/den&gt;errVal);
+     }
+   }
+
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9022.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T13%3A08%3A42%2B01%3A00&amp;precision=second" title="2014-04-07T13:08:42+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Trivial changes to the function arguments
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/35ae58734a5b92458347e872361c49d4cc89f8d4" title="35ae58734a5b92458347e872361c49d4cc89f8d4">35ae58734a5b92458347e872361c49d4cc89f8d4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9022.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T15%3A13%3A29%2B01%3A00&amp;precision=second" title="2014-04-07T15:13:29+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The TOL_ERR capital came from "notional" templating of this function into the code where it was initially cut-out. I do not have problem with naming it low case, but making it global does not make sense.  It is not good enough to provide homogeneous accuracy along any data range and its meaning is well restricted by the algorithm it is in. It can be properly understood only within this algorithm scope. 
+</p>
+<p>
+I tried to make it generic, but doing this appears to need much more efforts then I was able to assign within the scope of another ticket this one is extracted from. 
+</p>
+<p>
+If we wand generic and proper tollErr function, it should be separate ticket for it. Meanwhile this one has been renamed to relErr.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="9022.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T15%3A45%3A07%2B01%3A00&amp;precision=second" title="2014-04-07T15:45:07+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> conflicts with master after long inactivity period
+</p>
+<p>
+Merge branch 'master' into feature/9022_serialWorkspaceComparison
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/Algorithms/src/CheckWorkspacesMatch.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/891c24d9a1c975329309419621c5bd0ad4710788" title="891c24d9a1c975329309419621c5bd0ad4710788">891c24d9a1c975329309419621c5bd0ad4710788</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="9022.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T15%3A54%3A52%2B01%3A00&amp;precision=second" title="2014-04-07T15:54:52+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> Missing pre-commit
+</p>
+<p>
+why it get missing in the first place?
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/096696236d85f3ab1f0435b87db68c964a3038e5" title="096696236d85f3ab1f0435b87db68c964a3038e5">096696236d85f3ab1f0435b87db68c964a3038e5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="9022.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T16%3A25%3A40%2B01%3A00&amp;precision=second" title="2014-04-07T16:25:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="9022.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T08%3A38%3A38%2B01%3A00&amp;precision=second" title="2014-04-08T08:38:38+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="9022.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T08%3A44%3A07%2B01%3A00&amp;precision=second" title="2014-04-08T08:44:07+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I didn't mean to make the function global. What I meant was just move it to near the top of the <tt>CheckWorkspacesMatch.cpp</tt> file and put it in an anonymous namespace (this will actually make it far from global). The only reason I think it should be moved is that at the moment it's place in the file makes it look like it is a member function.
+</p>
+<p>
+My idea was for the top of the file to look like this:
+</p>
+<div class="code"><pre><span class="k">namespace</span> Mantid
+<span class="p">{</span>
+<span class="k">namespace</span> Algorithms
+<span class="p">{</span>
+  <span class="k">namespace</span>
+  <span class="p">{</span> <span class="c1">//anonymous
+</span>    <span class="cm">/**
+     * Function which calculates relative error between two values and analyses if this error is within the limits
+    * requested
+    * @param x1       -- first value to check difference
+    * @param x2       -- second value to check difference
+    * @param errorVal -- the value of the error, to check against. Should  be positive != 0
+
+    * @returns true if error or false if the value is within the limits requested
+    */</span>
+   <span class="kt">bool</span> relErr<span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="o">&amp;</span>x1<span class="p">,</span><span class="k">const</span> <span class="kt">double</span> <span class="o">&amp;</span>x2<span class="p">,</span><span class="k">const</span> <span class="kt">double</span> <span class="o">&amp;</span>errorVal<span class="p">)</span>
+   <span class="p">{</span>
+     <span class="kt">double</span> num<span class="o">=</span> std<span class="o">::</span>fabs<span class="p">(</span>x1<span class="o">-</span>x2<span class="p">);</span>
+     <span class="c1">// how to treat x1&lt;0 and x2 &gt; 0 ?  probably this way
+</span>     <span class="kt">double</span> den<span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span>std<span class="o">::</span>fabs<span class="p">(</span>x1<span class="p">)</span><span class="o">+</span>std<span class="o">::</span>fabs<span class="p">(</span>x2<span class="p">));</span>
+     <span class="k">if</span> <span class="p">(</span>den<span class="o">&lt;</span>errorVal<span class="p">)</span> 
+        <span class="k">return</span> <span class="p">(</span>num<span class="o">&gt;</span>errorVal<span class="p">);</span>
+     <span class="k">return</span> <span class="p">(</span>num<span class="o">/</span>den<span class="o">&gt;</span>errorVal<span class="p">);</span>
+   <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">...</span> rest of the file
+
+</pre></div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="9022.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T09%3A26%3A54%2B01%3A00&amp;precision=second" title="2014-04-08T09:26:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> moved error calculating function into anonymous namespace.
+</p>
+<p>
+nof if I am familiar with this style or finding it clearer then usual file scope function.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a4a2820677b34cde570d1aa28e6c428275345749" title="a4a2820677b34cde570d1aa28e6c428275345749">a4a2820677b34cde570d1aa28e6c428275345749</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="9022.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T09%3A32%3A00%2B01%3A00&amp;precision=second" title="2014-04-08T09:32:00+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9022.html" title="enhancement: Run CheckWorkspaceMatch serially when investigating comparison logs (closed: fixed)">#9022</a> better way of expressing the same concept
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/757b060971d0981e0934c4867f0f5648b8213274" title="757b060971d0981e0934c4867f0f5648b8213274">757b060971d0981e0934c4867f0f5648b8213274</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="9022.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T09%3A45%3A17%2B01%3A00&amp;precision=second" title="2014-04-08T09:45:17+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="9022.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T12%3A53%3A04%2B01%3A00&amp;precision=second" title="2014-04-08T12:53:04+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="9022.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T12%3A57%3A50%2B01%3A00&amp;precision=second" title="2014-04-08T12:57:50+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9022_serialWorkspaceComparison'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/b0d8ba3930908612f42ddbb8a4ee7a433c4e7036"><span class="icon">​</span>b0d8ba3930908612f42ddbb8a4ee7a433c4e7036</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="9022.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A00%3A56%2B01%3A00&amp;precision=second" title="2015-06-04T03:00:56+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9865"><span class="icon">​</span>9865</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9022?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9022?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9022?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7955 (Muon: Dead Time file logic is broken)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7954.html" title="Ticket #7954" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7955?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7955?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7955?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7956.html" title="Ticket #7956" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7955, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7954.html" title="Ticket #7954">Previous Ticket</a></span></li><li><span><a class="next" href="7956.html" title="Ticket #7956">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/7955.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7955.html">Ticket #7955</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T10%3A45%3A09%2B01%3A00&amp;precision=second" title="2013-09-17T10:45:09+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A16%3A44%2B01%3A00&amp;precision=second" title="2015-06-04T02:16:44+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Muon: Dead Time file logic is broken</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Arturs+Bekasovs">Arturs Bekasovs</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Arturs+Bekasovs">Arturs Bekasovs</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.0.html">Release 3.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Muon">Muon</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="6691.html" title="MUON: save user specified deadtime table filename">#6691</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Gesner Passos
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+To reproduce:
+</p>
+<ol><li>Initially, set Dead Time Table to "None".
+</li><li>Load and plot attached <em>EMU00036854.nxs</em>.
+</li><li>Now set Dead Time Table to "From Disk", write some nonsense inside the box, e.g. "non-existent file", and press Enter. Message box saying "A problem occurred while applying dead times." should appear, which is expected.
+</li><li>Now, click "Browse" near the Dead Time file box, and select attached <em>dtepar.nxs</em>. The same message box appears again. This shouldn't happen, because this IS a valid Dead Time file.
+</li><li>Try to select the same file again. This time correction is applied without any errors.
+</li><li>Write some non-sense and press Enter again - the correction is applied without errors, though the file obviously does not exist.
+</li></ol>
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/7955/dtepar.nxs.html" title="View attachment">dtepar.nxs</a><a href="../raw-attachment/ticket/7955/dtepar.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="22703 bytes">22.2 KB</span>) -
+      added by <em>Arturs Bekasovs</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T10%3A45%3A28%2B01%3A00&amp;precision=second" title="2013-09-17T10:45:28+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Dead Time Table file
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/7955/EMU00036854.nxs.html" title="View attachment">EMU00036854.nxs</a><a href="../raw-attachment/ticket/7955/EMU00036854.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="987157 bytes">964.0 KB</span>) -
+      added by <em>Arturs Bekasovs</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T10%3A45%3A40%2B01%3A00&amp;precision=second" title="2013-09-17T10:45:40+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Sample data file
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T10%3A45%3A28%2B01%3A00&amp;precision=second" title="2013-09-17T10:45:28+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7955/dtepar.nxs.html"><em>dtepar.nxs</em></a><a href="../raw-attachment/ticket/7955/dtepar.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Dead Time Table file
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T10%3A45%3A40%2B01%3A00&amp;precision=second" title="2013-09-17T10:45:40+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7955/EMU00036854.nxs.html"><em>EMU00036854.nxs</em></a><a href="../raw-attachment/ticket/7955/EMU00036854.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Sample data file
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7955.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T10%3A46%3A24%2B01%3A00&amp;precision=second" title="2013-09-17T10:46:24+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6691</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="closed ticket" href="6691.html" title="enhancement: MUON: save user specified deadtime table filename (closed: fixed)">#6691</a>) While investigating this one, found that the whole Dead Time file thing is not working properly. Ticket for that: <a class="closed ticket" href="7955.html" title="defect: Muon: Dead Time file logic is broken (closed: fixed)">#7955</a>.
+</p>
+<p>
+While it's theoretically possible to implement this one, it would be difficult to verify it before the logic is fixed, so doing that first.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7955.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T10%3A51%3A08%2B01%3A00&amp;precision=second" title="2013-09-17T10:51:08+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li><li>
+      <strong>Blocking</strong>
+        <em>6691</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+It seems that the last file found is used instead of the current one loaded.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7955.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T10%3A52%3A25%2B01%3A00&amp;precision=second" title="2013-09-17T10:52:25+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6691</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="closed ticket" href="6691.html" title="enhancement: MUON: save user specified deadtime table filename (closed: fixed)">#6691</a>) Trac issues. Returning blocked by ticket.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="7955.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T10%3A23%3A22%2B01%3A00&amp;precision=second" title="2013-09-19T10:23:22+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make loading function throw exceptions, not show messages.
+</p>
+<p>
+Refs <a class="closed ticket" href="7955.html" title="defect: Muon: Dead Time file logic is broken (closed: fixed)">#7955</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/012befb350cbeca8e0aa1b82aecff01c6badcea5" title="012befb350cbeca8e0aa1b82aecff01c6badcea5">012befb350cbeca8e0aa1b82aecff01c6badcea5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="7955.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T10%3A23%3A22%2B01%3A00&amp;precision=second" title="2013-09-19T10:23:22+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Do updates only when Dead Timt Table files where found.
+</p>
+<p>
+Refs <a class="closed ticket" href="7955.html" title="defect: Muon: Dead Time file logic is broken (closed: fixed)">#7955</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cce6e036148d29a58577d5800b13272b55546b7f" title="cce6e036148d29a58577d5800b13272b55546b7f">cce6e036148d29a58577d5800b13272b55546b7f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="7955.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T10%3A23%3A22%2B01%3A00&amp;precision=second" title="2013-09-19T10:23:22+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move error reporting code to one place.
+</p>
+<p>
+Plus make error message explicit about the fact that
+no dead time correction was applied.
+</p>
+<p>
+Refs <a class="closed ticket" href="7955.html" title="defect: Muon: Dead Time file logic is broken (closed: fixed)">#7955</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2d36de452f39fbb69e287b113b16ae633270b998" title="2d36de452f39fbb69e287b113b16ae633270b998">2d36de452f39fbb69e287b113b16ae633270b998</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="7955.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T10%3A23%3A22%2B01%3A00&amp;precision=second" title="2013-09-19T10:23:22+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Check if Dead Time file is valid before using it.
+</p>
+<p>
+Refs <a class="closed ticket" href="7955.html" title="defect: Muon: Dead Time file logic is broken (closed: fixed)">#7955</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/33a6a7ef3a5f8ab30ea48b9c6d635a244993a5b2" title="33a6a7ef3a5f8ab30ea48b9c6d635a244993a5b2">33a6a7ef3a5f8ab30ea48b9c6d635a244993a5b2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="7955.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T10%3A28%3A14%2B01%3A00&amp;precision=second" title="2013-09-19T10:28:14+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Tester:</strong>
+</p>
+<p>
+Make sure that the problem in the description is not reproducible any more. 
+</p>
+<p>
+And, in general, check that the logic is correct.
+</p>
+<ul><li>If Dead Time table file is not valid -&gt; error is shown saying that Dead Time corr. was not applied
+</li><li>If is valid -&gt; Dead Time correction is applied
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="7955.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T10%3A30%3A56%2B01%3A00&amp;precision=second" title="2013-09-19T10:30:56+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7955.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-20T13%3A56%3A54%2B01%3A00&amp;precision=second" title="2013-09-20T13:56:54+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Gesner Passos</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7955.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-20T15%3A18%3A19%2B01%3A00&amp;precision=second" title="2013-09-20T15:18:19+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+It corrected the problem. 
+</p>
+<p>
+A small issue is that the user is able to interact with the system even with the red mark saying that the deadtime is invalid. And he may go on doing lot's of stuffs, and it does not alert him always that it is not applying the correction. But it is correctly implemented. So, it has passed. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7955.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-20T15%3A18%3A37%2B01%3A00&amp;precision=second" title="2013-09-20T15:18:37+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/bugfix/7955_muon_deadtime_file_logic'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="7955.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A16%3A44%2B01%3A00&amp;precision=second" title="2015-06-04T02:16:44+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/8800"><span class="icon">​</span>8800</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7955?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7955?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7955?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1376 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9059 (Simplify Logger class to not store created instances in static list)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9058.html" title="Ticket #9058" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9059?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9059?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9059?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9060.html" title="Ticket #9060" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9059, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9058.html" title="Ticket #9058">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="9060.html" title="Ticket #9060">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9059.html">Ticket #9059</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-20T14%3A26%3A39Z&amp;precision=second" title="2014-02-20T14:26:39Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A02%3A28%2B01%3A00&amp;precision=second" title="2015-06-04T03:02:28+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Simplify Logger class to not store created instances in static list</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~Maintenance">Maintenance</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Nick Draper
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-02-21 15:11:01.140843+00:00">
+        (last modified by Martyn Gigg)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/9059?action=diff&amp;version=3">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+The Logger::get method currently creates a new Logger object &amp; inserts this into a static list and waits for a user to call release so that it can be deleted. This is all a bit convoluted and harks back to when we used to cache Logger instances.
+</p>
+<p>
+This is no longer the case and it would be better if the class could be constructed as normal and then let the users decide how to manage the new instances.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9059.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-20T14%3A52%3A39Z&amp;precision=second" title="2014-02-20T14:52:39Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9059.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-21T15%3A11%3A01Z&amp;precision=second" title="2014-02-21T15:11:01Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/9059?action=diff&amp;version=3">diff</a>)
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>Change Logger::get to return shared_ptr</em> to <em>Simplify Logger class to not store created instances in static list</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9059.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A06Z&amp;precision=second" title="2014-03-18T12:53:06Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Add a performance test for the logging framework.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0b7bcfdd54d6eb9d0b542ab89203c0bea07aeaf2" title="0b7bcfdd54d6eb9d0b542ab89203c0bea07aeaf2">0b7bcfdd54d6eb9d0b542ab89203c0bea07aeaf2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9059.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A06Z&amp;precision=second" title="2014-03-18T12:53:06Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Logger to be a normal class that can be instantiated.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e970b351c4706add0bb98470ae13a5ca341bb8d7" title="e970b351c4706add0bb98470ae13a5ca341bb8d7">e970b351c4706add0bb98470ae13a5ca341bb8d7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9059.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A07Z&amp;precision=second" title="2014-03-18T12:53:07Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Kernel/KernelTest builds &amp; tests pass
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6e92fad22c8c42defeea1c2bb6d9bdc28035b7b2" title="6e92fad22c8c42defeea1c2bb6d9bdc28035b7b2">6e92fad22c8c42defeea1c2bb6d9bdc28035b7b2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9059.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A07Z&amp;precision=second" title="2014-03-18T12:53:07Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Geometry/GeometryTest compiles &amp; the tests pass.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/111e89d88a9f29e0104decbccdfed9ee0e86a43d" title="111e89d88a9f29e0104decbccdfed9ee0e86a43d">111e89d88a9f29e0104decbccdfed9ee0e86a43d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9059.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A07Z&amp;precision=second" title="2014-03-18T12:53:07Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+API &amp; APITest compiles.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c99e3ae2212d7009de7a1a529cca3e6cdc367564" title="c99e3ae2212d7009de7a1a529cca3e6cdc367564">c99e3ae2212d7009de7a1a529cca3e6cdc367564</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9059.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A07Z&amp;precision=second" title="2014-03-18T12:53:07Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+DataObjects/test pass
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fe44d24c465f393d0cf5d86df2804693c537280d" title="fe44d24c465f393d0cf5d86df2804693c537280d">fe44d24c465f393d0cf5d86df2804693c537280d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9059.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A07Z&amp;precision=second" title="2014-03-18T12:53:07Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Python compiles and the tests pass.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ebb75011696f783e3ca326a1924d7ebf60f2d0a6" title="ebb75011696f783e3ca326a1924d7ebf60f2d0a6">ebb75011696f783e3ca326a1924d7ebf60f2d0a6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9059.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A08Z&amp;precision=second" title="2014-03-18T12:53:08Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove unnecessary additional logger references.
+</p>
+<p>
+Just use the base class one.
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f9da7811db41fdc62a5bd983042776cc3574987" title="5f9da7811db41fdc62a5bd983042776cc3574987">5f9da7811db41fdc62a5bd983042776cc3574987</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9059.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A08Z&amp;precision=second" title="2014-03-18T12:53:08Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+DataHandling compiles
+</p>
+<p>
+Move static loggers to cpp files and remove some unnecessary loggers
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/25d862996719f3f103bfb1ddfa6b79ad7d42567e" title="25d862996719f3f103bfb1ddfa6b79ad7d42567e">25d862996719f3f103bfb1ddfa6b79ad7d42567e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9059.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A08Z&amp;precision=second" title="2014-03-18T12:53:08Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Crystal now compiles but not tests. They depend on MDEvents...
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b53200102debb4a45d79641d0d9bc4f85a0df48c" title="b53200102debb4a45d79641d0d9bc4f85a0df48c">b53200102debb4a45d79641d0d9bc4f85a0df48c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9059.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A08Z&amp;precision=second" title="2014-03-18T12:53:08Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+MDEvents &amp; tests compile
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0165823fd09d36f2d67ac8377b202d13292cef0a" title="0165823fd09d36f2d67ac8377b202d13292cef0a">0165823fd09d36f2d67ac8377b202d13292cef0a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9059.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A08Z&amp;precision=second" title="2014-03-18T12:53:08Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+MDAlgorithms &amp; tests compile.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/002399749e1d04c1903efcd7156486cd47798440" title="002399749e1d04c1903efcd7156486cd47798440">002399749e1d04c1903efcd7156486cd47798440</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9059.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A09Z&amp;precision=second" title="2014-03-18T12:53:09Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+CurveFitting compiles
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e41551a06f582fa246efec1c3a089865e1fd56a0" title="e41551a06f582fa246efec1c3a089865e1fd56a0">e41551a06f582fa246efec1c3a089865e1fd56a0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9059.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A09Z&amp;precision=second" title="2014-03-18T12:53:09Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+ICat &amp; tests now compile
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b235d202be29e7408e44478f9de7bd904527ffe6" title="b235d202be29e7408e44478f9de7bd904527ffe6">b235d202be29e7408e44478f9de7bd904527ffe6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9059.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A09Z&amp;precision=second" title="2014-03-18T12:53:09Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+WorkflowAlgorithms compiles.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5e60ffaf52a00b751202fcb71e0e82cefc38750d" title="5e60ffaf52a00b751202fcb71e0e82cefc38750d">5e60ffaf52a00b751202fcb71e0e82cefc38750d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9059.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A09Z&amp;precision=second" title="2014-03-18T12:53:09Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+LiveData &amp; tests compile
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ed4fe6030935407a82a5622e066a4248db1a49c" title="6ed4fe6030935407a82a5622e066a4248db1a49c">6ed4fe6030935407a82a5622e066a4248db1a49c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9059.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A09Z&amp;precision=second" title="2014-03-18T12:53:09Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+SINQ &amp; tests compiles
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7892e727e3b57be0f5f46c7312123eb1ee92c946" title="7892e727e3b57be0f5f46c7312123eb1ee92c946">7892e727e3b57be0f5f46c7312123eb1ee92c946</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9059.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A09Z&amp;precision=second" title="2014-03-18T12:53:09Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+ScriptRepository compiles
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a4af45b36a34bf77fdb4eda4f9bb2eeb4cfa54fd" title="a4af45b36a34bf77fdb4eda4f9bb2eeb4cfa54fd">a4af45b36a34bf77fdb4eda4f9bb2eeb4cfa54fd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9059.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A09Z&amp;precision=second" title="2014-03-18T12:53:09Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+MantidQt API library compiles
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a4e53eb5e9227ca5f81eb0feb38851d201b30a63" title="a4e53eb5e9227ca5f81eb0feb38851d201b30a63">a4e53eb5e9227ca5f81eb0feb38851d201b30a63</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9059.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A10Z&amp;precision=second" title="2014-03-18T12:53:10Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+MantidWidgets library compiles
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/881164ba511b8895e4dc6cf3fdb1e29012bd34e5" title="881164ba511b8895e4dc6cf3fdb1e29012bd34e5">881164ba511b8895e4dc6cf3fdb1e29012bd34e5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9059.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A10Z&amp;precision=second" title="2014-03-18T12:53:10Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+SpectrumViewer lib compiles.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/39812c47a631d961f7f97efa050e7aed4cea6a13" title="39812c47a631d961f7f97efa050e7aed4cea6a13">39812c47a631d961f7f97efa050e7aed4cea6a13</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9059.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A10Z&amp;precision=second" title="2014-03-18T12:53:10Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+SliceViewer lib compiles
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/85c151e09796841d6e05ddc36ffc2edd13f6dd46" title="85c151e09796841d6e05ddc36ffc2edd13f6dd46">85c151e09796841d6e05ddc36ffc2edd13f6dd46</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9059.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A10Z&amp;precision=second" title="2014-03-18T12:53:10Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+MantidQt CustomInterfaces compiles.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d81efc616c4cda3a3ca6be9c213b33d199b3372c" title="d81efc616c4cda3a3ca6be9c213b33d199b3372c">d81efc616c4cda3a3ca6be9c213b33d199b3372c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="9059.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A10Z&amp;precision=second" title="2014-03-18T12:53:10Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+MantidPlot exe compiles
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ce68409f5d71595d15c7c29630b2d4c2ec4e91e4" title="ce68409f5d71595d15c7c29630b2d4c2ec4e91e4">ce68409f5d71595d15c7c29630b2d4c2ec4e91e4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="9059.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-18T12%3A53%3A10Z&amp;precision=second" title="2014-03-18T12:53:10Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Vates libraries &amp; app compiles.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bbdb2cb203da47aeb1fbb8fc336a44a08e838235" title="bbdb2cb203da47aeb1fbb8fc336a44a08e838235">bbdb2cb203da47aeb1fbb8fc336a44a08e838235</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="9059.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T08%3A30%3A55Z&amp;precision=second" title="2014-03-21T08:30:55Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Put back static Logger in IFunction1D.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/309006c73570b8e5123d2aa696fb3a3f4965977f" title="309006c73570b8e5123d2aa696fb3a3f4965977f">309006c73570b8e5123d2aa696fb3a3f4965977f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="9059.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T08%3A30%3A56Z&amp;precision=second" title="2014-03-21T08:30:56Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/9059_refactor_logger' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/DataHandling/inc/MantidDataHandling/SaveANSTOAscii.h
+Code/Mantid/Framework/DataHandling/src/SaveANSTOAscii.cpp
+Code/Mantid/Framework/Kernel/test/LoggerTest.h
+Code/Mantid/Framework/MDAlgorithms/src/ConvertToMD.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81d17cf85ad63b459bd61c1266c8b2de29ce7a01" title="81d17cf85ad63b459bd61c1266c8b2de29ce7a01">81d17cf85ad63b459bd61c1266c8b2de29ce7a01</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="9059.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T10%3A36%3A13Z&amp;precision=second" title="2014-03-21T10:36:13Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Put back static Logger in IFunction1D.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/309006c73570b8e5123d2aa696fb3a3f4965977f" title="309006c73570b8e5123d2aa696fb3a3f4965977f">309006c73570b8e5123d2aa696fb3a3f4965977f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="9059.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T10%3A36%3A13Z&amp;precision=second" title="2014-03-21T10:36:13Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Kill compiler warning about unused variable in LoggerTest
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/402f963b2a8590377f4482ee60c851eb419a25fa" title="402f963b2a8590377f4482ee60c851eb419a25fa">402f963b2a8590377f4482ee60c851eb419a25fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="9059.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T10%3A36%3A13Z&amp;precision=second" title="2014-03-21T10:36:13Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/master' into feature/9059_refactor_logger
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/MDAlgorithms/src/ConvertToMD.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0f502d36fe516c32e1400edfe73bcf3c468a2be6" title="0f502d36fe516c32e1400edfe73bcf3c468a2be6">0f502d36fe516c32e1400edfe73bcf3c468a2be6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="9059.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T10%3A36%3A13Z&amp;precision=second" title="2014-03-21T10:36:13Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix other logger instances after merge from master.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8182b9cd0384964b166a6712547d7d7f2be6a6ad" title="8182b9cd0384964b166a6712547d7d7f2be6a6ad">8182b9cd0384964b166a6712547d7d7f2be6a6ad</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="9059.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T10%3A37%3A48Z&amp;precision=second" title="2014-03-21T10:37:48Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/9059_refactor_logger' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/DataHandling/inc/MantidDataHandling/SaveANSTOAscii.h
+Code/Mantid/Framework/DataHandling/src/SaveANSTOAscii.cpp
+Code/Mantid/Framework/Kernel/test/LoggerTest.h
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/246ea81dc9424e50a178aad2182b24719a0222db" title="246ea81dc9424e50a178aad2182b24719a0222db">246ea81dc9424e50a178aad2182b24719a0222db</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="9059.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T11%3A57%3A26Z&amp;precision=second" title="2014-03-21T11:57:26Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove a missed static logger reference in an algorithm.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f62d6ff09417ad044e614bde0de88cab818967c" title="5f62d6ff09417ad044e614bde0de88cab818967c">5f62d6ff09417ad044e614bde0de88cab818967c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="9059.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T12%3A22%3A52Z&amp;precision=second" title="2014-03-21T12:22:52Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix logger call in SANS script.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/af590b857787b65ee632218b347a41a87f8ae3eb" title="af590b857787b65ee632218b347a41a87f8ae3eb">af590b857787b65ee632218b347a41a87f8ae3eb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="9059.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T12%3A22%3A52Z&amp;precision=second" title="2014-03-21T12:22:52Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add deprecated Logger.get for Python.
+</p>
+<p>
+Gives users a little leeway.
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bc294cfaf6d4353c6727b10efdcdfaf398cf92aa" title="bc294cfaf6d4353c6727b10efdcdfaf398cf92aa">bc294cfaf6d4353c6727b10efdcdfaf398cf92aa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="9059.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T12%3A50%3A26Z&amp;precision=second" title="2014-03-21T12:50:26Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Put back initializer character for MPI build
+</p>
+<p>
+Refs <a class="closed ticket" href="9069.html" title="enhancement: IDS catalog interface (closed: fixed)">#9069</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/019c2930128cfeb5529ca1a5b6021b72172996e8" title="019c2930128cfeb5529ca1a5b6021b72172996e8">019c2930128cfeb5529ca1a5b6021b72172996e8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="9059.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T12%3A51%3A54Z&amp;precision=second" title="2014-03-21T12:51:54Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Branch: feature/9059_refactor_logger
+</p>
+<p>
+Tester: Check that you can still change the log level from MantidPlot and that you get the detail that you are expecting. There should be no visible change from a user perspective.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="9059.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T14%3A13%3A36Z&amp;precision=second" title="2014-03-28T14:13:36Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Nick Draper</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="9059.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T16%3A05%3A41Z&amp;precision=second" title="2014-03-28T16:05:41Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Log level still works well in mantid plot and is still preserved across sessions, no apparent change - works as before.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="9059.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T16%3A15%3A53Z&amp;precision=second" title="2014-03-28T16:15:53Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+re <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a> merge conflict
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/859a50c9e27d873e3c5b3c1658f2c1ff22259030" title="859a50c9e27d873e3c5b3c1658f2c1ff22259030">859a50c9e27d873e3c5b3c1658f2c1ff22259030</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="9059.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T16%3A59%3A59Z&amp;precision=second" title="2014-03-28T16:59:59Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="9059.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-31T08%3A07%3A08%2B01%3A00&amp;precision=second" title="2014-03-31T08:07:08+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unresolved merge conflicts.
+</p>
+<p>
+Refs <a class="closed ticket" href="9059.html" title="enhancement: Simplify Logger class to not store created instances in static list (closed: fixed)">#9059</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ce6ac62cc11278a43b16654a7b670a03082c3b42" title="ce6ac62cc11278a43b16654a7b670a03082c3b42">ce6ac62cc11278a43b16654a7b670a03082c3b42</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="9059.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A02%3A28%2B01%3A00&amp;precision=second" title="2015-06-04T03:02:28+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9902"><span class="icon">​</span>9902</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9059?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9059?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9059?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

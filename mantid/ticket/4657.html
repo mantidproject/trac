@@ -1,0 +1,840 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #4657 (Extend IntegratePeakTimeSlices for panels that may not be Rectangular Detectors)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="4656.html" title="Ticket #4656" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4657?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4657?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4657?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="4658.html" title="Ticket #4658" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 4657, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="4656.html" title="Ticket #4656">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="4658.html" title="Ticket #4658">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="4657.html">Ticket #4657</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-26T01%3A33%3A33Z&amp;precision=second" title="2012-01-26T01:33:33Z in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A00%3A03%2B01%3A00&amp;precision=second" title="2015-06-04T00:00:03+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Extend IntegratePeakTimeSlices for panels that may not be Rectangular Detectors</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Ruth+Mikkelson">Ruth Mikkelson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Ruth+Mikkelson">Ruth Mikkelson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.1.html">Release 2.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Vickie Lynch
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+The current implementation only works with Rectangular Detectors. The detectors(pixels) close to a peak should be about rectangular in order for the results to be relevant.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="4657.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-26T01%3A49%3A44Z&amp;precision=second" title="2012-01-26T01:49:44Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li><li>
+      <strong>Owner</strong>
+        set to <em>Ruth Mikkelson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="4657.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T03%3A19%3A15Z&amp;precision=second" title="2012-02-13T03:19:15Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Found nearest neighbors by checking children of Bank
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a4e94a169a09ba1e9a2abcf3382aa78737ac747d" title="a4e94a169a09ba1e9a2abcf3382aa78737ac747d">a4e94a169a09ba1e9a2abcf3382aa78737ac747d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="4657.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T03%3A19%3A16Z&amp;precision=second" title="2012-02-13T03:19:16Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved conflicts in a strange merge I hope. Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a>
+</p>
+<p>
+Merge branch 'master' into Work1
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/CurveFitting/inc/MantidCurveFitting/BivariateNormal.h
+Code/Mantid/Framework/CurveFitting/src/BivariateNormal.cpp
+Code/Mantid/Framework/CurveFitting/test/BivariateNormalTest.h 
+</p>
+</blockquote>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/555a873d983a1bbce78d0c450db3084f0f091d60" title="555a873d983a1bbce78d0c450db3084f0f091d60">555a873d983a1bbce78d0c450db3084f0f091d60</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="4657.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T03%3A19%3A17Z&amp;precision=second" title="2012-02-13T03:19:17Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Redid changes by others lost during merge.
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dede7bd606d2ad3e962ea231c768eaae4294ff6b" title="dede7bd606d2ad3e962ea231c768eaae4294ff6b">dede7bd606d2ad3e962ea231c768eaae4294ff6b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="4657.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T03%3A19%3A18Z&amp;precision=second" title="2012-02-13T03:19:18Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added virtual to the destructor for IntegratePeakTimeSlices.
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/10f07dea840476da9be8553b00ece7c1e1f0680d" title="10f07dea840476da9be8553b00ece7c1e1f0680d">10f07dea840476da9be8553b00ece7c1e1f0680d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="4657.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T03%3A48%3A28Z&amp;precision=second" title="2012-02-13T03:48:28Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed Windows error by adding const
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d6ea0422d584140c6e66616a372ce4d9d22a7fd7" title="d6ea0422d584140c6e66616a372ce4d9d22a7fd7">d6ea0422d584140c6e66616a372ce4d9d22a7fd7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="4657.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T14%3A56%3A16Z&amp;precision=second" title="2012-02-13T14:56:16Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> make Peak object find grandparent as bank name
+</p>
+<p>
+in all cases, not just rectangular detectors 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac363628e4fafc7e0cca350ef5b5051cf82a0d0e" title="ac363628e4fafc7e0cca350ef5b5051cf82a0d0e">ac363628e4fafc7e0cca350ef5b5051cf82a0d0e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="4657.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T15%3A10%3A21Z&amp;precision=second" title="2012-02-13T15:10:21Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> give more helpful names to wish panels in IDF 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7dbd18a32ed85a5650b1d6ce8a70b2a6db544530" title="7dbd18a32ed85a5650b1d6ce8a70b2a6db544530">7dbd18a32ed85a5650b1d6ce8a70b2a6db544530</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="4657.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T22%3A57%3A27Z&amp;precision=second" title="2012-02-13T22:57:27Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a>: Peak object finds row/column from the names of its parents 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b3404050efec7250a9c7c0dde64fe4e4971476ad" title="b3404050efec7250a9c7c0dde64fe4e4971476ad">b3404050efec7250a9c7c0dde64fe4e4971476ad</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="4657.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T22%3A57%3A27Z&amp;precision=second" title="2012-02-13T22:57:27Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> strings include 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4bcf63adf1e99ef7b48ac22a80ee1566e8d45c92" title="4bcf63adf1e99ef7b48ac22a80ee1566e8d45c92">4bcf63adf1e99ef7b48ac22a80ee1566e8d45c92</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="4657.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T23%3A05%3A23Z&amp;precision=second" title="2012-02-13T23:05:23Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> make peak row/col work 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8124653589926ba07143475f0b170874612f732b" title="8124653589926ba07143475f0b170874612f732b">8124653589926ba07143475f0b170874612f732b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="4657.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T23%3A02%3A50Z&amp;precision=second" title="2012-02-14T23:02:50Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Updated to work with WISH data.
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0077296f60f9ee0e65a07fd6f1437ca1fa49edec" title="0077296f60f9ee0e65a07fd6f1437ca1fa49edec">0077296f60f9ee0e65a07fd6f1437ca1fa49edec</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="4657.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T23%3A02%3A51Z&amp;precision=second" title="2012-02-14T23:02:51Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Eliminated a Compiler warning.
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8405c6459bebda85fb303fef2902a2b1f9284c5a" title="8405c6459bebda85fb303fef2902a2b1f9284c5a">8405c6459bebda85fb303fef2902a2b1f9284c5a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="4657.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A30Z&amp;precision=second" title="2012-02-17T19:16:30Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Eliminated one compiler check note, added array bounds check
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/82c4ad27e80863fae173469c092c8a8d1a6114d1" title="82c4ad27e80863fae173469c092c8a8d1a6114d1">82c4ad27e80863fae173469c092c8a8d1a6114d1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="4657.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A32Z&amp;precision=second" title="2012-02-17T19:16:32Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a>. Reverted old so no merge conflicts
+</p>
+<p>
+cannot resolve conflict with too large of file. AutoTestData/SEQ_MWDEWs.nxs(?) 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c76d96ce7120e2356982de610a6105b7a61814dd" title="c76d96ce7120e2356982de610a6105b7a61814dd">c76d96ce7120e2356982de610a6105b7a61814dd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="4657.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A39Z&amp;precision=second" title="2012-02-17T19:16:39Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Updated to work with WISH data.
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0077296f60f9ee0e65a07fd6f1437ca1fa49edec" title="0077296f60f9ee0e65a07fd6f1437ca1fa49edec">0077296f60f9ee0e65a07fd6f1437ca1fa49edec</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="4657.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A39Z&amp;precision=second" title="2012-02-17T19:16:39Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Eliminated a Compiler warning.
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8405c6459bebda85fb303fef2902a2b1f9284c5a" title="8405c6459bebda85fb303fef2902a2b1f9284c5a">8405c6459bebda85fb303fef2902a2b1f9284c5a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="4657.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A46Z&amp;precision=second" title="2012-02-17T19:16:46Z in Timeline">9 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Update Wiki documentation and parameter documentation.
+</p>
+<p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/943e71063a62fccb766cd0824987cf3b5b06571b" title="943e71063a62fccb766cd0824987cf3b5b06571b">943e71063a62fccb766cd0824987cf3b5b06571b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="4657.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-12T15%3A46%3A48Z&amp;precision=second" title="2012-03-12T15:46:48Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4657.html" title="enhancement: Extend IntegratePeakTimeSlices for panels that may not be Rectangular ... (closed: fixed)">#4657</a> give more helpful names to wish panels in IDF
+(cherry picked from commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7dbd18a32ed85a5650b1d6ce8a70b2a6db544530" title="7dbd18a32ed85a5650b1d6ce8a70b2a6db544530">7dbd18a32ed85a5650b1d6ce8a70b2a6db544530</a>) 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/17a75ec393db7a194264a82b330909593c03a411" title="17a75ec393db7a194264a82b330909593c03a411">17a75ec393db7a194264a82b330909593c03a411</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="4657.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T17%3A18%3A45%2B01%3A00&amp;precision=second" title="2012-04-25T17:18:45+01:00 in Timeline">8 years</a> ago by Ruth Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="4657.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-30T12%3A11%3A51%2B01%3A00&amp;precision=second" title="2012-04-30T12:11:51+01:00 in Timeline">8 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Vickie Lynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="4657.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T14%3A57%3A40%2B01%3A00&amp;precision=second" title="2012-05-01T14:57:40+01:00 in Timeline">8 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+How do I get the BankName, Row, and Col in a peaksworkspace for WISH?  I loaded WISH00017986 and found 100 peaks using FindPeaksMD, but get "Cannot get panel for a peak".
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="4657.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T17%3A18%3A40%2B01%3A00&amp;precision=second" title="2012-05-01T17:18:40+01:00 in Timeline">8 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Integrated WISH00017986 and got reasonable values of Intensity and SigInt for some of the peaks.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="4657.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A00%3A03%2B01%3A00&amp;precision=second" title="2015-06-04T00:00:03+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/5504"><span class="icon">​</span>5504</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4657?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4657?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4657?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

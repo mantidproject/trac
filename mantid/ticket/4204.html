@@ -1,0 +1,920 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #4204 (Ensure old- and new-style Python APIs can coexist in the same process)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="4203.html" title="Ticket #4203" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4204?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4204?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4204?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="4205.html" title="Ticket #4205" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 4204, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="4203.html" title="Ticket #4203">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="4205.html" title="Ticket #4205">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="4204.html">Ticket #4204</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T16%3A52%3A46Z&amp;precision=second" title="2011-11-25T16:52:46Z in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A41%3A17%2B01%3A00&amp;precision=second" title="2015-06-03T23:41:17+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Ensure old- and new-style Python APIs can coexist in the same process</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=blocker">blocker</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.0.html">Release 2.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Nick Draper
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+At the moment if you try and import the new mantid package and the old MantidFramework in to the same process you get a boost assertion error that some registrations already exist and the program exits.
+</p>
+<p>
+The issue is that boost::python's type conversion registry is a static map and is shared among all dynamically loaded extension modules. The solution is to statically link the old API to boost python so that it gets a private copy of the registry and they don't clash. 
+</p>
+<p>
+We don't want to statically link the new one however as we have split modules that need to share the registry.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="4204.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T14%3A21%3A47Z&amp;precision=second" title="2011-11-28T14:21:47Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+So it turns out the static boost libraries on linux are not compiled with fPIC so the library refuses to link to the dynamic module. In any case the fact that we have to use the RTLD flag when loading the python module on linux (to ensure the singletons wire up correctly) means that we can't just statically link anyway.
+</p>
+<p>
+The solution requires statically linking to boost python (for the old API) AND ensuring that only the Mantid libraries are opened with the RTLD_GLOBAL flag.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="4204.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T14%3A41%3A08Z&amp;precision=second" title="2011-11-28T14:41:08Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Make the old/new python interfaces will blissfully coexist.
+</p>
+<p>
+The ticket is the best place to look for the reason why this is so convoluted.
+Please also read 'PythonAPI/src/why_is_boost_python_here.txt'. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be5e8879809bc64fc6ff1799e16080d4c5aeb915" title="be5e8879809bc64fc6ff1799e16080d4c5aeb915">be5e8879809bc64fc6ff1799e16080d4c5aeb915</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="4204.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T14%3A56%3A37Z&amp;precision=second" title="2011-11-28T14:56:37Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Fix for RHEL5 build and kill some warnings. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/946b49ab6b55c4026d3920a371e899f4cae58dc9" title="946b49ab6b55c4026d3920a371e899f4cae58dc9">946b49ab6b55c4026d3920a371e899f4cae58dc9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="4204.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T15%3A15%3A13Z&amp;precision=second" title="2011-11-28T15:15:13Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Fix for the builds working off Third_Party. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1664665b1359e126f8972d2fbcda49a93285392c" title="1664665b1359e126f8972d2fbcda49a93285392c">1664665b1359e126f8972d2fbcda49a93285392c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="4204.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T16%3A56%3A17Z&amp;precision=second" title="2011-11-28T16:56:17Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. RHEL6 needs to load stdc++ very early.
+</p>
+<p>
+If stdc++ is not loaded early the thrown exceptions cause crashes instead. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4bf9327ed4c73651083743167ae0a77d99734620" title="4bf9327ed4c73651083743167ae0a77d99734620">4bf9327ed4c73651083743167ae0a77d99734620</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="4204.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T17%3A20%3A09Z&amp;precision=second" title="2011-11-28T17:20:09Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Fix for running from a directory outside bin. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e3eb756967bc4659230a2ff38177645de4e88bce" title="e3eb756967bc4659230a2ff38177645de4e88bce">e3eb756967bc4659230a2ff38177645de4e88bce</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="4204.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-29T08%3A36%3A00Z&amp;precision=second" title="2011-11-29T08:36:00Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Change library lookup to one that is always in bin.
+</p>
+<p>
+The old Python framewoek was looking at the depenencies on Kernel but
+this is not always next to the MantidFramework file. Move to check against
+libMantidPythonAPI that will always be next to the file. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5d006b76452f88e20852047ea86cbffbe0264f47" title="5d006b76452f88e20852047ea86cbffbe0264f47">5d006b76452f88e20852047ea86cbffbe0264f47</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="4204.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-29T11%3A58%3A30Z&amp;precision=second" title="2011-11-29T11:58:30Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="4204.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-29T11%3A58%3A41Z&amp;precision=second" title="2011-11-29T11:58:41Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="4204.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-05T08%3A20%3A08Z&amp;precision=second" title="2011-12-05T08:20:08Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="4204.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-05T08%3A20%3A46Z&amp;precision=second" title="2011-12-05T08:20:46Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+It appears this still doesn't quite work on the Mac and with newer versions of glibc (on Ubuntu Oneric Ocelot)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="4204.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-05T08%3A26%3A38Z&amp;precision=second" title="2011-12-05T08:26:38Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Add symbol visibility attributes to bpl registry.
+</p>
+<p>
+Ensures that the boost pythpn type registry is kept hidden within each
+library on Linux and Mac. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4fa2fb27d6b18a5596681396ed8b2c0714de4b37" title="4fa2fb27d6b18a5596681396ed8b2c0714de4b37">4fa2fb27d6b18a5596681396ed8b2c0714de4b37</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="4204.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-05T08%3A58%3A07Z&amp;precision=second" title="2011-12-05T08:58:07Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Ensure the same hidden registry for the new API. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6da6fc5edce3c406496e064dc211ffbbcb92b7f0" title="6da6fc5edce3c406496e064dc211ffbbcb92b7f0">6da6fc5edce3c406496e064dc211ffbbcb92b7f0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="4204.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-05T10%3A24%3A24Z&amp;precision=second" title="2011-12-05T10:24:24Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Change the Mac to load symbols locally for Python. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f70264656ffadcc0410de291f337bb9061be59c" title="4f70264656ffadcc0410de291f337bb9061be59c">4f70264656ffadcc0410de291f337bb9061be59c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="4204.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-05T11%3A45%3A18Z&amp;precision=second" title="2011-12-05T11:45:18Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Skip attempting to dynamically load dlopen library also. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f649102c81e579113a2a5d88698a190d67e18581" title="f649102c81e579113a2a5d88698a190d67e18581">f649102c81e579113a2a5d88698a190d67e18581</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="4204.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-05T14%3A17%3A44Z&amp;precision=second" title="2011-12-05T14:17:44Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="4204.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-05T14%3A17%3A48Z&amp;precision=second" title="2011-12-05T14:17:48Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="4204.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-06T08%3A16%3A10Z&amp;precision=second" title="2011-12-06T08:16:10Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Fix for the installed version of MantidFramework on Mac 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf65373c44b3cebb5810bbede221eaaeab52a71c" title="cf65373c44b3cebb5810bbede221eaaeab52a71c">cf65373c44b3cebb5810bbede221eaaeab52a71c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="4204.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-06T08%3A27%3A35Z&amp;precision=second" title="2011-12-06T08:27:35Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Be slighlty more picky about which file is chosen 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8b600532ae223ade80ac030c90311ecc7fc921e" title="b8b600532ae223ade80ac030c90311ecc7fc921e">b8b600532ae223ade80ac030c90311ecc7fc921e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="4204.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-06T18%3A20%3A37Z&amp;precision=second" title="2011-12-06T18:20:37Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Fixes MantidPlot startup on Mac 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/950535c2a7161caa0df175dd66b15e42da4a852c" title="950535c2a7161caa0df175dd66b15e42da4a852c">950535c2a7161caa0df175dd66b15e42da4a852c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="4204.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-06T18%3A38%3A43Z&amp;precision=second" title="2011-12-06T18:38:43Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Try again to remove the compile flag. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ec9ba2048344c78b41533ab8e386969ee1e896f" title="7ec9ba2048344c78b41533ab8e386969ee1e896f">7ec9ba2048344c78b41533ab8e386969ee1e896f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="4204.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-06T21%3A29%3A10Z&amp;precision=second" title="2011-12-06T21:29:10Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Fix for the installed version of MantidFramework on Mac 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf65373c44b3cebb5810bbede221eaaeab52a71c" title="cf65373c44b3cebb5810bbede221eaaeab52a71c">cf65373c44b3cebb5810bbede221eaaeab52a71c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="4204.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-06T21%3A29%3A10Z&amp;precision=second" title="2011-12-06T21:29:10Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Be slighlty more picky about which file is chosen 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8b600532ae223ade80ac030c90311ecc7fc921e" title="b8b600532ae223ade80ac030c90311ecc7fc921e">b8b600532ae223ade80ac030c90311ecc7fc921e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="4204.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-06T21%3A29%3A16Z&amp;precision=second" title="2011-12-06T21:29:16Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Fixes MantidPlot startup on Mac 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/950535c2a7161caa0df175dd66b15e42da4a852c" title="950535c2a7161caa0df175dd66b15e42da4a852c">950535c2a7161caa0df175dd66b15e42da4a852c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="4204.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-06T21%3A29%3A16Z&amp;precision=second" title="2011-12-06T21:29:16Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4204.html" title="enhancement: Ensure old- and new-style Python APIs can coexist in the same process (closed: fixed)">#4204</a>. Try again to remove the compile flag. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ec9ba2048344c78b41533ab8e386969ee1e896f" title="7ec9ba2048344c78b41533ab8e386969ee1e896f">7ec9ba2048344c78b41533ab8e386969ee1e896f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="4204.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-11T15%3A53%3A23Z&amp;precision=second" title="2012-01-11T15:53:23Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Nick Draper</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="4204.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-11T16%3A21%3A50Z&amp;precision=second" title="2012-01-11T16:21:50Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+tested on windows 7 64 bit
+works beutifully
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="4204.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-11T16%3A21%3A57Z&amp;precision=second" title="2012-01-11T16:21:57Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="4204.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A41%3A17%2B01%3A00&amp;precision=second" title="2015-06-03T23:41:17+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/5051"><span class="icon">​</span>5051</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4204?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4204?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4204?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

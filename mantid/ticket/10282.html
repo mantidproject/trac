@@ -1,0 +1,1386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10282 (Create a Scatterer class that can be used for structure factor calculation)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10281.html" title="Ticket #10281" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10282?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10282?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10282?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10283.html" title="Ticket #10283" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10282, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10281.html" title="Ticket #10281">Previous Ticket</a></span></li><li><span><a class="next" href="10283.html" title="Ticket #10283">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10282.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10282.html">Ticket #10282</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T08%3A57%3A36%2B01%3A00&amp;precision=second" title="2014-09-26T08:57:36+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A52%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T03:52:45+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Create a Scatterer class that can be used for structure factor calculation</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Michael+Wedel">Michael Wedel</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Michael+Wedel">Michael Wedel</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              anders.markvardsen@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="10464.html" title="Fix Column::isType on OS X with intel compiler">#10464</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="10262.html" title="Space group reflection conditions">#10262</a>, <a class="closed ticket" href="10283.html" title="Modify CrystalStructure to use space group and scatterers">#10283</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Anders Markvardsen
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+As part of the efforts for <a class="closed ticket" href="10262.html" title="Space group reflection conditions (closed: fixed)">#10262</a>, I want to be able to calculate the structure factor for a given reciprocal lattice vector. For this purpose, a <tt>Scatterer</tt>-class should be defined. It will contain the following information:
+</p>
+<ul><li>Element or Isotope (for information purposes only).
+</li><li>Scattering length
+</li><li>Fractional coordinates
+</li></ul><p>
+Then, it will have a method to calculate the structure factor for a reciprocal lattice vector, with this formula, where <tt>b</tt> is the coherent scattering length, <tt>h</tt> is the vector and <tt>r</tt> is the coordinate-triplet (note that it is a complex number):
+</p>
+<pre class="wiki">F_hkl = b * exp(i * h * r)
+</pre><p>
+There should be a factory that creates scatterers from the element symbol (Data from Sears, 2003, <a class="ext-link" href="http://dx.doi.org/10.1080/10448639208218770"><span class="icon">​</span>http://dx.doi.org/10.1080/10448639208218770</a>).
+</p>
+<p>
+Then there has to be a class that is composed of an arbitrary number of scatterers, so that the structure factor for a given <tt>h</tt> may be calculated by summation over all scatterers in the unit cell.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/10282/Mantid-Crystallography.pdf.html" title="View attachment">Mantid-Crystallography.pdf</a><a href="../raw-attachment/ticket/10282/Mantid-Crystallography.pdf" class="trac-rawlink" title="Download">​</a>
+       (<span title="3475 bytes">3.4 KB</span>) -
+      added by <em>Michael Wedel</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-28T14%3A25%3A59Z&amp;precision=second" title="2014-10-28T14:25:59Z in Timeline">6 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/10282/Crystallography-alternative.pdf.html" title="View attachment">Crystallography-alternative.pdf</a><a href="../raw-attachment/ticket/10282/Crystallography-alternative.pdf" class="trac-rawlink" title="Download">​</a>
+       (<span title="3370 bytes">3.3 KB</span>) -
+      added by <em>Michael Wedel</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-29T15%3A29%3A44Z&amp;precision=second" title="2014-10-29T15:29:44Z in Timeline">6 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/10282/Mantid-Crystallography-II.pdf.html" title="View attachment">Mantid-Crystallography-II.pdf</a><a href="../raw-attachment/ticket/10282/Mantid-Crystallography-II.pdf" class="trac-rawlink" title="Download">​</a>
+       (<span title="3519 bytes">3.4 KB</span>) -
+      added by <em>Michael Wedel</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-04T12%3A42%3A00Z&amp;precision=second" title="2014-11-04T12:42:00Z in Timeline">6 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10282.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T09%3A03%3A25%2B01%3A00&amp;precision=second" title="2014-09-26T09:03:25+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10283</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10282.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T10%3A27%3A47%2B01%3A00&amp;precision=second" title="2014-09-26T10:27:47+01:00 in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10282.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T14%3A59%3A40%2B01%3A00&amp;precision=second" title="2014-09-26T14:59:40+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I discovered Kernel::NeutronAtom, so I will use this for the implementation of <tt>Scatterer</tt>. Nevertheless, it could be useful to also have a string based creation method.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10282.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T14%3A36%3A08%2B01%3A00&amp;precision=second" title="2014-10-01T14:36:08+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>anders.markvardsen@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10282.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-14T15%3A14%3A26%2B01%3A00&amp;precision=second" title="2014-10-14T15:14:26+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T12%3A27%3A47%2B01%3A00&amp;precision=second" title="2014-10-20T12:27:47+01:00 in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?cversion=0&amp;cnum_hist=5#comment:5">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?action=comment-diff&amp;cnum=5&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10282.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-14T16%3A10%3A19%2B01%3A00&amp;precision=second" title="2014-10-14T16:10:19+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T12%3A27%3A53%2B01%3A00&amp;precision=second" title="2014-10-20T12:27:53+01:00 in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?cversion=0&amp;cnum_hist=6#comment:6">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?action=comment-diff&amp;cnum=6&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10282.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-14T16%3A32%3A33%2B01%3A00&amp;precision=second" title="2014-10-14T16:32:33+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T12%3A28%3A01%2B01%3A00&amp;precision=second" title="2014-10-20T12:28:01+01:00 in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?cversion=0&amp;cnum_hist=7#comment:7">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?action=comment-diff&amp;cnum=7&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10282.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T09%3A23%3A57%2B01%3A00&amp;precision=second" title="2014-10-16T09:23:57+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T12%3A28%3A06%2B01%3A00&amp;precision=second" title="2014-10-20T12:28:06+01:00 in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?cversion=0&amp;cnum_hist=8#comment:8">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?action=comment-diff&amp;cnum=8&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10282.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-17T16%3A01%3A07%2B01%3A00&amp;precision=second" title="2014-10-17T16:01:07+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Deleted old branch - turned out to be out of scope.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T12%3A28%3A42%2B01%3A00&amp;precision=second" title="2014-10-20T12:28:42+01:00 in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?cversion=0&amp;cnum_hist=9#comment:9">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?action=comment-diff&amp;cnum=9&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10282.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T16%3A44%3A19%2B01%3A00&amp;precision=second" title="2014-10-20T16:44:19+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Add IScatterer
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9e3b33fb4c35cea2d6a1f6ef21dcb5704cc12456" title="9e3b33fb4c35cea2d6a1f6ef21dcb5704cc12456">9e3b33fb4c35cea2d6a1f6ef21dcb5704cc12456</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10282.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-20T16%3A44%3A19%2B01%3A00&amp;precision=second" title="2014-10-20T16:44:19+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Checkpointing work.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46443f1e80fd8e61966e5ad1a47d1a6c293083fa" title="46443f1e80fd8e61966e5ad1a47d1a6c293083fa">46443f1e80fd8e61966e5ad1a47d1a6c293083fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10282.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T08%3A44%3A58%2B01%3A00&amp;precision=second" title="2014-10-21T08:44:58+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Expanding interface of IScatterer
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/714eb0b064a5ba8c489d4804fce2bc0655df31a8" title="714eb0b064a5ba8c489d4804fce2bc0655df31a8">714eb0b064a5ba8c489d4804fce2bc0655df31a8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10282.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T13%3A46%3A54%2B01%3A00&amp;precision=second" title="2014-10-21T13:46:54+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Removed rigid scatterer, added tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/67a9d3cea24aa5e11b5af56cf11aca9cbd103c18" title="67a9d3cea24aa5e11b5af56cf11aca9cbd103c18">67a9d3cea24aa5e11b5af56cf11aca9cbd103c18</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10282.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T13%3A46%3A54%2B01%3A00&amp;precision=second" title="2014-10-21T13:46:54+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Added occupancy to calculation, wrote test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90dbdba6d1d55189b28dd1d382dce96a65d323d6" title="90dbdba6d1d55189b28dd1d382dce96a65d323d6">90dbdba6d1d55189b28dd1d382dce96a65d323d6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10282.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T13%3A46%3A55%2B01%3A00&amp;precision=second" title="2014-10-21T13:46:55+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Added static create method
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f69b3a344285a99cdb6f7a708ed241f3015e686d" title="f69b3a344285a99cdb6f7a708ed241f3015e686d">f69b3a344285a99cdb6f7a708ed241f3015e686d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10282.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T13%3A46%3A55%2B01%3A00&amp;precision=second" title="2014-10-21T13:46:55+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Completed ScattererCollection and tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81680d274ca58fe188859b531230caf14590c52c" title="81680d274ca58fe188859b531230caf14590c52c">81680d274ca58fe188859b531230caf14590c52c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10282.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T15%3A56%3A41%2B01%3A00&amp;precision=second" title="2014-10-21T15:56:41+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Renamed ScattererCollection
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9a802904a1b556144dabdde98ff30be2e460b6ab" title="9a802904a1b556144dabdde98ff30be2e460b6ab">9a802904a1b556144dabdde98ff30be2e460b6ab</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10282.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T15%3A56%3A41%2B01%3A00&amp;precision=second" title="2014-10-21T15:56:41+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Added documentation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be1467a1ee5c974284d516cfa7b962a2c11750fe" title="be1467a1ee5c974284d516cfa7b962a2c11750fe">be1467a1ee5c974284d516cfa7b962a2c11750fe</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10282.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T16%3A24%3A24%2B01%3A00&amp;precision=second" title="2014-10-21T16:24:24+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>Notes</strong>
+</p>
+<p>
+I tried to solve this first using the function fitting framework, introducing a new domain type etc. In the end, this turned out to be more complex than in the beginning, because I found it a bit hard to construct a composite scatterer. I'm sure this can be done anyway, wrapping the structure that I went for now.
+</p>
+<p>
+A bit contrary to the UML diagram in <a class="closed ticket" href="10262.html" title="Space group reflection conditions (closed: fixed)">#10262</a>, IScatterer is coupled to UnitCell and SpaceGroup, because this makes many calculations much more convenient. Since the only use case I can come up with for IScatterer is structure factor calculation with a crystal structure as part of the input I think this is acceptable.
+</p>
+<p>
+What is a bit unsolved here is convenient creation of scatterers - this will be solved in <a class="closed ticket" href="10283.html" title="Modify CrystalStructure to use space group and scatterers (closed: fixed)">#10283</a>, because CrystalStructure will probably be the only place where this is used, so it's unlikely these classes will be used directly by anyone.
+</p>
+<p>
+<strong>Testing information</strong>
+</p>
+<p>
+Not much to test except code review. There is one test in CompositeScatterer, which compares structure factors of a hypothetical structure with structure factors calculated by SHELXL, this is probably interesting to see a "usage example".
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10282.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-21T22%3A04%3A29%2B01%3A00&amp;precision=second" title="2014-10-21T22:04:29+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Change system test to parse reference operations
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bef90d54396ad185a0ba1a66d7b88dcbe668bd72" title="bef90d54396ad185a0ba1a66d7b88dcbe668bd72">bef90d54396ad185a0ba1a66d7b88dcbe668bd72</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10282.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-22T05%3A35%3A28%2B01%3A00&amp;precision=second" title="2014-10-22T05:35:28+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Remove faulty lines from reference data
+</p>
+<p>
+Had overlooked some lines in the reference data file that just contained "-1".
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/17e96b1b9d98f4c60cfcce0239f6ef691f9d9a0a" title="17e96b1b9d98f4c60cfcce0239f6ef691f9d9a0a">17e96b1b9d98f4c60cfcce0239f6ef691f9d9a0a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10282.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-24T09%3A38%3A48%2B01%3A00&amp;precision=second" title="2014-10-24T09:38:48+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10282.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-24T16%3A30%3A47%2B01%3A00&amp;precision=second" title="2014-10-24T16:30:47+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Checkpointing work
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a220020e7879718699d52807b5e0114cb6267df" title="7a220020e7879718699d52807b5e0114cb6267df">7a220020e7879718699d52807b5e0114cb6267df</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10282.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-24T16%3A32%3A23%2B01%3A00&amp;precision=second" title="2014-10-24T16:32:23+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I decided to try another thing to enable general string based construction for scatterers (which will be required for saving etc.) by utilizing Kernel::Property. PropertyManager does everything I need, I think.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10282.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-26T21%3A57%3A55Z&amp;precision=second" title="2014-10-26T21:57:55Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Added conversion function between unit cell and string
+</p>
+<p>
+For using UnitCell in PropertyWithValue, it would be necessary to change the stream operator of UnitCell,
+because that is only used for printing at the moment and the precision is limited to 1e-3, which is not enough
+for cases like powder diffraction (for example at POLDI, where lattice parameters are determined with precision
+better than 1e-4).
+</p>
+<p>
+Instead of modifying the interface of UnitCell I chose to add explicit string conversion functions. It should be
+straightforward to change later on.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1672ac53b9b651ce13a8267ec0d2d62fc27df664" title="1672ac53b9b651ce13a8267ec0d2d62fc27df664">1672ac53b9b651ce13a8267ec0d2d62fc27df664</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10282.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-26T21%3A57%3A55Z&amp;precision=second" title="2014-10-26T21:57:55Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Changed IScatterer interface, added factory
+</p>
+<p>
+IScatterer now inherits from PropertyManager. There's now also a factory for consistent creation of scatterers.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0b6ba9a22d268f27cecfad1de15ffc3949fabe04" title="0b6ba9a22d268f27cecfad1de15ffc3949fabe04">0b6ba9a22d268f27cecfad1de15ffc3949fabe04</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10282.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-26T22%3A12%3A01Z&amp;precision=second" title="2014-10-26T22:12:01Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Removing unit test
+</p>
+<p>
+This was only meant to be added temporarily for finding a problem in a system test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dad21672aa463c6b4977aa06413ad2a29a610d78" title="dad21672aa463c6b4977aa06413ad2a29a610d78">dad21672aa463c6b4977aa06413ad2a29a610d78</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10282.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T06%3A00%3A52Z&amp;precision=second" title="2014-10-27T06:00:52Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+As written in comment 25, I changed the interface to use Property/PropertyManager. This way we can write new scatterers (for example with anisotropic displacement parameters) easily. In addition I think it will be easier to write code for reading/writing crystal structures from/to files.
+</p>
+<p>
+<strong>System test changed</strong>
+</p>
+<p>
+Because I added Fd-3m to the space group factory for testing purposes, I discovered a problem in the system test which had to be fixed. systemtests requires merging as well.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10282.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T09%3A07%3A51Z&amp;precision=second" title="2014-10-27T09:07:51Z in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Anders Markvardsen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10282.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T15%3A33%3A24Z&amp;precision=second" title="2014-10-27T15:33:24Z in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Some initial observations from here:
+</p>
+<ol><li>Inherite from PropertyManager is this necessary?
+</li></ol><ol start="2"><li>Should a scatter have knowledge of unit cell, space group and position?
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-28T14%3A25%3A59Z&amp;precision=second" title="2014-10-28T14:25:59Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/10282/Mantid-Crystallography.pdf.html"><em>Mantid-Crystallography.pdf</em></a><a href="../raw-attachment/ticket/10282/Mantid-Crystallography.pdf" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10282.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-28T15%3A59%3A59Z&amp;precision=second" title="2014-10-28T15:59:59Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The diagram contains some (most, but not all) of the crystallography related classes in MantidGeometry and how they interact. Classes with orange background are classes that are likely to be used from "outside". PointGroup is grey, because at the moment it does not inherit from ProductOfCyclicGroups and cannot be extracted from SpaceGroup - both things will be implemented later.
+</p>
+<p>
+Also, some more thoughts about the UnitCell/SpaceGroup dilemma after discussion with Anders:
+</p>
+<ul><li>Easy conclusion first: I will remove the inheritance from PropertyManager and keep it as a private member. "Composition over inheritance" - did not realize this here when I was writing the code. Additionally, it can be exchanged for something else later.
+</li></ul><ul><li>I still think "calculateStructureFactor" should not be implemented directly by CrystalStructure. Every change of calculation method would result in a new subclass of CrystalStructure, which seems somehow strange to me. Having an IScatterer is actually a case of the Strategy Pattern, because essentially it makes the structure factor calculation method exchangeable.
+</li></ul><ul><li>SpaceGroup can be moved out of IScatterer. CrystalStructure would then need to keep track of the scatterers it holds by itself. Like now, it would take a CompositeScatterer for construction, which holds n scatterers forming the asymmetric unit. Internally however, it holds a CompositeScatterer which contains all scatterers in the unit cell, with their respective position. I did not implement it this way, because there are potentially a lot more objects in CrystalStructure (think complex intermetallic compounds with 1k atoms in the cell) this way. Many calculations will be redundant (the amplitudes of the complex structure factors will be calculated for each scatterer in the cell, instead of just once for each scatterer in the asymmetric unit).
+</li></ul><ul><li>Unit cell <strong>could</strong> be moved out at the cost of creating another class, "Reflection", which is used instead of plain Kernel::V3D as representation of hkl. Reflection would probably hold hkl, d, F. On the other hand, a reflection may be characterized by many more things than just hkl, d and F depending on the context (think reciprocal lattice vector through orientation matrix as one example) - so at this point there is no easy solution either.
+</li></ul><ul><li>If we remove position also, there is nothing left in IScatterer. I did not include NeutronAtom into IScatterer, because it doesn't necessarily have to be an atom. It could be a molecule, or a particle (SANS) or some other thing that scatters neutrons.
+</li></ul><p>
+Currently, my "favourite" solution is to "step back a bit", and rename IScatterer to IScattererInUnitCell - that would cover the scope of the ticket. IScatterer could be kept with a more or less empty interface, in case anyone would like to implement scatterers for other purposes.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10282.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-29T15%3A24%3A03Z&amp;precision=second" title="2014-10-29T15:24:03Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Had some more time to think and read briefly about other techniques that involve some sort of "scattering". The name "IScatterer" is probably too broad - I was thinking in terms of elastic Bragg scattering only. Maybe a better name for the interface could be "BraggScatterer".
+</p>
+<p>
+Then, instead of depending on SpaceGroup, there could be a method "setEquivalentPositions" (which CrystalStructure calculates using SpaceGroup).
+</p>
+<p>
+For removing UnitCell I still don't see an easy way.
+</p>
+<p>
+Edit: Added diagram for suggested alternative.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-29T15%3A29%3A28Z&amp;precision=second" title="2014-10-29T15:29:28Z in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?cversion=0&amp;cnum_hist=32#comment:32">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10282?action=comment-diff&amp;cnum=32&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-29T15%3A29%3A44Z&amp;precision=second" title="2014-10-29T15:29:44Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/10282/Crystallography-alternative.pdf.html"><em>Crystallography-alternative.pdf</em></a><a href="../raw-attachment/ticket/10282/Crystallography-alternative.pdf" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="10282.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-31T10%3A26%3A54Z&amp;precision=second" title="2014-10-31T10:26:54Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>10464</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="10282.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-03T10%3A02%3A46Z&amp;precision=second" title="2014-11-03T10:02:46Z in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Design Crystallography-alternative.pdf looks good.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="10282.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-03T15%3A35%3A25Z&amp;precision=second" title="2014-11-03T15:35:25Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+As I tried to remove SpaceGroup from BraggScatterer, I realized it does not really work that well in terms of "anticipating what's happening" for users of the interface. When the position of the scatterer is changed, the equivalent positions are not consistent with position any more. I don't think there is a reasonable behaviour for this case. Keeping the old equivalent positions does definitely not make sense. Setting the equivalent positions to only the position that has just been assigned makes not much sense either, because that would be highly unexpected (at least to me) - multiplicity of the position would change without any apparent reason.
+</p>
+<p>
+I will solve this by introducing another class which implements BraggScatterer and which IsotropicAtomBraggScatterer inherits from. This is the cleanest solution and it also makes CompositeBraggScatterer more simple. If anyone else would like to implement this behaviour differently, it's no problem to do so.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="10282.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-03T16%3A30%3A04Z&amp;precision=second" title="2014-11-03T16:30:04Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Renamed classes to fit diagram
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/53f2099856f81b399c47f0b8b1d06ac81357860f" title="53f2099856f81b399c47f0b8b1d06ac81357860f">53f2099856f81b399c47f0b8b1d06ac81357860f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="10282.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-04T12%3A34%3A06Z&amp;precision=second" title="2014-11-04T12:34:06Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10282.html" title="Create a Scatterer class that can be used for structure factor calculation (closed: fixed)">#10282</a>. Changed BraggScatterer interface
+</p>
+<p>
+Changed the interface of BraggScatterer to be independent of UnitCell, SpaceGroup and V3D. These are handled in BraggScattererInCrystalStructure now.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b4a8c560e19824f376753af479b9383ad4535789" title="b4a8c560e19824f376753af479b9383ad4535789">b4a8c560e19824f376753af479b9383ad4535789</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="10282.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-04T12%3A41%3A31Z&amp;precision=second" title="2014-11-04T12:41:31Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Notes</strong>
+</p>
+<ul><li>After some trials I decided not to make PropertyManager a private member of BraggScatterer, because this would require wrapping most methods of PropertyManager.
+</li><li>To remove UnitCell and SpaceGroup (and also Position) from BraggScatterer I introduced an intermediate class called BraggScattererInCrystalStructure, which has these three properties.
+</li><li>CompositeBraggScatterer is now more general and instead of declaring any properties itself, it exposes properties of member scatterers that are marked for this. BraggScattererInCrystalStructure for example marks UnitCell and SpaceGroup, which means that a CompositeBraggScatterer which contains an IsotropicAtomBraggScatterer also has those properties. When values are assigned to the composite property, the value is propagated to all members (as before).
+</li></ul><p>
+I attached a new diagram to reflect these design changes.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-04T12%3A42%3A00Z&amp;precision=second" title="2014-11-04T12:42:00Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/10282/Mantid-Crystallography-II.pdf.html"><em>Mantid-Crystallography-II.pdf</em></a><a href="../raw-attachment/ticket/10282/Mantid-Crystallography-II.pdf" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="10282.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-05T07%3A52%3A58Z&amp;precision=second" title="2014-11-05T07:52:58Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="10282.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-05T08%3A44%3A38Z&amp;precision=second" title="2014-11-05T08:44:38Z in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="10282.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-05T10%3A31%3A19Z&amp;precision=second" title="2014-11-05T10:31:19Z in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/10282_create_scattering_function'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/36df3c6621afffdb71e0394d37d7290999145b91"><span class="icon">​</span>36df3c6621afffdb71e0394d37d7290999145b91</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="10282.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-05T10%3A32%3A00Z&amp;precision=second" title="2014-11-05T10:32:00Z in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+documentation of classes are clear
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="10282.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-06T15%3A51%3A28Z&amp;precision=second" title="2014-11-06T15:51:28Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/10282_create_scattering_function'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/0bd60496d38ca5a4cb3c6f2b8fc9cb2107d8c233"><span class="icon">​</span>0bd60496d38ca5a4cb3c6f2b8fc9cb2107d8c233</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="10282.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A52%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T03:52:45+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11124"><span class="icon">​</span>11124</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10282?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10282?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10282?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

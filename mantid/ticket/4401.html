@@ -1,0 +1,3606 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #4401 (IImplementation of ConvertToMD workspace algorithm)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="4400.html" title="Ticket #4400" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4401?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4401?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4401?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="4402.html" title="Ticket #4402" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 4401, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="4400.html" title="Ticket #4400">Previous Ticket</a></span></li><li><span><a class="next" href="4402.html" title="Ticket #4402">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/4401.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="4401.html">Ticket #4401</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-06T01%3A03%3A08Z&amp;precision=second" title="2012-01-06T01:03:08Z in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A49%3A26%2B01%3A00&amp;precision=second" title="2015-06-03T23:49:26+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">IImplementation of ConvertToMD workspace algorithm</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Alex+Buts">Alex Buts</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Alex+Buts">Alex Buts</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.1.html">Release 2.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=VATES">VATES</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="4813.html" title="Modify ConvertToMDEvents algorithm to produce both orthogonal and non-orthogonal system of coordinates">#4813</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Roman Tolchenov
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Algorithm exists and works both for matrix workspace and event workspace but number of substantial improvements/additions still needed. 
+</p>
+<p>
+1) Adding new data to existing workspace
+</p>
+<p>
+2) Current events are treated using dynamic rebinning -- it may be what is needed for ISIS but may be not and is probably not acceptable for SNS.
+ 
+3) More tests to verify if everything works correctly  still needed (comparison with Horace). 
+</p>
+<p>
+4) Rotating crystal and more general&amp;correct treatment of time logs used as a dimension.
+</p>
+<p>
+5) Optimization and parallelisation 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="4401.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-06T01%3A04%3A45Z&amp;precision=second" title="2012-01-06T01:04:45Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Owner</strong>
+        set to <em>Alex Buts</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="4401.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-06T01%3A05%3A04Z&amp;precision=second" title="2012-01-06T01:05:04Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="4401.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T13%3A18%3A16Z&amp;precision=second" title="2012-02-14T13:18:16Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> MDEventWSWrapper made reenterable
+</p>
+<p>
+As boost function pointers do funny things when stings supplied as function arguments and when the number of arguments is high, custom vftable has been build with functions, which use 0 or 1 argument. As the result, internal memory for the class was needed.
+</p>
+<p>
+Reverting to classic old function pointers allows to use multiple function arguments and eliminate the need for internal class memory. This allows to deploy const methods and makes class reenterable (mainly) 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2aa3339a681eb512f1b8858e52d7d40a2b741410" title="2aa3339a681eb512f1b8858e52d7d40a2b741410">2aa3339a681eb512f1b8858e52d7d40a2b741410</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="4401.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T13%3A24%3A46Z&amp;precision=second" title="2012-02-14T13:24:46Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a>  Fixing Unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2587a936d6ba1418cbc77ec260ded6ccf480136b" title="2587a936d6ba1418cbc77ec260ded6ccf480136b">2587a936d6ba1418cbc77ec260ded6ccf480136b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="4401.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T13%3A31%3A00Z&amp;precision=second" title="2012-02-14T13:31:00Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> attempt to fix unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ddcc45f1959f1a26fedfff7a125945dd3caff233" title="ddcc45f1959f1a26fedfff7a125945dd3caff233">ddcc45f1959f1a26fedfff7a125945dd3caff233</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="4401.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-16T17%3A40%3A08Z&amp;precision=second" title="2012-02-16T17:40:08Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>4813</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="4401.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-16T17%3A43%3A43Z&amp;precision=second" title="2012-02-16T17:43:43Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Starting the work on adding events to existing ws 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c159e1ce30fd9281c1cb4df295a474e69db944ca" title="c159e1ce30fd9281c1cb4df295a474e69db944ca">c159e1ce30fd9281c1cb4df295a474e69db944ca</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="4401.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A29Z&amp;precision=second" title="2012-02-17T19:16:29Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> MDEventWSWrapper made reenterable
+</p>
+<p>
+As boost function pointers do funny things when stings supplied as function arguments and when the number of arguments is high, custom vftable has been build with functions, which use 0 or 1 argument. As the result, internal memory for the class was needed.
+</p>
+<p>
+Reverting to classic old function pointers allows to use multiple function arguments and eliminate the need for internal class memory. This allows to deploy const methods and makes class reenterable (mainly) 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2aa3339a681eb512f1b8858e52d7d40a2b741410" title="2aa3339a681eb512f1b8858e52d7d40a2b741410">2aa3339a681eb512f1b8858e52d7d40a2b741410</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="4401.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A30Z&amp;precision=second" title="2012-02-17T19:16:30Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a>  Fixing Unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2587a936d6ba1418cbc77ec260ded6ccf480136b" title="2587a936d6ba1418cbc77ec260ded6ccf480136b">2587a936d6ba1418cbc77ec260ded6ccf480136b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="4401.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A30Z&amp;precision=second" title="2012-02-17T19:16:30Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> attempt to fix unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ddcc45f1959f1a26fedfff7a125945dd3caff233" title="ddcc45f1959f1a26fedfff7a125945dd3caff233">ddcc45f1959f1a26fedfff7a125945dd3caff233</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="4401.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A52Z&amp;precision=second" title="2012-02-17T19:16:52Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Starting the work on adding events to existing ws 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c159e1ce30fd9281c1cb4df295a474e69db944ca" title="c159e1ce30fd9281c1cb4df295a474e69db944ca">c159e1ce30fd9281c1cb4df295a474e69db944ca</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="4401.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A29%3A10Z&amp;precision=second" title="2012-03-13T17:29:10Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Removed unused methods. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bacc8c7e45f1c93658862faf421881795f842498" title="bacc8c7e45f1c93658862faf421881795f842498">bacc8c7e45f1c93658862faf421881795f842498</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="4401.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A29%3A10Z&amp;precision=second" title="2012-03-13T17:29:10Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Removed redundant methods 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/329ecc20148daf372e9d8c2af16b575991c91210" title="329ecc20148daf372e9d8c2af16b575991c91210">329ecc20148daf372e9d8c2af16b575991c91210</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="4401.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A21Z&amp;precision=second" title="2012-03-13T19:10:21Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Removed unused methods. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bacc8c7e45f1c93658862faf421881795f842498" title="bacc8c7e45f1c93658862faf421881795f842498">bacc8c7e45f1c93658862faf421881795f842498</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="4401.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A21Z&amp;precision=second" title="2012-03-13T19:10:21Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Removed redundant methods 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/329ecc20148daf372e9d8c2af16b575991c91210" title="329ecc20148daf372e9d8c2af16b575991c91210">329ecc20148daf372e9d8c2af16b575991c91210</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="4401.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-14T17%3A52%3A27Z&amp;precision=second" title="2012-03-14T17:52:27Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Code refactored to separate different parts
+</p>
+<p>
+of the code into different pieces, which are much less connected with each other. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4bd322c30c192e3f1f7f0af7a568311a01202250" title="4bd322c30c192e3f1f7f0af7a568311a01202250">4bd322c30c192e3f1f7f0af7a568311a01202250</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="4401.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-16T14%3A27%3A33Z&amp;precision=second" title="2012-03-16T14:27:33Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> further separating algorithm body from internal methods 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6878d9270023653863d8791e427d8f596b7d7866" title="6878d9270023653863d8791e427d8f596b7d7866">6878d9270023653863d8791e427d8f596b7d7866</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="4401.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-16T14%3A32%3A23Z&amp;precision=second" title="2012-03-16T14:32:23Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing unix error. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e5aa854e7024385c563914269b2e1cc5df7e701f" title="e5aa854e7024385c563914269b2e1cc5df7e701f">e5aa854e7024385c563914269b2e1cc5df7e701f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="4401.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-16T16%3A59%3A34Z&amp;precision=second" title="2012-03-16T16:59:34Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> more tests for MDEventsSubalgorithm factory
+</p>
+<p>
+Clearer metaloops which initiate the algorithms as the result. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e14786b14818b864b54c36a79d65f66b30e6e38c" title="e14786b14818b864b54c36a79d65f66b30e6e38c">e14786b14818b864b54c36a79d65f66b30e6e38c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="4401.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T18%3A00%3A55Z&amp;precision=second" title="2012-03-20T18:00:55Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> minor edits and comments 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/24b12e729d96b16df822535b2d05c4d1aff35850" title="24b12e729d96b16df822535b2d05c4d1aff35850">24b12e729d96b16df822535b2d05c4d1aff35850</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="4401.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T18%3A00%3A55Z&amp;precision=second" title="2012-03-20T18:00:55Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Added Powder mode (without any functionality yet)
+</p>
+<p>
+Compiles, test should not pass. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/48cf3a1f188e1c00ea5828856a1e3599aed5a015" title="48cf3a1f188e1c00ea5828856a1e3599aed5a015">48cf3a1f188e1c00ea5828856a1e3599aed5a015</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="4401.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T18%3A00%3A55Z&amp;precision=second" title="2012-03-20T18:00:55Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Passing existing tests for Conv2MD 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5937bace257e8b08193641af702ddfbad7619f88" title="5937bace257e8b08193641af702ddfbad7619f88">5937bace257e8b08193641af702ddfbad7619f88</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="4401.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T18%3A11%3A53Z&amp;precision=second" title="2012-03-20T18:11:53Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> fixing unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5b061477d8cfc362619127bdb927a57002280121" title="5b061477d8cfc362619127bdb927a57002280121">5b061477d8cfc362619127bdb927a57002280121</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="4401.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T18%3A18%3A23Z&amp;precision=second" title="2012-03-20T18:18:23Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing Ctest error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d2efb48e22e7ece205098b7346479ea3d452e9d6" title="d2efb48e22e7ece205098b7346479ea3d452e9d6">d2efb48e22e7ece205098b7346479ea3d452e9d6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="4401.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T18%3A30%3A52Z&amp;precision=second" title="2012-03-20T18:30:52Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing unix warnings 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/71715a12f81632453cfdcd88db409c59ebee0f41" title="71715a12f81632453cfdcd88db409c59ebee0f41">71715a12f81632453cfdcd88db409c59ebee0f41</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="4401.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A23Z&amp;precision=second" title="2012-03-20T20:09:23Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Code refactored to separate different parts
+</p>
+<p>
+of the code into different pieces, which are much less connected with each other. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4bd322c30c192e3f1f7f0af7a568311a01202250" title="4bd322c30c192e3f1f7f0af7a568311a01202250">4bd322c30c192e3f1f7f0af7a568311a01202250</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="4401.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A38Z&amp;precision=second" title="2012-03-20T20:09:38Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> further separating algorithm body from internal methods 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6878d9270023653863d8791e427d8f596b7d7866" title="6878d9270023653863d8791e427d8f596b7d7866">6878d9270023653863d8791e427d8f596b7d7866</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="4401.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A38Z&amp;precision=second" title="2012-03-20T20:09:38Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing unix error. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e5aa854e7024385c563914269b2e1cc5df7e701f" title="e5aa854e7024385c563914269b2e1cc5df7e701f">e5aa854e7024385c563914269b2e1cc5df7e701f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="4401.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A39Z&amp;precision=second" title="2012-03-20T20:09:39Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> more tests for MDEventsSubalgorithm factory
+</p>
+<p>
+Clearer metaloops which initiate the algorithms as the result. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e14786b14818b864b54c36a79d65f66b30e6e38c" title="e14786b14818b864b54c36a79d65f66b30e6e38c">e14786b14818b864b54c36a79d65f66b30e6e38c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="4401.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A51Z&amp;precision=second" title="2012-03-20T20:09:51Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> minor edits and comments 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/24b12e729d96b16df822535b2d05c4d1aff35850" title="24b12e729d96b16df822535b2d05c4d1aff35850">24b12e729d96b16df822535b2d05c4d1aff35850</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="4401.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A51Z&amp;precision=second" title="2012-03-20T20:09:51Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Added Powder mode (without any functionality yet)
+</p>
+<p>
+Compiles, test should not pass. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/48cf3a1f188e1c00ea5828856a1e3599aed5a015" title="48cf3a1f188e1c00ea5828856a1e3599aed5a015">48cf3a1f188e1c00ea5828856a1e3599aed5a015</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="4401.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A51Z&amp;precision=second" title="2012-03-20T20:09:51Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Passing existing tests for Conv2MD 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5937bace257e8b08193641af702ddfbad7619f88" title="5937bace257e8b08193641af702ddfbad7619f88">5937bace257e8b08193641af702ddfbad7619f88</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="4401.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A52Z&amp;precision=second" title="2012-03-20T20:09:52Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> fixing unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5b061477d8cfc362619127bdb927a57002280121" title="5b061477d8cfc362619127bdb927a57002280121">5b061477d8cfc362619127bdb927a57002280121</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="4401.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A52Z&amp;precision=second" title="2012-03-20T20:09:52Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing Ctest error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d2efb48e22e7ece205098b7346479ea3d452e9d6" title="d2efb48e22e7ece205098b7346479ea3d452e9d6">d2efb48e22e7ece205098b7346479ea3d452e9d6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="4401.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A53Z&amp;precision=second" title="2012-03-20T20:09:53Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing unix warnings 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/71715a12f81632453cfdcd88db409c59ebee0f41" title="71715a12f81632453cfdcd88db409c59ebee0f41">71715a12f81632453cfdcd88db409c59ebee0f41</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="4401.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-23T13%3A35%3A29Z&amp;precision=second" title="2012-03-23T13:35:29Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> changed uint64 to size_t to avoid win32 warnings.
+</p>
+<p>
+The variable in question relates to ws in memory anyway 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d800549f562a74b0f965cafe174207f2acbc2ce6" title="d800549f562a74b0f965cafe174207f2acbc2ce6">d800549f562a74b0f965cafe174207f2acbc2ce6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="4401.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-23T13%3A35%3A30Z&amp;precision=second" title="2012-03-23T13:35:30Z in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> changed get_vector to getVector
+</p>
+<p>
+refs <a class="closed ticket" href="4813.html" title="task: Modify ConvertToMDEvents algorithm to produce both orthogonal and ... (closed: fixed)">#4813</a> further step in separating transformation matrix from ConvertToMDEvents 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f878850796feee35f7ed07c40dabfc36704e3a87" title="f878850796feee35f7ed07c40dabfc36704e3a87">f878850796feee35f7ed07c40dabfc36704e3a87</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="4401.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-29T13%3A00%3A59%2B01%3A00&amp;precision=second" title="2012-03-29T13:00:59+01:00 in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Implemented adding to existing MDWS
+</p>
+<p>
+Crudest implementation. no big checks for validity done. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e7a29b6f4c291edb8729d4a31e0c6a7600a47108" title="e7a29b6f4c291edb8729d4a31e0c6a7600a47108">e7a29b6f4c291edb8729d4a31e0c6a7600a47108</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="4401.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-29T13%3A12%3A38%2B01%3A00&amp;precision=second" title="2012-03-29T13:12:38+01:00 in Timeline">9 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing unix warning 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fe77ab395579b2338c551b409ea1ceace840b38d" title="fe77ab395579b2338c551b409ea1ceace840b38d">fe77ab395579b2338c551b409ea1ceace840b38d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="4401.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-23T18%3A50%3A47%2B01%3A00&amp;precision=second" title="2012-04-23T18:50:47+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> fixed bug with adding events to existing workspace 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1be67aaee1e9a26d792084962225d3c8dc2c789e" title="1be67aaee1e9a26d792084962225d3c8dc2c789e">1be67aaee1e9a26d792084962225d3c8dc2c789e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="4401.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-23T18%3A50%3A48%2B01%3A00&amp;precision=second" title="2012-04-23T18:50:48+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixed error with copying additional WS parameters
+</p>
+<p>
+when running add to existing MDWorkspace. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f1965a1eaa81113573c3d6378c570594d3dc9bd5" title="f1965a1eaa81113573c3d6378c570594d3dc9bd5">f1965a1eaa81113573c3d6378c570594d3dc9bd5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="4401.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T08%3A25%3A27%2B01%3A00&amp;precision=second" title="2012-04-24T08:25:27+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> fixed bug with adding events to existing workspace 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1be67aaee1e9a26d792084962225d3c8dc2c789e" title="1be67aaee1e9a26d792084962225d3c8dc2c789e">1be67aaee1e9a26d792084962225d3c8dc2c789e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="4401.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T08%3A25%3A28%2B01%3A00&amp;precision=second" title="2012-04-24T08:25:28+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixed error with copying additional WS parameters
+</p>
+<p>
+when running add to existing MDWorkspace. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f1965a1eaa81113573c3d6378c570594d3dc9bd5" title="f1965a1eaa81113573c3d6378c570594d3dc9bd5">f1965a1eaa81113573c3d6378c570594d3dc9bd5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="4401.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A15%3A33%2B01%3A00&amp;precision=second" title="2012-04-24T17:15:33+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> modified the sub-algorithms to obey code conversion. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be399534e98afd5ff68a0cfaf9bc99624c61a08d" title="be399534e98afd5ff68a0cfaf9bc99624c61a08d">be399534e98afd5ff68a0cfaf9bc99624c61a08d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="4401.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A15%3A33%2B01%3A00&amp;precision=second" title="2012-04-24T17:15:33+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> ConvertToMDEvent enums isolated into separate namespace 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/74aef192a8fdb88560be2ef8e897b159aed5e016" title="74aef192a8fdb88560be2ef8e897b159aed5e016">74aef192a8fdb88560be2ef8e897b159aed5e016</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="4401.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A15%3A33%2B01%3A00&amp;precision=second" title="2012-04-24T17:15:33+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Added performance test
+</p>
+<p>
+doing nothing for the time being 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/afa94ee9cacb6c2c083e1ab384e40f7e73b7c6a4" title="afa94ee9cacb6c2c083e1ab384e40f7e73b7c6a4">afa94ee9cacb6c2c083e1ab384e40f7e73b7c6a4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="4401.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A30%3A49%2B01%3A00&amp;precision=second" title="2012-04-24T17:30:49+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Trying to fix Unix error
+</p>
+<p>
+with template overloading/inheritance 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/27843f907e7b167b812adab7ede4302b9f2cdf1c" title="27843f907e7b167b812adab7ede4302b9f2cdf1c">27843f907e7b167b812adab7ede4302b9f2cdf1c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="4401.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A32%3A40%2B01%3A00&amp;precision=second" title="2012-04-24T17:32:40+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> CTest test error fixed 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/da20587a2bd687c6dc68a63c3be5cc6d7fd7a449" title="da20587a2bd687c6dc68a63c3be5cc6d7fd7a449">da20587a2bd687c6dc68a63c3be5cc6d7fd7a449</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="4401.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A38%3A35%2B01%3A00&amp;precision=second" title="2012-04-24T17:38:35+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Trying to fix Unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1e5ecc608097734846efcfba28844fd8644e120d" title="1e5ecc608097734846efcfba28844fd8644e120d">1e5ecc608097734846efcfba28844fd8644e120d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="4401.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A47%3A19%2B01%3A00&amp;precision=second" title="2012-04-24T17:47:19+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing (hopefully) Unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c372a494cc1073d648560327a3afda34934504d4" title="c372a494cc1073d648560327a3afda34934504d4">c372a494cc1073d648560327a3afda34934504d4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="4401.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A49%3A26%2B01%3A00&amp;precision=second" title="2012-04-24T17:49:26+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing CXX test error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/41b065cc13b5ffd77a48c583d155fd10d1203842" title="41b065cc13b5ffd77a48c583d155fd10d1203842">41b065cc13b5ffd77a48c583d155fd10d1203842</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="4401.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T18%3A10%3A43%2B01%3A00&amp;precision=second" title="2012-04-24T18:10:43+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Another attempt to resolve Unix namespace maze 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/69095483b943ba09eb6b31967b071cb707601cc5" title="69095483b943ba09eb6b31967b071cb707601cc5">69095483b943ba09eb6b31967b071cb707601cc5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="4401.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T18%3A18%3A31%2B01%3A00&amp;precision=second" title="2012-04-24T18:18:31+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> looking for Unix error source 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0b1d5d1116e543fc33e22a0706ec5627d1c6c8e0" title="0b1d5d1116e543fc33e22a0706ec5627d1c6c8e0">0b1d5d1116e543fc33e22a0706ec5627d1c6c8e0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="4401.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T18%3A24%3A02%2B01%3A00&amp;precision=second" title="2012-04-24T18:24:02+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> wandering in Unix namspaces maze 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2822a81a3572ff986a5cae10d502f09bfee14a52" title="2822a81a3572ff986a5cae10d502f09bfee14a52">2822a81a3572ff986a5cae10d502f09bfee14a52</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="4401.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T18%3A35%3A23%2B01%3A00&amp;precision=second" title="2012-04-24T18:35:23+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> reverting ConvertToMD namespace changes
+</p>
+<p>
+as this seems not works on Unix properly 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/09cec3bcaa97ea05a2f422b8d7dce76bd5f82f0a" title="09cec3bcaa97ea05a2f422b8d7dce76bd5f82f0a">09cec3bcaa97ea05a2f422b8d7dce76bd5f82f0a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="4401.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T19%3A54%3A16%2B01%3A00&amp;precision=second" title="2012-04-24T19:54:16+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> syntax error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0aca422ffe10f6363728b889d608c94ed5234856" title="0aca422ffe10f6363728b889d608c94ed5234856">0aca422ffe10f6363728b889d608c94ed5234856</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="4401.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T19%3A54%3A16%2B01%3A00&amp;precision=second" title="2012-04-24T19:54:16+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying again 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/027f3287e65d96fc54609be6df25cd84007c04e2" title="027f3287e65d96fc54609be6df25cd84007c04e2">027f3287e65d96fc54609be6df25cd84007c04e2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="4401.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T19%3A54%3A16%2B01%3A00&amp;precision=second" title="2012-04-24T19:54:16+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying again"
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dfaa10ba5d24e4c949cecc02dda90890dc293e1a" title="dfaa10ba5d24e4c949cecc02dda90890dc293e1a">dfaa10ba5d24e4c949cecc02dda90890dc293e1a</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4ad806f635363d43b770b72cfe22be4aac92de1f" title="4ad806f635363d43b770b72cfe22be4aac92de1f">4ad806f635363d43b770b72cfe22be4aac92de1f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="4401.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T19%3A54%3A16%2B01%3A00&amp;precision=second" title="2012-04-24T19:54:16+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying to fix broken commin 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/29b04596cee801e0a6ba694d13e53935a91ed64e" title="29b04596cee801e0a6ba694d13e53935a91ed64e">29b04596cee801e0a6ba694d13e53935a91ed64e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="4401.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T19%3A54%3A17%2B01%3A00&amp;precision=second" title="2012-04-24T19:54:17+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying to nail error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/70277310f8e72bbbb5a5f1c83e3a4ab87394d18c" title="70277310f8e72bbbb5a5f1c83e3a4ab87394d18c">70277310f8e72bbbb5a5f1c83e3a4ab87394d18c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="4401.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T19%3A54%3A17%2B01%3A00&amp;precision=second" title="2012-04-24T19:54:17+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> more attempts to corner Unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a33301f681196f865465739a4236a1506c59ec5" title="7a33301f681196f865465739a4236a1506c59ec5">7a33301f681196f865465739a4236a1506c59ec5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="4401.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T19%3A54%3A17%2B01%3A00&amp;precision=second" title="2012-04-24T19:54:17+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> still some compilation erros 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4fd2962723064740f2407eca0455ee1846fd96fd" title="4fd2962723064740f2407eca0455ee1846fd96fd">4fd2962723064740f2407eca0455ee1846fd96fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="4401.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T19%3A58%3A08%2B01%3A00&amp;precision=second" title="2012-04-24T19:58:08+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying to disable all offending code 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c9bc454323287c7efe5c16e306b72291a432d5ad" title="c9bc454323287c7efe5c16e306b72291a432d5ad">c9bc454323287c7efe5c16e306b72291a432d5ad</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="4401.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T20%3A02%3A17%2B01%3A00&amp;precision=second" title="2012-04-24T20:02:17+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Trying to disable all offending code 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2acd679f9e361eae3546686a87b9a3e6f694bb11" title="2acd679f9e361eae3546686a87b9a3e6f694bb11">2acd679f9e361eae3546686a87b9a3e6f694bb11</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="4401.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T20%3A09%3A36%2B01%3A00&amp;precision=second" title="2012-04-24T20:09:36+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> disabling all offending code 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/94b141a81c2147fe9881eabe2f7e6263e626ed91" title="94b141a81c2147fe9881eabe2f7e6263e626ed91">94b141a81c2147fe9881eabe2f7e6263e626ed91</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="4401.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T20%3A14%3A25%2B01%3A00&amp;precision=second" title="2012-04-24T20:14:25+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> disabling all offending code 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b761b251332bc1d35584c22f16fc8b99f4eb0406" title="b761b251332bc1d35584c22f16fc8b99f4eb0406">b761b251332bc1d35584c22f16fc8b99f4eb0406</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="4401.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T09%3A46%3A05%2B01%3A00&amp;precision=second" title="2012-04-25T09:46:05+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> preprecessed detectors are prepared to refactoring 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2dc8c40954d4042235c51b7924a24407511377be" title="2dc8c40954d4042235c51b7924a24407511377be">2dc8c40954d4042235c51b7924a24407511377be</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="4401.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T09%3A46%3A06%2B01%3A00&amp;precision=second" title="2012-04-25T09:46:06+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> enabling part of the code
+</p>
+<p>
+in hope that should be no errors on Unix 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cbf50c4321712f68ec48ad7f7ba0c0e5d6f2f851" title="cbf50c4321712f68ec48ad7f7ba0c0e5d6f2f851">cbf50c4321712f68ec48ad7f7ba0c0e5d6f2f851</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="4401.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T09%3A46%3A06%2B01%3A00&amp;precision=second" title="2012-04-25T09:46:06+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> minor comment 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c64c86169a3df46190e22e830b7690f3a5393cb0" title="c64c86169a3df46190e22e830b7690f3a5393cb0">c64c86169a3df46190e22e830b7690f3a5393cb0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="4401.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T12%3A30%3A54%2B01%3A00&amp;precision=second" title="2012-04-25T12:30:54+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Another piece of refactored code added
+</p>
+<p>
+and hopefully works 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0af0063fc0eecd1e77249449c70daa54b3d5fb38" title="0af0063fc0eecd1e77249449c70daa54b3d5fb38">0af0063fc0eecd1e77249449c70daa54b3d5fb38</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="4401.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T13%3A15%3A02%2B01%3A00&amp;precision=second" title="2012-04-25T13:15:02+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Another piece of TM code added back 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a9941716154a8b1c1bedcb552e5e6e4e9c4dbe56" title="a9941716154a8b1c1bedcb552e5e6e4e9c4dbe56">a9941716154a8b1c1bedcb552e5e6e4e9c4dbe56</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="4401.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T13%3A52%3A08%2B01%3A00&amp;precision=second" title="2012-04-25T13:52:08+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing Unix warning 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3264ec3197e50bd7903c0cbd2f2de18d1cfdc7c0" title="3264ec3197e50bd7903c0cbd2f2de18d1cfdc7c0">3264ec3197e50bd7903c0cbd2f2de18d1cfdc7c0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="4401.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T13%3A52%3A08%2B01%3A00&amp;precision=second" title="2012-04-25T13:52:08+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Additional piece of code enabled 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7315ed74296a916c940b06d80dd187d9bafd0a54" title="7315ed74296a916c940b06d80dd187d9bafd0a54">7315ed74296a916c940b06d80dd187d9bafd0a54</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="4401.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T15%3A16%3A45%2B01%3A00&amp;precision=second" title="2012-04-25T15:16:45+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> enabled all failing code under win 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/91e4acd818e8831e30c716e909386ad3f3f5bc9c" title="91e4acd818e8831e30c716e909386ad3f3f5bc9c">91e4acd818e8831e30c716e909386ad3f3f5bc9c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="4401.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T15%3A19%3A58%2B01%3A00&amp;precision=second" title="2012-04-25T15:19:58+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> missed modification added 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0719e619ba63269e4952f55f95406f04dafc7deb" title="0719e619ba63269e4952f55f95406f04dafc7deb">0719e619ba63269e4952f55f95406f04dafc7deb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="4401.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T15%3A54%3A35%2B01%3A00&amp;precision=second" title="2012-04-25T15:54:35+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Enabled everything disabled before.
+</p>
+<p>
+Should be in working order now. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b38a65480153b16949475b0fff0dfeeb8d8a457f" title="b38a65480153b16949475b0fff0dfeeb8d8a457f">b38a65480153b16949475b0fff0dfeeb8d8a457f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="4401.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T15%3A54%3A35%2B01%3A00&amp;precision=second" title="2012-04-25T15:54:35+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> this should return code to working state 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/167a1859e662c3cec01ccd2afd39a40b952bc982" title="167a1859e662c3cec01ccd2afd39a40b952bc982">167a1859e662c3cec01ccd2afd39a40b952bc982</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="4401.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T15%3A54%3A36%2B01%3A00&amp;precision=second" title="2012-04-25T15:54:36+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> minor error fixed 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/18b1e680faf2d6d7a8875f226d12c1ef87f1e8a8" title="18b1e680faf2d6d7a8875f226d12c1ef87f1e8a8">18b1e680faf2d6d7a8875f226d12c1ef87f1e8a8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="4401.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T19%3A09%3A24%2B01%3A00&amp;precision=second" title="2012-04-25T19:09:24+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> dim names and dimID-s were switching places. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e9384d7625029ee12f4f78b6ad262b9e495bb32b" title="e9384d7625029ee12f4f78b6ad262b9e495bb32b">e9384d7625029ee12f4f78b6ad262b9e495bb32b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="4401.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T19%3A09%3A24%2B01%3A00&amp;precision=second" title="2012-04-25T19:09:24+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Minor bugs in WS description
+</p>
+<p>
+not all fixed 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d52291ad70d1ff681a80c39a3ca8761596be0f23" title="d52291ad70d1ff681a80c39a3ca8761596be0f23">d52291ad70d1ff681a80c39a3ca8761596be0f23</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="4401.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-27T09%3A16%3A03%2B01%3A00&amp;precision=second" title="2012-04-27T09:16:03+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> explicitly extracted interfaces on biggest subalg classes 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/25244bf7ec5016f9a424662d00a09cfc4693944b" title="25244bf7ec5016f9a424662d00a09cfc4693944b">25244bf7ec5016f9a424662d00a09cfc4693944b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-82">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:82" class="cnum">
+      <a href="4401.html#comment:82">comment:82</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-27T12%3A37%3A56%2B01%3A00&amp;precision=second" title="2012-04-27T12:37:56+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5161.html" title="enhancement: Create separate algorithm which would preprocess detectors (closed: fixed)">#5161</a> detectors clear behind themselves
+</p>
+<p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> a performance test skeleton 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81dba05c570df4019b206ee7920f73cf426cd935" title="81dba05c570df4019b206ee7920f73cf426cd935">81dba05c570df4019b206ee7920f73cf426cd935</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-83">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:83" class="cnum">
+      <a href="4401.html#comment:83">comment:83</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-27T17%3A14%3A48%2B01%3A00&amp;precision=second" title="2012-04-27T17:14:48+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> added couple of performance tests which check something
+</p>
+<p>
+can not compare results as the results widely differ on test data provided. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a0ecde9e3e699a080cb8a4da12e17164bab4808e" title="a0ecde9e3e699a080cb8a4da12e17164bab4808e">a0ecde9e3e699a080cb8a4da12e17164bab4808e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-84">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:84" class="cnum">
+      <a href="4401.html#comment:84">comment:84</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-27T17%3A40%3A34%2B01%3A00&amp;precision=second" title="2012-04-27T17:40:34+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+4) Rotating crystal and more general&amp;correct treatment of time logs used as a dimension have not been touched but otherwise -- pretty large changes to implementation. 
+</p>
+<p>
+Parallel is also postponed as questions about adding to MD workspace in parallel remain. 
+</p>
+<p>
+Number of possible optimization tasks remain but can deal with it after design discussion. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-85">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:85" class="cnum">
+      <a href="4401.html#comment:85">comment:85</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-27T17%3A44%3A46%2B01%3A00&amp;precision=second" title="2012-04-27T17:44:46+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-86">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:86" class="cnum">
+      <a href="4401.html#comment:86">comment:86</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A10%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:10+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> modified the sub-algorithms to obey code conversion. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be399534e98afd5ff68a0cfaf9bc99624c61a08d" title="be399534e98afd5ff68a0cfaf9bc99624c61a08d">be399534e98afd5ff68a0cfaf9bc99624c61a08d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-87">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:87" class="cnum">
+      <a href="4401.html#comment:87">comment:87</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A11%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:11+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> ConvertToMDEvent enums isolated into separate namespace 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/74aef192a8fdb88560be2ef8e897b159aed5e016" title="74aef192a8fdb88560be2ef8e897b159aed5e016">74aef192a8fdb88560be2ef8e897b159aed5e016</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-88">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:88" class="cnum">
+      <a href="4401.html#comment:88">comment:88</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A11%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:11+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Added performance test
+</p>
+<p>
+doing nothing for the time being 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/afa94ee9cacb6c2c083e1ab384e40f7e73b7c6a4" title="afa94ee9cacb6c2c083e1ab384e40f7e73b7c6a4">afa94ee9cacb6c2c083e1ab384e40f7e73b7c6a4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-89">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:89" class="cnum">
+      <a href="4401.html#comment:89">comment:89</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A12%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:12+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Trying to fix Unix error
+</p>
+<p>
+with template overloading/inheritance 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/27843f907e7b167b812adab7ede4302b9f2cdf1c" title="27843f907e7b167b812adab7ede4302b9f2cdf1c">27843f907e7b167b812adab7ede4302b9f2cdf1c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-90">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:90" class="cnum">
+      <a href="4401.html#comment:90">comment:90</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A12%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:12+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> CTest test error fixed 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/da20587a2bd687c6dc68a63c3be5cc6d7fd7a449" title="da20587a2bd687c6dc68a63c3be5cc6d7fd7a449">da20587a2bd687c6dc68a63c3be5cc6d7fd7a449</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-91">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:91" class="cnum">
+      <a href="4401.html#comment:91">comment:91</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A13%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:13+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Trying to fix Unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1e5ecc608097734846efcfba28844fd8644e120d" title="1e5ecc608097734846efcfba28844fd8644e120d">1e5ecc608097734846efcfba28844fd8644e120d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-92">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:92" class="cnum">
+      <a href="4401.html#comment:92">comment:92</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A13%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:13+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing (hopefully) Unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c372a494cc1073d648560327a3afda34934504d4" title="c372a494cc1073d648560327a3afda34934504d4">c372a494cc1073d648560327a3afda34934504d4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-93">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:93" class="cnum">
+      <a href="4401.html#comment:93">comment:93</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A14%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:14+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing CXX test error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/41b065cc13b5ffd77a48c583d155fd10d1203842" title="41b065cc13b5ffd77a48c583d155fd10d1203842">41b065cc13b5ffd77a48c583d155fd10d1203842</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-94">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:94" class="cnum">
+      <a href="4401.html#comment:94">comment:94</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A16%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:16+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Another attempt to resolve Unix namespace maze 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/69095483b943ba09eb6b31967b071cb707601cc5" title="69095483b943ba09eb6b31967b071cb707601cc5">69095483b943ba09eb6b31967b071cb707601cc5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-95">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:95" class="cnum">
+      <a href="4401.html#comment:95">comment:95</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A17%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:17+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> looking for Unix error source 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0b1d5d1116e543fc33e22a0706ec5627d1c6c8e0" title="0b1d5d1116e543fc33e22a0706ec5627d1c6c8e0">0b1d5d1116e543fc33e22a0706ec5627d1c6c8e0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-96">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:96" class="cnum">
+      <a href="4401.html#comment:96">comment:96</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A17%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:17+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> wandering in Unix namspaces maze 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2822a81a3572ff986a5cae10d502f09bfee14a52" title="2822a81a3572ff986a5cae10d502f09bfee14a52">2822a81a3572ff986a5cae10d502f09bfee14a52</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-97">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:97" class="cnum">
+      <a href="4401.html#comment:97">comment:97</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A18%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:18+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> reverting ConvertToMD namespace changes
+</p>
+<p>
+as this seems not works on Unix properly 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/09cec3bcaa97ea05a2f422b8d7dce76bd5f82f0a" title="09cec3bcaa97ea05a2f422b8d7dce76bd5f82f0a">09cec3bcaa97ea05a2f422b8d7dce76bd5f82f0a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-98">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:98" class="cnum">
+      <a href="4401.html#comment:98">comment:98</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A21%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:21+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> syntax error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0aca422ffe10f6363728b889d608c94ed5234856" title="0aca422ffe10f6363728b889d608c94ed5234856">0aca422ffe10f6363728b889d608c94ed5234856</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-99">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:99" class="cnum">
+      <a href="4401.html#comment:99">comment:99</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A21%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:21+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying again 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/027f3287e65d96fc54609be6df25cd84007c04e2" title="027f3287e65d96fc54609be6df25cd84007c04e2">027f3287e65d96fc54609be6df25cd84007c04e2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-100">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:100" class="cnum">
+      <a href="4401.html#comment:100">comment:100</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A22%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:22+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying again"
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dfaa10ba5d24e4c949cecc02dda90890dc293e1a" title="dfaa10ba5d24e4c949cecc02dda90890dc293e1a">dfaa10ba5d24e4c949cecc02dda90890dc293e1a</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4ad806f635363d43b770b72cfe22be4aac92de1f" title="4ad806f635363d43b770b72cfe22be4aac92de1f">4ad806f635363d43b770b72cfe22be4aac92de1f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-101">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:101" class="cnum">
+      <a href="4401.html#comment:101">comment:101</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A23%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:23+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying to fix broken commin 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/29b04596cee801e0a6ba694d13e53935a91ed64e" title="29b04596cee801e0a6ba694d13e53935a91ed64e">29b04596cee801e0a6ba694d13e53935a91ed64e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-102">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:102" class="cnum">
+      <a href="4401.html#comment:102">comment:102</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A23%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:23+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying to nail error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/70277310f8e72bbbb5a5f1c83e3a4ab87394d18c" title="70277310f8e72bbbb5a5f1c83e3a4ab87394d18c">70277310f8e72bbbb5a5f1c83e3a4ab87394d18c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-103">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:103" class="cnum">
+      <a href="4401.html#comment:103">comment:103</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A24%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:24+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> more attempts to corner Unix error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a33301f681196f865465739a4236a1506c59ec5" title="7a33301f681196f865465739a4236a1506c59ec5">7a33301f681196f865465739a4236a1506c59ec5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-104">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:104" class="cnum">
+      <a href="4401.html#comment:104">comment:104</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A24%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:24+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> still some compilation erros 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4fd2962723064740f2407eca0455ee1846fd96fd" title="4fd2962723064740f2407eca0455ee1846fd96fd">4fd2962723064740f2407eca0455ee1846fd96fd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-105">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:105" class="cnum">
+      <a href="4401.html#comment:105">comment:105</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A25%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:25+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> trying to disable all offending code 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c9bc454323287c7efe5c16e306b72291a432d5ad" title="c9bc454323287c7efe5c16e306b72291a432d5ad">c9bc454323287c7efe5c16e306b72291a432d5ad</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-106">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:106" class="cnum">
+      <a href="4401.html#comment:106">comment:106</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A25%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:25+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Trying to disable all offending code 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2acd679f9e361eae3546686a87b9a3e6f694bb11" title="2acd679f9e361eae3546686a87b9a3e6f694bb11">2acd679f9e361eae3546686a87b9a3e6f694bb11</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-107">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:107" class="cnum">
+      <a href="4401.html#comment:107">comment:107</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A26%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:26+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> disabling all offending code 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/94b141a81c2147fe9881eabe2f7e6263e626ed91" title="94b141a81c2147fe9881eabe2f7e6263e626ed91">94b141a81c2147fe9881eabe2f7e6263e626ed91</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-108">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:108" class="cnum">
+      <a href="4401.html#comment:108">comment:108</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A26%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:26+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> disabling all offending code 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b761b251332bc1d35584c22f16fc8b99f4eb0406" title="b761b251332bc1d35584c22f16fc8b99f4eb0406">b761b251332bc1d35584c22f16fc8b99f4eb0406</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-109">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:109" class="cnum">
+      <a href="4401.html#comment:109">comment:109</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A37%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:37+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> preprecessed detectors are prepared to refactoring 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2dc8c40954d4042235c51b7924a24407511377be" title="2dc8c40954d4042235c51b7924a24407511377be">2dc8c40954d4042235c51b7924a24407511377be</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-110">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:110" class="cnum">
+      <a href="4401.html#comment:110">comment:110</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A37%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:37+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> enabling part of the code
+</p>
+<p>
+in hope that should be no errors on Unix 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cbf50c4321712f68ec48ad7f7ba0c0e5d6f2f851" title="cbf50c4321712f68ec48ad7f7ba0c0e5d6f2f851">cbf50c4321712f68ec48ad7f7ba0c0e5d6f2f851</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-111">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:111" class="cnum">
+      <a href="4401.html#comment:111">comment:111</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A38%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:38+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> minor comment 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c64c86169a3df46190e22e830b7690f3a5393cb0" title="c64c86169a3df46190e22e830b7690f3a5393cb0">c64c86169a3df46190e22e830b7690f3a5393cb0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-112">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:112" class="cnum">
+      <a href="4401.html#comment:112">comment:112</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A43%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:43+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Another piece of refactored code added
+</p>
+<p>
+and hopefully works 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0af0063fc0eecd1e77249449c70daa54b3d5fb38" title="0af0063fc0eecd1e77249449c70daa54b3d5fb38">0af0063fc0eecd1e77249449c70daa54b3d5fb38</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-113">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:113" class="cnum">
+      <a href="4401.html#comment:113">comment:113</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A44%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:44+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Another piece of TM code added back 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a9941716154a8b1c1bedcb552e5e6e4e9c4dbe56" title="a9941716154a8b1c1bedcb552e5e6e4e9c4dbe56">a9941716154a8b1c1bedcb552e5e6e4e9c4dbe56</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-114">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:114" class="cnum">
+      <a href="4401.html#comment:114">comment:114</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A46%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:46+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Fixing Unix warning 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3264ec3197e50bd7903c0cbd2f2de18d1cfdc7c0" title="3264ec3197e50bd7903c0cbd2f2de18d1cfdc7c0">3264ec3197e50bd7903c0cbd2f2de18d1cfdc7c0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-115">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:115" class="cnum">
+      <a href="4401.html#comment:115">comment:115</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A47%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:47+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Additional piece of code enabled 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7315ed74296a916c940b06d80dd187d9bafd0a54" title="7315ed74296a916c940b06d80dd187d9bafd0a54">7315ed74296a916c940b06d80dd187d9bafd0a54</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-116">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:116" class="cnum">
+      <a href="4401.html#comment:116">comment:116</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A47%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:47+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> enabled all failing code under win 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/91e4acd818e8831e30c716e909386ad3f3f5bc9c" title="91e4acd818e8831e30c716e909386ad3f3f5bc9c">91e4acd818e8831e30c716e909386ad3f3f5bc9c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-117">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:117" class="cnum">
+      <a href="4401.html#comment:117">comment:117</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A48%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:48+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> missed modification added 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0719e619ba63269e4952f55f95406f04dafc7deb" title="0719e619ba63269e4952f55f95406f04dafc7deb">0719e619ba63269e4952f55f95406f04dafc7deb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-118">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:118" class="cnum">
+      <a href="4401.html#comment:118">comment:118</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A50%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:50+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Enabled everything disabled before.
+</p>
+<p>
+Should be in working order now. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b38a65480153b16949475b0fff0dfeeb8d8a457f" title="b38a65480153b16949475b0fff0dfeeb8d8a457f">b38a65480153b16949475b0fff0dfeeb8d8a457f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-119">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:119" class="cnum">
+      <a href="4401.html#comment:119">comment:119</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A51%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:51+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> this should return code to working state 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/167a1859e662c3cec01ccd2afd39a40b952bc982" title="167a1859e662c3cec01ccd2afd39a40b952bc982">167a1859e662c3cec01ccd2afd39a40b952bc982</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-120">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:120" class="cnum">
+      <a href="4401.html#comment:120">comment:120</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A51%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:51+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> minor error fixed 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/18b1e680faf2d6d7a8875f226d12c1ef87f1e8a8" title="18b1e680faf2d6d7a8875f226d12c1ef87f1e8a8">18b1e680faf2d6d7a8875f226d12c1ef87f1e8a8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-121">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:121" class="cnum">
+      <a href="4401.html#comment:121">comment:121</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A54%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:54+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> dim names and dimID-s were switching places. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e9384d7625029ee12f4f78b6ad262b9e495bb32b" title="e9384d7625029ee12f4f78b6ad262b9e495bb32b">e9384d7625029ee12f4f78b6ad262b9e495bb32b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-122">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:122" class="cnum">
+      <a href="4401.html#comment:122">comment:122</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A54%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:54+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Minor bugs in WS description
+</p>
+<p>
+not all fixed 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d52291ad70d1ff681a80c39a3ca8761596be0f23" title="d52291ad70d1ff681a80c39a3ca8761596be0f23">d52291ad70d1ff681a80c39a3ca8761596be0f23</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-123">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:123" class="cnum">
+      <a href="4401.html#comment:123">comment:123</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A30%3A27%2B01%3A00&amp;precision=second" title="2012-04-28T22:30:27+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> explicitly extracted interfaces on biggest subalg classes 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/25244bf7ec5016f9a424662d00a09cfc4693944b" title="25244bf7ec5016f9a424662d00a09cfc4693944b">25244bf7ec5016f9a424662d00a09cfc4693944b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-124">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:124" class="cnum">
+      <a href="4401.html#comment:124">comment:124</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A30%3A31%2B01%3A00&amp;precision=second" title="2012-04-28T22:30:31+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5161.html" title="enhancement: Create separate algorithm which would preprocess detectors (closed: fixed)">#5161</a> detectors clear behind themselves
+</p>
+<p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> a performance test skeleton 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81dba05c570df4019b206ee7920f73cf426cd935" title="81dba05c570df4019b206ee7920f73cf426cd935">81dba05c570df4019b206ee7920f73cf426cd935</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-125">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:125" class="cnum">
+      <a href="4401.html#comment:125">comment:125</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A30%3A34%2B01%3A00&amp;precision=second" title="2012-04-28T22:30:34+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> added couple of performance tests which check something
+</p>
+<p>
+can not compare results as the results widely differ on test data provided. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a0ecde9e3e699a080cb8a4da12e17164bab4808e" title="a0ecde9e3e699a080cb8a4da12e17164bab4808e">a0ecde9e3e699a080cb8a4da12e17164bab4808e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-126">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:126" class="cnum">
+      <a href="4401.html#comment:126">comment:126</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T11%3A04%3A16%2B01%3A00&amp;precision=second" title="2012-05-01T11:04:16+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Added provisional UML diagram for existing ConvertToMDEvent algorithms bunch
+</p>
+<p>
+not complete diagram 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c9245d374377c9d875fc05a17c4ad4762daaa126" title="c9245d374377c9d875fc05a17c4ad4762daaa126">c9245d374377c9d875fc05a17c4ad4762daaa126</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-127">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:127" class="cnum">
+      <a href="4401.html#comment:127">comment:127</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T11%3A11%3A52%2B01%3A00&amp;precision=second" title="2012-05-01T11:11:52+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Minor Comments 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fb1c570f2d54b08dd80b4791559edba59791e038" title="fb1c570f2d54b08dd80b4791559edba59791e038">fb1c570f2d54b08dd80b4791559edba59791e038</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-128">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:128" class="cnum">
+      <a href="4401.html#comment:128">comment:128</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T16%3A04%3A37%2B01%3A00&amp;precision=second" title="2012-05-01T16:04:37+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Minor Comments 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/09a7eda15274e6bd0db855fe7da7bd7b51a4f715" title="09a7eda15274e6bd0db855fe7da7bd7b51a4f715">09a7eda15274e6bd0db855fe7da7bd7b51a4f715</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-129">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:129" class="cnum">
+      <a href="4401.html#comment:129">comment:129</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-03T18%3A21%3A55%2B01%3A00&amp;precision=second" title="2012-05-03T18:21:55+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Testers should check if algorithm adds to existing workspace correctly. 
+</p>
+<p>
+and (ideally :) if the structure of the super-algorithm is understandable. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-130">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:130" class="cnum">
+      <a href="4401.html#comment:130">comment:130</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-04T11%3A15%3A41%2B01%3A00&amp;precision=second" title="2012-05-04T11:15:41+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Comments to properties
+</p>
+<p>
+synchronized with new meaning and wiki 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fe783e4c9d9f148fcc56f9857c8fdb520885f1ea" title="fe783e4c9d9f148fcc56f9857c8fdb520885f1ea">fe783e4c9d9f148fcc56f9857c8fdb520885f1ea</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-131">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:131" class="cnum">
+      <a href="4401.html#comment:131">comment:131</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-04T12%3A03%3A23%2B01%3A00&amp;precision=second" title="2012-05-04T12:03:23+01:00 in Timeline">8 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-132">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:132" class="cnum">
+      <a href="4401.html#comment:132">comment:132</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-04T12%3A22%3A38%2B01%3A00&amp;precision=second" title="2012-05-04T12:22:38+01:00 in Timeline">8 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Checked by running the algorithm in the GUI and running a test script.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-133">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:133" class="cnum">
+      <a href="4401.html#comment:133">comment:133</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-04T16%3A52%3A57%2B01%3A00&amp;precision=second" title="2012-05-04T16:52:57+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Minor Comments 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/09a7eda15274e6bd0db855fe7da7bd7b51a4f715" title="09a7eda15274e6bd0db855fe7da7bd7b51a4f715">09a7eda15274e6bd0db855fe7da7bd7b51a4f715</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-134">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:134" class="cnum">
+      <a href="4401.html#comment:134">comment:134</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-04T16%3A53%3A44%2B01%3A00&amp;precision=second" title="2012-05-04T16:53:44+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> Comments to properties
+</p>
+<p>
+synchronized with new meaning and wiki 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fe783e4c9d9f148fcc56f9857c8fdb520885f1ea" title="fe783e4c9d9f148fcc56f9857c8fdb520885f1ea">fe783e4c9d9f148fcc56f9857c8fdb520885f1ea</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-135">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:135" class="cnum">
+      <a href="4401.html#comment:135">comment:135</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-24T18%3A49%3A34%2B01%3A00&amp;precision=second" title="2012-07-24T18:49:34+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4401.html" title="enhancement: IImplementation of ConvertToMD workspace algorithm (closed: fixed)">#4401</a> UML for recent MD workspace implementation 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/634a286ffbdf8ba6d409ad2ff87f179ac3983681" title="634a286ffbdf8ba6d409ad2ff87f179ac3983681">634a286ffbdf8ba6d409ad2ff87f179ac3983681</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-136">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:136" class="cnum">
+      <a href="4401.html#comment:136">comment:136</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A49%3A26%2B01%3A00&amp;precision=second" title="2015-06-03T23:49:26+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/5248"><span class="icon">​</span>5248</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4401?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4401?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4401?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

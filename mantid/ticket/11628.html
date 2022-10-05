@@ -1,0 +1,964 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11628 (Mask calculation for bleed correction, option for whole tube)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11627.html" title="Ticket #11627" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11628?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11628?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11628?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11629.html" title="Ticket #11629" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11628, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11627.html" title="Ticket #11627">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="11629.html" title="Ticket #11629">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11628.html">Ticket #11628</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-24T10%3A48%3A04%2B01%3A00&amp;precision=second" title="2015-04-24T10:48:04+01:00 in Timeline">5 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A43%3A49%2B01%3A00&amp;precision=second" title="2015-06-04T04:43:49+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Mask calculation for bleed correction, option for whole tube</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Nick+Draper">Nick Draper</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Nick+Draper">Nick Draper</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Direct+Inelastic">Direct Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              russell.ewings@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              NickDraper
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+From Russell Ewings:
+</p>
+<p>
+I believe that the way the mask is calculated during "bleed" corrections on direct geometry inelastic instruments is incorrect. If a pixels is deemed to have a high rate, i.e. strong Bragg peak present, then the tube in which it lives is likely to suffer from "bleed" due to detector electronics problems. The entire tube should therefore be masked in the data reduction. At the moment it seems that only the high-rate pixels themselves are masked, and not the tube. An example run where this can be seen is Merlin run 24643, which was a multi-rep run with Ei=120, 43 and 22meV. The corresponding white beam vanadium run is 23684, and the hard mask file we use is MER23698.msk. All of the other parameters are the defaults used in our template script that Alex wrote. 
+</p>
+<p>
+Thanks, Russell 
+</p>
+<p>
+I would suggest we provide an option for high rate pixels, or whole tube masking.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11628.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-24T21%3A13%3A00%2B01%3A00&amp;precision=second" title="2015-04-24T21:13:00+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Fixed diagnose for event workspaces.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b2af8059258f1c745bc85615ba21cb984e9421bb" title="b2af8059258f1c745bc85615ba21cb984e9421bb">b2af8059258f1c745bc85615ba21cb984e9421bb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11628.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-24T21%3A15%3A32%2B01%3A00&amp;precision=second" title="2015-04-24T21:15:32+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>russell.ewings@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11628.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T12%3A09%3A38%2B01%3A00&amp;precision=second" title="2015-04-28T12:09:38+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> fixing unit tests and more detailed description of the
+</p>
+<p>
+CreatePSDBleedMask algorithm.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fb077fe05c8c46d5709fa2c83221df6ced9f9cc4" title="fb077fe05c8c46d5709fa2c83221df6ced9f9cc4">fb077fe05c8c46d5709fa2c83221df6ced9f9cc4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11628.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T12%3A09%3A38%2B01%3A00&amp;precision=second" title="2015-04-28T12:09:38+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> unit tests for bleeding corrections
+</p>
+<p>
+and various changes to fix&amp;modify unit test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0ad28cb70bc4a4ccd6056502dcc957adf71ffee5" title="0ad28cb70bc4a4ccd6056502dcc957adf71ffee5">0ad28cb70bc4a4ccd6056502dcc957adf71ffee5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="11628.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T14%3A03%3A41%2B01%3A00&amp;precision=second" title="2015-04-28T14:03:41+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Changes to fix GUI
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d3dd0b4d24f8e9c7f203bc68e4042065e132f96a" title="d3dd0b4d24f8e9c7f203bc68e4042065e132f96a">d3dd0b4d24f8e9c7f203bc68e4042065e132f96a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="11628.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T15%3A48%3A15%2B01%3A00&amp;precision=second" title="2015-04-28T15:48:15+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Proper description for the algorithm
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d95c232d070c4592eef1a120fed70c52e9a673f" title="4d95c232d070c4592eef1a120fed70c52e9a673f">4d95c232d070c4592eef1a120fed70c52e9a673f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="11628.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T18%3A18%3A17%2B01%3A00&amp;precision=second" title="2015-04-28T18:18:17+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Minor changes done while fixing system test for MERLIN
+</p>
+<p>
+also added warning to Integration test, stating that it does not work as expected for event workspaces.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4186e4be140285091371772536add744615c4284" title="4186e4be140285091371772536add744615c4284">4186e4be140285091371772536add744615c4284</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="11628.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T18%3A45%3A34%2B01%3A00&amp;precision=second" title="2015-04-28T18:45:34+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> changed MERLINReduction.nxs reference file
+</p>
+<p>
+as bleeding corrections were wrong for some time.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b4ca5b66eb4ec041b781d473541815332323b814" title="b4ca5b66eb4ec041b781d473541815332323b814">b4ca5b66eb4ec041b781d473541815332323b814</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="11628.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T19%3A22%3A44%2B01%3A00&amp;precision=second" title="2015-04-28T19:22:44+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> fixing LET system test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/664374afbe4381fe496f234b94fed4300ac2b05f" title="664374afbe4381fe496f234b94fed4300ac2b05f">664374afbe4381fe496f234b94fed4300ac2b05f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="11628.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T19%3A51%3A28%2B01%3A00&amp;precision=second" title="2015-04-28T19:51:28+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This fixed as PR <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/668"><span class="icon">​</span>https://github.com/mantidproject/mantid/pull/668</a>
+</p>
+<p>
+To my disbelieve, this appears to be ticket not about bleeding corrections (though about them too a bit) but about diagnostics for direct inelastic in event mode. I heard a rumours that diagnostics does not properly work in event mode, and this ticket have clearly proven this.
+</p>
+<p>
+To complete the ticket range of bugfixes and changes had to be implemented:
+</p>
+<p>
+1) Fixed background test in event mode. Apparently, integration in event mode was working over random TOF region (often over the whole frame region). This has been fixed and warning has been added to Integration algorithm description.
+</p>
+<p>
+2) Bleeding corrections need non-normalized workspace. Apparently ISIS reduction was testing bleeding on normalized workspace for ages and results were referenced in the system tests. I have changed reference file in system test to the correct one.
+</p>
+<p>
+3) changes to (2) caused small re-factoring of the reduction code to run bleed test on  non-normalized workspace. New unit test have been written and number of smaller changes and tests were modified to reflect this. 
+</p>
+<p>
+4)Description of bleeding correction algorithm was pretty poor. Partially because of this, its incorrect operations left unnoticed for so long. I've written much more advanced description, illustrating bleeding and how proper corrections look like using ticket's MER24643 file as the example. The diagnostics was initially suffering from issues 1) and 2) but now I believe that the reduction does proper corrections as have been discussed with Russell. All his remarks were addressed. 
+</p>
+<p>
+Despite all these changes, tester who is probably not an expert in Direct Inelastic could not do too much. If(when) system tests pass, one can be reasonably confident that previous reduction works fine. I have fixed MERLIN system test, which now calculates bleeding masks (It was apparently did not found any bleeding corrections before but now it does).
+</p>
+<p>
+Do the code review. Look at the CreatePSDBleed algorithm description and check how it looks now.
+Physics looks right and will be additionally verified by Russell.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="11628.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-28T22%3A12%3A00%2B01%3A00&amp;precision=second" title="2015-04-28T22:12:00+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Trying to fix background removal when normalised by
+</p>
+<p>
+monitor-2 (may break other normalizations)
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5ca816b112c4b944e324fd95b2434a244e9aaef9" title="5ca816b112c4b944e324fd95b2434a244e9aaef9">5ca816b112c4b944e324fd95b2434a244e9aaef9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="11628.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T09%3A30%3A52%2B01%3A00&amp;precision=second" title="2015-04-29T09:30:52+01:00 in Timeline">5 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+@abuts There is a crash in <tt>PythonScriptsTest_DirectEnergyConversionTest</tt>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="11628.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T19%3A45%3A24%2B01%3A00&amp;precision=second" title="2015-04-29T19:45:24+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> reverting changes to _find_or_build_bkgr_ws
+</p>
+<p>
+as different normalization options are envisaged.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ab430a5ee19996b5578910135c0da2e6ff87690a" title="ab430a5ee19996b5578910135c0da2e6ff87690a">ab430a5ee19996b5578910135c0da2e6ff87690a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="11628.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T19%3A45%3A24%2B01%3A00&amp;precision=second" title="2015-04-29T19:45:24+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> export_normalization method and unit test for it
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/420970427e41ac5be54af22b8cfa407ecb4d189c" title="420970427e41ac5be54af22b8cfa407ecb4d189c">420970427e41ac5be54af22b8cfa407ecb4d189c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="11628.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T19%3A45%3A24%2B01%3A00&amp;precision=second" title="2015-04-29T19:45:24+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Fixing CreatePSDBleedMask crashing Mantid on goodfrm
+</p>
+<p>
+log with non-integer value.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d9d87fe612625c8909194554bc453831d7efe54d" title="d9d87fe612625c8909194554bc453831d7efe54d">d9d87fe612625c8909194554bc453831d7efe54d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="11628.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T19%3A45%3A24%2B01%3A00&amp;precision=second" title="2015-04-29T19:45:24+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> fixed background removal in multirep mode for non-event ws
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f828deae40ab8175eb60381e1fc2dc3d7deab849" title="f828deae40ab8175eb60381e1fc2dc3d7deab849">f828deae40ab8175eb60381e1fc2dc3d7deab849</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="11628.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T19%3A55%3A18%2B01%3A00&amp;precision=second" title="2015-04-29T19:55:18+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+After generating pull request I've realized that background removal in multirep mode does not work correctly when normalization is anything else but current. 
+</p>
+<p>
+This is hopefully fixed now. During the fixing this issue I've discovered couple of other minor issues (e.g. crash of Mantid if CreatePSDMask has wrong type of goodfrm log)
+</p>
+<p>
+As new background removal (multirep removal, later removal) is not system tested and waits for physical evaluation, a tester can safely accept changes if existing system tests show that reduction runs as before. Qualitative tests suggest that background removal works fine. 
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T20%3A06%3A21%2B01%3A00&amp;precision=second" title="2015-04-29T20:06:21+01:00 in Timeline">5 years</a> ago
+                      by Alex Buts
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/11628?cversion=0&amp;cnum_hist=17#comment:17">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/11628?action=comment-diff&amp;cnum=17&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="11628.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T20%3A54%3A23%2B01%3A00&amp;precision=second" title="2015-04-29T20:54:23+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Pylint warnings
+</p>
+<p>
+what a waste of time!
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c541714f66a12ac936a78265ffd05d433d9e4835" title="c541714f66a12ac936a78265ffd05d433d9e4835">c541714f66a12ac936a78265ffd05d433d9e4835</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="11628.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-29T20%3A54%3A23%2B01%3A00&amp;precision=second" title="2015-04-29T20:54:23+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> More pylint
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2bcd08357ac5c28e3c776e0538a25407c6838ca4" title="2bcd08357ac5c28e3c776e0538a25407c6838ca4">2bcd08357ac5c28e3c776e0538a25407c6838ca4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="11628.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T12%3A35%3A43%2B01%3A00&amp;precision=second" title="2015-04-30T12:35:43+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Modified NormaliseByCurrent algorithm to return norm_factor
+</p>
+<p>
+log value
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/defbbcc0eaab2b4ad02b3a18146fb7509cadddf7" title="defbbcc0eaab2b4ad02b3a18146fb7509cadddf7">defbbcc0eaab2b4ad02b3a18146fb7509cadddf7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="11628.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T12%3A35%3A43%2B01%3A00&amp;precision=second" title="2015-04-30T12:35:43+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> Using changes in NormalizeByCurrent algorithm
+</p>
+<p>
+within the reduction script
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fb376b424b3e1fbee8b154d78842b20ff0c56972" title="fb376b424b3e1fbee8b154d78842b20ff0c56972">fb376b424b3e1fbee8b154d78842b20ff0c56972</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="11628.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T14%3A03%3A25%2B01%3A00&amp;precision=second" title="2015-04-30T14:03:25+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> minor comments and export_normalization for dependent
+</p>
+<p>
+properties.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b56f31a95f03eaeb7fb4e83bd4b6493236437268" title="b56f31a95f03eaeb7fb4e83bd4b6493236437268">b56f31a95f03eaeb7fb4e83bd4b6493236437268</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="11628.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T14%3A03%3A26%2B01%3A00&amp;precision=second" title="2015-04-30T14:03:26+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> documentation and correct good frame rate for event
+</p>
+<p>
+workspace.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0a0a8c128ba083496c6dca9a45ad733c3f664d02" title="0a0a8c128ba083496c6dca9a45ad733c3f664d02">0a0a8c128ba083496c6dca9a45ad733c3f664d02</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="11628.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T14%3A03%3A26%2B01%3A00&amp;precision=second" title="2015-04-30T14:03:26+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> GCC warnings
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/973f534612d105fa837064db49107eb248aada1f" title="973f534612d105fa837064db49107eb248aada1f">973f534612d105fa837064db49107eb248aada1f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="11628.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T15%3A09%3A28%2B01%3A00&amp;precision=second" title="2015-04-30T15:09:28+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> fixing unit test (test log name incorrect)
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/732748c1b2d419ccfbf0d67d6b2222c9c3d6d4ce" title="732748c1b2d419ccfbf0d67d6b2222c9c3d6d4ce">732748c1b2d419ccfbf0d67d6b2222c9c3d6d4ce</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="11628.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-05T20%3A41%3A59%2B01%3A00&amp;precision=second" title="2015-05-05T20:41:59+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="11628.html" title="Mask calculation for bleed correction, option for whole tube (closed: fixed)">#11628</a> fixing conflicts with master
+</p>
+<p>
+Merge branch 'master' into 11628_bleedingCorrections
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/docs/source/algorithms/NormaliseByCurrent-v1.rst
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/277e5268ac9342a7f7e9dd7953b4cfab77f871bd" title="277e5268ac9342a7f7e9dd7953b4cfab77f871bd">277e5268ac9342a7f7e9dd7953b4cfab77f871bd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="11628.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-12T08%3A55%3A40%2B01%3A00&amp;precision=second" title="2015-05-12T08:55:40+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Owner</strong>
+        changed from <em>Alex Buts</em> to <em>Nick Draper</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="11628.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-12T09%3A05%3A02%2B01%3A00&amp;precision=second" title="2015-05-12T09:05:02+01:00 in Timeline">5 years</a> ago by NickDraper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>closed</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>NickDraper</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="668.html" title="enhancement: Python: Extend MantidHelp (closed: fixed)">#668</a> from mantidproject/11628_bleedingCorrections
+</p>
+<p>
+fixing bleeding corrections for ISIS direct inelastic
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/98dcf72dd94895f51e638e0c9eeb25a4ae3fcdcc"><span class="icon">​</span>98dcf72dd94895f51e638e0c9eeb25a4ae3fcdcc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="11628.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A43%3A49%2B01%3A00&amp;precision=second" title="2015-06-04T04:43:49+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/12466"><span class="icon">​</span>12466</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11628?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11628?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11628?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

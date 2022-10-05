@@ -1,0 +1,937 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8487 (Fix unreleased use of POCO::XML document and nodelists in Geometry code)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8486.html" title="Ticket #8486" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8487?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8487?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8487?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8488.html" title="Ticket #8488" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8487, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8486.html" title="Ticket #8486">Previous Ticket</a></span></li><li><span><a class="next" href="8488.html" title="Ticket #8488">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8487.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8487.html">Ticket #8487</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-20T11%3A26%3A21Z&amp;precision=second" title="2013-11-20T11:26:21Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A38%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T02:38:45+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Fix unreleased use of POCO::XML document and nodelists in Geometry code</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Karl+Palmen">Karl Palmen</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Russell+Taylor">Russell Taylor</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~maintenance">maintenance</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="9118.html" title="Refactor and simplify IMDDimensionFactory">#9118</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="8360.html" title="Clear memory leaks in the Geometry package">#8360</a>, <a class="closed ticket" href="10637.html" title="Close and review all leak issues with Poco::XML document, nodelist, etc. objects">#10637</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Nick Draper
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-11-25 10:36:29.252905+00:00">
+        (last modified by Karl Palmen)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/8487?action=diff&amp;version=3">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+In the code of framework/Geometry I found numerous cases of POCO::XML document or nodelist objects being created, but not released. This could cause  memory leakage. Fix by using AutPtr for the object.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8487.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-25T09%3A47%3A39Z&amp;precision=second" title="2013-11-25T09:47:39Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+AutoPtr is preferred to release().
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8487.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-25T09%3A55%3A54Z&amp;precision=second" title="2013-11-25T09:55:54Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8487?action=diff&amp;version=2">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8487.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-25T10%3A36%3A29Z&amp;precision=second" title="2013-11-25T10:36:29Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8487?action=diff&amp;version=3">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8487.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T18%3A44%3A06Z&amp;precision=second" title="2014-02-05T18:44:06Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        set to <em>Russell Taylor</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8487.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T19%3A59%3A35Z&amp;precision=second" title="2014-02-05T19:59:35Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8360</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8487.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-06T14%3A50%3A00Z&amp;precision=second" title="2014-02-06T14:50:00Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Russell Taylor</em> to <em>Karl Palmen</em>
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8487.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-06T14%3A51%3A59Z&amp;precision=second" title="2014-02-06T14:51:59Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Karl Palmen</em> to <em>Russell Taylor</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Karl, I've already made a start on this as it links in with memory leaks I'm fixing.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8487.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-06T14%3A53%3A36Z&amp;precision=second" title="2014-02-06T14:53:36Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+OK
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8487.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T21%3A30%3A53Z&amp;precision=second" title="2014-02-14T21:30:53Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Use Poco::AutoPtr in place of manual calls to release().
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/312716582989ea547e1f5304551bea254e8fcada" title="312716582989ea547e1f5304551bea254e8fcada">312716582989ea547e1f5304551bea254e8fcada</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8487.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-04T16%3A35%3A11Z&amp;precision=second" title="2014-03-04T16:35:11Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9118</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8487.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A51Z&amp;precision=second" title="2014-03-06T18:43:51Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Use Poco::AutoPtr in place of manual calls to release().
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fcb35d8d19a9117cc678942d0c8e0da4fd9aeae2" title="fcb35d8d19a9117cc678942d0c8e0da4fd9aeae2">fcb35d8d19a9117cc678942d0c8e0da4fd9aeae2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8487.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A55Z&amp;precision=second" title="2014-03-06T18:43:55Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Remove trial print added in <a class="closed ticket" href="9118.html" title="enhancement: Refactor and simplify IMDDimensionFactory (closed: fixed)">#9118</a> &amp; left in by mistake.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b3d6ff84c1dc0a89c5d7c645198d59b247e93a7e" title="b3d6ff84c1dc0a89c5d7c645198d59b247e93a7e">b3d6ff84c1dc0a89c5d7c645198d59b247e93a7e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8487.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A55Z&amp;precision=second" title="2014-03-06T18:43:55Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Don't leak memory due to Poco calls.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3298f7808bece5b2f18c9d5f15378ea0ed16a9f8" title="3298f7808bece5b2f18c9d5f15378ea0ed16a9f8">3298f7808bece5b2f18c9d5f15378ea0ed16a9f8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8487.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A56Z&amp;precision=second" title="2014-03-06T18:43:56Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Ensure Poco XML call doesn't leak memory.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/668b03e2cfcd31426b368ee98a61c78e265c6189" title="668b03e2cfcd31426b368ee98a61c78e265c6189">668b03e2cfcd31426b368ee98a61c78e265c6189</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8487.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A56Z&amp;precision=second" title="2014-03-06T18:43:56Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Eliminate Poco-related leaks in test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ce7af193503a0fe50227e16c896a1f6ab78003b2" title="ce7af193503a0fe50227e16c896a1f6ab78003b2">ce7af193503a0fe50227e16c896a1f6ab78003b2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8487.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A56Z&amp;precision=second" title="2014-03-06T18:43:56Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Replace manual calls to release with AutoPtr use.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a0f15138715ba280239583942ee33a38b402e2e0" title="a0f15138715ba280239583942ee33a38b402e2e0">a0f15138715ba280239583942ee33a38b402e2e0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8487.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A56Z&amp;precision=second" title="2014-03-06T18:43:56Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Replace tabs with spaces.
+</p>
+<p>
+No code changes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bfc2d4d0066d1ffc6c71dc85aac95ba0edf83f1a" title="bfc2d4d0066d1ffc6c71dc85aac95ba0edf83f1a">bfc2d4d0066d1ffc6c71dc85aac95ba0edf83f1a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8487.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A56Z&amp;precision=second" title="2014-03-06T18:43:56Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Replace manual call to release with AutoPtr.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ec7417f0e3e2d9e1a0adac60a3a601d57aa89608" title="ec7417f0e3e2d9e1a0adac60a3a601d57aa89608">ec7417f0e3e2d9e1a0adac60a3a601d57aa89608</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8487.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A56Z&amp;precision=second" title="2014-03-06T18:43:56Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Replace tabs with spaces.
+</p>
+<p>
+No code changed.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/07e28e51211fc20ac99c3df66ec2c6ab4bfa1d1c" title="07e28e51211fc20ac99c3df66ec2c6ab4bfa1d1c">07e28e51211fc20ac99c3df66ec2c6ab4bfa1d1c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8487.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A57Z&amp;precision=second" title="2014-03-06T18:43:57Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Hold document object in AutoPtr instead of raw pointer.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a1b1c3a526ff7bde42cf3bde5d0b25c38b5e595e" title="a1b1c3a526ff7bde42cf3bde5d0b25c38b5e595e">a1b1c3a526ff7bde42cf3bde5d0b25c38b5e595e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8487.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A57Z&amp;precision=second" title="2014-03-06T18:43:57Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Minimize the number of headers included.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6befd24c8e5a503f0877a3cbdbdab728422eb72a" title="6befd24c8e5a503f0877a3cbdbdab728422eb72a">6befd24c8e5a503f0877a3cbdbdab728422eb72a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="8487.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A43%3A57Z&amp;precision=second" title="2014-03-06T18:43:57Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Replace manual calls to release with AutoPtr.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f18a6fe3da2aca7a52fac41e9bbf84b200c4f770" title="f18a6fe3da2aca7a52fac41e9bbf84b200c4f770">f18a6fe3da2aca7a52fac41e9bbf84b200c4f770</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="8487.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T18%3A56%3A54Z&amp;precision=second" title="2014-03-06T18:56:54Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. It seems that Windows wants this include.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/38955ae37bc0253685b8a3997613bc24d761f37d" title="38955ae37bc0253685b8a3997613bc24d761f37d">38955ae37bc0253685b8a3997613bc24d761f37d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="8487.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T19%3A13%3A23Z&amp;precision=second" title="2014-03-06T19:13:23Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Put include in right place to make Windows happy.
+</p>
+<p>
+Also clear up a few unused headers.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/168e8c4b4d4b6c9caf2ddb49408ecf7c7fda5666" title="168e8c4b4d4b6c9caf2ddb49408ecf7c7fda5666">168e8c4b4d4b6c9caf2ddb49408ecf7c7fda5666</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="8487.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T19%3A45%3A15Z&amp;precision=second" title="2014-03-06T19:45:15Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8487.html" title="task: Fix unreleased use of POCO::XML document and nodelists in Geometry code (closed: fixed)">#8487</a>. Give up and put the include back in the header.
+</p>
+<p>
+The strange thing is that my local Windows build was just fine...
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8f5741a251943fb3a84c758e2856f39bc0611359" title="8f5741a251943fb3a84c758e2856f39bc0611359">8f5741a251943fb3a84c758e2856f39bc0611359</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="8487.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-06T20%3A25%3A50Z&amp;precision=second" title="2014-03-06T20:25:50Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+That should be all the Poco::XML code using AutoPtr now instead of release (or leaking), with the exception of vtkGeometryCacheWriter/Reader - these classes do not appear to be unit tested so I don't want to mess with them. The release calls are in the destructor, so it should be exception-safe.
+</p>
+<p>
+Check the there are no more calls to release() anywhere, and that any calls to things like parseString(), getElementsByTagName() &amp; create*Node() are assigning into AutoPtr.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="8487.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-07T13%3A35%3A20Z&amp;precision=second" title="2014-03-07T13:35:20Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Nick Draper</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="8487.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-07T13%3A49%3A44Z&amp;precision=second" title="2014-03-07T13:49:44Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The only remaining calls to release are in the vtkcache writer/reader, and I confirm they have the appropriate release calls in their destructors.
+</p>
+<p>
+All the other specified searches did not come up with any that have been missed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="8487.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-07T13%3A50%3A15Z&amp;precision=second" title="2014-03-07T13:50:15Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/bugfix/8487_geometry_poco_xml_leaks'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/7f15bfac171b3bee4aafd76fd7af229f633c442e"><span class="icon">​</span>7f15bfac171b3bee4aafd76fd7af229f633c442e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="8487.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T10%3A00%3A54Z&amp;precision=second" title="2014-11-26T10:00:54Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10637</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="8487.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A38%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T02:38:45+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9331"><span class="icon">​</span>9331</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8487?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8487?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8487?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

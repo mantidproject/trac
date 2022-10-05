@@ -1,0 +1,2298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #4394 (quasielastic diffusion-in-a-sphere fitting algorithm)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="4393.html" title="Ticket #4393" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4394?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4394?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4394?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="4395.html" title="Ticket #4395" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 4394, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="4393.html" title="Ticket #4393">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="4395.html" title="Ticket #4395">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="4394.html">Ticket #4394</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-04T20%3A31%3A32Z&amp;precision=second" title="2012-01-04T20:31:32Z in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A49%3A09%2B01%3A00&amp;precision=second" title="2015-06-03T23:49:09+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">quasielastic diffusion-in-a-sphere fitting algorithm</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Jose+Borreguero">Jose Borreguero</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Jose+Borreguero">Jose Borreguero</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.1.html">Release 3.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Andrei Savici
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-12-23 21:03:06.389009+00:00">
+        (last modified by Jose Borreguero)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/4394?action=diff&amp;version=67">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Fitting function modelling the continuos diffusion of a particle confined to an spherical volume. More details in the corresponding WIKI page <a href="http://www.mantidproject.org/DiffSphere">http://www.mantidproject.org/DiffSphere</a>.
+</p>
+<p>
+TESTING: Upload all attachments to your /tmp directory, and run the python script in the Script Window of MantidPlot. Look in data_Parameters workspace to check that the fitting parameters are close to the target values, namely:
+</p>
+<blockquote>
+<p>
+Intensity = 0.74,  Radius = 2.25,  Diffusion = 0.024
+</p>
+</blockquote>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/4394/test.py.html" title="View attachment">test.py</a><a href="../raw-attachment/ticket/4394/test.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="1306 bytes">1.3 KB</span>) -
+      added by <em>Jose Borreguero</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A03%3A55Z&amp;precision=second" title="2013-12-23T21:03:55Z in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/4394/data.nxs.html" title="View attachment">data.nxs</a><a href="../raw-attachment/ticket/4394/data.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="58389 bytes">57.0 KB</span>) -
+      added by <em>Jose Borreguero</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A04%3A06Z&amp;precision=second" title="2013-12-23T21:04:06Z in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/4394/resolution.nxs.html" title="View attachment">resolution.nxs</a><a href="../raw-attachment/ticket/4394/resolution.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="62004 bytes">60.6 KB</span>) -
+      added by <em>Jose Borreguero</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A04%3A18Z&amp;precision=second" title="2013-12-23T21:04:18Z in Timeline">7 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="4394.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-06T16%3A54%3A12Z&amp;precision=second" title="2012-01-06T16:54:12Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="4394.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-09T09%3A43%3A20Z&amp;precision=second" title="2012-01-09T09:43:20Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 32</em> to <em>Iteration 33</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to iteration 33 at iteration 32 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="4394.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-23T21%3A40%3A31Z&amp;precision=second" title="2012-01-23T21:40:31Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> updated header file, started source file
+</p>
+<ul><li>added list of coefficients in the header file
+</li><li>structure to list the coefficients 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bc8ed53e21c4d92abd01a5a8e2ad16bec725b97f" title="bc8ed53e21c4d92abd01a5a8e2ad16bec725b97f">bc8ed53e21c4d92abd01a5a8e2ad16bec725b97f</a>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="4394.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-23T21%3A53%3A32Z&amp;precision=second" title="2012-01-23T21:53:32Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> updated header file, started source file
+</p>
+<ul><li>added list of coefficients in the header file
+</li><li>structure to list the coefficients 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bc8ed53e21c4d92abd01a5a8e2ad16bec725b97f" title="bc8ed53e21c4d92abd01a5a8e2ad16bec725b97f">bc8ed53e21c4d92abd01a5a8e2ad16bec725b97f</a>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="4394.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-09T16%3A33%3A34Z&amp;precision=second" title="2012-02-09T16:33:34Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Need to test the speed and accuracy by comparing the (default) Levenbergâ€“Marquardt and Simplex methods.<br />
+Levenbergâ€“Marquardt requires partial derivatives with respect to the active parameters. This translates to three extra evaluations of the structure factor when the numerical derivative is invoked<br />
+Simplex does not require partial derivatives
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="4394.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A54Z&amp;precision=second" title="2012-03-13T17:21:54Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Updated main fitting funtion
+</p>
+<ul><li>lookup tables alpha and linearJlist.
+</li><li>numerical interpolation when close to numerical divergence
+for factor J. 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/91f360aa425db5ded41292596e3871ef185c8d64" title="91f360aa425db5ded41292596e3871ef185c8d64">91f360aa425db5ded41292596e3871ef185c8d64</a>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="4394.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A55Z&amp;precision=second" title="2012-03-13T17:21:55Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Major rewrite of the fitting function
+</p>
+<ul><li>helper functions initXnlCoeff, initAlphaCoeff, initLinJlist,
+</li></ul><blockquote>
+<p>
+LorentzianCoefficients 
+</p>
+</blockquote>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d41a9cf0b8cd794ed6598df14535f9b439b61a87" title="d41a9cf0b8cd794ed6598df14535f9b439b61a87">d41a9cf0b8cd794ed6598df14535f9b439b61a87</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="4394.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A55Z&amp;precision=second" title="2012-03-13T17:21:55Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Finished debugging. Test passes
+</p>
+<ul><li>I left derivative as undefined. Thus, the "Simplex" algoritm
+is used. Test minimization takes less than one second 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/05a6a0bd6a0f2eb7752f67783f3faa6177201602" title="05a6a0bd6a0f2eb7752f67783f3faa6177201602">05a6a0bd6a0f2eb7752f67783f3faa6177201602</a>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="4394.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A55Z&amp;precision=second" title="2012-03-13T17:21:55Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> fix bug in DiffSphereTest 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3d62b8698cc6e45f720e807fd74432d393fdcdef" title="3d62b8698cc6e45f720e807fd74432d393fdcdef">3d62b8698cc6e45f720e807fd74432d393fdcdef</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="4394.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A55Z&amp;precision=second" title="2012-03-13T17:21:55Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Partitioned DiffSphere into elastic and inelastic parts 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4a22643b940c98920b696a6adbf755945db722ce" title="4a22643b940c98920b696a6adbf755945db722ce">4a22643b940c98920b696a6adbf755945db722ce</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="4394.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A55Z&amp;precision=second" title="2012-03-13T17:21:55Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added ties between elastic and inelastic 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6b2d650f515a28943c6c8f2837558e6ab4076948" title="6b2d650f515a28943c6c8f2837558e6ab4076948">6b2d650f515a28943c6c8f2837558e6ab4076948</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="4394.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A56Z&amp;precision=second" title="2012-03-13T17:21:56Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Tying parameters of Elastic part to Inelastic part 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8f73f033ab9ce279d33fbd2dcbf16ccbe9d243fc" title="8f73f033ab9ce279d33fbd2dcbf16ccbe9d243fc">8f73f033ab9ce279d33fbd2dcbf16ccbe9d243fc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="4394.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A56Z&amp;precision=second" title="2012-03-13T17:21:56Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> HeightPrefactor must be defined as public member 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/52b7c907fa125f4b7672277d3f5d6c1f0843947e" title="52b7c907fa125f4b7672277d3f5d6c1f0843947e">52b7c907fa125f4b7672277d3f5d6c1f0843947e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="4394.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T17%3A21%3A56Z&amp;precision=second" title="2012-03-13T17:21:56Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Add constraints
+</p>
+<p>
+Constraint parameters Intensity, Diffusion, and Radius
+to positive values 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b98fb43ddb5680e0654ee2710b8c25cba14fa8f1" title="b98fb43ddb5680e0654ee2710b8c25cba14fa8f1">b98fb43ddb5680e0654ee2710b8c25cba14fa8f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="4394.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A18Z&amp;precision=second" title="2012-03-13T19:10:18Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Updated main fitting funtion
+</p>
+<ul><li>lookup tables alpha and linearJlist.
+</li><li>numerical interpolation when close to numerical divergence
+for factor J. 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/91f360aa425db5ded41292596e3871ef185c8d64" title="91f360aa425db5ded41292596e3871ef185c8d64">91f360aa425db5ded41292596e3871ef185c8d64</a>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="4394.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A19Z&amp;precision=second" title="2012-03-13T19:10:19Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Major rewrite of the fitting function
+</p>
+<ul><li>helper functions initXnlCoeff, initAlphaCoeff, initLinJlist,
+</li></ul><blockquote>
+<p>
+LorentzianCoefficients 
+</p>
+</blockquote>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d41a9cf0b8cd794ed6598df14535f9b439b61a87" title="d41a9cf0b8cd794ed6598df14535f9b439b61a87">d41a9cf0b8cd794ed6598df14535f9b439b61a87</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="4394.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A19Z&amp;precision=second" title="2012-03-13T19:10:19Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Finished debugging. Test passes
+</p>
+<ul><li>I left derivative as undefined. Thus, the "Simplex" algoritm
+is used. Test minimization takes less than one second 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/05a6a0bd6a0f2eb7752f67783f3faa6177201602" title="05a6a0bd6a0f2eb7752f67783f3faa6177201602">05a6a0bd6a0f2eb7752f67783f3faa6177201602</a>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="4394.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A19Z&amp;precision=second" title="2012-03-13T19:10:19Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> fix bug in DiffSphereTest 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3d62b8698cc6e45f720e807fd74432d393fdcdef" title="3d62b8698cc6e45f720e807fd74432d393fdcdef">3d62b8698cc6e45f720e807fd74432d393fdcdef</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="4394.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A19Z&amp;precision=second" title="2012-03-13T19:10:19Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Partitioned DiffSphere into elastic and inelastic parts 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4a22643b940c98920b696a6adbf755945db722ce" title="4a22643b940c98920b696a6adbf755945db722ce">4a22643b940c98920b696a6adbf755945db722ce</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="4394.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A20Z&amp;precision=second" title="2012-03-13T19:10:20Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added ties between elastic and inelastic 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6b2d650f515a28943c6c8f2837558e6ab4076948" title="6b2d650f515a28943c6c8f2837558e6ab4076948">6b2d650f515a28943c6c8f2837558e6ab4076948</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="4394.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A20Z&amp;precision=second" title="2012-03-13T19:10:20Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Tying parameters of Elastic part to Inelastic part 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8f73f033ab9ce279d33fbd2dcbf16ccbe9d243fc" title="8f73f033ab9ce279d33fbd2dcbf16ccbe9d243fc">8f73f033ab9ce279d33fbd2dcbf16ccbe9d243fc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="4394.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A20Z&amp;precision=second" title="2012-03-13T19:10:20Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> HeightPrefactor must be defined as public member 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/52b7c907fa125f4b7672277d3f5d6c1f0843947e" title="52b7c907fa125f4b7672277d3f5d6c1f0843947e">52b7c907fa125f4b7672277d3f5d6c1f0843947e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="4394.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A10%3A20Z&amp;precision=second" title="2012-03-13T19:10:20Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Add constraints
+</p>
+<p>
+Constraint parameters Intensity, Diffusion, and Radius
+to positive values 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b98fb43ddb5680e0654ee2710b8c25cba14fa8f1" title="b98fb43ddb5680e0654ee2710b8c25cba14fa8f1">b98fb43ddb5680e0654ee2710b8c25cba14fa8f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="4394.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-13T19%3A45%3A58Z&amp;precision=second" title="2012-03-13T19:45:58Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Correction: arrays can't have runtime sizes 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dd43340c7cf1f9eec075656688854915fb3eb09f" title="dd43340c7cf1f9eec075656688854915fb3eb09f">dd43340c7cf1f9eec075656688854915fb3eb09f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="4394.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-14T18%3A50%3A57Z&amp;precision=second" title="2012-03-14T18:50:57Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added ElasticDiffSphere test
+</p>
+<p>
+Convolution of a Gaussian resolution function with ElasticDiffSphere 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ea57d5aab0678e8f9b1f38cd75e0aa2ce3e118ee" title="ea57d5aab0678e8f9b1f38cd75e0aa2ce3e118ee">ea57d5aab0678e8f9b1f38cd75e0aa2ce3e118ee</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="4394.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-14T20%3A47%3A43Z&amp;precision=second" title="2012-03-14T20:47:43Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added test function testDiffSphereTies
+</p>
+<p>
+assert the ties between the elastic and inelastic contributions 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/32356596a6331c3c4d5aea2d7eb33830e6397d0d" title="32356596a6331c3c4d5aea2d7eb33830e6397d0d">32356596a6331c3c4d5aea2d7eb33830e6397d0d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="4394.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-15T20%3A15%3A22Z&amp;precision=second" title="2012-03-15T20:15:22Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Moved ties to the constructor
+</p>
+<p>
+-Removed init( ) and moved ties to the constructor
+-Wrote part of testDiffSphere 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/536dd2d9cad207ccb0070b85bc9707654d211c91" title="536dd2d9cad207ccb0070b85bc9707654d211c91">536dd2d9cad207ccb0070b85bc9707654d211c91</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="4394.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-16T20%3A27%3A36Z&amp;precision=second" title="2012-03-16T20:27:36Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added first part of test function testDiffSphere 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2c7de59125eeaf19cfca048f868314cdcf6c1edb" title="2c7de59125eeaf19cfca048f868314cdcf6c1edb">2c7de59125eeaf19cfca048f868314cdcf6c1edb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="4394.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-16T20%3A50%3A46Z&amp;precision=second" title="2012-03-16T20:50:46Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> inserted the conversion to microseconds in convFact
+</p>
+<ul><li>also commented out some debug.log() messages 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/624cfa37a60394b141a320bad0070676437bdf78" title="624cfa37a60394b141a320bad0070676437bdf78">624cfa37a60394b141a320bad0070676437bdf78</a>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="4394.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A24Z&amp;precision=second" title="2012-03-20T20:09:24Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added ElasticDiffSphere test
+</p>
+<p>
+Convolution of a Gaussian resolution function with ElasticDiffSphere 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ea57d5aab0678e8f9b1f38cd75e0aa2ce3e118ee" title="ea57d5aab0678e8f9b1f38cd75e0aa2ce3e118ee">ea57d5aab0678e8f9b1f38cd75e0aa2ce3e118ee</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="4394.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A28Z&amp;precision=second" title="2012-03-20T20:09:28Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added test function testDiffSphereTies
+</p>
+<p>
+assert the ties between the elastic and inelastic contributions 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/32356596a6331c3c4d5aea2d7eb33830e6397d0d" title="32356596a6331c3c4d5aea2d7eb33830e6397d0d">32356596a6331c3c4d5aea2d7eb33830e6397d0d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="4394.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A33Z&amp;precision=second" title="2012-03-20T20:09:33Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Moved ties to the constructor
+</p>
+<p>
+-Removed init( ) and moved ties to the constructor
+-Wrote part of testDiffSphere 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/536dd2d9cad207ccb0070b85bc9707654d211c91" title="536dd2d9cad207ccb0070b85bc9707654d211c91">536dd2d9cad207ccb0070b85bc9707654d211c91</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="4394.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A41Z&amp;precision=second" title="2012-03-20T20:09:41Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added first part of test function testDiffSphere 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2c7de59125eeaf19cfca048f868314cdcf6c1edb" title="2c7de59125eeaf19cfca048f868314cdcf6c1edb">2c7de59125eeaf19cfca048f868314cdcf6c1edb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="4394.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-20T20%3A09%3A42Z&amp;precision=second" title="2012-03-20T20:09:42Z in Timeline">9 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> inserted the conversion to microseconds in convFact
+</p>
+<ul><li>also commented out some debug.log() messages 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/624cfa37a60394b141a320bad0070676437bdf78" title="624cfa37a60394b141a320bad0070676437bdf78">624cfa37a60394b141a320bad0070676437bdf78</a>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="4394.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A54%3A56%2B01%3A00&amp;precision=second" title="2012-04-24T17:54:56+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> modifications in testDiffSphere 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ba9de312387865b8f3affe941f103effc0e8aa6" title="7ba9de312387865b8f3affe941f103effc0e8aa6">7ba9de312387865b8f3affe941f103effc0e8aa6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="4394.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-24T17%3A54%3A56%2B01%3A00&amp;precision=second" title="2012-04-24T17:54:56+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> testDiffSphere works on Ubuntu 11.10
+</p>
+<p>
+Passing and retrieving pointers to the Fit alg, instead of strings 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8988a2d707bf6a7cc3cb1a15b53baf67c29cdd32" title="8988a2d707bf6a7cc3cb1a15b53baf67c29cdd32">8988a2d707bf6a7cc3cb1a15b53baf67c29cdd32</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="4394.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A14%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:14+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> modifications in testDiffSphere 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ba9de312387865b8f3affe941f103effc0e8aa6" title="7ba9de312387865b8f3affe941f103effc0e8aa6">7ba9de312387865b8f3affe941f103effc0e8aa6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="4394.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A29%3A15%2B01%3A00&amp;precision=second" title="2012-04-28T22:29:15+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> testDiffSphere works on Ubuntu 11.10
+</p>
+<p>
+Passing and retrieving pointers to the Fit alg, instead of strings 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8988a2d707bf6a7cc3cb1a15b53baf67c29cdd32" title="8988a2d707bf6a7cc3cb1a15b53baf67c29cdd32">8988a2d707bf6a7cc3cb1a15b53baf67c29cdd32</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="4394.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-30T14%3A39%3A11%2B01%3A00&amp;precision=second" title="2012-04-30T14:39:11+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.1</em> to <em>Release 2.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="4394.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-12T18%3A33%3A25%2B01%3A00&amp;precision=second" title="2012-07-12T18:33:25+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/4394?action=diff&amp;version=40">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="4394.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-06T15%3A22%3A34%2B01%3A00&amp;precision=second" title="2012-08-06T15:22:34+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.2</em> to <em>Release 2.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="4394.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-12T19%3A28%3A32%2B01%3A00&amp;precision=second" title="2012-10-12T19:28:32+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added global Q attribute
+</p>
+<p>
+modified ParameterTie.h
+modified DiffSphere.h
+modified DiffSphere.cpp
+modified Fit.cpp
+modified DiffSphereTest.h 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/40bc658ec1ef4534c078f858d10e67bf0a547fa2" title="40bc658ec1ef4534c078f858d10e67bf0a547fa2">40bc658ec1ef4534c078f858d10e67bf0a547fa2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="4394.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-12T21%3A43%3A57%2B01%3A00&amp;precision=second" title="2012-10-12T21:43:57+01:00 in Timeline">8 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a>. Remove print statement.
+</p>
+<p>
+It was causing a performance test to crash. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/11e0c290edced54e8a156b3da25621eab9443842" title="11e0c290edced54e8a156b3da25621eab9443842">11e0c290edced54e8a156b3da25621eab9443842</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="4394.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-15T20%3A21%3A44%2B01%3A00&amp;precision=second" title="2012-10-15T20:21:44+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> test works with conv-&gt;asString now
+</p>
+<p>
+modified: CMakeLists.txt
+modified: DiffSphereTest.h
+</p>
+<p>
+We can pass the Function property as a strings, instead of
+as a pointer to IFunction 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b7421d90ece40d08019c5579ac8d9613fa9635d9" title="b7421d90ece40d08019c5579ac8d9613fa9635d9">b7421d90ece40d08019c5579ac8d9613fa9635d9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="4394.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-26T15%3A34%3A41%2B01%3A00&amp;precision=second" title="2012-10-26T15:34:41+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.3</em> to <em>Release 2.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="4394.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A44%3A31Z&amp;precision=second" title="2012-11-02T16:44:31Z in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added global Q attribute
+</p>
+<p>
+modified ParameterTie.h
+modified DiffSphere.h
+modified DiffSphere.cpp
+modified Fit.cpp
+modified DiffSphereTest.h 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/40bc658ec1ef4534c078f858d10e67bf0a547fa2" title="40bc658ec1ef4534c078f858d10e67bf0a547fa2">40bc658ec1ef4534c078f858d10e67bf0a547fa2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="4394.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A44%3A31Z&amp;precision=second" title="2012-11-02T16:44:31Z in Timeline">8 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a>. Remove print statement.
+</p>
+<p>
+It was causing a performance test to crash. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/11e0c290edced54e8a156b3da25621eab9443842" title="11e0c290edced54e8a156b3da25621eab9443842">11e0c290edced54e8a156b3da25621eab9443842</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="4394.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A44%3A40Z&amp;precision=second" title="2012-11-02T16:44:40Z in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> test works with conv-&gt;asString now
+</p>
+<p>
+modified: CMakeLists.txt
+modified: DiffSphereTest.h
+</p>
+<p>
+We can pass the Function property as a strings, instead of
+as a pointer to IFunction 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b7421d90ece40d08019c5579ac8d9613fa9635d9" title="b7421d90ece40d08019c5579ac8d9613fa9635d9">b7421d90ece40d08019c5579ac8d9613fa9635d9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="4394.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-22T22%3A44%3A54Z&amp;precision=second" title="2013-01-22T22:44:54Z in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.4</em> to <em>Release 2.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="4394.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-24T22%3A42%3A35%2B01%3A00&amp;precision=second" title="2013-04-24T22:42:35+01:00 in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.5</em> to <em>Release 2.6</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="4394.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T12%3A07%3A48%2B01%3A00&amp;precision=second" title="2013-07-18T12:07:48+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="4394.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A27%3A10%2B01%3A00&amp;precision=second" title="2013-07-18T16:27:10+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>new</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="4394.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A07%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:07+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="4394.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T14%3A54%3A58%2B01%3A00&amp;precision=second" title="2013-07-26T14:54:58+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.6</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to backlog at the code freeze for R2.6
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="4394.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-20T16%3A39%3A15Z&amp;precision=second" title="2013-12-20T16:39:15Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> moved initialization steps from constructor to init
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a193f37414449809c1e00f9f72622f0cde394cdb" title="a193f37414449809c1e00f9f72622f0cde394cdb">a193f37414449809c1e00f9f72622f0cde394cdb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="4394.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-20T16%3A43%3A33Z&amp;precision=second" title="2013-12-20T16:43:33Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Moved ElasticDiffSphere inside of DiffSphere
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3ba74a5f3d2cd262d0a01b58ab12b8ac785a89df" title="3ba74a5f3d2cd262d0a01b58ab12b8ac785a89df">3ba74a5f3d2cd262d0a01b58ab12b8ac785a89df</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="4394.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-20T16%3A46%3A20Z&amp;precision=second" title="2013-12-20T16:46:20Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Moved some initialization steps to init
+</p>
+<p>
+These changes for the elastic part
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a1c3b36f241fd99c7486207c707bf33d062b4cd5" title="a1c3b36f241fd99c7486207c707bf33d062b4cd5">a1c3b36f241fd99c7486207c707bf33d062b4cd5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="4394.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-20T19%3A59%3A50Z&amp;precision=second" title="2013-12-20T19:59:50Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Moved inelastic part under DiffSphere files
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d5d49c652594c964b271194712f6dba91e26996" title="4d5d49c652594c964b271194712f6dba91e26996">4d5d49c652594c964b271194712f6dba91e26996</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="4394.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-20T23%3A07%3A46Z&amp;precision=second" title="2013-12-20T23:07:46Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Some refactoring
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90cd7672a625ecd74ee68dd5ba7d5408fc72a23e" title="90cd7672a625ecd74ee68dd5ba7d5408fc72a23e">90cd7672a625ecd74ee68dd5ba7d5408fc72a23e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="4394.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-21T00%3A24%3A40Z&amp;precision=second" title="2013-12-21T00:24:40Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> redoing the unit test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2e13235a989e3955980c618ed074bdc19f56acd4" title="2e13235a989e3955980c618ed074bdc19f56acd4">2e13235a989e3955980c618ed074bdc19f56acd4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="4394.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-21T00%3A30%3A04Z&amp;precision=second" title="2013-12-21T00:30:04Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Explicit check of boundaries
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/47e5376b9e4ea557039f35a86cc8d003e20fe7f5" title="47e5376b9e4ea557039f35a86cc8d003e20fe7f5">47e5376b9e4ea557039f35a86cc8d003e20fe7f5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="4394.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-21T00%3A31%3A48Z&amp;precision=second" title="2013-12-21T00:31:48Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> correct silly format syntax
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f253e120a3d30d71c4c345a16313b0dd071985d1" title="f253e120a3d30d71c4c345a16313b0dd071985d1">f253e120a3d30d71c4c345a16313b0dd071985d1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="4394.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T19%3A22%3A30Z&amp;precision=second" title="2013-12-23T19:22:30Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Wrote four unit tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cc22d30b1f8a5d74edc1b202d2ce800f8213702e" title="cc22d30b1f8a5d74edc1b202d2ce800f8213702e">cc22d30b1f8a5d74edc1b202d2ce800f8213702e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="4394.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T19%3A32%3A42Z&amp;precision=second" title="2013-12-23T19:32:42Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> add numeric header
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/245a3c3eaa3e2b015bdcef697b4d598509924c61" title="245a3c3eaa3e2b015bdcef697b4d598509924c61">245a3c3eaa3e2b015bdcef697b4d598509924c61</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="4394.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T19%3A42%3A36Z&amp;precision=second" title="2013-12-23T19:42:36Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Reduced random variability in initial guess
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8eb3bdfcc0c4305ba8adee9325ca5535d576aa53" title="8eb3bdfcc0c4305ba8adee9325ca5535d576aa53">8eb3bdfcc0c4305ba8adee9325ca5535d576aa53</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="4394.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T20%3A43%3A44Z&amp;precision=second" title="2013-12-23T20:43:44Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Added WIKI header
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a17c250595225d0a54c2cdcbbaa2446a62b63e1d" title="a17c250595225d0a54c2cdcbbaa2446a62b63e1d">a17c250595225d0a54c2cdcbbaa2446a62b63e1d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="4394.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A03%3A06Z&amp;precision=second" title="2013-12-23T21:03:06Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/4394?action=diff&amp;version=67">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A03%3A55Z&amp;precision=second" title="2013-12-23T21:03:55Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/4394/test.py.html"><em>test.py</em></a><a href="../raw-attachment/ticket/4394/test.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A04%3A06Z&amp;precision=second" title="2013-12-23T21:04:06Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/4394/data.nxs.html"><em>data.nxs</em></a><a href="../raw-attachment/ticket/4394/data.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A04%3A18Z&amp;precision=second" title="2013-12-23T21:04:18Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/4394/resolution.nxs.html"><em>resolution.nxs</em></a><a href="../raw-attachment/ticket/4394/resolution.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="4394.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A05%3A19Z&amp;precision=second" title="2013-12-23T21:05:19Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="4394.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A05%3A56Z&amp;precision=second" title="2013-12-23T21:05:56Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <blockquote>
+<p>
+TESTING: Upload all attachments to your /tmp directory, and run the python script in the Script Window of MantidPlot. Look in data_Parameters workspace to check that the fitting parameters are close to the target values, namely:
+</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>
+Intensity = 0.74, Radius = 2.25, Diffusion = 0.024
+</p>
+</blockquote>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="4394.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A34%3A31Z&amp;precision=second" title="2013-12-23T21:34:31Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I think CurveFittingTest.DiffSphereTest.testDiffSphereInelastic
+fails randomly on Ubuntu:
+</p>
+<p>
+<a class="ext-link" href="https://builds.sns.gov/job/ornl_ubuntu12.04_develop/893/"><span class="icon">​</span>https://builds.sns.gov/job/ornl_ubuntu12.04_develop/893/</a>
+<a class="ext-link" href="https://builds.sns.gov/job/ornl_ubuntu12.04_develop/899/"><span class="icon">​</span>https://builds.sns.gov/job/ornl_ubuntu12.04_develop/899/</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="4394.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T21%3A44%3A29Z&amp;precision=second" title="2013-12-23T21:44:29Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Reduced random variability in initial guess
+</p>
+<p>
+The initial guess can be too far from the optimal parameters so that
+the fitting procedure is unable to converge
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ae6ddece863f4c52d9836a07b8eb3c2d07da6dc" title="6ae6ddece863f4c52d9836a07b8eb3c2d07da6dc">6ae6ddece863f4c52d9836a07b8eb3c2d07da6dc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="4394.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-23T22%3A24%3A52Z&amp;precision=second" title="2013-12-23T22:24:52Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> Return infinity for negative parameters
+</p>
+<p>
+Change return zero for return infinity. Garanteed a bad chi-square
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/aac58a5f84374461b51a79258ecfa7ad29a9da6e" title="aac58a5f84374461b51a79258ecfa7ad29a9da6e">aac58a5f84374461b51a79258ecfa7ad29a9da6e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="4394.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-24T20%3A07%3A23Z&amp;precision=second" title="2013-12-24T20:07:23Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="4394.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-24T20%3A07%3A46Z&amp;precision=second" title="2013-12-24T20:07:46Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <blockquote>
+<p>
+TESTING: Upload all attachments to your /tmp directory, and run the python script in the Script Window of MantidPlot. Look in data_Parameters workspace to check that the fitting parameters are close to the target values, namely:
+</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>
+Intensity = 0.74, Radius = 2.25, Diffusion = 0.024
+</p>
+</blockquote>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="4394.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-24T20%3A09%3A12Z&amp;precision=second" title="2013-12-24T20:09:12Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.1</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="4394.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-02T16%3A59%3A31Z&amp;precision=second" title="2014-01-02T16:59:31Z in Timeline">7 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Andrei Savici</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="4394.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-02T16%3A59%3A51Z&amp;precision=second" title="2014-01-02T16:59:51Z in Timeline">7 years</a> ago by Andrei Savici
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Needs some updates to wiki
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="4394.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-02T18%3A13%3A30Z&amp;precision=second" title="2014-01-02T18:13:30Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4394.html" title="enhancement: quasielastic diffusion-in-a-sphere fitting algorithm (closed: fixed)">#4394</a> More details for the WIKI page
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0916210d668ecb7941486c8694abe9b897ff854d" title="0916210d668ecb7941486c8694abe9b897ff854d">0916210d668ecb7941486c8694abe9b897ff854d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="4394.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-02T19%3A01%3A21Z&amp;precision=second" title="2014-01-02T19:01:21Z in Timeline">7 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/4394_diffusion_sphere'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/d71ca69a8c0d0c7ca7f3e19dee76d9d8d348494f"><span class="icon">​</span>d71ca69a8c0d0c7ca7f3e19dee76d9d8d348494f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="4394.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T00%3A41%3A33Z&amp;precision=second" title="2014-02-05T00:41:33Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Indirect Inelastic</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="4394.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A49%3A09%2B01%3A00&amp;precision=second" title="2015-06-03T23:49:09+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/5241"><span class="icon">​</span>5241</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4394?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4394?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4394?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

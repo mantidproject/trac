@@ -1,0 +1,795 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #4554 (Multiple-Reader/Single-Writer locks, or "Busy" flag for workspace access)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="4553.html" title="Ticket #4553" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4554?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4554?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4554?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="4555.html" title="Ticket #4555" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 4554, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="4553.html" title="Ticket #4553">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="4555.html" title="Ticket #4555">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="4554.html">Ticket #4554</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-18T22%3A36%3A37Z&amp;precision=second" title="2012-01-18T22:36:37Z in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A55%3A47%2B01%3A00&amp;precision=second" title="2015-06-03T23:55:47+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Multiple-Reader/Single-Writer locks, or "Busy" flag for workspace access</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.1.html">Release 2.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              nick.draper@…, russell.taylor@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Vickie Lynch
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2012-02-03 20:25:34.505782+00:00">
+        (last modified by Janik Zikovsky)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/4554?action=diff&amp;version=14">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Refs <a class="closed ticket" href="4516.html" title="defect: PlusMD crashes Mantid in conjuction with  SliceViewer (closed: fixed)">#4516</a>: It is possible to have destructive access to a workspace (via the PlusMD algorithm, for example), while the GUI thread is busy accessing it to draw it.
+</p>
+<p>
+We can prevent segfaults by either: implementing a "busy" flag on workspaces, or by using Multiple-Reader/Single-Writer locks.
+</p>
+<p>
+<a class="ext-link" href="http://stackoverflow.com/questions/989795/example-for-boost-shared-mutex-multiple-reads-one-write"><span class="icon">​</span>http://stackoverflow.com/questions/989795/example-for-boost-shared-mutex-multiple-reads-one-write</a>
+</p>
+<p>
+Investigate.
+</p>
+<p>
+Edit: Here is a sample script that could cause segfaults if using GUI views on the MDW workspace while the loop runs:
+</p>
+<pre class="wiki">import numpy as np
+
+CreateMDWorkspace(Dimensions='3',Extents='0,10,0,10,0,10',Names='x,y,z',Units='m,m,m',MaxRecursionDepth='20',OutputWorkspace='mdw', SplitInto='2', SplitThreshold='150')
+FakeMDEventData(InputWorkspace='mdw',UniformParams='1e+05')
+plotSlice('mdw')
+
+num = 100
+xs = np.random.rand(num)*10.0
+ys = np.random.rand(num)*10.0
+zs = np.random.rand(num)*10.0
+for (x,y,z) in zip(xs, ys, zs):
+	CreateMDWorkspace(Dimensions='3',Extents='0,10,0,10,0,10',Names='x,y,z',Units='m,m,m',MaxRecursionDepth='20',OutputWorkspace='extra')
+	FakeMDEventData(InputWorkspace='extra',PeakParams='1e4, %g,%g,%g, 0.5'% (x,y,z))
+	PlusMD('mdw', 'extra', OutputWorkspace='mdw')
+	PlusMD('mdw', 'extra', OutputWorkspace='mdw')
+	PlusMD('mdw', 'extra', OutputWorkspace='mdw')
+	PlusMD('mdw', 'extra', OutputWorkspace='mdw')
+</pre>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="4554.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-18T22%3A36%3A47Z&amp;precision=second" title="2012-01-18T22:36:47Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="4554.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-18T22%3A38%3A39Z&amp;precision=second" title="2012-01-18T22:38:39Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> trying a boost mutex class, mostly to see if it compiles 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5dd3ae31ee4b795c4b87b72e6d081148a8b669ad" title="5dd3ae31ee4b795c4b87b72e6d081148a8b669ad">5dd3ae31ee4b795c4b87b72e6d081148a8b669ad</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="4554.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-18T22%3A42%3A57Z&amp;precision=second" title="2012-01-18T22:42:57Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> boost-thread not on windows 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/88aca9f20aae7e815ec0607cf38c60dd4189d336" title="88aca9f20aae7e815ec0607cf38c60dd4189d336">88aca9f20aae7e815ec0607cf38c60dd4189d336</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="4554.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-18T22%3A42%3A57Z&amp;precision=second" title="2012-01-18T22:42:57Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> boost-thread not on windows 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fec69d95b298326197c3c41b01bbeaca34cca779" title="fec69d95b298326197c3c41b01bbeaca34cca779">fec69d95b298326197c3c41b01bbeaca34cca779</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="4554.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-18T23%3A15%3A37Z&amp;precision=second" title="2012-01-18T23:15:37Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> commented-out test that works for me 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a44b838fa7322ce14675c456623aa891e0620f35" title="a44b838fa7322ce14675c456623aa891e0620f35">a44b838fa7322ce14675c456623aa891e0620f35</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="4554.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-20T18%3A58%3A16Z&amp;precision=second" title="2012-01-20T18:58:16Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> using Poco::RWLock in a test 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12d815690785cb94b9ba3cb94e6a74bb3e0aa20d" title="12d815690785cb94b9ba3cb94e6a74bb3e0aa20d">12d815690785cb94b9ba3cb94e6a74bb3e0aa20d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="4554.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-20T20%3A57%3A22Z&amp;precision=second" title="2012-01-20T20:57:22Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> Public ReadLock and private lock access
+</p>
+<p>
+Also Refs <a class="closed ticket" href="996.html" title="task: Improve code structure in Algorithm (closed: fixed)">#996</a>: starting to clean up Algorithm.execute() 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be86fc7198eee110c3d262a25be9213da1b5de06" title="be86fc7198eee110c3d262a25be9213da1b5de06">be86fc7198eee110c3d262a25be9213da1b5de06</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="4554.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-20T22%3A42%3A10Z&amp;precision=second" title="2012-01-20T22:42:10Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> make sure all destructors are virtual  and ctors are called
+</p>
+<p>
+To fix segfaults on destruction. Multiple virtual inheritance is hard ;) 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/272de2602728e2b4d4b9855305430e0911503757" title="272de2602728e2b4d4b9855305430e0911503757">272de2602728e2b4d4b9855305430e0911503757</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="4554.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-23T15%3A16%3A34Z&amp;precision=second" title="2012-01-23T15:16:34Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> notes for later 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1a6622b9c614649f144deca3e9d25b0292c880b9" title="1a6622b9c614649f144deca3e9d25b0292c880b9">1a6622b9c614649f144deca3e9d25b0292c880b9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="4554.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-24T19%3A14%3A45Z&amp;precision=second" title="2012-01-24T19:14:45Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> read/write locks on workspaces in Algorithm.
+</p>
+<p>
+Also refs <a class="closed ticket" href="996.html" title="task: Improve code structure in Algorithm (closed: fixed)">#996</a> cleanup 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ff60eaed87ed19b698f18594b4365b4b9c0568fc" title="ff60eaed87ed19b698f18594b4365b4b9c0568fc">ff60eaed87ed19b698f18594b4365b4b9c0568fc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="4554.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-24T19%3A14%3A45Z&amp;precision=second" title="2012-01-24T19:14:45Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> make sure to have a unique lock object
+</p>
+<p>
+when cloning a workspace. So explicitely declared the copy constructors of every class up to DataItem. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d6ae8f24b99c22ec2c81cbc597267a1d8617eec1" title="d6ae8f24b99c22ec2c81cbc597267a1d8617eec1">d6ae8f24b99c22ec2c81cbc597267a1d8617eec1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="4554.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-24T19%3A35%3A56Z&amp;precision=second" title="2012-01-24T19:35:56Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> left some debugging statements in 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c515accbeb966b87ef4eb6ebb9d9b2c2a21e7239" title="c515accbeb966b87ef4eb6ebb9d9b2c2a21e7239">c515accbeb966b87ef4eb6ebb9d9b2c2a21e7239</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="4554.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-03T20%3A15%3A00Z&amp;precision=second" title="2012-02-03T20:15:00Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/4554?action=diff&amp;version=13">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="4554.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-03T20%3A25%3A34Z&amp;precision=second" title="2012-02-03T20:25:34Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/4554?action=diff&amp;version=14">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="4554.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-03T20%3A33%3A24Z&amp;precision=second" title="2012-02-03T20:33:24Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> added locks to Paraview renderers
+</p>
+<p>
+To prevent segfaults from algorithms running in the background 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb5b66e79c0ab9846386a07909afcb42c7488ca4" title="bb5b66e79c0ab9846386a07909afcb42c7488ca4">bb5b66e79c0ab9846386a07909afcb42c7488ca4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="4554.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-03T20%3A35%3A48Z&amp;precision=second" title="2012-02-03T20:35:48Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Note to testers: it should be possible to view a MD workspace in VatesSimpleGUI and continually update the settings (so that it fetches the data from the workspace) WHILE the above script runs in the background. The plotting blocks WS modification and vice/versa.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="4554.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-06T14%3A20%3A30Z&amp;precision=second" title="2012-02-06T14:20:30Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> added locks to Paraview renderers
+</p>
+<p>
+To prevent segfaults from algorithms running in the background 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb5b66e79c0ab9846386a07909afcb42c7488ca4" title="bb5b66e79c0ab9846386a07909afcb42c7488ca4">bb5b66e79c0ab9846386a07909afcb42c7488ca4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="4554.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-06T16%3A31%3A14Z&amp;precision=second" title="2012-02-06T16:31:14Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> debugging output for locking 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc5a5b22ded47a49b80cb6ffd7d990d697b74eb4" title="dc5a5b22ded47a49b80cb6ffd7d990d697b74eb4">dc5a5b22ded47a49b80cb6ffd7d990d697b74eb4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="4554.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-07T18%3A34%3A24Z&amp;precision=second" title="2012-02-07T18:34:24Z in Timeline">9 years</a> ago by Mathieu Doucet
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="4554.html" title="enhancement: Multiple-Reader/Single-Writer locks, or &#34;Busy&#34; flag for workspace access (closed: fixed)">#4554</a> fix warning 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/36bc9c4cd1440fde6d1afe7ceadb8141da180d2d" title="36bc9c4cd1440fde6d1afe7ceadb8141da180d2d">36bc9c4cd1440fde6d1afe7ceadb8141da180d2d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="4554.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-02T18%3A53%3A46%2B01%3A00&amp;precision=second" title="2012-05-02T18:53:46+01:00 in Timeline">8 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Vickie Lynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="4554.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-02T18%3A58%3A45%2B01%3A00&amp;precision=second" title="2012-05-02T18:58:45+01:00 in Timeline">8 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Locks work and there is no SegFault in script
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="4554.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A55%3A47%2B01%3A00&amp;precision=second" title="2015-06-03T23:55:47+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/5401"><span class="icon">​</span>5401</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4554?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4554?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4554?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

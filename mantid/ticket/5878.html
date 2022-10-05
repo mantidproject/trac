@@ -1,0 +1,1163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #5878 (Add processing correct EFixed to ConvertToMD algorithm)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="5877.html" title="Ticket #5877" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5878?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5878?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5878?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="5879.html" title="Ticket #5879" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 5878, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="5877.html" title="Ticket #5877">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="5879.html" title="Ticket #5879">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="5878.html">Ticket #5878</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-24T08%3A55%3A20%2B01%3A00&amp;precision=second" title="2012-09-24T08:55:20+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A50%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T00:50:43+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Add processing correct EFixed to ConvertToMD algorithm</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Alex+Buts">Alex Buts</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Alex+Buts">Alex Buts</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=trivial">trivial</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.3.html">Release 2.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              borreguero@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Andrei Savici
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+According to user/colleague request, it is easy to add correct EFixed processing to ConvertToMD
+</p>
+<p>
+--
+Algorithm convertToMD is not handling well spectra from indirect data. In particular, method MDWSDescription:getEi() does not read "Efixed" for each detector. Two examples of reading are implemented in ModeratorTzero::CalculateTfLi() or CorrectKiKf::exec().
+</p>
+<p>
+Could you please amend your algorithm so that it will read the different Efixed for indirect spectra?
+--
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="5878.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A12%3A00%2B01%3A00&amp;precision=second" title="2012-09-27T16:12:00+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> PerrocessDetToMD returns Efixed col on request
+</p>
+<p>
+At least for Direct instrument if requested. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f65099683d6ae4d338537300f4434b424f560c9a" title="f65099683d6ae4d338537300f4434b424f560c9a">f65099683d6ae4d338537300f4434b424f560c9a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="5878.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A12%3A00%2B01%3A00&amp;precision=second" title="2012-09-27T16:12:00+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> All ConvertToMD methods update eFixed from array if present
+</p>
+<p>
+Or at least they should. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6aeb3d1e8a73489a1593312e58e6298870644528" title="6aeb3d1e8a73489a1593312e58e6298870644528">6aeb3d1e8a73489a1593312e58e6298870644528</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="5878.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A12%3A00%2B01%3A00&amp;precision=second" title="2012-09-27T16:12:00+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> The tests now work
+</p>
+<p>
+at least the one I've run 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b94563a1372a10b45779e1a7c78c6b8907341656" title="b94563a1372a10b45779e1a7c78c6b8907341656">b94563a1372a10b45779e1a7c78c6b8907341656</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="5878.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A12%3A00%2B01%3A00&amp;precision=second" title="2012-09-27T16:12:00+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Additional unit tests
+</p>
+<p>
+and some unit tests moved 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3dd8f6136236af68b1a9de2bcafbfbc357120173" title="3dd8f6136236af68b1a9de2bcafbfbc357120173">3dd8f6136236af68b1a9de2bcafbfbc357120173</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="5878.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A12%3A00%2B01%3A00&amp;precision=second" title="2012-09-27T16:12:00+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Fixed unit tests 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0f7eebb027b94f9a23f53a9baafeb9bc1fb76cfa" title="0f7eebb027b94f9a23f53a9baafeb9bc1fb76cfa">0f7eebb027b94f9a23f53a9baafeb9bc1fb76cfa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="5878.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A12%3A00%2B01%3A00&amp;precision=second" title="2012-09-27T16:12:00+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Removed duplicated getEi function 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/31e6bd8c63023e4c167dcb741fb7a8f39c166d2e" title="31e6bd8c63023e4c167dcb741fb7a8f39c166d2e">31e6bd8c63023e4c167dcb741fb7a8f39c166d2e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="5878.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A12%3A01%2B01%3A00&amp;precision=second" title="2012-09-27T16:12:01+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Minor simplifications to getEi 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6a2525517f6ec93260149a32f1ffe204126b23f1" title="6a2525517f6ec93260149a32f1ffe204126b23f1">6a2525517f6ec93260149a32f1ffe204126b23f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="5878.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A26%3A49%2B01%3A00&amp;precision=second" title="2012-09-27T16:26:49+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Theoretically speaking, ConvertToMD indirect transformation plugin should now read information for each detector. 
+</p>
+<p>
+The code from ConvertUnit::exec(), CorrectKiKf::exec() or CalculateTfLi() is used to do that. 
+</p>
+<p>
+Despite this looks like working I have not found any existing example or instrument, which in fact has different Efixed for a detector defined, so Efixed workspace property is used to provide these values. 
+</p>
+<p>
+The tester should find such instrument if one exist and verify how it all works for this instrument. 
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T17%3A35%3A52%2B01%3A00&amp;precision=second" title="2012-09-27T17:35:52+01:00 in Timeline">8 years</a> ago
+                      by Alex Buts
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/5878?cversion=0&amp;cnum_hist=8#comment:8">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/5878?action=comment-diff&amp;cnum=8&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="5878.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A30%3A16%2B01%3A00&amp;precision=second" title="2012-09-27T16:30:16+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Fixing CMake error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/13ce47410edc8678f79e1611f8070689a5053540" title="13ce47410edc8678f79e1611f8070689a5053540">13ce47410edc8678f79e1611f8070689a5053540</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="5878.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A46%3A35%2B01%3A00&amp;precision=second" title="2012-09-27T16:46:35+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Trying to fix python test error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2e9f1301dddee146d6672219de03323b196ab5d7" title="2e9f1301dddee146d6672219de03323b196ab5d7">2e9f1301dddee146d6672219de03323b196ab5d7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="5878.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A55%3A57%2B01%3A00&amp;precision=second" title="2012-09-27T16:55:57+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Fixing Emodes 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0b9c2e7a4a26981164bb4dca92b7807244be7d8c" title="0b9c2e7a4a26981164bb4dca92b7807244be7d8c">0b9c2e7a4a26981164bb4dca92b7807244be7d8c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="5878.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T16%3A58%3A37%2B01%3A00&amp;precision=second" title="2012-09-27T16:58:37+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Fixing Unix warning 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7e2f2954822692b419191f2f1930423933f28ceb" title="7e2f2954822692b419191f2f1930423933f28ceb">7e2f2954822692b419191f2f1930423933f28ceb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="5878.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T17%3A23%3A22%2B01%3A00&amp;precision=second" title="2012-09-27T17:23:22+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> This should fix unix warning. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7d81c1571be4366078bd7e3049a0b6e46baef13e" title="7d81c1571be4366078bd7e3049a0b6e46baef13e">7d81c1571be4366078bd7e3049a0b6e46baef13e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="5878.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T17%3A33%3A40%2B01%3A00&amp;precision=second" title="2012-09-27T17:33:40+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="5878.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-27T17%3A33%3A53%2B01%3A00&amp;precision=second" title="2012-09-27T17:33:53+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="5878.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-29T18%3A12%3A51Z&amp;precision=second" title="2012-10-29T18:12:51Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Andrei Savici</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="5878.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-31T20%3A32%3A08Z&amp;precision=second" title="2012-10-31T20:32:08Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li><li>
+      <strong>type</strong>
+        changed from <em>enhancement</em> to <em>defect</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The Basis file is in Autotest directory
+</p>
+<pre class="wiki">Load(Filename='BSS_11841_event.nxs',OutputWorkspace='BSS_11841_event')
+ConvertUnits(InputWorkspace='BSS_11841_event',OutputWorkspace='BSS_11841_event',Target='DeltaE',EMode='Indirect')
+Rebin(InputWorkspace='BSS_11841_event',OutputWorkspace='BSS_11841_event',Params='-0.2,0.001,0.2',PreserveEvents='0')
+SofQW(InputWorkspace='BSS_11841_event',OutputWorkspace='sq',QAxisBinning='0,0.01,3',EMode='Indirect')
+
+ConvertToMD(InputWorkspace='BSS_11841_event',OutputWorkspace='MD',QDimensions='|Q|',dEAnalysisMode='Indirect',MinValues='0,-0.2',MaxValues='2,0.2')
+</pre><p>
+The MD workspace has 0 events.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="5878.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-01T10%3A09%3A40Z&amp;precision=second" title="2012-11-01T10:09:40Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Should fix the problem identified by tester 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7f08239f40e93f11f58345653e555b07d9f2aaba" title="7f08239f40e93f11f58345653e555b07d9f2aaba">7f08239f40e93f11f58345653e555b07d9f2aaba</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="5878.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-01T10%3A14%3A23Z&amp;precision=second" title="2012-11-01T10:14:23Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="5878.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-01T10%3A16%3A05Z&amp;precision=second" title="2012-11-01T10:16:05Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The changes fix the script above and allow proper account of energy in indirect mode. 
+</p>
+<p>
+The ticket is not so trivial after all.  
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="5878.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-01T13%3A24%3A26Z&amp;precision=second" title="2012-11-01T13:24:26Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="5878.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-01T14%3A14%3A02Z&amp;precision=second" title="2012-11-01T14:14:02Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="5878.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A14Z&amp;precision=second" title="2012-11-02T16:43:14Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> PerrocessDetToMD returns Efixed col on request
+</p>
+<p>
+At least for Direct instrument if requested. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f65099683d6ae4d338537300f4434b424f560c9a" title="f65099683d6ae4d338537300f4434b424f560c9a">f65099683d6ae4d338537300f4434b424f560c9a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="5878.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A14Z&amp;precision=second" title="2012-11-02T16:43:14Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> All ConvertToMD methods update eFixed from array if present
+</p>
+<p>
+Or at least they should. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6aeb3d1e8a73489a1593312e58e6298870644528" title="6aeb3d1e8a73489a1593312e58e6298870644528">6aeb3d1e8a73489a1593312e58e6298870644528</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="5878.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A15Z&amp;precision=second" title="2012-11-02T16:43:15Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> The tests now work
+</p>
+<p>
+at least the one I've run 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b94563a1372a10b45779e1a7c78c6b8907341656" title="b94563a1372a10b45779e1a7c78c6b8907341656">b94563a1372a10b45779e1a7c78c6b8907341656</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="5878.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A15Z&amp;precision=second" title="2012-11-02T16:43:15Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Additional unit tests
+</p>
+<p>
+and some unit tests moved 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3dd8f6136236af68b1a9de2bcafbfbc357120173" title="3dd8f6136236af68b1a9de2bcafbfbc357120173">3dd8f6136236af68b1a9de2bcafbfbc357120173</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="5878.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A15Z&amp;precision=second" title="2012-11-02T16:43:15Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Fixed unit tests 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0f7eebb027b94f9a23f53a9baafeb9bc1fb76cfa" title="0f7eebb027b94f9a23f53a9baafeb9bc1fb76cfa">0f7eebb027b94f9a23f53a9baafeb9bc1fb76cfa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="5878.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A16Z&amp;precision=second" title="2012-11-02T16:43:16Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Removed duplicated getEi function 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/31e6bd8c63023e4c167dcb741fb7a8f39c166d2e" title="31e6bd8c63023e4c167dcb741fb7a8f39c166d2e">31e6bd8c63023e4c167dcb741fb7a8f39c166d2e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="5878.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A16Z&amp;precision=second" title="2012-11-02T16:43:16Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Minor simplifications to getEi 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6a2525517f6ec93260149a32f1ffe204126b23f1" title="6a2525517f6ec93260149a32f1ffe204126b23f1">6a2525517f6ec93260149a32f1ffe204126b23f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="5878.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A17Z&amp;precision=second" title="2012-11-02T16:43:17Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Fixing CMake error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/13ce47410edc8678f79e1611f8070689a5053540" title="13ce47410edc8678f79e1611f8070689a5053540">13ce47410edc8678f79e1611f8070689a5053540</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="5878.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A17Z&amp;precision=second" title="2012-11-02T16:43:17Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Trying to fix python test error 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2e9f1301dddee146d6672219de03323b196ab5d7" title="2e9f1301dddee146d6672219de03323b196ab5d7">2e9f1301dddee146d6672219de03323b196ab5d7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="5878.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A18Z&amp;precision=second" title="2012-11-02T16:43:18Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Fixing Emodes 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0b9c2e7a4a26981164bb4dca92b7807244be7d8c" title="0b9c2e7a4a26981164bb4dca92b7807244be7d8c">0b9c2e7a4a26981164bb4dca92b7807244be7d8c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="5878.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A18Z&amp;precision=second" title="2012-11-02T16:43:18Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Fixing Unix warning 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7e2f2954822692b419191f2f1930423933f28ceb" title="7e2f2954822692b419191f2f1930423933f28ceb">7e2f2954822692b419191f2f1930423933f28ceb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="5878.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T16%3A43%3A19Z&amp;precision=second" title="2012-11-02T16:43:19Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> This should fix unix warning. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7d81c1571be4366078bd7e3049a0b6e46baef13e" title="7d81c1571be4366078bd7e3049a0b6e46baef13e">7d81c1571be4366078bd7e3049a0b6e46baef13e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="5878.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T17%3A33%3A02Z&amp;precision=second" title="2012-11-02T17:33:02Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Should fix the problem identified by tester 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7f08239f40e93f11f58345653e555b07d9f2aaba" title="7f08239f40e93f11f58345653e555b07d9f2aaba">7f08239f40e93f11f58345653e555b07d9f2aaba</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="5878.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-06T21%3A10%3A55Z&amp;precision=second" title="2012-12-06T21:10:55Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5878.html" title="defect: Add processing correct EFixed to ConvertToMD algorithm (closed: fixed)">#5878</a> Should fix the problem identified by tester 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7f08239f40e93f11f58345653e555b07d9f2aaba" title="7f08239f40e93f11f58345653e555b07d9f2aaba">7f08239f40e93f11f58345653e555b07d9f2aaba</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="5878.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A50%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T00:50:43+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/6724"><span class="icon">​</span>6724</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5878?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5878?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5878?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

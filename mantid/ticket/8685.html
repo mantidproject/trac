@@ -1,0 +1,1654 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8685 (Use matrix workspace to store splitters for fast frequency log)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8684.html" title="Ticket #8684" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8685?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8685?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8685?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8686.html" title="Ticket #8686" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8685, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8684.html" title="Ticket #8684">Previous Ticket</a></span></li><li><span><a class="next" href="8686.html" title="Ticket #8686">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8685.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8685.html">Ticket #8685</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-08T18%3A27%3A27Z&amp;precision=second" title="2014-01-08T18:27:27Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A46%3A58%2B01%3A00&amp;precision=second" title="2015-06-04T02:46:58+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Use matrix workspace to store splitters for fast frequency log</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              petersonpf@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="9244.html" title="Improve sort in TimeSeriesProperty">#9244</a>, <a class="inprogress ticket" href="9326.html" title="Chop event splitters by time">#9326</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Andrei Savici
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-01-10 02:09:23.716264+00:00">
+        (last modified by Wenduo Zhou)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/8685?action=diff&amp;version=1">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+The current way to generate event filter and then filter events does not fit for high-frequency log.  Generating and parsing a SplitterWorkspace (i.e., a TableWorkspace) containing near million rows is very costly. 
+</p>
+<p>
+Therefore, an alternative way is to record the splitters in a matrix workspace, and filter events from this workspace. 
+</p>
+<p>
+Enable GenerateEventFilter to output either SplitterWorkspace (as usual) or MatrixWorkspace (new) by user's choice. 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/8685/verify7789b.py.html" title="View attachment">verify7789b.py</a><a href="../raw-attachment/ticket/8685/verify7789b.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="951 bytes">951 bytes</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A41%3A28%2B01%3A00&amp;precision=second" title="2014-04-09T03:41:28+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/8685/verify7789a.py.html" title="View attachment">verify7789a.py</a><a href="../raw-attachment/ticket/8685/verify7789a.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="849 bytes">849 bytes</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T13%3A19%3A07%2B01%3A00&amp;precision=second" title="2014-04-14T13:19:07+01:00 in Timeline">6 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8685.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-10T02%3A09%3A23Z&amp;precision=second" title="2014-01-10T02:09:23Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>petersonpf@…</em> added
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8685?action=diff&amp;version=1">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8685.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-15T02%3A36%3A52Z&amp;precision=second" title="2014-01-15T02:36:52Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refactored code. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e4511983d4c55f1218a914662b1bc68afb02c021" title="e4511983d4c55f1218a914662b1bc68afb02c021">e4511983d4c55f1218a914662b1bc68afb02c021</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8685.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-16T03%3A12%3A59Z&amp;precision=second" title="2014-01-16T03:12:59Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implemented matrix workspace output. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Also added several unit tests for the new feature.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e003fdc698650e73c18c27d170d524e9111b1150" title="e003fdc698650e73c18c27d170d524e9111b1150">e003fdc698650e73c18c27d170d524e9111b1150</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8685.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-17T16%3A31%3A31Z&amp;precision=second" title="2014-01-17T16:31:31Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Enabled to split events by vector splitter. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6bd39122ed0e56722891c183425496888fba70c" title="a6bd39122ed0e56722891c183425496888fba70c">a6bd39122ed0e56722891c183425496888fba70c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8685.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-17T16%3A31%3A31Z&amp;precision=second" title="2014-01-17T16:31:31Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Enabled to split events using splitter matrix workspace. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c774e4c9def3252796c74963b6bfa9e06d14d877" title="c774e4c9def3252796c74963b6bfa9e06d14d877">c774e4c9def3252796c74963b6bfa9e06d14d877</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8685.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-23T16%3A33%3A37Z&amp;precision=second" title="2014-01-23T16:33:37Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added method to split events. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Added and tested a method to filter/split events with spliters instored
+in vectors.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e3487731d0c138192eca2afde97fb5c3e2f8c8b6" title="e3487731d0c138192eca2afde97fb5c3e2f8c8b6">e3487731d0c138192eca2afde97fb5c3e2f8c8b6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8685.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-24T21%3A11%3A00Z&amp;precision=second" title="2014-01-24T21:11:00Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6999</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8685.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-02T15%3A34%3A46Z&amp;precision=second" title="2014-02-02T15:34:46Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.1</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to backlog at the end of Release 3.1
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8685.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T19%3A04%3A24Z&amp;precision=second" title="2014-03-28T19:04:24Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Enabled to generate filters in matrix workspace. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<ol><li>Enabled to generate filters and output them in MatrixWorkspace;
+</li><li>Enabled to generate filters in parallel (not finished yet).
+</li></ol><p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/565927f0d59e7c36678efcd009998642ef54f229" title="565927f0d59e7c36678efcd009998642ef54f229">565927f0d59e7c36678efcd009998642ef54f229</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8685.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T19%3A04%3A25Z&amp;precision=second" title="2014-03-28T19:04:25Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Enabled to return with debug message. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d3d6754bcb700389fc2974b5aaaeacccdb3010ac" title="d3d6754bcb700389fc2974b5aaaeacccdb3010ac">d3d6754bcb700389fc2974b5aaaeacccdb3010ac</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8685.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T19%3A04%3A25Z&amp;precision=second" title="2014-03-28T19:04:25Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added new unit test for returning matrix workspace. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/365eae123aef01041b7f0dae187fc398fcc7dd71" title="365eae123aef01041b7f0dae187fc398fcc7dd71">365eae123aef01041b7f0dae187fc398fcc7dd71</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8685.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T19%3A04%3A26Z&amp;precision=second" title="2014-03-28T19:04:26Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add debug output. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<ol><li>Enabled to output more detailed debug information;
+</li><li>Code refactored for parallelization by OpenMP.
+</li></ol><p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/afa81763e95e6d572e787ef2b376c0cb72af35db" title="afa81763e95e6d572e787ef2b376c0cb72af35db">afa81763e95e6d572e787ef2b376c0cb72af35db</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8685.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T19%3A15%3A10Z&amp;precision=second" title="2014-03-28T19:15:10Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved conflict. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/703e658fc92a5e468fcc535b81c784765c0bc566" title="703e658fc92a5e468fcc535b81c784765c0bc566">703e658fc92a5e468fcc535b81c784765c0bc566</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8685.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T20%3A39%3A43Z&amp;precision=second" title="2014-03-28T20:39:43Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Adapted to new FilterEvents splitter workspace property. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37d033c5fe5ee3719362a9730dcdf3ef4d6e9231" title="37d033c5fe5ee3719362a9730dcdf3ef4d6e9231">37d033c5fe5ee3719362a9730dcdf3ef4d6e9231</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8685.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T20%3A39%3A44Z&amp;precision=second" title="2014-03-28T20:39:44Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Parallelized with OpenMP. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f256fdbad0eba00941ae868588b511c856eba479" title="f256fdbad0eba00941ae868588b511c856eba479">f256fdbad0eba00941ae868588b511c856eba479</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8685.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-31T08%3A15%3A12%2B01%3A00&amp;precision=second" title="2014-03-31T08:15:12+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+There is a cppcheck warning in <a class="ext-link" href="http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/469/cppcheckResult/"><span class="icon">​</span>GenerateEventsFilter</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8685.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-01T02%3A31%3A09%2B01%3A00&amp;precision=second" title="2014-04-01T02:31:09+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8685.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-01T03%3A32%3A46%2B01%3A00&amp;precision=second" title="2014-04-01T03:32:46+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9244</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8685.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-01T04%3A16%3A26%2B01%3A00&amp;precision=second" title="2014-04-01T04:16:26+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Improved performance on speed. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<ol><li>Removed log in debug level in loop.
+</li><li>Reduced access to a huge vector.
+</li><li>Refactored the operation on DateAndTime and time_duration for speed.
+</li></ol><p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/da57667c8e7d913cfcd650027795b0b31a0ef6d7" title="da57667c8e7d913cfcd650027795b0b31a0ef6d7">da57667c8e7d913cfcd650027795b0b31a0ef6d7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8685.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-04T08%3A15%3A24%2B01%3A00&amp;precision=second" title="2014-04-04T08:15:24+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+There is a compiler warning about an <a class="ext-link" href="http://download.mantidproject.org/jenkins/view/Develop%20Clean%20Builds%20and%20Tests/job/is_clean_ubuntu-12.04_develop/399/warnings22Result/"><span class="icon">​</span>unused variable</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8685.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-04T15%3A09%3A07%2B01%3A00&amp;precision=second" title="2014-04-04T15:09:07+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cleaned up code for logging and multithread. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2b81df764254340bdab37e11546973f0553d8094" title="2b81df764254340bdab37e11546973f0553d8094">2b81df764254340bdab37e11546973f0553d8094</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="8685.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T15%3A33%3A48%2B01%3A00&amp;precision=second" title="2014-04-07T15:33:48+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cleaned the codes. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/156debd74588bd9f568e15c8092a1a369cc14de8" title="156debd74588bd9f568e15c8092a1a369cc14de8">156debd74588bd9f568e15c8092a1a369cc14de8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="8685.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T16%3A53%3A31%2B01%3A00&amp;precision=second" title="2014-04-07T16:53:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a compiler warning. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f1b865f9397969b8f544ae1f4e4500c6a28244d9" title="f1b865f9397969b8f544ae1f4e4500c6a28244d9">f1b865f9397969b8f544ae1f4e4500c6a28244d9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="8685.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T16%3A53%3A31%2B01%3A00&amp;precision=second" title="2014-04-07T16:53:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactored filtering by multiple log values. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6dba5722f2d5c62f95a193a623d1f57f5381738a" title="6dba5722f2d5c62f95a193a623d1f57f5381738a">6dba5722f2d5c62f95a193a623d1f57f5381738a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="8685.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T18%3A42%3A56%2B01%3A00&amp;precision=second" title="2014-04-07T18:42:56+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactored algorithm to adding new splitter. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/aa9ebbb978640601bb0755de754cc9273c98062c" title="aa9ebbb978640601bb0755de754cc9273c98062c">aa9ebbb978640601bb0755de754cc9273c98062c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="8685.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T03%3A31%3A57%2B01%3A00&amp;precision=second" title="2014-04-08T03:31:57+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Edit wiki and cleaned the codes. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c3523ae86ffbd5941142d1630eb5c4572b6e6aa" title="4c3523ae86ffbd5941142d1630eb5c4572b6e6aa">4c3523ae86ffbd5941142d1630eb5c4572b6e6aa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="8685.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T03%3A39%3A59%2B01%3A00&amp;precision=second" title="2014-04-08T03:39:59+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <h2 id="Fortester">For tester</h2>
+<ol><li>Get access of VULCAN run 20002 and/or 20006;
+</li><li>Download script verify8685a.py;
+</li><li>Before merging the change from this ticket, run script by choosing run number as 20002 or 20006.  You will find it takes very long time to generate event filters and even longer time to filter events;
+</li><li>Download script verify8685b.py.  Compare it to verify8685a.py to see the difference;  Be noticed that the option 'GenerateTOFCorrection' in FilterEvents is a new functionality. 
+</li><li>Merge the change from this ticket and build Mantid;
+</li><li>Run verify8685b.py and compare the speed. 
+</li></ol>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T13%3A21%3A32%2B01%3A00&amp;precision=second" title="2014-04-14T13:21:32+01:00 in Timeline">6 years</a> ago
+                      by Wenduo Zhou
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8685?cversion=0&amp;cnum_hist=27#comment:27">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8685?action=comment-diff&amp;cnum=27&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="8685.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T09%3A10%3A08%2B01%3A00&amp;precision=second" title="2014-04-08T09:10:08+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+There are still some <a class="ext-link" href="http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/510/cppcheckResult/"><span class="icon">​</span>cppcheck</a> warnings that need to be addressed in <tt>GenerateEventsFilter</tt> &amp; <tt>FilterEventsByLogValuePreNexus</tt>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="8685.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T14%3A43%3A04%2B01%3A00&amp;precision=second" title="2014-04-08T14:43:04+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Suppressed a cppcheck error. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2ba0d4bad9b23c55b4af374fd270258e2c479656" title="2ba0d4bad9b23c55b4af374fd270258e2c479656">2ba0d4bad9b23c55b4af374fd270258e2c479656</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="8685.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A22%3A31%2B01%3A00&amp;precision=second" title="2014-04-09T03:22:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a Windows compilter error. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2eceef66b04d5e4941e7f4dbf21c5cd8b2edae9a" title="2eceef66b04d5e4941e7f4dbf21c5cd8b2edae9a">2eceef66b04d5e4941e7f4dbf21c5cd8b2edae9a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="8685.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A22%3A31%2B01%3A00&amp;precision=second" title="2014-04-09T03:22:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Turned on parallel and cleaned code. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/569f2e738e86249dcdefc31139bd7499c30cdcf3" title="569f2e738e86249dcdefc31139bd7499c30cdcf3">569f2e738e86249dcdefc31139bd7499c30cdcf3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="8685.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A24%3A48%2B01%3A00&amp;precision=second" title="2014-04-09T03:24:48+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9244</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A41%3A28%2B01%3A00&amp;precision=second" title="2014-04-09T03:41:28+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8685/verify7789b.py.html"><em>verify7789b.py</em></a><a href="../raw-attachment/ticket/8685/verify7789b.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="8685.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A42%3A38%2B01%3A00&amp;precision=second" title="2014-04-09T03:42:38+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9244</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="8685.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A43%3A50%2B01%3A00&amp;precision=second" title="2014-04-09T03:43:50+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9244</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="8685.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A45%3A19%2B01%3A00&amp;precision=second" title="2014-04-09T03:45:19+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6999</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="8685.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T03%3A47%3A05%2B01%3A00&amp;precision=second" title="2014-04-09T03:47:05+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9244</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="8685.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T15%3A52%3A48%2B01%3A00&amp;precision=second" title="2014-04-09T15:52:48+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a doxygen warning. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/26483167ac04c4ddf37a2abee9c9a4dbddd6acc4" title="26483167ac04c4ddf37a2abee9c9a4dbddd6acc4">26483167ac04c4ddf37a2abee9c9a4dbddd6acc4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="8685.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T15%3A52%3A48%2B01%3A00&amp;precision=second" title="2014-04-09T15:52:48+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Corrected some doxygen warnings. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/282bcc80c9dd68bb1b1392b1fe9e8086754414ee" title="282bcc80c9dd68bb1b1392b1fe9e8086754414ee">282bcc80c9dd68bb1b1392b1fe9e8086754414ee</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="8685.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T15%3A58%3A29%2B01%3A00&amp;precision=second" title="2014-04-09T15:58:29+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="8685.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T14%3A53%3A11%2B01%3A00&amp;precision=second" title="2014-04-11T14:53:11+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+There are a bunch of new memory leaks in EventListTest (spotted because I've been squashing the older ones). I can show you where they are.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="8685.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T16%3A48%3A41%2B01%3A00&amp;precision=second" title="2014-04-11T16:48:41+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Removed progress bar in openmp loop. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8360cba88c28d109eec79f0463e8eb48d5914d76" title="8360cba88c28d109eec79f0463e8eb48d5914d76">8360cba88c28d109eec79f0463e8eb48d5914d76</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="8685.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T18%3A56%3A51%2B01%3A00&amp;precision=second" title="2014-04-11T18:56:51+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed some memory leaks. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/66ddc8fe9dbe57f71128f5cca03fa29462df978f" title="66ddc8fe9dbe57f71128f5cca03fa29462df978f">66ddc8fe9dbe57f71128f5cca03fa29462df978f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="8685.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T18%3A57%3A49%2B01%3A00&amp;precision=second" title="2014-04-11T18:57:49+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="8685.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T19%3A08%3A13%2B01%3A00&amp;precision=second" title="2014-04-11T19:08:13+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Best not to close things until the builds have passed....
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="8685.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T22%3A11%3A26%2B01%3A00&amp;precision=second" title="2014-04-11T22:11:26+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Modified an error message.  Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/39f169c6dc6f98d553042989864352ab305eb840" title="39f169c6dc6f98d553042989864352ab305eb840">39f169c6dc6f98d553042989864352ab305eb840</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="8685.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T22%3A22%3A42%2B01%3A00&amp;precision=second" title="2014-04-11T22:22:42+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="8685.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T22%3A24%3A04%2B01%3A00&amp;precision=second" title="2014-04-11T22:24:04+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Andrei Savici</em>
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>Use matrix workspac to store splitters for fast frequency log</em> to <em>Use matrix workspace to store splitters for fast frequency log</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="8685.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T22%3A32%3A11%2B01%3A00&amp;precision=second" title="2014-04-11T22:32:11+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Could not run the python scripts in the before case. No FastLog and no UseParallelProcessing. Please update testing procedure
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T13%3A19%3A07%2B01%3A00&amp;precision=second" title="2014-04-14T13:19:07+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8685/verify7789a.py.html"><em>verify7789a.py</em></a><a href="../raw-attachment/ticket/8685/verify7789a.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="8685.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T13%3A20%3A08%2B01%3A00&amp;precision=second" title="2014-04-14T13:20:08+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Test script is corrected.  
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="8685.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T13%3A21%3A42%2B01%3A00&amp;precision=second" title="2014-04-14T13:21:42+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="8685.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T13%3A21%3A55%2B01%3A00&amp;precision=second" title="2014-04-14T13:21:55+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="8685.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T13%3A37%3A11%2B01%3A00&amp;precision=second" title="2014-04-14T13:37:11+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9326</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="8685.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T15%3A28%3A37%2B01%3A00&amp;precision=second" title="2014-04-14T15:28:37+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+verify7789a.py​ still has a problem in FilterEvents. There is no SplitSampleLogs keyword
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="8685.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-15T16%3A53%3A21%2B01%3A00&amp;precision=second" title="2014-04-15T16:53:21+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="8685.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-15T18%3A13%3A21%2B01%3A00&amp;precision=second" title="2014-04-15T18:13:21+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed an unnecessary warning log. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46e9acd2dabb0db97145f16ff5fe50b1a14d3000" title="46e9acd2dabb0db97145f16ff5fe50b1a14d3000">46e9acd2dabb0db97145f16ff5fe50b1a14d3000</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="8685.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-15T18%3A27%3A43%2B01%3A00&amp;precision=second" title="2014-04-15T18:27:43+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed a progress update within OpenMP loop. Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f5809aa0f3f550f763ba9137d5b33268c2d6b87" title="4f5809aa0f3f550f763ba9137d5b33268c2d6b87">4f5809aa0f3f550f763ba9137d5b33268c2d6b87</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="8685.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-15T18%3A36%3A57%2B01%3A00&amp;precision=second" title="2014-04-15T18:36:57+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a>. Merge 'origin/feature/8685_matrixws_filter'
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/Algorithms/src/GenerateEventsFilter.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a0e7b5ee47f2e854e5b5c771cd9f0ccba8a8335c" title="a0e7b5ee47f2e854e5b5c771cd9f0ccba8a8335c">a0e7b5ee47f2e854e5b5c771cd9f0ccba8a8335c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="8685.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-15T18%3A39%3A06%2B01%3A00&amp;precision=second" title="2014-04-15T18:39:06+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="8685.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A46%3A58%2B01%3A00&amp;precision=second" title="2015-06-04T02:46:58+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9529"><span class="icon">​</span>9529</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8685?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8685?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8685?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

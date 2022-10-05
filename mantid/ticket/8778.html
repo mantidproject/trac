@@ -1,0 +1,1284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8778 (algorithm to interpolate  S(Q,E) from a set of 2D workspaces)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8777.html" title="Ticket #8777" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8778?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8778?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8778?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8779.html" title="Ticket #8779" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8778, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8777.html" title="Ticket #8777">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="8779.html" title="Ticket #8779">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8778.html">Ticket #8778</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-29T19%3A38%3A25Z&amp;precision=second" title="2014-01-29T19:38:25Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A50%3A48%2B01%3A00&amp;precision=second" title="2015-06-04T02:50:48+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">algorithm to interpolate  S(Q,E) from a set of 2D workspaces</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Jose+Borreguero">Jose Borreguero</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Jose+Borreguero">Jose Borreguero</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Michael Reuter
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-02-13 22:32:47.260557+00:00">
+        (last modified by Jose Borreguero)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/8778?action=diff&amp;version=32">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Given a set of temperature values {T_i} and corresponding structure factors {S_i=S(Q,E,T_i)}, interpolate a structure factor S(Q,E,T) for any temperature T within the range spanned by the {T_i} values.
+The workspaces are assumed to be MatrixWorkspace2D and all share the same (Q,E) values. More details in the related webpage <a href="http://www.mantidproject.org/DSFinterp">DSFinterp</a> at the Mantid wiki.
+</p>
+<p>
+TESTING THE TICKET:
+It is first necessary to install python package <strong>dsfinterp</strong>, which can be obtained from the python package index
+</p>
+<pre class="wiki">sudo pip install dsfinterp
+</pre><p>
+If the package is not installed, then the algorithm will not be subscribed and will be unaivalable.
+</p>
+<p>
+Download and uncompress the attached file, then run script DSFinterpTest.py to generate and plot a set of interpolated structure factors.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/8778/DSFinterpTest.tar.gz.html" title="View attachment">DSFinterpTest.tar.gz</a><a href="../raw-attachment/ticket/8778/DSFinterpTest.tar.gz" class="trac-rawlink" title="Download">​</a>
+       (<span title="2168836 bytes">2.1 MB</span>) -
+      added by <em>Jose Borreguero</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T22%3A37%3A16Z&amp;precision=second" title="2014-02-13T22:37:16Z in Timeline">7 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8778.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-29T19%3A39%3A42Z&amp;precision=second" title="2014-01-29T19:39:42Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>algorith to interpolate 2D S(Q,E) from a set or workspaces</em> to <em>algorithm to interpolate 2D S(Q,E) from a set or workspaces</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8778.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-29T19%3A40%3A23Z&amp;precision=second" title="2014-01-29T19:40:23Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8778?action=diff&amp;version=2">diff</a>)
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>algorithm to interpolate 2D S(Q,E) from a set or workspaces</em> to <em>algorithm to interpolate  S(Q,E) from a set or 2D workspaces</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8778.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-29T19%3A40%3A42Z&amp;precision=second" title="2014-01-29T19:40:42Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>algorithm to interpolate  S(Q,E) from a set or 2D workspaces</em> to <em>algorithm to interpolate  S(Q,E) from a set of 2D workspaces</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8778.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-29T21%3A23%3A23Z&amp;precision=second" title="2014-01-29T21:23:23Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> First pass, pyexec barely started
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/494b0012df6b44d1ae4f4018ad1994ab8eece463" title="494b0012df6b44d1ae4f4018ad1994ab8eece463">494b0012df6b44d1ae4f4018ad1994ab8eece463</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8778.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-30T22%3A08%3A25Z&amp;precision=second" title="2014-01-30T22:08:25Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> First pass at pyexec
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8b3cd51cb941e0cbdd7a50d620ea12d80ecb7ac6" title="8b3cd51cb941e0cbdd7a50d620ea12d80ecb7ac6">8b3cd51cb941e0cbdd7a50d620ea12d80ecb7ac6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8778.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-30T22%3A09%3A59Z&amp;precision=second" title="2014-01-30T22:09:59Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> correct silly sintax error
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e4756b2c05d1e8531fc7c8c54e5c9466ca3ed4a3" title="e4756b2c05d1e8531fc7c8c54e5c9466ca3ed4a3">e4756b2c05d1e8531fc7c8c54e5c9466ca3ed4a3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8778.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-02T15%3A34%3A46Z&amp;precision=second" title="2014-02-02T15:34:46Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.1</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to backlog at the end of Release 3.1
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8778.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T19%3A18%3A33Z&amp;precision=second" title="2014-02-04T19:18:33Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Renamed algorithm
+</p>
+<p>
+To better reflect that this algorithm uses the dsfinterp python package
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6704c74115278ab4e6a386f76ed2e2c1c72bb9fa" title="6704c74115278ab4e6a386f76ed2e2c1c72bb9fa">6704c74115278ab4e6a386f76ed2e2c1c72bb9fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8778.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T21%3A37%3A21Z&amp;precision=second" title="2014-02-05T21:37:21Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Added RegressionWindow and RegressionType properties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6b55cdc9ae42b909ebdd36f41d10296485fbb764" title="6b55cdc9ae42b909ebdd36f41d10296485fbb764">6b55cdc9ae42b909ebdd36f41d10296485fbb764</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8778.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-06T20%3A06%3A49Z&amp;precision=second" title="2014-02-06T20:06:49Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> We can now interpolate to more than one value
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8d7a4bd3cea5c7d4c90fc443148c710ed55ef06" title="b8d7a4bd3cea5c7d4c90fc443148c710ed55ef06">b8d7a4bd3cea5c7d4c90fc443148c710ed55ef06</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8778.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-06T20%3A06%3A50Z&amp;precision=second" title="2014-02-06T20:06:50Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Set channelgroup as an instance attribute
+</p>
+<p>
+In case we want to reuse the algorithm, we can create an unmanaged
+algorith and run it many times, but we initialize only
+channelgroup once
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7409cf1ae61389fa3594cdfa11cf7ba64aa9c16d" title="7409cf1ae61389fa3594cdfa11cf7ba64aa9c16d">7409cf1ae61389fa3594cdfa11cf7ba64aa9c16d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8778.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-07T15%3A28%3A03Z&amp;precision=second" title="2014-02-07T15:28:03Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8778.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-07T15%3A30%3A01Z&amp;precision=second" title="2014-02-07T15:30:01Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>8947</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8778.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-07T16%3A42%3A13Z&amp;precision=second" title="2014-02-07T16:42:13Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Added bool variable to perform local regression
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be02deb7ae4bc4f2d7f8bfcb56c5a8486706fc6c" title="be02deb7ae4bc4f2d7f8bfcb56c5a8486706fc6c">be02deb7ae4bc4f2d7f8bfcb56c5a8486706fc6c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8778.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A43Z&amp;precision=second" title="2014-02-11T20:36:43Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> First pass, pyexec barely started
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3be3d12ca6cd0901caacecf283fcd009e387034c" title="3be3d12ca6cd0901caacecf283fcd009e387034c">3be3d12ca6cd0901caacecf283fcd009e387034c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8778.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A44Z&amp;precision=second" title="2014-02-11T20:36:44Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> First pass at pyexec
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d577a38d1c01b63bec9a48cee4f0d6eaf9def745" title="d577a38d1c01b63bec9a48cee4f0d6eaf9def745">d577a38d1c01b63bec9a48cee4f0d6eaf9def745</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8778.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A45Z&amp;precision=second" title="2014-02-11T20:36:45Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> correct silly sintax error
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0e335a4fb4c1d53bf689a80e69b0e4237e8cd72a" title="0e335a4fb4c1d53bf689a80e69b0e4237e8cd72a">0e335a4fb4c1d53bf689a80e69b0e4237e8cd72a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8778.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A45Z&amp;precision=second" title="2014-02-11T20:36:45Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Renamed algorithm
+</p>
+<p>
+To better reflect that this algorithm uses the dsfinterp python package
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d1b5667aee6afdcd46daf25b934ff6b77c219f57" title="d1b5667aee6afdcd46daf25b934ff6b77c219f57">d1b5667aee6afdcd46daf25b934ff6b77c219f57</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8778.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A46Z&amp;precision=second" title="2014-02-11T20:36:46Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Added RegressionWindow and RegressionType properties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c7e1e67f9f541811a6e9762649bde965a914c988" title="c7e1e67f9f541811a6e9762649bde965a914c988">c7e1e67f9f541811a6e9762649bde965a914c988</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8778.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A47Z&amp;precision=second" title="2014-02-11T20:36:47Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> We can now interpolate to more than one value
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ad21de920d13f3c7a047cbb0c2cc29413bedb010" title="ad21de920d13f3c7a047cbb0c2cc29413bedb010">ad21de920d13f3c7a047cbb0c2cc29413bedb010</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8778.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A47Z&amp;precision=second" title="2014-02-11T20:36:47Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Set channelgroup as an instance attribute
+</p>
+<p>
+In case we want to reuse the algorithm, we can create an unmanaged
+algorith and run it many times, but we initialize only
+channelgroup once
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b9c50ad775e0ea83c81b7f1bce3f66cd8b9809f9" title="b9c50ad775e0ea83c81b7f1bce3f66cd8b9809f9">b9c50ad775e0ea83c81b7f1bce3f66cd8b9809f9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="8778.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A48Z&amp;precision=second" title="2014-02-11T20:36:48Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Added bool variable to perform local regression
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a539ecb6a234d7fdeedff4e751a212b62058c1cf" title="a539ecb6a234d7fdeedff4e751a212b62058c1cf">a539ecb6a234d7fdeedff4e751a212b62058c1cf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="8778.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-11T20%3A36%3A49Z&amp;precision=second" title="2014-02-11T20:36:49Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Add LoadErrors option in algorithm properties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3300ce8583424593c03edf7378f5fd7eb707791a" title="3300ce8583424593c03edf7378f5fd7eb707791a">3300ce8583424593c03edf7378f5fd7eb707791a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="8778.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T21%3A15%3A53Z&amp;precision=second" title="2014-02-12T21:15:53Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Added reference to dsfinter in pypi
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c3832594aae0b1e3d0ae1c8d5ba5906d85638c0d" title="c3832594aae0b1e3d0ae1c8d5ba5906d85638c0d">c3832594aae0b1e3d0ae1c8d5ba5906d85638c0d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="8778.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T00%3A59%3A05Z&amp;precision=second" title="2014-02-13T00:59:05Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Added WIKI header
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/330e1a09dbe82567ccb11c4896dfa07dad38ad2c" title="330e1a09dbe82567ccb11c4896dfa07dad38ad2c">330e1a09dbe82567ccb11c4896dfa07dad38ad2c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="8778.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T01%3A01%3A36Z&amp;precision=second" title="2014-02-13T01:01:36Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Ammended WIKI header
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/220ca75a249804f3fbf10f9c38b24514b62a4e9d" title="220ca75a249804f3fbf10f9c38b24514b62a4e9d">220ca75a249804f3fbf10f9c38b24514b62a4e9d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="8778.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T19%3A22%3A34Z&amp;precision=second" title="2014-02-13T19:22:34Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Added exceptions
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa2899e76cead50052dcec3494a12a74fd84d764" title="fa2899e76cead50052dcec3494a12a74fd84d764">fa2899e76cead50052dcec3494a12a74fd84d764</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="8778.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T20%3A51%3A46Z&amp;precision=second" title="2014-02-13T20:51:46Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Unit test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/161feb8aee443ed67e1f16d718d321657106e3db" title="161feb8aee443ed67e1f16d718d321657106e3db">161feb8aee443ed67e1f16d718d321657106e3db</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="8778.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T21%3A09%3A27Z&amp;precision=second" title="2014-02-13T21:09:27Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Added a StringArrayValidator
+</p>
+<p>
+For linear regression types
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5822c1471b1bea43f9fe48f4b0011dd23fe99619" title="5822c1471b1bea43f9fe48f4b0011dd23fe99619">5822c1471b1bea43f9fe48f4b0011dd23fe99619</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="8778.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T22%3A29%3A34Z&amp;precision=second" title="2014-02-13T22:29:34Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8778?action=diff&amp;version=30">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="8778.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T22%3A32%3A05Z&amp;precision=second" title="2014-02-13T22:32:05Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8778?action=diff&amp;version=31">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="8778.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T22%3A32%3A47Z&amp;precision=second" title="2014-02-13T22:32:47Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8778?action=diff&amp;version=32">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="8778.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T22%3A34%3A30Z&amp;precision=second" title="2014-02-13T22:34:30Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+TESTING THE TICKET:
+It is first necessary to install python package <strong>dsfinterp</strong>, which can be obtained from the python package index
+</p>
+<pre class="wiki">sudo pip install dsfinterp
+</pre><p>
+If the package is not installed, then the algorithm will not be subscribed and will be unaivalable.
+</p>
+<p>
+Download and uncompress the attached file, then run script DSFinterpTest.py to generate and plot a set of interpolated structure factors.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="8778.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T22%3A35%3A01Z&amp;precision=second" title="2014-02-13T22:35:01Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>8947</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="8778.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T22%3A35%3A15Z&amp;precision=second" title="2014-02-13T22:35:15Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T22%3A37%3A16Z&amp;precision=second" title="2014-02-13T22:37:16Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8778/DSFinterpTest.tar.gz.html"><em>DSFinterpTest.tar.gz</em></a><a href="../raw-attachment/ticket/8778/DSFinterpTest.tar.gz" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="8778.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T15%3A16%3A42Z&amp;precision=second" title="2014-02-14T15:16:42Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="8778.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T15%3A17%3A46Z&amp;precision=second" title="2014-02-14T15:17:46Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Redo WIKI header
+</p>
+<p>
+..and inserted mandatory validators
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96a330cc16816e66015fa09ea26a4afa71c6673c" title="96a330cc16816e66015fa09ea26a4afa71c6673c">96a330cc16816e66015fa09ea26a4afa71c6673c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="8778.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T15%3A41%3A23Z&amp;precision=second" title="2014-02-14T15:41:23Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Correct direction of some properties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1c7088c88cfb9cb9e61a7fce1c65fb8f942087cd" title="1c7088c88cfb9cb9e61a7fce1c65fb8f942087cd">1c7088c88cfb9cb9e61a7fce1c65fb8f942087cd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="8778.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T15%3A43%3A57Z&amp;precision=second" title="2014-02-14T15:43:57Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8778.html" title="enhancement: algorithm to interpolate  S(Q,E) from a set of 2D workspaces (closed: fixed)">#8778</a> Correct typo in WIKI header
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd5bed0ebe2eb0f06540acbae5747ed5a0636a8b" title="bd5bed0ebe2eb0f06540acbae5747ed5a0636a8b">bd5bed0ebe2eb0f06540acbae5747ed5a0636a8b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="8778.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T16%3A07%3A30Z&amp;precision=second" title="2014-02-14T16:07:30Z in Timeline">7 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+TESTING THE TICKET:
+It is first necessary to install python package <strong>dsfinterp</strong>, which can be obtained from the python package index
+</p>
+<pre class="wiki">sudo pip install dsfinterp
+</pre><p>
+If the package is not installed, then the algorithm will not be subscribed and will be unaivalable.
+</p>
+<p>
+Download and uncompress the attached file, then run script DSFinterpTest.py to generate and plot a set of interpolated structure factors.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="8778.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-25T18%3A42%3A48Z&amp;precision=second" title="2014-02-25T18:42:48Z in Timeline">7 years</a> ago by Michael Reuter
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Michael Reuter</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="8778.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-26T21%3A32%3A02Z&amp;precision=second" title="2014-02-26T21:32:02Z in Timeline">7 years</a> ago by Michael Reuter
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8778_interpolate_sqe'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/729bb94ba411daf64395c265f2e6946455ab4c54"><span class="icon">​</span>729bb94ba411daf64395c265f2e6946455ab4c54</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="8778.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A50%3A48%2B01%3A00&amp;precision=second" title="2015-06-04T02:50:48+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9622"><span class="icon">​</span>9622</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8778?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8778?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8778?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

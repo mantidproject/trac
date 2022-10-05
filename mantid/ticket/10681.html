@@ -1,0 +1,975 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10681 (Implement generic ISIS reduction wrapper, which would work both through web services and directly from Mantid)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10680.html" title="Ticket #10680" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10681?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10681?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10681?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10682.html" title="Ticket #10682" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10681, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10680.html" title="Ticket #10680">Previous Ticket</a></span></li><li><span><a class="next" href="10682.html" title="Ticket #10682">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10681.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10681.html">Ticket #10681</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-04T14%3A22%3A28Z&amp;precision=second" title="2014-12-04T14:22:28Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A07%3A14%2B01%3A00&amp;precision=second" title="2015-06-04T04:07:14+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Implement generic ISIS reduction wrapper, which would work both through web services and directly from Mantid</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Alex+Buts">Alex Buts</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Alex+Buts">Alex Buts</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Direct+Inelastic">Direct Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              ian.bush@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="10532.html" title="Separate Property manager from Direct inelastic reduction script">#10532</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="10684.html" title="Hide Multirep mode inside DirectReduction">#10684</a>, <a class="closed ticket" href="10708.html" title="Update default instrument parameters from workspace">#10708</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Ian Bush
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+The prototype is already there, in <a class="closed ticket" href="10532.html" title="Separate Property manager from Direct inelastic reduction script (closed: fixed)">#10532</a> branch, but it is not nice and tidy as number of properties have to be set manually for it to work. 
+</p>
+<p>
+It is also not unit/system tested. 
+</p>
+<p>
+This ticket to rewrite existing prototype in proper OO way and modify system tests to accept&amp; verify the changes. 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10681.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-04T20%3A20%3A17Z&amp;precision=second" title="2014-12-04T20:20:17Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Nice ReductionWrapper and initial code to test it.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3d2d8d84fd9f88c13ebc1d0f925c2a34267577e0" title="3d2d8d84fd9f88c13ebc1d0f925c2a34267577e0">3d2d8d84fd9f88c13ebc1d0f925c2a34267577e0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10681.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-04T20%3A28%3A36Z&amp;precision=second" title="2014-12-04T20:28:36Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10684</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10681.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T12%3A52%3A40Z&amp;precision=second" title="2014-12-05T12:52:40Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Advanced properties removed from DirectReductionProperties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/544b435698e0d92701a6ed0022fe0a26eac16b60" title="544b435698e0d92701a6ed0022fe0a26eac16b60">544b435698e0d92701a6ed0022fe0a26eac16b60</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10681.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T12%3A52%3A40Z&amp;precision=second" title="2014-12-05T12:52:40Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Test for ReductionWrapper
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/88671803308376c53c7adc3e22b2977fba65be17" title="88671803308376c53c7adc3e22b2977fba65be17">88671803308376c53c7adc3e22b2977fba65be17</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10681.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T15%3A26%3A20Z&amp;precision=second" title="2014-12-05T15:26:20Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Initial commit. Mari Reduction wrapped (almost)
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4880167b79fbe5a6e626c2b07e6919e4f2dbc9cf" title="4880167b79fbe5a6e626c2b07e6919e4f2dbc9cf">4880167b79fbe5a6e626c2b07e6919e4f2dbc9cf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10681.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T15%3A46%3A05Z&amp;precision=second" title="2014-12-05T15:46:05Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Fully extracted Mari Reduction
+</p>
+<p>
+and system tests work fine.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ba269e21af3a4bc15da76c5b5301c268c2a8b086" title="ba269e21af3a4bc15da76c5b5301c268c2a8b086">ba269e21af3a4bc15da76c5b5301c268c2a8b086</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10681.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T16%3A43%3A08Z&amp;precision=second" title="2014-12-05T16:43:08Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Modified MAPS system test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f2181698384d26b08c32e6c8421ab6144b1f774" title="4f2181698384d26b08c32e6c8421ab6144b1f774">4f2181698384d26b08c32e6c8421ab6144b1f774</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10681.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T17%3A09%3A24Z&amp;precision=second" title="2014-12-05T17:09:24Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Merlin system test moved to redWrapper
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4beaea0a40edc76412cf6d0b9ba6aa425bf6861b" title="4beaea0a40edc76412cf6d0b9ba6aa425bf6861b">4beaea0a40edc76412cf6d0b9ba6aa425bf6861b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10681.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T17%3A58%3A57Z&amp;precision=second" title="2014-12-05T17:58:57Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Minor comments and bugs found while changing system tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/042119f54361c8c9db0152bb00b4a4bef6c71fb5" title="042119f54361c8c9db0152bb00b4a4bef6c71fb5">042119f54361c8c9db0152bb00b4a4bef6c71fb5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10681.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T19%3A22%3A49Z&amp;precision=second" title="2014-12-05T19:22:49Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Minor bug when assigning range of incident energies
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46d5d1692bc4e7b9bd93855048d04d96eaea4157" title="46d5d1692bc4e7b9bd93855048d04d96eaea4157">46d5d1692bc4e7b9bd93855048d04d96eaea4157</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10681.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T19%3A22%3A49Z&amp;precision=second" title="2014-12-05T19:22:49Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Disabled old interface test
+</p>
+<p>
+as it does not work and should not but let's sit here for a future reference
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e4c67e4c05e69fa1aad0f6856c590254a7541c7e" title="e4c67e4c05e69fa1aad0f6856c590254a7541c7e">e4c67e4c05e69fa1aad0f6856c590254a7541c7e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10681.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T19%3A40%3A53Z&amp;precision=second" title="2014-12-05T19:40:53Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Minor bugs in setting energy list.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/57ec9f332d9212fb1d8ccd488d1aa47315c23910" title="57ec9f332d9212fb1d8ccd488d1aa47315c23910">57ec9f332d9212fb1d8ccd488d1aa47315c23910</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10681.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T20%3A06%3A17Z&amp;precision=second" title="2014-12-05T20:06:17Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Converted Let single rep
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6cd27d721b6202cecdf886a24c9d1026ccd051c7" title="6cd27d721b6202cecdf886a24c9d1026ccd051c7">6cd27d721b6202cecdf886a24c9d1026ccd051c7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10681.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T20%3A06%3A17Z&amp;precision=second" title="2014-12-05T20:06:17Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Converted LET reduction to reduction wrapper
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e801f90a7b3e9a18766d6b84691ee14d8fe0fa05" title="e801f90a7b3e9a18766d6b84691ee14d8fe0fa05">e801f90a7b3e9a18766d6b84691ee14d8fe0fa05</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10681.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T20%3A10%3A42Z&amp;precision=second" title="2014-12-05T20:10:42Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Minor comments
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2d18c177ff337add04fb5bb6a9e52d329fb60ff" title="f2d18c177ff337add04fb5bb6a9e52d329fb60ff">f2d18c177ff337add04fb5bb6a9e52d329fb60ff</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10681.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T20%3A20%3A27Z&amp;precision=second" title="2014-12-05T20:20:27Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The changes are both in Mantid and System test folder (though system tests will work both with and without these changes)
+</p>
+<p>
+There is small wrapper around ISIS reduction, which would work from Mantid, System Tests and Web services without any changes. 
+</p>
+<p>
+Web services implementation is a bit dodgy, as used properties from the script have to be copied manually to web service and I do not believe, it is actually necessary. But this is the question to web services. 
+</p>
+<p>
+The Inelastic system tests were rewritten using this wrapper and it works. Also it works in similar way from Mantid, so all this looks nice and tidy. Will see what instrument scientists would say. 
+</p>
+<p>
+Testing with web services is also necessary but this will be separate issue. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10681.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T20%3A23%3A58Z&amp;precision=second" title="2014-12-05T20:23:58Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>ian.bush@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10681.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T20%3A58%3A34Z&amp;precision=second" title="2014-12-05T20:58:34Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>10532</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10681.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T20%3A58%3A40Z&amp;precision=second" title="2014-12-05T20:58:40Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10681.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T20%3A58%3A47Z&amp;precision=second" title="2014-12-05T20:58:47Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>10532</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10681.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-07T16%3A34%3A58Z&amp;precision=second" title="2014-12-07T16:34:58Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Merged changes from branch <a class="closed ticket" href="10532.html" title="Separate Property manager from Direct inelastic reduction script (closed: fixed)">#10532</a>
+</p>
+<p>
+Merge remote-tracking branch 'remotes/origin/feature/10532_separatePropertyManager' into feature/10681_RedWrapper
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/scripts/Inelastic/DirectReductionProperties.py
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/239da8088b283bc3868cb2a8ba9938758ccb2eaf" title="239da8088b283bc3868cb2a8ba9938758ccb2eaf">239da8088b283bc3868cb2a8ba9938758ccb2eaf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10681.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T10%3A33%3A58Z&amp;precision=second" title="2014-12-08T10:33:58Z in Timeline">6 years</a> ago by Ian Bush
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Ian Bush</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10681.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T10%3A34%3A01Z&amp;precision=second" title="2014-12-08T10:34:01Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Minor comments
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d191f58463d6f5cc13349289339595797bd2bd1e" title="d191f58463d6f5cc13349289339595797bd2bd1e">d191f58463d6f5cc13349289339595797bd2bd1e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10681.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T12%3A28%3A00Z&amp;precision=second" title="2014-12-08T12:28:00Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10708</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10681.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T13%3A07%3A28Z&amp;precision=second" title="2014-12-08T13:07:28Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Added python tests to CMakeLists.txt to run by make
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6717c624616976bb7c4617b0e9082f051b9b9d14" title="6717c624616976bb7c4617b0e9082f051b9b9d14">6717c624616976bb7c4617b0e9082f051b9b9d14</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10681.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T13%3A27%3A21Z&amp;precision=second" title="2014-12-08T13:27:21Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Should fix unit test dependency on system test file
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a08fd0273d4ef797ba44f5a78252cb374ac30220" title="a08fd0273d4ef797ba44f5a78252cb374ac30220">a08fd0273d4ef797ba44f5a78252cb374ac30220</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10681.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T14%3A00%3A39Z&amp;precision=second" title="2014-12-08T14:00:39Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Fixed unit tests fixed locally a while ago.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/246909fb4d6467ba6450770403d343cac2b8a212" title="246909fb4d6467ba6450770403d343cac2b8a212">246909fb4d6467ba6450770403d343cac2b8a212</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10681.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T14%3A16%3A49Z&amp;precision=second" title="2014-12-08T14:16:49Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10681.html" title="Implement generic ISIS reduction wrapper, which would work both through ... (closed: fixed)">#10681</a> Fixed old RHEL 6 python difference
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e083616e352140d5cf4f704700c639a63e6259f3" title="e083616e352140d5cf4f704700c639a63e6259f3">e083616e352140d5cf4f704700c639a63e6259f3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10681.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T16%3A42%3A54Z&amp;precision=second" title="2014-12-08T16:42:54Z in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10681_RedWrapper
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/87c180fdea0cf7e428737e7b51e44fe7ece333fb"><span class="icon">​</span>87c180fdea0cf7e428737e7b51e44fe7ece333fb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10681.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T16%3A42%3A54Z&amp;precision=second" title="2014-12-08T16:42:54Z in Timeline">6 years</a> ago by Ian Bush
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/10681_RedWrapper'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/0aad34d0d9deca7e9cbd618a91f163872864719b"><span class="icon">​</span>0aad34d0d9deca7e9cbd618a91f163872864719b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10681.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T16%3A43%3A19Z&amp;precision=second" title="2014-12-08T16:43:19Z in Timeline">6 years</a> ago by Ian Bush
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/10681_RedWrapper'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/ae2a77e07e40323bce176bb583827034b213c47e"><span class="icon">​</span>ae2a77e07e40323bce176bb583827034b213c47e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10681.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A07%3A14%2B01%3A00&amp;precision=second" title="2015-06-04T04:07:14+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11523"><span class="icon">​</span>11523</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10681?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10681?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10681?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11288 (Refactor ConvertSpiceDataToReadlSpace)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11287.html" title="Ticket #11287" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11288?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11288?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11288?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11289.html" title="Ticket #11289" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11288, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11287.html" title="Ticket #11287">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="11289.html" title="Ticket #11289">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11288.html">Ticket #11288</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-06T17%3A04%3A06Z&amp;precision=second" title="2015-03-06T17:04:06Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A30%3A53%2B01%3A00&amp;precision=second" title="2015-06-04T04:30:53+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Refactor ConvertSpiceDataToReadlSpace</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Diffraction">Diffraction</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              petersonpf@…, saviciat@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              VickieLynch
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2015-03-16 14:04:10.202895+00:00">
+        (last modified by Wenduo Zhou)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/11288?action=diff&amp;version=1">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+The present approach to create MDEventWorkspace in this algorithm is to write a temporary MD file from a set of MatrixWorkspaces and load the file by calling 'ImportMDEventWorkspace'. This approach is not efficient especially when the file is huge.  
+</p>
+<p>
+Write a new method to create MDEventWorkspace and add MDEvents inside Mantid.  
+</p>
+<p>
+ConvertSpiceDataToRealSpace creates an MD workspace with Y min and max limits both 0
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11288.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-16T14%3A04%3A10Z&amp;precision=second" title="2015-03-16T14:04:10Z in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/11288?action=diff&amp;version=1">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11288.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-17T18%3A39%3A29Z&amp;precision=second" title="2015-03-17T18:39:29Z in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Started to refactor the MD codes. Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee70995b7c5e347cef42c94a00bd51b9cebd66c0" title="ee70995b7c5e347cef42c94a00bd51b9cebd66c0">ee70995b7c5e347cef42c94a00bd51b9cebd66c0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11288.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-27T03%3A23%3A48Z&amp;precision=second" title="2015-03-27T03:23:48Z in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replaced C++ algorithms other than child algorithm call. Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/278f83d3c15e140704ac63f0ddb80afd0daf3781" title="278f83d3c15e140704ac63f0ddb80afd0daf3781">278f83d3c15e140704ac63f0ddb80afd0daf3781</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11288.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-27T03%3A26%3A50Z&amp;precision=second" title="2015-03-27T03:26:50Z in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/474"><span class="icon">​</span>pull request #474</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="11288.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-27T03%3A27%3A04Z&amp;precision=second" title="2015-03-27T03:27:04Z in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="11288.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-27T16%3A11%3A56Z&amp;precision=second" title="2015-03-27T16:11:56Z in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>. Fixed unit test due to new feature.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c6e0b3f683e50de2ea64d338f996b3681a90a9bf" title="c6e0b3f683e50de2ea64d338f996b3681a90a9bf">c6e0b3f683e50de2ea64d338f996b3681a90a9bf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="11288.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-30T12%3A40%3A34%2B01%3A00&amp;precision=second" title="2015-03-30T12:40:34+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed the issue of binning of MDWorkspace. Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6e32e860648ea81a973fa1bde7edb174cd0674ac" title="6e32e860648ea81a973fa1bde7edb174cd0674ac">6e32e860648ea81a973fa1bde7edb174cd0674ac</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="11288.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-30T14%3A45%3A34%2B01%3A00&amp;precision=second" title="2015-03-30T14:45:34+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, Retest please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="11288.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-31T02%3A04%3A47%2B01%3A00&amp;precision=second" title="2015-03-31T02:04:47+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tried to fix warnings. Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/902f9b3bffb0c1791dfb9ccc7535c2d472828172" title="902f9b3bffb0c1791dfb9ccc7535c2d472828172">902f9b3bffb0c1791dfb9ccc7535c2d472828172</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="11288.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-31T04%3A42%3A28%2B01%3A00&amp;precision=second" title="2015-03-31T04:42:28+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tried to fix ubuntu warnings. Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a8f83af272dcb8a3a4fd3c1708a3c30ff529dcb5" title="a8f83af272dcb8a3a4fd3c1708a3c30ff529dcb5">a8f83af272dcb8a3a4fd3c1708a3c30ff529dcb5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="11288.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-31T14%3A43%3A31%2B01%3A00&amp;precision=second" title="2015-03-31T14:43:31+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed the last warning. Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/01c5159a00608d0462d525ec806516130f7fa32b" title="01c5159a00608d0462d525ec806516130f7fa32b">01c5159a00608d0462d525ec806516130f7fa32b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="11288.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-31T21%3A53%3A09%2B01%3A00&amp;precision=second" title="2015-03-31T21:53:09+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="11288.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-01T03%3A49%3A37%2B01%3A00&amp;precision=second" title="2015-04-01T03:49:37+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="11288.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-01T14%3A59%3A44%2B01%3A00&amp;precision=second" title="2015-04-01T14:59:44+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cleaned logging. Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d6d28ad5ba819c24de1d8c038adec82a90e6e6a6" title="d6d28ad5ba819c24de1d8c038adec82a90e6e6a6">d6d28ad5ba819c24de1d8c038adec82a90e6e6a6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="11288.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-01T20%3A20%3A09%2B01%3A00&amp;precision=second" title="2015-04-01T20:20:09+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merged with master and resolve conflicts. Refs <a class="closed ticket" href="11288.html" title="Refactor ConvertSpiceDataToReadlSpace (closed: fixed)">#11288</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c4141a127f5a269bace3f438c70517cc7730b68c" title="c4141a127f5a269bace3f438c70517cc7730b68c">c4141a127f5a269bace3f438c70517cc7730b68c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="11288.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T01%3A15%3A42%2B01%3A00&amp;precision=second" title="2015-04-02T01:15:42+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+For tester: 
+</p>
+<p>
+The purpose of this issue is to create MDEventWorkspaces by calling C++ methods directly instead of calling Mantid algorithm to generate MD files and then import them.  For this, you can check code and unit tests.  
+</p>
+<p>
+Another issue solved is the binning on some direction if all the signals have the same position on this direction.  For example, all signals of HFIR HB2A have the same y-value.  Previously, the range of Y values of the output MDEventWorkspace is from 0 to 0.  Now it is not. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="11288.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T01%3A16%3A00%2B01%3A00&amp;precision=second" title="2015-04-02T01:16:00+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="11288.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T14%3A58%3A13%2B01%3A00&amp;precision=second" title="2015-04-02T14:58:13+01:00 in Timeline">6 years</a> ago by anonymous
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="11288.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T15%3A19%3A24%2B01%3A00&amp;precision=second" title="2015-04-02T15:19:24+01:00 in Timeline">6 years</a> ago by VickieLynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>VickieLynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="474.html" title="enhancement: Fix issues with passing arguments by reference (closed: fixed)">#474</a> from mantidproject/feature/11288_refactor_convertspice
+</p>
+<p>
+Refactor ConvertSpiceDataToRealWorkspace
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/2eb7b1c6278d7c626c9d4296ef15e265e2eb9780"><span class="icon">​</span>2eb7b1c6278d7c626c9d4296ef15e265e2eb9780</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="11288.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T10%3A14%3A48%2B01%3A00&amp;precision=second" title="2015-04-22T10:14:48+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Direct Inelastic</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="11288.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T12%3A53%3A07%2B01%3A00&amp;precision=second" title="2015-04-22T12:53:07+01:00 in Timeline">5 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Direct Inelastic</em> to <em>Diffraction</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="11288.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A30%3A53%2B01%3A00&amp;precision=second" title="2015-06-04T04:30:53+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/12127"><span class="icon">​</span>12127</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11288?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11288?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11288?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #6791 (OSIRIS Diffraction: Implement diffspec mode)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="6790.html" title="Ticket #6790" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6791?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6791?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6791?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="6792.html" title="Ticket #6792" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 6791, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="6790.html" title="Ticket #6790">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="6792.html" title="Ticket #6792">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="6791.html">Ticket #6791</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-28T13%3A13%3A00Z&amp;precision=second" title="2013-03-28T13:13:00Z in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A28%3A28%2B01%3A00&amp;precision=second" title="2015-06-04T01:28:28+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">OSIRIS Diffraction: Implement diffspec mode</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=blocker">blocker</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.6.html">Release 2.6</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Jay Rainey
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-07-25 10:01:43.945421+00:00">
+        (last modified by Martyn Gigg)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/6791?action=diff&amp;version=14">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+From Spencer:
+</p>
+<p>
+For OSIRIS, in the current diffonly setup a range of runs can be input each with a different time range corresponding to different d-spacings and all the runs are merged. The time ranges are specific to diffraction. When you try to run with diffspec the time range is different and the routine fails.
+SO, for diffspec all we want is to read in the diffraction spectra, normalise to monitor &amp; focus to d-spacing to give the one spectrum.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="6791.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T10%3A49%3A59%2B01%3A00&amp;precision=second" title="2013-04-29T10:49:59+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.5</em> to <em>Release 2.6</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to <a class="missing changeset" title="No default repository defined">r2</a>.6 at the end of <a class="missing changeset" title="No default repository defined">r2</a>.5
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="6791.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T12%3A31%3A07%2B01%3A00&amp;precision=second" title="2013-07-10T12:31:07+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Priority</strong>
+        changed from <em>major</em> to <em>blocker</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="6791.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-11T16%3A11%3A13%2B01%3A00&amp;precision=second" title="2013-07-11T16:11:13+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="6791.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-11T16%3A15%3A32%2B01%3A00&amp;precision=second" title="2013-07-11T16:15:32+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement DiffSpec mode for OSIRIS diffraction algorithm. Refs <a class="closed ticket" href="6791.html" title="enhancement: OSIRIS Diffraction: Implement diffspec mode (closed: fixed)">#6791</a>
+</p>
+<p>
+This is not exposed to the GUI yet.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/023f6e249e24c98bed64fab88d10866c6b590d2f" title="023f6e249e24c98bed64fab88d10866c6b590d2f">023f6e249e24c98bed64fab88d10866c6b590d2f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="6791.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-12T17%3A24%3A29%2B01%3A00&amp;precision=second" title="2013-07-12T17:24:29+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use MSGReducer for OSIRIS diffspec mode. Refs <a class="closed ticket" href="6791.html" title="enhancement: OSIRIS Diffraction: Implement diffspec mode (closed: fixed)">#6791</a>
+</p>
+<p>
+Reorganised OSIRIS parameter files to follow IRIS/TOSCA. The interface
+now uses the same MSGReducer for diffspec mode and only uses the workflow
+algorithm for diffonly mode.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/875777e07235998a692d049d274226d77925622e" title="875777e07235998a692d049d274226d77925622e">875777e07235998a692d049d274226d77925622e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="6791.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-12T17%3A24%3A29%2B01%3A00&amp;precision=second" title="2013-07-12T17:24:29+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove DiffSpec mode from OSIRISDiffractionReduction.
+</p>
+<p>
+Leave it doing diffraction only in favour of MSGReducer covering
+spectroscopy mode. Refs <a class="closed ticket" href="6791.html" title="enhancement: OSIRIS Diffraction: Implement diffspec mode (closed: fixed)">#6791</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ece1177e83c708de04618458d0efed975ddae80a" title="ece1177e83c708de04618458d0efed975ddae80a">ece1177e83c708de04618458d0efed975ddae80a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="6791.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-15T12%3A35%3A35%2B01%3A00&amp;precision=second" title="2013-07-15T12:35:35+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make rebin parameters optional on IndirectDiffractionReduction GUI
+</p>
+<p>
+Refs <a class="closed ticket" href="6791.html" title="enhancement: OSIRIS Diffraction: Implement diffspec mode (closed: fixed)">#6791</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ad92abc850f2ed354d37b2f9f37e5b98c0bc7ee0" title="ad92abc850f2ed354d37b2f9f37e5b98c0bc7ee0">ad92abc850f2ed354d37b2f9f37e5b98c0bc7ee0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="6791.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T12%3A07%3A46%2B01%3A00&amp;precision=second" title="2013-07-18T12:07:46+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="6791.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A27%3A09%2B01%3A00&amp;precision=second" title="2013-07-18T16:27:09+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>new</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="6791.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-21T18%3A51%3A38%2B01%3A00&amp;precision=second" title="2013-07-21T18:51:38+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make the rebin string optional in indirect diffraction reduction.
+</p>
+<p>
+If not given, RebinToWorkspace is used to rebin the workspace to the
+first spectrum so that grouping can proceed.
+Refs <a class="closed ticket" href="6791.html" title="enhancement: OSIRIS Diffraction: Implement diffspec mode (closed: fixed)">#6791</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/433c16409aade72af17301f324daa79c29e982c4" title="433c16409aade72af17301f324daa79c29e982c4">433c16409aade72af17301f324daa79c29e982c4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="6791.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-23T21%3A20%3A59%2B01%3A00&amp;precision=second" title="2013-07-23T21:20:59+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Rebin larger workspace of sample/vanadium to smaller.
+</p>
+<p>
+Allows for a point where raw files started being written with an extra bin
+and so could not be used with an earlier vanadium.
+Refs <a class="closed ticket" href="6791.html" title="enhancement: OSIRIS Diffraction: Implement diffspec mode (closed: fixed)">#6791</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bcb06749ba76880dd2cae160d2e7352be9a1c696" title="bcb06749ba76880dd2cae160d2e7352be9a1c696">bcb06749ba76880dd2cae160d2e7352be9a1c696</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="6791.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A05%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:05+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="6791.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T17%3A36%3A12%2B01%3A00&amp;precision=second" title="2013-07-24T17:36:12+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add system test for OSIRIS spectroscopy mode. Refs <a class="closed ticket" href="6791.html" title="enhancement: OSIRIS Diffraction: Implement diffspec mode (closed: fixed)">#6791</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1f8cb9a0a80cc99185f0e324f8ada62bdf4e27e4" title="1f8cb9a0a80cc99185f0e324f8ada62bdf4e27e4">1f8cb9a0a80cc99185f0e324f8ada62bdf4e27e4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="6791.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-25T11%3A01%3A43%2B01%3A00&amp;precision=second" title="2013-07-25T11:01:43+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/6791?action=diff&amp;version=14">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Branch: feature/6791_osiris_diffspec_mode in <strong>both</strong> main code &amp; system test repositories
+</p>
+<p>
+Tester: This concerns the Indirect Diffraction GUI. Start the interface &amp; select OSIRIS as an instrument. It should now have a second combobox labelled "Reflection" filled with diffonly and diffspec options.
+</p>
+<p>
+Selecting diffonly should produce an interface which has input for a cal file and vanadium runs, whereas the diffspec interface should just have a rebin box.
+</p>
+<p>
+Check diffonly mode:
+</p>
+<ul><li>Use Run=OSI89813.raw,CalFile=osiris_041_RES10.cal,Vanadium=osi89757.raw (all in systemtests)
+</li><li>Click run and the reduction should proceed and produce two workspaces.
+</li></ul><p>
+Check diffspec mode:
+</p>
+<ul><li>Use Run=osiris00101300.raw (system tests, you will have to merge in that repository to pick up the file)
+</li><li>First time around just click run and the reduction should go ahead
+</li><li>Second time enter some rebin parameters, e.g. 2,0.001,3.0 and click run. 
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="6791.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-25T12%3A29%3A15%2B01%3A00&amp;precision=second" title="2013-07-25T12:29:15+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Indirect Inelastic</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="6791.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T15%3A46%3A04%2B01%3A00&amp;precision=second" title="2013-07-26T15:46:04+01:00 in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Jay Rainey</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="6791.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T16%3A34%3A32%2B01%3A00&amp;precision=second" title="2013-07-26T16:34:32+01:00 in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <h2 id="Testing">Testing</h2>
+<ul><li>Testing on Ubuntu 12.4.
+</li><li>Diffonly mode works as expected.
+</li><li>Diffspec mode works as expected.
+</li></ul><h2 id="Codereview">Code review</h2>
+<ul><li>Clean and consistent code.
+</li><li>No visible bugs/problems.
+</li></ul><p>
+<strong>Note:</strong>  I found a bug when testing this ticket, when diffonly mode is <tt>run</tt> twice (using same input values) then a few errors appear in the <tt>Results log</tt>. See <a class="closed ticket" href="7543.html" title="enhancement: OSIRIS Diffraction: Implement diffspec mode (closed: fixed)">#7543</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="6791.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T16%3A41%3A18%2B01%3A00&amp;precision=second" title="2013-07-26T16:41:18+01:00 in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/6791_osiris_diffspec_mode'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="6791.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T09%3A12%3A15%2B01%3A00&amp;precision=second" title="2013-07-29T09:12:15+01:00 in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/6791_osiris_diffspec_mode'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="6791.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A28%3A28%2B01%3A00&amp;precision=second" title="2015-06-04T01:28:28+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/7637"><span class="icon">​</span>7637</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6791?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6791?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6791?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

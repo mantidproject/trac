@@ -1,0 +1,449 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10375 (Race condition in ParameterMap)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10374.html" title="Ticket #10374" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10375?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10375?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10375?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10376.html" title="Ticket #10376" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10375, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10374.html" title="Ticket #10374">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="10376.html" title="Ticket #10376">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10375.html">Ticket #10375</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T08%3A47%3A55%2B01%3A00&amp;precision=second" title="2014-10-16T08:47:55+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A56%3A00%2B01%3A00&amp;precision=second" title="2015-06-04T03:56:00+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Race condition in ParameterMap</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=blocker">blocker</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Pete Peterson
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+A git bisect shows that this <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/f94f814ce5e1d89785aece20fa280c2963b94b40"><span class="icon">​</span>commit</a> has caused some systemtests, particular ARCSReduction, to start segfaulting part way through.
+</p>
+<p>
+gdb shows that the problem is around the ParameterMap access but the segfault actually occurs in boost code.
+</p>
+<p>
+My suspicion is that switching to boost::unordered_map has uncovered a subtle race condition that was already present. 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10375.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T08%3A48%3A02%2B01%3A00&amp;precision=second" title="2014-10-16T08:48:02+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10375.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T08%3A50%3A26%2B01%3A00&amp;precision=second" title="2014-10-16T08:50:26+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This is confirmed by the fact that if I take out the OpenMP look from BinaryOperation then the segfault goes away. Running the helgrind tool shows a race condition between retrieving and modifying the map:
+</p>
+<pre class="wiki">==23510== Possible data race during read of size 8 at 0x578938E0 by thread #14
+==23510== Locks held: 1, at address 0x30CF0320
+==23510==    at 0xEC38388: boost::unordered::unordered_multimap&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt;, boost::hash&lt;Mantid::Geometry::IComponent* const&gt;, std::equal_to&lt;Mantid::Geometry::IComponent* const&gt;, std::allocator&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt; &gt;::empty() const (unordered_map.hpp:672)
+==23510==    by 0xEC35EBA: Mantid::Geometry::ParameterMap::positionOf(Mantid::Geometry::IComponent const*, char const*, char const*) const (ParameterMap.cpp:710)
+==23510==    by 0xEC35AF6: Mantid::Geometry::ParameterMap::get(Mantid::Geometry::IComponent const*, char const*, char const*) const (ParameterMap.cpp:659)
+==23510==    by 0xEBB3B50: Mantid::Geometry::Instrument::isDetectorMasked(int const&amp;) const (Instrument.cpp:584)
+==23510==    by 0xEBB3C0D: Mantid::Geometry::Instrument::isDetectorMasked(std::set&lt;int, std::less&lt;int&gt;, std::allocator&lt;int&gt; &gt; const&amp;) const (Instrument.cpp:608)
+==23510==    by 0x1E687BC0: Mantid::Algorithms::MedianDetectorTest::maskOutliers(std::vector&lt;double, std::allocator&lt;double&gt; &gt;, boost::shared_ptr&lt;Mantid::API::MatrixWorkspace&gt;, std::vector&lt;std::vector&lt;unsigned long, std::allocator&lt;unsigned long&gt; &gt;, std::allocator&lt;std::vector&lt;unsigned long, std::allocator&lt;unsigned long&gt; &gt; &gt; &gt;) [clone ._omp_fn.0] (MedianDetectorTest.cpp:257)
+==23510==    by 0x6A3204E: gomp_thread_start (team.c:115)
+==23510==    by 0x4C30E26: ??? (in /usr/lib/valgrind/vgpreload_helgrind-amd64-linux.so)
+==23510==    by 0x4E45181: start_thread (pthread_create.c:312)
+==23510==    by 0x5155FBC: clone (clone.S:111)
+==23510== 
+==23510== This conflicts with a previous write of size 8 by thread #11
+==23510== Locks held: 1, at address 0x26E13A60
+==23510==    at 0xEC3F8B9: boost::unordered::detail::grouped_table_impl&lt;boost::unordered::detail::multimap&lt;std::allocator&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt;, Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt;, boost::hash&lt;Mantid::Geometry::IComponent* const&gt;, std::equal_to&lt;Mantid::Geometry::IComponent* const&gt; &gt; &gt;::add_node(boost::unordered::detail::node_constructor&lt;std::allocator&lt;boost::unordered::detail::grouped_ptr_node&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt; &gt; &gt;&amp;, unsigned long, boost::unordered::iterator_detail::iterator&lt;boost::unordered::detail::grouped_ptr_node&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt; &gt;) (equivalent.hpp:418)
+==23510==    by 0xEC3D4B6: boost::unordered::detail::grouped_table_impl&lt;boost::unordered::detail::multimap&lt;std::allocator&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt;, Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt;, boost::hash&lt;Mantid::Geometry::IComponent* const&gt;, std::equal_to&lt;Mantid::Geometry::IComponent* const&gt; &gt; &gt;::emplace_impl(boost::unordered::detail::node_constructor&lt;std::allocator&lt;boost::unordered::detail::grouped_ptr_node&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt; &gt; &gt;&amp;) (equivalent.hpp:431)
+==23510==    by 0xEC3BA54: boost::unordered::iterator_detail::iterator&lt;boost::unordered::detail::grouped_ptr_node&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt; &gt; boost::unordered::detail::grouped_table_impl&lt;boost::unordered::detail::multimap&lt;std::allocator&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt;, Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt;, boost::hash&lt;Mantid::Geometry::IComponent* const&gt;, std::equal_to&lt;Mantid::Geometry::IComponent* const&gt; &gt; &gt;::emplace&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt;(std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt;&amp;&amp;) (equivalent.hpp:465)
+==23510==    by 0xEC39F26: boost::unordered::iterator_detail::iterator&lt;boost::unordered::detail::grouped_ptr_node&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt; &gt; boost::unordered::unordered_multimap&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt;, boost::hash&lt;Mantid::Geometry::IComponent* const&gt;, std::equal_to&lt;Mantid::Geometry::IComponent* const&gt;, std::allocator&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt; &gt;::emplace&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt;(std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt;&amp;&amp;) (unordered_map.hpp:720)
+==23510==    by 0xEC38A8F: boost::unordered::unordered_multimap&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt;, boost::hash&lt;Mantid::Geometry::IComponent* const&gt;, std::equal_to&lt;Mantid::Geometry::IComponent* const&gt;, std::allocator&lt;std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt; &gt; &gt;::insert(std::pair&lt;Mantid::Geometry::IComponent* const, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; &gt;&amp;&amp;) (unordered_map.hpp:869)
+==23510==    by 0xEC344AF: Mantid::Geometry::ParameterMap::add(Mantid::Geometry::IComponent const*, boost::shared_ptr&lt;Mantid::Geometry::Parameter&gt; const&amp;) (ParameterMap.cpp:346)
+==23510==    by 0xEC38D77: void Mantid::Geometry::ParameterMap::add&lt;bool&gt;(std::string const&amp;, Mantid::Geometry::IComponent const*, std::string const&amp;, bool const&amp;) (ParameterMap.h:139)
+==23510==    by 0xEC35547: Mantid::Geometry::ParameterMap::addBool(Mantid::Geometry::IComponent const*, std::string const&amp;, bool) (ParameterMap.cpp:517)
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10375.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T09%3A01%3A49%2B01%3A00&amp;precision=second" title="2014-10-16T09:01:49+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix race condition in ParameterMap
+</p>
+<p>
+If threads are competing to try and both check and update the map then
+they will hit the appropriate PARALLEL_CRITICAL sections within the
+relevant methods. The bug was that the critical sections all had different
+names and so OpenMP would not block on an ::add while a ::get is being
+performed. The critical secctions are renamed to reflect the what
+they are protecting.
+Refs <a class="closed ticket" href="10375.html" title="Race condition in ParameterMap (closed: fixed)">#10375</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/63e43e0eb64b35cd3f1fcec7391bd7b4c1f84b7d" title="63e43e0eb64b35cd3f1fcec7391bd7b4c1f84b7d">63e43e0eb64b35cd3f1fcec7391bd7b4c1f84b7d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10375.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T09%3A01%3A49%2B01%3A00&amp;precision=second" title="2014-10-16T09:01:49+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix up whitespace in ParameterMap.cpp
+</p>
+<p>
+Refs <a class="closed ticket" href="10375.html" title="Race condition in ParameterMap (closed: fixed)">#10375</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7cfbfa666da4da0c5f373a6320bc4833857604da" title="7cfbfa666da4da0c5f373a6320bc4833857604da">7cfbfa666da4da0c5f373a6320bc4833857604da</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10375.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T12%3A47%3A17%2B01%3A00&amp;precision=second" title="2014-10-16T12:47:17+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/44"><span class="icon">​</span>pull request #44</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10375.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T13%3A35%3A14%2B01%3A00&amp;precision=second" title="2014-10-16T13:35:14+01:00 in Timeline">6 years</a> ago by Pete Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Pete Peterson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10375.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-16T13%3A57%3A18%2B01%3A00&amp;precision=second" title="2014-10-16T13:57:18+01:00 in Timeline">6 years</a> ago by Pete Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="44.html" title="enhancement: Turn the Algorithm base class into a virtual class (closed: fixed)">#44</a> from mantidproject/bugfix/10375_parameter_map_race_condition
+</p>
+<p>
+Looks good and everything appears to work. I couldn't find where m_mapAccess was defined though.
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/82f92943e5dd4d93dc1a1638e50641ec5391c127"><span class="icon">​</span>82f92943e5dd4d93dc1a1638e50641ec5391c127</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10375.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A56%3A00%2B01%3A00&amp;precision=second" title="2015-06-04T03:56:00+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11217"><span class="icon">​</span>11217</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10375?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10375?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10375?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

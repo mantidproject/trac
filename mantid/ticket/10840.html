@@ -1,0 +1,1272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10840 (fix rpath issues with osx package built cmake 3)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10839.html" title="Ticket #10839" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10840?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10840?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10840?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10841.html" title="Ticket #10841" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10840, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10839.html" title="Ticket #10839">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="10841.html" title="Ticket #10841">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10840.html">Ticket #10840</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-19T19%3A27%3A15Z&amp;precision=second" title="2014-12-19T19:27:15Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A13%3A24%2B01%3A00&amp;precision=second" title="2015-06-04T04:13:24+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">fix rpath issues with osx package built cmake 3</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Steven+Hahn">Steven Hahn</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Steven+Hahn">Steven Hahn</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Pete Peterson
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+In cmake 3, MACOSX_RPATH is enabled by default and is currently generating a large warning. Determine if we want MACOSX_RPATH enabled and we do want it enabled, specify it for each target.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10840.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-19T19%3A29%3A49Z&amp;precision=second" title="2014-12-19T19:29:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <pre class="wiki">CMake Warning (dev):
+  Policy CMP0042 is not set: MACOSX_RPATH is enabled by default.  Run "cmake
+  --help-policy CMP0042" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+  MACOSX_RPATH is not specified for the following targets:
+
+   API
+   Algorithms
+   Crystal
+   CurveFitting
+   CustomDialogs
+   CustomInterfaces
+   DataHandling
+   DataObjects
+   DesignerPlugins
+   Geometry
+   ICat
+   ISISLiveData
+   Kernel
+   LiveData
+   MDAlgorithms
+   MDEvents
+   MantidQtAPI
+   MantidQtFactory
+   MantidQtRefDetectorViewer
+   MantidQtSliceViewer
+   MantidQtSpectrumViewer
+   MantidWidgets
+   Nexus
+   PythonAPIModule
+   PythonGeometryModule
+   PythonKernelModule
+   PythonWorkspaceCreationHelper
+   QtPropertyBrowser
+   RemoteAlgorithms
+   SINQ
+   ScriptRepository
+   UserAlgorithms
+   WorkflowAlgorithms
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10840.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-19T19%3A30%3A41Z&amp;precision=second" title="2014-12-19T19:30:41Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <pre class="wiki">
+cmake --help-policy CMP0042
+CMP0042
+-------
+
+``MACOSX_RPATH`` is enabled by default.
+
+CMake 2.8.12 and newer has support for using ``@rpath`` in a target's install
+name.  This was enabled by setting the target property
+``MACOSX_RPATH``.  The ``@rpath`` in an install name is a more
+flexible and powerful mechanism than ``@executable_path`` or ``@loader_path``
+for locating shared libraries.
+
+CMake 3.0 and later prefer this property to be ON by default.  Projects
+wanting ``@rpath`` in a target's install name may remove any setting of
+the ``INSTALL_NAME_DIR`` and ``CMAKE_INSTALL_NAME_DIR``
+variables.
+
+This policy was introduced in CMake version 3.0.  CMake version
+3.0.2 warns when the policy is not set and uses OLD behavior.  Use
+the cmake_policy command to set it to OLD or NEW explicitly.
+
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10840.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-19T23%3A23%3A35Z&amp;precision=second" title="2014-12-19T23:23:35Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. MantidPlot starts, but still has issues with python.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6b37331ae2752d3373be29d3e8d516a6fb739b6b" title="6b37331ae2752d3373be29d3e8d516a6fb739b6b">6b37331ae2752d3373be29d3e8d516a6fb739b6b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10840.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-20T03%3A04%3A48Z&amp;precision=second" title="2014-12-20T03:04:48Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Python imports without errors.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b332d1f20ca967bbe14c04b28b01a9c67ef26781" title="b332d1f20ca967bbe14c04b28b01a9c67ef26781">b332d1f20ca967bbe14c04b28b01a9c67ef26781</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10840.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-08T22%3A00%3A50Z&amp;precision=second" title="2015-01-08T22:00:50Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Libraries copied to bundle but crashes on start.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7eb1127039f29029f4958a7372e66326e24a457a" title="7eb1127039f29029f4958a7372e66326e24a457a">7eb1127039f29029f4958a7372e66326e24a457a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10840.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T23%3A14%3A11Z&amp;precision=second" title="2015-01-16T23:14:11Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. MantidPlot starts, but still has issues with python.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2d6a4dfa83bc425df6b208ecd8b7b0404315b56" title="f2d6a4dfa83bc425df6b208ecd8b7b0404315b56">f2d6a4dfa83bc425df6b208ecd8b7b0404315b56</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10840.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T23%3A14%3A11Z&amp;precision=second" title="2015-01-16T23:14:11Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Python imports without errors.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e26b356fc2449a4eac10638f880ab095231ccd0a" title="e26b356fc2449a4eac10638f880ab095231ccd0a">e26b356fc2449a4eac10638f880ab095231ccd0a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10840.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T23%3A14%3A11Z&amp;precision=second" title="2015-01-16T23:14:11Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. homebrew dependencies included in app bundle.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/739a169829a26e2447c604a9eeb5ba6ccea4e6cd" title="739a169829a26e2447c604a9eeb5ba6ccea4e6cd">739a169829a26e2447c604a9eeb5ba6ccea4e6cd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10840.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T22%3A31%3A02Z&amp;precision=second" title="2015-01-20T22:31:02Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. update sip and pyqt versions. Needs more general fix.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a1bf9167796efa053531577ad2ca2281819a5d0e" title="a1bf9167796efa053531577ad2ca2281819a5d0e">a1bf9167796efa053531577ad2ca2281819a5d0e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10840.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T17%3A11%3A37Z&amp;precision=second" title="2015-01-21T17:11:37Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Added python dependencies
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/263d13a6bcc71345740c74fe2ed942e25aeddcf5" title="263d13a6bcc71345740c74fe2ed942e25aeddcf5">263d13a6bcc71345740c74fe2ed942e25aeddcf5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10840.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T18%3A51%3A14Z&amp;precision=second" title="2015-01-21T18:51:14Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Adding comments to ruby file creating app bundle
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ae850ccc006d5a2f64484de73d307de36a550af" title="7ae850ccc006d5a2f64484de73d307de36a550af">7ae850ccc006d5a2f64484de73d307de36a550af</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10840.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T18%3A52%3A38Z&amp;precision=second" title="2015-01-21T18:52:38Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. adding file that runs ruby script.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9ea16158a53f271bcfbe0f477821acf8ab4e9234" title="9ea16158a53f271bcfbe0f477821acf8ab4e9234">9ea16158a53f271bcfbe0f477821acf8ab4e9234</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10840.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T19%3A12%3A14Z&amp;precision=second" title="2015-01-21T19:12:14Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Update DarwinBuild so it works in 10.8 and 10.9
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/85b037c86f6b66610b54a5def153928beb78d171" title="85b037c86f6b66610b54a5def153928beb78d171">85b037c86f6b66610b54a5def153928beb78d171</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10840.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T19%3A40%3A35Z&amp;precision=second" title="2015-01-21T19:40:35Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Fix readlink issue
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1a17d915875607585e647a84d4143104bd8ecda2" title="1a17d915875607585e647a84d4143104bd8ecda2">1a17d915875607585e647a84d4143104bd8ecda2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10840.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T20%3A35%3A32Z&amp;precision=second" title="2015-01-21T20:35:32Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Get working with other systems
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e84647ff1291c0a5acc6cc76977fe4d37ddc451b" title="e84647ff1291c0a5acc6cc76977fe4d37ddc451b">e84647ff1291c0a5acc6cc76977fe4d37ddc451b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10840.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T20%3A41%3A42Z&amp;precision=second" title="2015-01-21T20:41:42Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/137"><span class="icon">​</span>pull request #137</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10840.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-22T21%3A01%3A44Z&amp;precision=second" title="2015-01-22T21:01:44Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. fix qt imageformats libraries
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/db817eafbeb9ca0aae807640202e0581e890fc55" title="db817eafbeb9ca0aae807640202e0581e890fc55">db817eafbeb9ca0aae807640202e0581e890fc55</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10840.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-23T20%3A49%3A04Z&amp;precision=second" title="2015-01-23T20:49:04Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. return to 10.8 deployment target. change id on libqsqlite
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c11ba6254f6d47e92d50a3f76de3826cf4ae7484" title="c11ba6254f6d47e92d50a3f76de3826cf4ae7484">c11ba6254f6d47e92d50a3f76de3826cf4ae7484</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10840.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-23T21%3A26%3A21Z&amp;precision=second" title="2015-01-23T21:26:21Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. add missing if around INSTALL_RPATH
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7c489179cd28674d0619fb95872a1036380c8a0f" title="7c489179cd28674d0619fb95872a1036380c8a0f">7c489179cd28674d0619fb95872a1036380c8a0f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10840.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-24T01%3A18%3A14Z&amp;precision=second" title="2015-01-24T01:18:14Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10840.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-25T18%3A44%3A23Z&amp;precision=second" title="2015-01-25T18:44:23Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10840.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-25T19%3A17%3A58Z&amp;precision=second" title="2015-01-25T19:17:58Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10840.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-27T13%3A21%3A40Z&amp;precision=second" title="2015-01-27T13:21:40Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10840.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-27T18%3A30%3A14Z&amp;precision=second" title="2015-01-27T18:30:14Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I don't know why the pull request build failed. The issue appears to be related to git and not the cod changes in this branch. Also, these changes are in develop, which is passing.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10840.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T18%3A51%3A12Z&amp;precision=second" title="2015-02-09T18:51:12Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. remove versioning from name of library
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2954a4ac81c225136bdb1deec264cc5aeebba4c" title="f2954a4ac81c225136bdb1deec264cc5aeebba4c">f2954a4ac81c225136bdb1deec264cc5aeebba4c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10840.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. MantidPlot starts, but still has issues with python.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4ab5272a44cf6e6f52eaf4fd3525f18fa615eec7" title="4ab5272a44cf6e6f52eaf4fd3525f18fa615eec7">4ab5272a44cf6e6f52eaf4fd3525f18fa615eec7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10840.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Python imports without errors.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a9facf740879f78a553ddf35981b48e739383bf8" title="a9facf740879f78a553ddf35981b48e739383bf8">a9facf740879f78a553ddf35981b48e739383bf8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10840.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. homebrew dependencies included in app bundle.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/04e675030b980b9db557c494f1fb881d02dd04e0" title="04e675030b980b9db557c494f1fb881d02dd04e0">04e675030b980b9db557c494f1fb881d02dd04e0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10840.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. update sip and pyqt versions. Needs more general fix.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f79dd7152308c930e826e88e652ee78199e951c0" title="f79dd7152308c930e826e88e652ee78199e951c0">f79dd7152308c930e826e88e652ee78199e951c0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10840.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Added python dependencies
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/22df9829644c0e6670ca033067afa74a74789b22" title="22df9829644c0e6670ca033067afa74a74789b22">22df9829644c0e6670ca033067afa74a74789b22</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10840.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Adding comments to ruby file creating app bundle
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9db96af7bb437ac251d7bbf6531555b028d13357" title="9db96af7bb437ac251d7bbf6531555b028d13357">9db96af7bb437ac251d7bbf6531555b028d13357</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10840.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. adding file that runs ruby script.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f43ab01474096a460b80a5487785df92af450c3" title="4f43ab01474096a460b80a5487785df92af450c3">4f43ab01474096a460b80a5487785df92af450c3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="10840.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Update DarwinBuild so it works in 10.8 and 10.9
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/15db93a92ed01e9bdaeedc25f3c489ac921661e3" title="15db93a92ed01e9bdaeedc25f3c489ac921661e3">15db93a92ed01e9bdaeedc25f3c489ac921661e3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="10840.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Fix readlink issue
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/21333aef86ccd1c2f84f4bf3b06380c4ef508de5" title="21333aef86ccd1c2f84f4bf3b06380c4ef508de5">21333aef86ccd1c2f84f4bf3b06380c4ef508de5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="10840.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. Get working with other systems
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6c85a266bdcd776832f0a016e197428855041ad" title="a6c85a266bdcd776832f0a016e197428855041ad">a6c85a266bdcd776832f0a016e197428855041ad</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="10840.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. fix qt imageformats libraries
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2f2f8dc6b285eb95c35305eacaead8ecd8852c5" title="f2f2f8dc6b285eb95c35305eacaead8ecd8852c5">f2f2f8dc6b285eb95c35305eacaead8ecd8852c5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="10840.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. return to 10.8 deployment target. change id on libqsqlite
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f8b472851c2e3d302fb681e9c6a5e39d9f04397" title="4f8b472851c2e3d302fb681e9c6a5e39d9f04397">4f8b472851c2e3d302fb681e9c6a5e39d9f04397</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="10840.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. add missing if around INSTALL_RPATH
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7281d68b9cbc7b8d5771359e06e0e47af42c6ca1" title="7281d68b9cbc7b8d5771359e06e0e47af42c6ca1">7281d68b9cbc7b8d5771359e06e0e47af42c6ca1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="10840.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A56%3A49Z&amp;precision=second" title="2015-02-09T19:56:49Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10840.html" title="fix rpath issues with osx package built cmake 3 (closed: fixed)">#10840</a>. remove versioning from name of library
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e81817318632ceb2850e8f8eca4480c116dee912" title="e81817318632ceb2850e8f8eca4480c116dee912">e81817318632ceb2850e8f8eca4480c116dee912</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="10840.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A57%3A58Z&amp;precision=second" title="2015-02-09T19:57:58Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/193"><span class="icon">​</span>pull request #193</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="10840.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T19%3A59%3A05Z&amp;precision=second" title="2015-02-09T19:59:05Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+accidentally merged unrelated commits into this branch. Closing and reopening as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/193"><span class="icon">​</span>https://github.com/mantidproject/mantid/pull/193</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="10840.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T20%3A50%3A25Z&amp;precision=second" title="2015-02-09T20:50:25Z in Timeline">6 years</a> ago by Steven Hahn
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="10840.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-10T19%3A37%3A43Z&amp;precision=second" title="2015-02-10T19:37:43Z in Timeline">6 years</a> ago by Pete Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Pete Peterson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="10840.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-10T20%3A01%3A17Z&amp;precision=second" title="2015-02-10T20:01:17Z in Timeline">6 years</a> ago by Pete Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="193.html" title="enhancement: Separate the curve fitting algorithms into a CurveFitting library (closed: fixed)">#193</a> from mantidproject/feature/10840_fix_macosx_package_fixed
+</p>
+<p>
+You need to actually follow the directions [on the wiki](<a class="ext-link" href="https://github.com/mantidproject/mantid/wiki/Building-Mantid-on-OS-X-10.9-&amp;-10.10-using-clang-and-Xcode"><span class="icon">​</span>https://github.com/mantidproject/mantid/wiki/Building-Mantid-on-OS-X-10.9-&amp;-10.10-using-clang-and-Xcode</a>), but it works.
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/a77ee7a434cde17db09c56b1c6f255aa4e39c292"><span class="icon">​</span>a77ee7a434cde17db09c56b1c6f255aa4e39c292</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="10840.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T10%3A21%3A42%2B01%3A00&amp;precision=second" title="2015-04-22T10:21:42+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Somehow these slipped through without a resolution.  Set to Fixed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="10840.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A13%3A24%2B01%3A00&amp;precision=second" title="2015-06-04T04:13:24+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11682"><span class="icon">​</span>11682</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10840?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10840?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10840?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

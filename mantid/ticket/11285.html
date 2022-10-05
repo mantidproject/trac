@@ -1,0 +1,756 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11285 (Create algorithm that loads, truncates, checks and merges a range of POLDI files)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11284.html" title="Ticket #11284" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11285?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11285?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11285?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11286.html" title="Ticket #11286" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11285, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11284.html" title="Ticket #11284">Previous Ticket</a></span></li><li><span><a class="next" href="11286.html" title="Ticket #11286">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/11285.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11285.html">Ticket #11285</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-06T08%3A29%3A10Z&amp;precision=second" title="2015-03-06T08:29:10Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A30%3A51%2B01%3A00&amp;precision=second" title="2015-06-04T04:30:51+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Create algorithm that loads, truncates, checks and merges a range of POLDI files</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Michael+Wedel">Michael Wedel</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Michael+Wedel">Michael Wedel</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Diffraction">Diffraction</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~POLDI">POLDI</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="10702.html" title="Create Workflow-algorithm for POLDI">#10702</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Federico Montesino Pouzols
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Loading POLDI data and bringing them into appropriate form for further processing takes a few steps:
+</p>
+<ul><li><tt>LoadSINQ</tt>
+</li><li><tt>LoadInstrument</tt>
+</li><li><tt>PoldiTruncateData</tt>
+</li><li>Optionally <tt>PoldiMerge</tt> for measurements with more than one data file
+</li></ul><p>
+I would like to combine these steps into one algorithm that takes the following parameters:
+</p>
+<ul><li>Year - this is required for LoadSINQ
+</li><li>First run number
+</li><li>Optional: Last run number
+</li><li>Optional: Number of files to merge
+</li></ul><p>
+If only the first run number is given, the algorithm will only process that one file. If the last run number is also provided, the algorithm will process all files in the range, not merging anything. If the last parameter is given, it will merge the corresponding number of files together. Examples:
+</p>
+<ul><li>32322: Only 32322 is processed
+</li><li>32322, 32328: Files 32322 through 32328 are processed
+</li><li>32322, 32327, 2: Files 32322 &amp; 32323 are merged, 32324 &amp; 23325, 32326 &amp; 32327 are merged. The resulting workspaces will have the name of the last data file in the range.
+</li></ul><p>
+This algorithm will be used in the POLDI workflow algorithm.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11285.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-06T16%3A01%3A28Z&amp;precision=second" title="2015-03-06T16:01:28Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. First draft of algorithm, unit test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2fc439a0f2d839356460c3120ad9f818604c2591" title="2fc439a0f2d839356460c3120ad9f818604c2591">2fc439a0f2d839356460c3120ad9f818604c2591</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11285.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-09T16%3A09%3A09Z&amp;precision=second" title="2015-03-09T16:09:09Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Small change to PoldiMerge to get rid of temp workspace
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dfd822dc15cdcc09112e4ef9f199de0ad7bf71ed" title="dfd822dc15cdcc09112e4ef9f199de0ad7bf71ed">dfd822dc15cdcc09112e4ef9f199de0ad7bf71ed</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11285.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-09T16%3A09%3A10Z&amp;precision=second" title="2015-03-09T16:09:10Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Adding behavior to PoldiLoadRuns
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8ce933037fb9c31ce94b7c78f09e6f54fa7ae9bf" title="8ce933037fb9c31ce94b7c78f09e6f54fa7ae9bf">8ce933037fb9c31ce94b7c78f09e6f54fa7ae9bf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11285.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-09T16%3A09%3A10Z&amp;precision=second" title="2015-03-09T16:09:10Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Change logic of algorithm slightly
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/63038338190bac85dc2af20fb96e2a7a59ecd00d" title="63038338190bac85dc2af20fb96e2a7a59ecd00d">63038338190bac85dc2af20fb96e2a7a59ecd00d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="11285.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-09T16%3A09%3A10Z&amp;precision=second" title="2015-03-09T16:09:10Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Fixing year problem.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b88353cea41fbc41cfd9749459d34c2ba2088fca" title="b88353cea41fbc41cfd9749459d34c2ba2088fca">b88353cea41fbc41cfd9749459d34c2ba2088fca</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="11285.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-09T16%3A09%3A10Z&amp;precision=second" title="2015-03-09T16:09:10Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Added SystemTest
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca268e2133193d831a00e2efd3a5f9b67cc2f800" title="ca268e2133193d831a00e2efd3a5f9b67cc2f800">ca268e2133193d831a00e2efd3a5f9b67cc2f800</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="11285.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T08%3A01%3A17Z&amp;precision=second" title="2015-03-10T08:01:17Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. More systemtests, added option to disable merge checks
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f47f5efa08a794b1787990b0ad4f247e2c784d38" title="f47f5efa08a794b1787990b0ad4f247e2c784d38">f47f5efa08a794b1787990b0ad4f247e2c784d38</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="11285.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T08%3A01%3A17Z&amp;precision=second" title="2015-03-10T08:01:17Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Removing unit test
+</p>
+<p>
+Discussed with Martyn, it's better to cover the different code paths in a system test instead of testing the private methods of the algorithm.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8faa31ab829fc0a8d1a9e161cd4d4d977a4c3f0d" title="8faa31ab829fc0a8d1a9e161cd4d4d977a4c3f0d">8faa31ab829fc0a8d1a9e161cd4d4d977a4c3f0d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="11285.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T09%3A25%3A52Z&amp;precision=second" title="2015-03-10T09:25:52Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Added documentation, usage examples
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/146db056ae880670b0a4eeef25c8d669677438a6" title="146db056ae880670b0a4eeef25c8d669677438a6">146db056ae880670b0a4eeef25c8d669677438a6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="11285.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T09%3A28%3A52Z&amp;precision=second" title="2015-03-10T09:28:52Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/373"><span class="icon">​</span>pull request #373</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="11285.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T09%3A35%3A25Z&amp;precision=second" title="2015-03-10T09:35:25Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="11285.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T09%3A39%3A34Z&amp;precision=second" title="2015-03-10T09:39:34Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Forgot to remove unit test from CMakeLists.txt
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1cccc3099d41530ed2e1fd32c89f999b8b387f98" title="1cccc3099d41530ed2e1fd32c89f999b8b387f98">1cccc3099d41530ed2e1fd32c89f999b8b387f98</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="11285.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T12%3A33%3A48Z&amp;precision=second" title="2015-03-10T12:33:48Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="11285.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T12%3A34%3A13Z&amp;precision=second" title="2015-03-10T12:34:13Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Wrong ticket number in commit from other branch.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T12%3A39%3A32Z&amp;precision=second" title="2015-03-10T12:39:32Z in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/11285?cversion=0&amp;cnum_hist=14#comment:14">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/11285?action=comment-diff&amp;cnum=14&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="11285.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T12%3A51%3A17Z&amp;precision=second" title="2015-03-10T12:51:17Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The fail on windows was unrelated, but it's important to see that the doctests work also on that platform.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="11285.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T13%3A57%3A36Z&amp;precision=second" title="2015-03-10T13:57:36Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="11285.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-10T15%3A26%3A22Z&amp;precision=second" title="2015-03-10T15:26:22Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11285.html" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11285</a>. Fixing some pylint problems
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/598e8aa850b20e4fd148ea77f45168809052ba9a" title="598e8aa850b20e4fd148ea77f45168809052ba9a">598e8aa850b20e4fd148ea77f45168809052ba9a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="11285.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-11T06%3A09%3A52Z&amp;precision=second" title="2015-03-11T06:09:52Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="11285.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-11T09%3A31%3A19Z&amp;precision=second" title="2015-03-11T09:31:19Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Federico Montesino Pouzols</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="11285.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-11T14%3A55%3A20Z&amp;precision=second" title="2015-03-11T14:55:20Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+All looks good and this new algorithm will be very convenient. All tests passed on the CI servers and also locally. The documentation reads well and It comes with fairly exhaustive tests and doc tests.
+</p>
+<p>
+The only thing that occurred to me, which is not really specific to this ticket, is that maybe in PoldiLoadRuns-v1.rst and similar doc tests that create several workspaces you could use <tt>testcleanup</tt> sections to do a <tt>DeleteWorkspace</tt> on a few or all of them. Otherwise all the workspaces remain in the ADS. As the doc tests are run sequentially, some of the subsequent tests can be confused if a name conflict arises at some point. I guess in this case the chances are very low, as the workspace names include the run numbers. Last time I run the doc tests interactively I could see lots of workspaces  being accumulated throughout the doc tests, using all sorts of funny names, and we could run into trouble at some point with this. On the other hand, that can be seen as a kind of convenient stress testing!
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="11285.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-11T14%3A55%3A35Z&amp;precision=second" title="2015-03-11T14:55:35Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="373.html" title="enhancement: Allow removal to non edge bins with RemoveTimeBins (also rename to ... (closed: fixed)">#373</a> from mantidproject/11285_create_multiple_poldi_data_loader
+</p>
+<p>
+Create algorithm that loads, checks and merges multiple POLDI data files
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/ab5bda8a6b3e7777e5c4fad280adcccd91eee9a2"><span class="icon">​</span>ab5bda8a6b3e7777e5c4fad280adcccd91eee9a2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="11285.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-16T08%3A20%3A31Z&amp;precision=second" title="2015-03-16T08:20:31Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Yes that is actually something I have not considered so far. I just created a ticket to deal with it for all POLDI documentation (<a class="closed ticket" href="11285.html#11364" title="Create algorithm that loads, truncates, checks and merges a range of POLDI ... (closed: fixed)">#11364</a>(<a class="ext-link" href="11364.html"><span class="icon">​</span>http://trac.mantidproject.org/mantid/ticket/11364</a>)).
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="11285.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A30%3A51%2B01%3A00&amp;precision=second" title="2015-06-04T04:30:51+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/12124"><span class="icon">​</span>12124</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11285?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11285?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11285?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

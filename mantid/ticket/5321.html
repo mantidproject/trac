@@ -1,0 +1,2228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #5321 (Improve and refactor MaskDetectors)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="5320.html" title="Ticket #5320" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5321?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5321?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5321?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="5322.html" title="Ticket #5322" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 5321, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="5320.html" title="Ticket #5320">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="5322.html" title="Ticket #5322">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="5321.html">Ticket #5321</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-14T21%3A15%3A37%2B01%3A00&amp;precision=second" title="2012-05-14T21:15:37+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A27%3A38%2B01%3A00&amp;precision=second" title="2015-06-04T00:27:38+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Improve and refactor MaskDetectors</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Peter+Peterson">Peter Peterson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.6.html">Release 2.6</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              petersonpf@…, taylorrj@…, campbellsi@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Michael Reuter
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <ol><li>Enable <em>MaskDetectors</em> to mask on workspace with grouped detetors of each spectrum as the input is MaskWorkspace. 
+</li></ol><ol start="2"><li>Clean the combination among input list of spectra, detectors, workspace indicies and masking workspace.  The correction operations should be [SpectraList OR WorkspaceIndexList] AND [DetectorList] AND [MaskedWorkspace]. 
+</li></ol>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="5321.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-22T16%3A08%3A06%2B01%3A00&amp;precision=second" title="2012-05-22T16:08:06+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="5321.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-22T16%3A11%3A10%2B01%3A00&amp;precision=second" title="2012-05-22T16:11:10+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor and enhance MaskDetectors.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>.
+</p>
+<p>
+(1) Enable MaskDetectors to support workspace with grouped detectors;
+(2) Refactor algorithm such that all inputs will be converted to
+MaskWorkspace first. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ed51af3b1c173c55a7338d2f6565eeee3a41f7b" title="6ed51af3b1c173c55a7338d2f6565eeee3a41f7b">6ed51af3b1c173c55a7338d2f6565eeee3a41f7b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="5321.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-22T16%3A11%3A11%2B01%3A00&amp;precision=second" title="2012-05-22T16:11:11+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Clean the codes. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12dee464aee43f41fd522215d35bf82ca917a4f1" title="12dee464aee43f41fd522215d35bf82ca917a4f1">12dee464aee43f41fd522215d35bf82ca917a4f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="5321.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-22T16%3A11%3A11%2B01%3A00&amp;precision=second" title="2012-05-22T16:11:11+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify UI of ExtractMask.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>.
+</p>
+<p>
+Modify the output of ExtractMask().  The output workspace can be
+(1) MaskWorkspace for worksapce with 1 detector per spectrum
+(2) Worksapce2D for workspace with grouped detectors. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc439e599597ec7f7c81669dc351c668844ef3c5" title="dc439e599597ec7f7c81669dc351c668844ef3c5">dc439e599597ec7f7c81669dc351c668844ef3c5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="5321.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-22T16%3A11%3A11%2B01%3A00&amp;precision=second" title="2012-05-22T16:11:11+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test and clean the codes.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca6304603532b1a5e7a9ff2abd01e9865a78edfd" title="ca6304603532b1a5e7a9ff2abd01e9865a78edfd">ca6304603532b1a5e7a9ff2abd01e9865a78edfd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="5321.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-22T16%3A11%3A11%2B01%3A00&amp;precision=second" title="2012-05-22T16:11:11+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add an output for testing SaveMask.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90e1725ebb7497ec81db03243f978cb258b2040c" title="90e1725ebb7497ec81db03243f978cb258b2040c">90e1725ebb7497ec81db03243f978cb258b2040c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="5321.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-22T19%3A24%3A14%2B01%3A00&amp;precision=second" title="2012-05-22T19:24:14+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug found in unit tests. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0ce266b53385aacc79d6189a21996be7aa57facf" title="0ce266b53385aacc79d6189a21996be7aa57facf">0ce266b53385aacc79d6189a21996be7aa57facf</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="5321.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-22T20%3A14%3A20%2B01%3A00&amp;precision=second" title="2012-05-22T20:14:20+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="5321.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-23T15%3A48%3A28%2B01%3A00&amp;precision=second" title="2012-05-23T15:48:28+01:00 in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a threading issue with ExtractMask. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/205420b4ea3ca25b4b090d18f7de850fe9100de7" title="205420b4ea3ca25b4b090d18f7de850fe9100de7">205420b4ea3ca25b4b090d18f7de850fe9100de7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="5321.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-23T22%3A57%3A33%2B01%3A00&amp;precision=second" title="2012-05-23T22:57:33+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Bring the old codes back to pass system tests tonight. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/582ee6811bbaca37c048639c7e08cc42a9d03fda" title="582ee6811bbaca37c048639c7e08cc42a9d03fda">582ee6811bbaca37c048639c7e08cc42a9d03fda</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="5321.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-24T12%3A52%3A36%2B01%3A00&amp;precision=second" title="2012-05-24T12:52:36+01:00 in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add MaskDetectors test for smaller range masked WS. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>
+</p>
+<p>
+Tests using a smaller masked workspace to mask a sub-section of the data
+on a larger input workspace. Used mainly for chunking where a
+MaskedWorkspace has been produced that is smaller than the a larger
+initial dataset 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a39b3489d5d67ebee9fc41d271eea7d1359f7eae" title="a39b3489d5d67ebee9fc41d271eea7d1359f7eae">a39b3489d5d67ebee9fc41d271eea7d1359f7eae</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="5321.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A03%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:03+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor and enhance MaskDetectors.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>.
+</p>
+<p>
+(1) Enable MaskDetectors to support workspace with grouped detectors;
+(2) Refactor algorithm such that all inputs will be converted to
+MaskWorkspace first. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ed51af3b1c173c55a7338d2f6565eeee3a41f7b" title="6ed51af3b1c173c55a7338d2f6565eeee3a41f7b">6ed51af3b1c173c55a7338d2f6565eeee3a41f7b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="5321.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A04%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:04+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Clean the codes. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12dee464aee43f41fd522215d35bf82ca917a4f1" title="12dee464aee43f41fd522215d35bf82ca917a4f1">12dee464aee43f41fd522215d35bf82ca917a4f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="5321.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A04%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:04+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify UI of ExtractMask.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>.
+</p>
+<p>
+Modify the output of ExtractMask().  The output workspace can be
+(1) MaskWorkspace for worksapce with 1 detector per spectrum
+(2) Worksapce2D for workspace with grouped detectors. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc439e599597ec7f7c81669dc351c668844ef3c5" title="dc439e599597ec7f7c81669dc351c668844ef3c5">dc439e599597ec7f7c81669dc351c668844ef3c5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="5321.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A05%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test and clean the codes.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca6304603532b1a5e7a9ff2abd01e9865a78edfd" title="ca6304603532b1a5e7a9ff2abd01e9865a78edfd">ca6304603532b1a5e7a9ff2abd01e9865a78edfd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="5321.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A06%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:06+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add an output for testing SaveMask.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90e1725ebb7497ec81db03243f978cb258b2040c" title="90e1725ebb7497ec81db03243f978cb258b2040c">90e1725ebb7497ec81db03243f978cb258b2040c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="5321.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A08%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:08+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug found in unit tests. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0ce266b53385aacc79d6189a21996be7aa57facf" title="0ce266b53385aacc79d6189a21996be7aa57facf">0ce266b53385aacc79d6189a21996be7aa57facf</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="5321.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A22%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:22+01:00 in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a threading issue with ExtractMask. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/205420b4ea3ca25b4b090d18f7de850fe9100de7" title="205420b4ea3ca25b4b090d18f7de850fe9100de7">205420b4ea3ca25b4b090d18f7de850fe9100de7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="5321.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A29%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:29+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Bring the old codes back to pass system tests tonight. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/582ee6811bbaca37c048639c7e08cc42a9d03fda" title="582ee6811bbaca37c048639c7e08cc42a9d03fda">582ee6811bbaca37c048639c7e08cc42a9d03fda</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="5321.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T14%3A59%3A33%2B01%3A00&amp;precision=second" title="2012-05-29T14:59:33+01:00 in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add MaskDetectors test for smaller range masked WS. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>
+</p>
+<p>
+Tests using a smaller masked workspace to mask a sub-section of the data
+on a larger input workspace. Used mainly for chunking where a
+MaskedWorkspace has been produced that is smaller than the a larger
+initial dataset 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a39b3489d5d67ebee9fc41d271eea7d1359f7eae" title="a39b3489d5d67ebee9fc41d271eea7d1359f7eae">a39b3489d5d67ebee9fc41d271eea7d1359f7eae</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="5321.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A55%3A51%2B01%3A00&amp;precision=second" title="2012-05-30T15:55:51+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor and enhance MaskDetectors.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>.
+</p>
+<p>
+(1) Enable MaskDetectors to support workspace with grouped detectors;
+(2) Refactor algorithm such that all inputs will be converted to
+MaskWorkspace first. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ed51af3b1c173c55a7338d2f6565eeee3a41f7b" title="6ed51af3b1c173c55a7338d2f6565eeee3a41f7b">6ed51af3b1c173c55a7338d2f6565eeee3a41f7b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="5321.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A55%3A52%2B01%3A00&amp;precision=second" title="2012-05-30T15:55:52+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Clean the codes. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12dee464aee43f41fd522215d35bf82ca917a4f1" title="12dee464aee43f41fd522215d35bf82ca917a4f1">12dee464aee43f41fd522215d35bf82ca917a4f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="5321.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A55%3A52%2B01%3A00&amp;precision=second" title="2012-05-30T15:55:52+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify UI of ExtractMask.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>.
+</p>
+<p>
+Modify the output of ExtractMask().  The output workspace can be
+(1) MaskWorkspace for worksapce with 1 detector per spectrum
+(2) Worksapce2D for workspace with grouped detectors. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc439e599597ec7f7c81669dc351c668844ef3c5" title="dc439e599597ec7f7c81669dc351c668844ef3c5">dc439e599597ec7f7c81669dc351c668844ef3c5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="5321.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A55%3A53%2B01%3A00&amp;precision=second" title="2012-05-30T15:55:53+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test and clean the codes.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca6304603532b1a5e7a9ff2abd01e9865a78edfd" title="ca6304603532b1a5e7a9ff2abd01e9865a78edfd">ca6304603532b1a5e7a9ff2abd01e9865a78edfd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="5321.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A55%3A53%2B01%3A00&amp;precision=second" title="2012-05-30T15:55:53+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add an output for testing SaveMask.  Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90e1725ebb7497ec81db03243f978cb258b2040c" title="90e1725ebb7497ec81db03243f978cb258b2040c">90e1725ebb7497ec81db03243f978cb258b2040c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="5321.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A55%3A54%2B01%3A00&amp;precision=second" title="2012-05-30T15:55:54+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug found in unit tests. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0ce266b53385aacc79d6189a21996be7aa57facf" title="0ce266b53385aacc79d6189a21996be7aa57facf">0ce266b53385aacc79d6189a21996be7aa57facf</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="5321.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A56%3A06%2B01%3A00&amp;precision=second" title="2012-05-30T15:56:06+01:00 in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a threading issue with ExtractMask. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/205420b4ea3ca25b4b090d18f7de850fe9100de7" title="205420b4ea3ca25b4b090d18f7de850fe9100de7">205420b4ea3ca25b4b090d18f7de850fe9100de7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="5321.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A56%3A12%2B01%3A00&amp;precision=second" title="2012-05-30T15:56:12+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Bring the old codes back to pass system tests tonight. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/582ee6811bbaca37c048639c7e08cc42a9d03fda" title="582ee6811bbaca37c048639c7e08cc42a9d03fda">582ee6811bbaca37c048639c7e08cc42a9d03fda</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="5321.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A56%3A16%2B01%3A00&amp;precision=second" title="2012-05-30T15:56:16+01:00 in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add MaskDetectors test for smaller range masked WS. Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>
+</p>
+<p>
+Tests using a smaller masked workspace to mask a sub-section of the data
+on a larger input workspace. Used mainly for chunking where a
+MaskedWorkspace has been produced that is smaller than the a larger
+initial dataset 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a39b3489d5d67ebee9fc41d271eea7d1359f7eae" title="a39b3489d5d67ebee9fc41d271eea7d1359f7eae">a39b3489d5d67ebee9fc41d271eea7d1359f7eae</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="5321.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T16%3A56%3A55%2B01%3A00&amp;precision=second" title="2012-05-30T16:56:55+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="5321.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-01T21%3A26%3A08%2B01%3A00&amp;precision=second" title="2012-06-01T21:26:08+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Wenduo Zhou</em> to <em>Peter Peterson</em>
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="5321.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-20T19%3A51%3A46%2B01%3A00&amp;precision=second" title="2012-06-20T19:51:46+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Adding methods for setting/getting mask bit. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/78e81e8da6926ca57009bfc63b2644019a6b8255" title="78e81e8da6926ca57009bfc63b2644019a6b8255">78e81e8da6926ca57009bfc63b2644019a6b8255</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="5321.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-20T21%3A09%3A03%2B01%3A00&amp;precision=second" title="2012-06-20T21:09:03+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Adding more tests to MaskWorkspace. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7659eae0aed5b33fae24cd40d63b83d22f0d23f7" title="7659eae0aed5b33fae24cd40d63b83d22f0d23f7">7659eae0aed5b33fae24cd40d63b83d22f0d23f7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="5321.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-21T15%3A58%3A02%2B01%3A00&amp;precision=second" title="2012-06-21T15:58:02+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Initialize data values during object construction.
+</p>
+<p>
+Done in a way that I can later reset it in case the instrument is set
+after construction. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/98ae9eb2996aea79c5a460bc57755fe832e4a08e" title="98ae9eb2996aea79c5a460bc57755fe832e4a08e">98ae9eb2996aea79c5a460bc57755fe832e4a08e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="5321.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-21T15%3A58%3A02%2B01%3A00&amp;precision=second" title="2012-06-21T15:58:02+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Removing unused code since the wksp initializes itself. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4492ab34e33990689bfc26ef257aa246a35c3fae" title="4492ab34e33990689bfc26ef257aa246a35c3fae">4492ab34e33990689bfc26ef257aa246a35c3fae</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="5321.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-21T15%3A58%3A03%2B01%3A00&amp;precision=second" title="2012-06-21T15:58:03+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Adding accessor methods for wkspindex to MaskWorkspace. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b174f4e3af45498b18879157da4e2149a1a0dc7d" title="b174f4e3af45498b18879157da4e2149a1a0dc7d">b174f4e3af45498b18879157da4e2149a1a0dc7d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="5321.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-25T20%3A04%3A22%2B01%3A00&amp;precision=second" title="2012-06-25T20:04:22+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Removing unused algorithm. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/acad0fa3f9c83b3023ed2f0c8ab39f526eb9c045" title="acad0fa3f9c83b3023ed2f0c8ab39f526eb9c045">acad0fa3f9c83b3023ed2f0c8ab39f526eb9c045</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="5321.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-25T20%3A04%3A23%2B01%3A00&amp;precision=second" title="2012-06-25T20:04:23+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Stop building ConverToMaskWorkspace before it is deleted. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3ad7dd1d0f16b9c77a07684759b090060911a5c5" title="3ad7dd1d0f16b9c77a07684759b090060911a5c5">3ad7dd1d0f16b9c77a07684759b090060911a5c5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="5321.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-27T13%3A40%3A27%2B01%3A00&amp;precision=second" title="2012-06-27T13:40:27+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Added method to get number of detectorIDs.
+</p>
+<p>
+This is in preparation for new masking workspaces which have a spectrum
+for each pixel. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a0b016d2ff8748dfa7b974449fb1d652c370a2af" title="a0b016d2ff8748dfa7b974449fb1d652c370a2af">a0b016d2ff8748dfa7b974449fb1d652c370a2af</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="5321.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-28T15%3A39%3A33%2B01%3A00&amp;precision=second" title="2012-06-28T15:39:33+01:00 in Timeline">8 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Pete, is there a reason why the getNumberDetectors() implementation couldn't just be m_detectorCache.size() - numMonitors() ?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="5321.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-02T16%3A13%3A21%2B01%3A00&amp;precision=second" title="2012-07-02T16:13:21+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Taking Russell's advice on implementation. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b94a5870f7928afcb1159ca26b530a5a6160a91f" title="b94a5870f7928afcb1159ca26b530a5a6160a91f">b94a5870f7928afcb1159ca26b530a5a6160a91f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="5321.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-05T20%3A01%3A11%2B01%3A00&amp;precision=second" title="2012-07-05T20:01:11+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Changing to MaskWorkspace proper. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cdb930cd951d99d92b5a8f06b4901af21036d623" title="cdb930cd951d99d92b5a8f06b4901af21036d623">cdb930cd951d99d92b5a8f06b4901af21036d623</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="5321.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-05T20%3A01%3A11%2B01%3A00&amp;precision=second" title="2012-07-05T20:01:11+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Fixing bug that should never happen. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e7a7b2918d593ad005de4cb7929533a0ed871c15" title="e7a7b2918d593ad005de4cb7929533a0ed871c15">e7a7b2918d593ad005de4cb7929533a0ed871c15</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="5321.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-05T20%3A01%3A11%2B01%3A00&amp;precision=second" title="2012-07-05T20:01:11+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Missed a file for workspace type change. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b16c1b1fe92a21508cb470d3d1a36793d351b9f0" title="b16c1b1fe92a21508cb470d3d1a36793d351b9f0">b16c1b1fe92a21508cb470d3d1a36793d351b9f0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="5321.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-05T20%3A01%3A11%2B01%3A00&amp;precision=second" title="2012-07-05T20:01:11+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Partially changed back the calculation of total detectors. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7b3962e380b046f000318b0fa504ef67decabdb0" title="7b3962e380b046f000318b0fa504ef67decabdb0">7b3962e380b046f000318b0fa504ef67decabdb0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="5321.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-05T20%3A01%3A12%2B01%3A00&amp;precision=second" title="2012-07-05T20:01:12+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Next round of everything working again and masks. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be639bd423d83782140c6ee2e3ec30196059c187" title="be639bd423d83782140c6ee2e3ec30196059c187">be639bd423d83782140c6ee2e3ec30196059c187</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="5321.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-11T18%3A45%3A34%2B01%3A00&amp;precision=second" title="2012-07-11T18:45:34+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Improving error message. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/91af6ade217af86ca5c124477c1ee8a67e7db1d9" title="91af6ade217af86ca5c124477c1ee8a67e7db1d9">91af6ade217af86ca5c124477c1ee8a67e7db1d9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="5321.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-11T19%3A49%3A24%2B01%3A00&amp;precision=second" title="2012-07-11T19:49:24+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Changed return type for generateEmptyMask. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0f3d13d11d7589f0e198896ece947fcc3516b62" title="c0f3d13d11d7589f0e198896ece947fcc3516b62">c0f3d13d11d7589f0e198896ece947fcc3516b62</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="5321.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-19T18%3A58%3A50%2B01%3A00&amp;precision=second" title="2012-07-19T18:58:50+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Adding more diagnostic methods to MaskWorkspace. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/898b819cfa3c7669a18d2a7b5e085679d71d789e" title="898b819cfa3c7669a18d2a7b5e085679d71d789e">898b819cfa3c7669a18d2a7b5e085679d71d789e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="5321.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-24T15%3A15%3A20%2B01%3A00&amp;precision=second" title="2012-07-24T15:15:20+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. If the specrum index is out of range return the default. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f8298ff52cf7052052f6769f68c1ad2ee5222908" title="f8298ff52cf7052052f6769f68c1ad2ee5222908">f8298ff52cf7052052f6769f68c1ad2ee5222908</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="5321.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-24T15%3A15%3A21%2B01%3A00&amp;precision=second" title="2012-07-24T15:15:21+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. CloneWorkspace if input is a MaskWorkspace.
+</p>
+<p>
+Also added a diagnostic print to show off what the difference in the
+number of masked spectra versus detectors. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/05391c60aa54f901e252298de9cc943116cde247" title="05391c60aa54f901e252298de9cc943116cde247">05391c60aa54f901e252298de9cc943116cde247</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="5321.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-25T16%3A38%3A52%2B01%3A00&amp;precision=second" title="2012-07-25T16:38:52+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. CloneWorkspace if input is a MaskWorkspace."
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/05391c60aa54f901e252298de9cc943116cde247" title="05391c60aa54f901e252298de9cc943116cde247">05391c60aa54f901e252298de9cc943116cde247</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4a5df9974602b30e7fb4aa40fd80d38bcb1e56b5" title="4a5df9974602b30e7fb4aa40fd80d38bcb1e56b5">4a5df9974602b30e7fb4aa40fd80d38bcb1e56b5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="5321.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-25T16%3A38%3A52%2B01%3A00&amp;precision=second" title="2012-07-25T16:38:52+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Putting back in some logging information. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4e3f0c7ebca5843cf49ed2ca8ae9b05d4b4f7134" title="4e3f0c7ebca5843cf49ed2ca8ae9b05d4b4f7134">4e3f0c7ebca5843cf49ed2ca8ae9b05d4b4f7134</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="5321.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-25T17%3A17%3A46%2B01%3A00&amp;precision=second" title="2012-07-25T17:17:46+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Copy over the instrument from the supplied workspace. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb4c518edb437c60d84f5bce6c543f462408c631" title="bb4c518edb437c60d84f5bce6c543f462408c631">bb4c518edb437c60d84f5bce6c543f462408c631</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="5321.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-25T17%3A17%3A47%2B01%3A00&amp;precision=second" title="2012-07-25T17:17:47+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Link masked spectra through the detector ids. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4a16ca5b3964e24c97189dfafb9646e8435aa946" title="4a16ca5b3964e24c97189dfafb9646e8435aa946">4a16ca5b3964e24c97189dfafb9646e8435aa946</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="5321.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-25T17%3A17%3A47%2B01%3A00&amp;precision=second" title="2012-07-25T17:17:47+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Example of how to convert the diagnostic masking. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b320b2ebfd975833c4f050c7437c090a6ab335ce" title="b320b2ebfd975833c4f050c7437c090a6ab335ce">b320b2ebfd975833c4f050c7437c090a6ab335ce</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="5321.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A39%3A37%2B01%3A00&amp;precision=second" title="2012-07-30T08:39:37+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Adding methods for setting/getting mask bit. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/78e81e8da6926ca57009bfc63b2644019a6b8255" title="78e81e8da6926ca57009bfc63b2644019a6b8255">78e81e8da6926ca57009bfc63b2644019a6b8255</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="5321.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A39%3A39%2B01%3A00&amp;precision=second" title="2012-07-30T08:39:39+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Adding more tests to MaskWorkspace. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7659eae0aed5b33fae24cd40d63b83d22f0d23f7" title="7659eae0aed5b33fae24cd40d63b83d22f0d23f7">7659eae0aed5b33fae24cd40d63b83d22f0d23f7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="5321.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A39%3A45%2B01%3A00&amp;precision=second" title="2012-07-30T08:39:45+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Initialize data values during object construction.
+</p>
+<p>
+Done in a way that I can later reset it in case the instrument is set
+after construction. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/98ae9eb2996aea79c5a460bc57755fe832e4a08e" title="98ae9eb2996aea79c5a460bc57755fe832e4a08e">98ae9eb2996aea79c5a460bc57755fe832e4a08e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="5321.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A39%3A46%2B01%3A00&amp;precision=second" title="2012-07-30T08:39:46+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Removing unused code since the wksp initializes itself. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4492ab34e33990689bfc26ef257aa246a35c3fae" title="4492ab34e33990689bfc26ef257aa246a35c3fae">4492ab34e33990689bfc26ef257aa246a35c3fae</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="5321.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A39%3A46%2B01%3A00&amp;precision=second" title="2012-07-30T08:39:46+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Adding accessor methods for wkspindex to MaskWorkspace. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b174f4e3af45498b18879157da4e2149a1a0dc7d" title="b174f4e3af45498b18879157da4e2149a1a0dc7d">b174f4e3af45498b18879157da4e2149a1a0dc7d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="5321.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A39%3A57%2B01%3A00&amp;precision=second" title="2012-07-30T08:39:57+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Removing unused algorithm. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/acad0fa3f9c83b3023ed2f0c8ab39f526eb9c045" title="acad0fa3f9c83b3023ed2f0c8ab39f526eb9c045">acad0fa3f9c83b3023ed2f0c8ab39f526eb9c045</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="5321.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A39%3A58%2B01%3A00&amp;precision=second" title="2012-07-30T08:39:58+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Stop building ConverToMaskWorkspace before it is deleted. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3ad7dd1d0f16b9c77a07684759b090060911a5c5" title="3ad7dd1d0f16b9c77a07684759b090060911a5c5">3ad7dd1d0f16b9c77a07684759b090060911a5c5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="5321.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A40%3A11%2B01%3A00&amp;precision=second" title="2012-07-30T08:40:11+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Added method to get number of detectorIDs.
+</p>
+<p>
+This is in preparation for new masking workspaces which have a spectrum
+for each pixel. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a0b016d2ff8748dfa7b974449fb1d652c370a2af" title="a0b016d2ff8748dfa7b974449fb1d652c370a2af">a0b016d2ff8748dfa7b974449fb1d652c370a2af</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="5321.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A40%3A33%2B01%3A00&amp;precision=second" title="2012-07-30T08:40:33+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Taking Russell's advice on implementation. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b94a5870f7928afcb1159ca26b530a5a6160a91f" title="b94a5870f7928afcb1159ca26b530a5a6160a91f">b94a5870f7928afcb1159ca26b530a5a6160a91f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="5321.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A40%3A56%2B01%3A00&amp;precision=second" title="2012-07-30T08:40:56+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Changing to MaskWorkspace proper. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cdb930cd951d99d92b5a8f06b4901af21036d623" title="cdb930cd951d99d92b5a8f06b4901af21036d623">cdb930cd951d99d92b5a8f06b4901af21036d623</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="5321.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A40%3A56%2B01%3A00&amp;precision=second" title="2012-07-30T08:40:56+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Fixing bug that should never happen. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e7a7b2918d593ad005de4cb7929533a0ed871c15" title="e7a7b2918d593ad005de4cb7929533a0ed871c15">e7a7b2918d593ad005de4cb7929533a0ed871c15</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="5321.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A40%3A57%2B01%3A00&amp;precision=second" title="2012-07-30T08:40:57+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Missed a file for workspace type change. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b16c1b1fe92a21508cb470d3d1a36793d351b9f0" title="b16c1b1fe92a21508cb470d3d1a36793d351b9f0">b16c1b1fe92a21508cb470d3d1a36793d351b9f0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="5321.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A40%3A58%2B01%3A00&amp;precision=second" title="2012-07-30T08:40:58+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Partially changed back the calculation of total detectors. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7b3962e380b046f000318b0fa504ef67decabdb0" title="7b3962e380b046f000318b0fa504ef67decabdb0">7b3962e380b046f000318b0fa504ef67decabdb0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="5321.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A40%3A59%2B01%3A00&amp;precision=second" title="2012-07-30T08:40:59+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Next round of everything working again and masks. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be639bd423d83782140c6ee2e3ec30196059c187" title="be639bd423d83782140c6ee2e3ec30196059c187">be639bd423d83782140c6ee2e3ec30196059c187</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="5321.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A38%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:38+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Improving error message. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/91af6ade217af86ca5c124477c1ee8a67e7db1d9" title="91af6ade217af86ca5c124477c1ee8a67e7db1d9">91af6ade217af86ca5c124477c1ee8a67e7db1d9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="5321.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A38%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:38+01:00 in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5321.html" title="enhancement: Improve and refactor MaskDetectors (closed: fixed)">#5321</a>. Changed return type for generateEmptyMask. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0f3d13d11d7589f0e198896ece947fcc3516b62" title="c0f3d13d11d7589f0e198896ece947fcc3516b62">c0f3d13d11d7589f0e198896ece947fcc3516b62</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="5321.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T13%3A43%3A48%2B01%3A00&amp;precision=second" title="2012-08-10T13:43:48+01:00 in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.2</em> to <em>Release 2.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved at the end of release 2.2
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="5321.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-29T15%3A21%3A33Z&amp;precision=second" title="2012-10-29T15:21:33Z in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.3</em> to <em>Release 2.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="5321.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-22T21%3A55%3A42Z&amp;precision=second" title="2013-01-22T21:55:42Z in Timeline">8 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.4</em> to <em>Release 2.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="5321.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T10%3A49%3A43%2B01%3A00&amp;precision=second" title="2013-04-29T10:49:43+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.5</em> to <em>Release 2.6</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to <a class="missing changeset" title="No default repository defined">r2</a>.6 at the end of <a class="missing changeset" title="No default repository defined">r2</a>.5
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="5321.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-13T21%3A52%3A48%2B01%3A00&amp;precision=second" title="2013-06-13T21:52:48+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I would set the resolution as "don't care" because it has been in the wild for eleven (11) months, but that isn't an option (it is in the 2.2 tag). I'm not sure what there is to do to test it since it is so very old.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="5321.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-14T13%3A54%3A03%2B01%3A00&amp;precision=second" title="2013-06-14T13:54:03+01:00 in Timeline">7 years</a> ago by Michael Reuter
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Michael Reuter</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="5321.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-14T18%3A47%3A22%2B01%3A00&amp;precision=second" title="2013-06-14T18:47:22+01:00 in Timeline">7 years</a> ago by Michael Reuter
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I'm going to take it that since this feature has been out so long, if it were broken other fixes would have been generated by now.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="5321.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A08%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:08+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="5321.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A27%3A38%2B01%3A00&amp;precision=second" title="2015-06-04T00:27:38+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/6167"><span class="icon">​</span>6167</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5321?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5321?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5321?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

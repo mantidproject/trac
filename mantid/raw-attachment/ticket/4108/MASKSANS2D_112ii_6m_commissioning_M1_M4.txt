@@ -1,0 +1,63 @@
+! LNX test
+MASK/CLEAR
+MASK/CLEAR/TIME
+PRINT chopper phase 99.9, max wav @ 6m is ~16.25
+L/WAV 1.75 16.25 .25/LIN
+PRINT 5% wavebins
+! strong scatter
+L/Q .001 .8 .08/LOG
+!L/Q .003,.001,.013,-.08,1.0
+PRINT change Q bins if have weak scatter
+! weak scatter
+!L/Q 0.0025, 0.001, 0.01, -0.16, 1.0
+L/QXY 0 0.025 .005/lin
+! note increase lower time limit here
+BACK/MON/TIMES 85000 98000
+DET/REAR
+GRAVITY/ON
+mask h0
+mask h190>h191
+mask v0
+mask v191
+! dead wire near top
+mask h156>h159
+! spot on rhs beam stop at 11m
+! mask h57>h66+v134>v141
+!
+mask/time 14500 16000
+!mask/time 5000 19200
+!
+L/PHI -15 15
+L/R 41 -1 3
+!L/SP 1 36864
+!MON/LENGTH=17.937 2
+!
+!MON/DIRECT=DIRECT_TRY_3.DAT
+MON/DIRECT=DIRECTm1_9672_6m_08Aug11.dat
+MON/TRANS/SPECTRUM=1/INTERPOLATE
+!  set monitor 2 to interpolate
+!PRINT  scale not sorted yet !!
+TRANS/TRANSPEC=4/SHIFT=-500
+MON/SPECTRUM=1/INTERPOLATE
+FIT/TRANS/LOG 1.75 16.25
+! 02/08/11 this centre found from glassy carbon 9673-add, 1.75-16.25ang, gravity on
+set centre -106.4 -169.1
+!
+! 29/05/11 .1358, fit 7400 GDW20 using 1.75 to 16.25 (but first 3 points noisy at 8% bins)
+!  24/7/11 .1374, very similar, from 9356-add, but data is too steep at small Q, need new D-B?
+! 25/07/11 new d-b file using gdw, 0.10327
+! 04/08/11 new db 9673gc_6m_SmoothUnFitTrans_04Aug11, .10055
+! 04/08/11 DIRECTm1_9346_6m_try_26Jul11, fit to 9672, .0626
+! 08/08/11 DIRECT=DIRECTm1_9672_6m_08Aug11, fit 9672, .1005
+set scales 0.1005 1.0 1.0 1.0 1.0
+! correction to actual sample position, measured 28 before shutter, notionally 81mm before shutter
+SAMPLE/OFFSET 53
+! Correction to SANS2D encoders in mm 
+DET/CORR REAR X -16.0
+DET/CORR REAR Z 58.0
+DET/CORR FRONT X -44.0
+DET/CORR FRONT Y -20.0
+DET/CORR FRONT Z 47.0
+DET/CORR FRONT ROT 0.0
+!
+!! 22/07/11 MASKSANS2D.112C_6m_commissioning SANS Team, REAR (ie ex front) only 

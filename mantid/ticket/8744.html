@@ -1,0 +1,729 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8744 (Implement fit function back-to-back exponential convoluted with psuedo voigt)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8743.html" title="Ticket #8743" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8744?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8744?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8744?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8745.html" title="Ticket #8745" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8744, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8743.html" title="Ticket #8743">Previous Ticket</a></span></li><li><span><a class="next" href="8745.html" title="Ticket #8745">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8744.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8744.html">Ticket #8744</a>
+          <span class="status">(reopened)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-23T14%3A46%3A29Z&amp;precision=second" title="2014-01-23T14:46:29Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A49%3A24%2B01%3A00&amp;precision=second" title="2015-06-04T02:49:24+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Implement fit function back-to-back exponential convoluted with psuedo voigt</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="milestone" href="../milestone/Backlog.html">Backlog</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              anders.markvardsen@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="assigned ticket" href="8745.html" title="Refactor NeutronBk2BkExpConvPVoigt and ThermalNeutronBk2BkConvPVoigt">#8745</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Anders Markvardsen
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Implement a fit function back to back exponential convoluted with pseduo-voigt as an extension of existing fit function BackToBackExponential, which only is convoluted with Gaussian 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/8744/hrp55500.nxs.html" title="View attachment">hrp55500.nxs</a><a href="../raw-attachment/ticket/8744/hrp55500.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="1552870 bytes">1.5 MB</span>) -
+      added by <em>Anders Markvardsen</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T10%3A12%3A38Z&amp;precision=second" title="2014-02-18T10:12:38Z in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                ISIS HRPD focused processed nexus file
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/8744/picture1.png.html" title="View attachment">picture1.png</a><a href="../raw-attachment/ticket/8744/picture1.png" class="trac-rawlink" title="Download">​</a>
+       (<span title="51432 bytes">50.2 KB</span>) -
+      added by <em>Anders Markvardsen</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T10%3A28%3A02Z&amp;precision=second" title="2014-02-18T10:28:02Z in Timeline">7 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8744.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-23T14%3A49%3A08Z&amp;precision=second" title="2014-01-23T14:49:08Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8745</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8744.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T04%3A03%3A47Z&amp;precision=second" title="2014-01-31T04:03:47Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Starting to implement BackToBackExponentialPV. Refs <a class="reopened ticket" href="8744.html" title="enhancement: Implement fit function back-to-back exponential convoluted with psuedo ... (reopened)">#8744</a>.
+</p>
+<p>
+Starting to implement BackToBackExponentialPV.
+The code is migrated from BacktoBackExponential.
+Some changes have been implemented.
+But it is not finished yet.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6659add48e23af00adbb5ab6e9813b908577517e" title="6659add48e23af00adbb5ab6e9813b908577517e">6659add48e23af00adbb5ab6e9813b908577517e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8744.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-02T15%3A34%3A46Z&amp;precision=second" title="2014-02-02T15:34:46Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.1</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to backlog at the end of Release 3.1
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8744.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T16%3A48%3A23Z&amp;precision=second" title="2014-02-03T16:48:23Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Finished implementation of the function. Refs <a class="reopened ticket" href="8744.html" title="enhancement: Implement fit function back-to-back exponential convoluted with psuedo ... (reopened)">#8744</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/936c2afb7d6e288c3b0019b8ffe42f6763fa3dc3" title="936c2afb7d6e288c3b0019b8ffe42f6763fa3dc3">936c2afb7d6e288c3b0019b8ffe42f6763fa3dc3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8744.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T21%3A13%3A45Z&amp;precision=second" title="2014-02-03T21:13:45Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added some unit tests. Refs <a class="reopened ticket" href="8744.html" title="enhancement: Implement fit function back-to-back exponential convoluted with psuedo ... (reopened)">#8744</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eba451ac65d035f75ee4427f997677740ee04d7c" title="eba451ac65d035f75ee4427f997677740ee04d7c">eba451ac65d035f75ee4427f997677740ee04d7c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8744.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T19%3A36%3A36Z&amp;precision=second" title="2014-02-05T19:36:36Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed unit test. Refs <a class="reopened ticket" href="8744.html" title="enhancement: Implement fit function back-to-back exponential convoluted with psuedo ... (reopened)">#8744</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f5e62cc79198ec9baac39407ac5b3eac9fde9024" title="f5e62cc79198ec9baac39407ac5b3eac9fde9024">f5e62cc79198ec9baac39407ac5b3eac9fde9024</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8744.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-07T20%3A28%3A14Z&amp;precision=second" title="2014-02-07T20:28:14Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8744.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T21%3A18%3A21Z&amp;precision=second" title="2014-02-13T21:18:21Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modified doc in wiki. Refs <a class="reopened ticket" href="8744.html" title="enhancement: Implement fit function back-to-back exponential convoluted with psuedo ... (reopened)">#8744</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3e4d8f8c7ee383199ee3feb641d8a36ccd231ba3" title="3e4d8f8c7ee383199ee3feb641d8a36ccd231ba3">3e4d8f8c7ee383199ee3feb641d8a36ccd231ba3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8744.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T21%3A18%3A21Z&amp;precision=second" title="2014-02-13T21:18:21Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added one more unit test. Refs <a class="reopened ticket" href="8744.html" title="enhancement: Implement fit function back-to-back exponential convoluted with psuedo ... (reopened)">#8744</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/97afd4eb4ac552cf6e3bb9714c3b3e21d59789f0" title="97afd4eb4ac552cf6e3bb9714c3b3e21d59789f0">97afd4eb4ac552cf6e3bb9714c3b3e21d59789f0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8744.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T14%3A37%3A46Z&amp;precision=second" title="2014-02-14T14:37:46Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Minor modification on how to calculate peak extent. Refs <a class="reopened ticket" href="8744.html" title="enhancement: Implement fit function back-to-back exponential convoluted with psuedo ... (reopened)">#8744</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e204f6b76b4ecc882156cc5ce5853a693319c5bc" title="e204f6b76b4ecc882156cc5ce5853a693319c5bc">e204f6b76b4ecc882156cc5ce5853a693319c5bc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8744.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T14%3A39%3A42Z&amp;precision=second" title="2014-02-14T14:39:42Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <h2 id="Fortester">For tester</h2>
+<p>
+Find some data from instruments using back-to-back exponential convoluted with pseudo-voigt as peak profile.  Then using this function to fit some peak. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8744.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T15%3A42%3A24Z&amp;precision=second" title="2014-02-14T15:42:24Z in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Anders Markvardsen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T10%3A12%3A38Z&amp;precision=second" title="2014-02-18T10:12:38Z in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8744/hrp55500.nxs.html"><em>hrp55500.nxs</em></a><a href="../raw-attachment/ticket/8744/hrp55500.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+ISIS HRPD focused processed nexus file
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8744.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T10%3A27%3A42Z&amp;precision=second" title="2014-02-18T10:27:42Z in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <ol><li>Load attached hrp55500.nxs file
+</li></ol><ol start="2"><li>Plot workspace hrp55500_2 for example
+</li></ol><ol start="3"><li>Add LinearBackground and one BackToBackExponentialPV peak
+</li></ol><p>
+When I try to adjust the width graphically I get the error message "Peak width cannot be equal or less than zero", see attaced picture1.png
+</p>
+<p>
+In another attempt, good new is that I did get a fit, but the parameters ! and B does not change. Also if I change the values of these manually as far as I can tell the peak shape does not change when I do plot guess. 
+</p>
+<p>
+When I select a non-zero value for Gamma, e.g. 1.0, and then to a fit I, the fit takes a lot longer and a lot of red lines are outputted, e.g:
+</p>
+<p>
+rying to set a NaN or infinity value (1.#QNAN) to parameter Gamma
+Trying to set a NaN or infinity value (1.#QNAN) to parameter I
+Trying to set a NaN or infinity value (1.#QNAN) to parameter A
+Trying to set a NaN or infinity value (1.#QNAN) to parameter B
+Trying to set a NaN or infinity value (1.#QNAN) to parameter X0
+Trying to set a NaN or infinity value (1.#QNAN) to parameter S
+Trying to set a NaN or infinity value (1.#QNAN) to parameter Gamma
+Trying to set a NaN or infinity value (1.#QNAN) to parameter I
+Trying to set a NaN or infinity value (1.#QNAN) to parameter A
+Trying to set a NaN or infinity value (1.#QNAN) to parameter B
+Trying to set a NaN or infinity value (1.#QNAN) to parameter X0
+Trying to set a NaN or infinity value (1.#QNAN) to parameter S
+Trying to set a NaN or infinity value (1.#QNAN) to parameter Gamma
+Trying to set a NaN or infinity value (1.#QNAN) to parameter I
+Trying to set a NaN or infinity value (1.#QNAN) to parameter A
+Trying to set a NaN or infinity value (1.#QNAN) to parameter B
+Trying to set a NaN or infinity value (1.#QNAN) to parameter X0
+Trying to set a NaN or infinity value (1.#QNAN) to parameter S
+Trying to set a NaN or infinity value (1.#QNAN) to parameter Gamma
+Trying to set a NaN or infinity value (1.#QNAN) to parameter I
+Trying to set a NaN or infinity value (1.#QNAN) to parameter A
+Trying to set a NaN or infinity value (1.#QNAN) to parameter B
+Trying to set a NaN or infinity value (1.#QNAN) to parameter X0
+Trying to set a NaN or infinity value (1.#QNAN) to parameter S
+Trying to set a NaN or infinity value (1.#QNAN) to parameter Gamma
+Trying to set a NaN or infinity value (1.#QNAN) to parameter I
+Trying to set a NaN or infinity value (1.#QNAN) to parameter A
+Trying to set a NaN or infinity value (1.#QNAN) to parameter B
+Trying to set a NaN or infinity value (1.#QNAN) to parameter X0
+Trying to set a NaN or infinity value (1.#QNAN) to parameter S
+Trying to set a NaN or infinity value (1.#QNAN) to parameter Gamma
+Trying to set a NaN or infinity value (1.#QNAN) to parameter I
+Trying to set a NaN or infinity value (1.#QNAN) to parameter A
+Trying to set a NaN or infinity value (1.#QNAN) to parameter B
+Trying to set a NaN or infinity value (1.#QNAN) to parameter X0
+Trying to set a NaN or infinity value (1.#QNAN) to parameter S
+Trying to set a NaN or infinity value (1.#QNAN) to parameter Gamma
+Trying to set a NaN or infinity value (1.#QNAN) to parameter I
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T10%3A28%3A02Z&amp;precision=second" title="2014-02-18T10:28:02Z in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8744/picture1.png.html"><em>picture1.png</em></a><a href="../raw-attachment/ticket/8744/picture1.png" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8744.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-12T14%3A17%3A16%2B01%3A00&amp;precision=second" title="2014-06-12T14:17:16+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.2</em> to <em>Release 3.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8744.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T10%3A25%3A31Z&amp;precision=second" title="2014-12-08T10:25:31Z in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Moved to the backlog at the code freeze of R3.3
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8744.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T10%3A27%3A20Z&amp;precision=second" title="2014-12-08T10:27:20Z in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.3</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8744.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A49%3A24%2B01%3A00&amp;precision=second" title="2015-06-04T02:49:24+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9588"><span class="icon">​</span>9588</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8744?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8744?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8744?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

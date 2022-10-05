@@ -1,0 +1,687 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8358 (Clear memory leaks in the DataObjectsTest package)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8357.html" title="Ticket #8357" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8358?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8358?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8358?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8359.html" title="Ticket #8359" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8358, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8357.html" title="Ticket #8357">Previous Ticket</a></span></li><li><span><a class="next" href="8359.html" title="Ticket #8359">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8358.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8358.html">Ticket #8358</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-04T16%3A50%3A57Z&amp;precision=second" title="2013-11-04T16:50:57Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A33%3A28%2B01%3A00&amp;precision=second" title="2015-06-04T02:33:28+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Clear memory leaks in the DataObjectsTest package</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Russell+Taylor">Russell Taylor</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Russell+Taylor">Russell Taylor</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~Maintenance">Maintenance</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="8362.html" title="Clear memory leaks in the DataObjects package">#8362</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Wenduo Zhou
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-11-06 15:02:25.367385+00:00">
+        (last modified by Russell Taylor)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/8358?action=diff&amp;version=2">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+The SNS Jenkins has a <a class="ext-link" href="https://builds.sns.gov/job/ornl_valgrind_develop"><span class="icon">​</span>valgrind job</a> which uses the unit tests as a hook into exercising the Mantid code itself. This of course means that it picks up any leaks in the test code as well.
+</p>
+<p>
+Using this job and/or valgrind runs of your own, eliminate all the leaks/errors that come out of the test code itself. I've created this as an isolated ticket because I'd like to get a clear view of the errors we have in the actual Mantid code. <strong>All changes to this ticket should only be to code in the Framework/DataObjects/test/ directory</strong>! 
+</p>
+<p>
+When working on this, don't just add <tt>delete</tt> calls - consider whether the leaking call really needs to be a heap allocation; create the object on the stack if not.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8358.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-04T17%3A10%3A39Z&amp;precision=second" title="2013-11-04T17:10:39Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8362</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8358.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-06T15%3A02%3A25Z&amp;precision=second" title="2013-11-06T15:02:25Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8358?action=diff&amp;version=2">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8358.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-08T18%3A33%3A54Z&amp;precision=second" title="2014-02-08T18:33:54Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        set to <em>Russell Taylor</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8358.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T10%3A59%3A49Z&amp;precision=second" title="2014-02-14T10:59:49Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets out of triage (new) to assigned at the introduction of the triage state
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8358.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T17%3A55%3A14Z&amp;precision=second" title="2014-03-10T17:55:14Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Clear memory leaks in test.
+</p>
+<p>
+There's no reason for any of these MaskWorkspace instances to be created
+on the heap rather than the stack.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/074f4563d9823b278c1de1e10a0326da606201d5" title="074f4563d9823b278c1de1e10a0326da606201d5">074f4563d9823b278c1de1e10a0326da606201d5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8358.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T21%3A34%3A20%2B01%3A00&amp;precision=second" title="2014-04-10T21:34:20+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Clear memory leaks in test.
+</p>
+<p>
+There's no reason for any of these MaskWorkspace instances to be created
+on the heap rather than the stack.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2bf5cadf3cfdc8887460cc2533410dab7f746948" title="2bf5cadf3cfdc8887460cc2533410dab7f746948">2bf5cadf3cfdc8887460cc2533410dab7f746948</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8358.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T21%3A34%3A20%2B01%3A00&amp;precision=second" title="2014-04-10T21:34:20+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Eliminate memory leak by creating object on stack.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96f7c0edea935551b5506b5c544cc6998b479594" title="96f7c0edea935551b5506b5c544cc6998b479594">96f7c0edea935551b5506b5c544cc6998b479594</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8358.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T21%3A34%3A20%2B01%3A00&amp;precision=second" title="2014-04-10T21:34:20+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Eliminate a raft of memory leaks in this test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/827f3b623393fbb526d44586a2e8d3db96eee95d" title="827f3b623393fbb526d44586a2e8d3db96eee95d">827f3b623393fbb526d44586a2e8d3db96eee95d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8358.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T21%3A34%3A20%2B01%3A00&amp;precision=second" title="2014-04-10T21:34:20+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Eliminate memory leaks in test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e66891bef9fe251bcf27493398d29a66cb1d8868" title="e66891bef9fe251bcf27493398d29a66cb1d8868">e66891bef9fe251bcf27493398d29a66cb1d8868</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8358.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T21%3A34%3A21%2B01%3A00&amp;precision=second" title="2014-04-10T21:34:21+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Eliminate memory leaks in test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e3c2cb4e372553b7bed73e22f06abf16579373cb" title="e3c2cb4e372553b7bed73e22f06abf16579373cb">e3c2cb4e372553b7bed73e22f06abf16579373cb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8358.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T19%3A24%3A39%2B01%3A00&amp;precision=second" title="2014-04-11T19:24:39+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Remove deletes that have been replicated in another ticket.
+</p>
+<p>
+<a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a> changed this test and handled the delete in an alternative way.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3020e6216efae05c65dfaea505475535fff4f3a8" title="3020e6216efae05c65dfaea505475535fff4f3a8">3020e6216efae05c65dfaea505475535fff4f3a8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8358.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T18%3A25%3A03%2B01%3A00&amp;precision=second" title="2014-04-23T18:25:03+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Eliminate a raft of memory leaks in this test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8b64ff6f49301927124fee59ac28fa389a634388" title="8b64ff6f49301927124fee59ac28fa389a634388">8b64ff6f49301927124fee59ac28fa389a634388</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8358.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T18%3A25%3A04%2B01%3A00&amp;precision=second" title="2014-04-23T18:25:04+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Eliminate memory leaks in test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1f9e34e0df2e57e1ec215cfd3c8cf65138b78b9e" title="1f9e34e0df2e57e1ec215cfd3c8cf65138b78b9e">1f9e34e0df2e57e1ec215cfd3c8cf65138b78b9e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8358.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T18%3A25%3A04%2B01%3A00&amp;precision=second" title="2014-04-23T18:25:04+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Eliminate memory leaks in test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c48d846278bf423855c039c3d877fdc14f681828" title="c48d846278bf423855c039c3d877fdc14f681828">c48d846278bf423855c039c3d877fdc14f681828</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8358.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T18%3A25%3A04%2B01%3A00&amp;precision=second" title="2014-04-23T18:25:04+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8358.html" title="defect: Clear memory leaks in the DataObjectsTest package (closed: fixed)">#8358</a>. Remove deletes that have been replicated in another ticket.
+</p>
+<p>
+<a class="closed ticket" href="8685.html" title="task: Use matrix workspace to store splitters for fast frequency log (closed: fixed)">#8685</a> changed this test and handled the delete in an alternative way.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc9870993067909f40857b92b9c3f9afb0d9f0bc" title="dc9870993067909f40857b92b9c3f9afb0d9f0bc">dc9870993067909f40857b92b9c3f9afb0d9f0bc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8358.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-30T16%3A13%3A58%2B01%3A00&amp;precision=second" title="2014-04-30T16:13:58+01:00 in Timeline">6 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+With this work and the removal of managed workspaces in <a class="closed ticket" href="9357.html" title="task: Eliminate managed workspaces (closed: fixed)">#9357</a> there are now only 2 leaks showing in the <a class="ext-link" href="http://builds.mantidproject.org/view/Valgrind/job/valgrind_develop_core_packages/"><span class="icon">​</span>DataObjectsTest valgrind</a> run, neither of which appear to be related to test code and so will be addressed in <a class="closed ticket" href="8362.html" title="defect: Clear memory leaks in the DataObjects package (closed: fixed)">#8362</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8358.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-30T18%3A34%3A06%2B01%3A00&amp;precision=second" title="2014-04-30T18:34:06+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Wenduo Zhou</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8358.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-02T15%3A37%3A41%2B01%3A00&amp;precision=second" title="2014-05-02T15:37:41+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/bugfix/8358_dataobjects_test_memory_leaks'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/6f0cc734d79ed89900575b05b74046664e8802cf"><span class="icon">​</span>6f0cc734d79ed89900575b05b74046664e8802cf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8358.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A33%3A28%2B01%3A00&amp;precision=second" title="2015-06-04T02:33:28+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9203"><span class="icon">​</span>9203</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8358?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8358?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8358?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

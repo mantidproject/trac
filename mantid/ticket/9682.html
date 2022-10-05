@@ -1,0 +1,859 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9682 (Refactor Kernel::Interpolation to correctly handle multiple loading from string)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9681.html" title="Ticket #9681" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9682?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9682?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9682?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9683.html" title="Ticket #9683" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9682, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9681.html" title="Ticket #9681">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="9683.html" title="Ticket #9683">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9682.html">Ticket #9682</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-18T16%3A00%3A13%2B01%3A00&amp;precision=second" title="2014-06-18T16:00:13+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A28%3A21%2B01%3A00&amp;precision=second" title="2015-06-04T03:28:21+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Refactor Kernel::Interpolation to correctly handle multiple loading from string</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Michael+Wedel">Michael Wedel</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Michael+Wedel">Michael Wedel</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-06-18 15:12:26.139455+00:00">
+        (last modified by Michael Wedel)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/9682?action=diff&amp;version=2">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+When an instrument definition contains a FitParameter with a lookup-table, all values are inserted into the table twice (in some situations even 4 times).
+</p>
+<p>
+I have traced this down to LoadInstrument::exec():
+</p>
+<pre class="wiki">174      // populate parameter map of workspace 
+175      m_workspace-&gt;populateInstrumentParameters();
+176
+177      // check if default parameter file is also present, unless loading from
+178      if (!m_filename.empty())
+179        runLoadParameterFile();
+</pre><p>
+Both line 175 and 179 execute the &gt;&gt; operator for Interpolation (eventually), on the same instance, so the data stored in the IDF are added twice.
+</p>
+<p>
+Adding a clearData() method to Interpolation and calling that inside the operator fixes the problem, but maybe it's possible to track down the real origin of this behavior.
+</p>
+<p>
+If anyone knows details of this loading procedure, I would be happy about advice.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9682.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-18T16%3A01%3A49%2B01%3A00&amp;precision=second" title="2014-06-18T16:01:49+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/9682?action=diff&amp;version=1">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9682.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-18T16%3A12%3A26%2B01%3A00&amp;precision=second" title="2014-06-18T16:12:26+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/9682?action=diff&amp;version=2">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9682.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T09%3A37%3A27%2B01%3A00&amp;precision=second" title="2014-06-23T09:37:27+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9682.html" title="defect: Refactor Kernel::Interpolation to correctly handle multiple loading from ... (closed: fixed)">#9682</a>. Added resetData method to Interpolation
+</p>
+<p>
+Cleaned up the unit tests a bit so that it's easier to spot where errors are coming from.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a4517162b96cb89beb613663e3206abb91b14efa" title="a4517162b96cb89beb613663e3206abb91b14efa">a4517162b96cb89beb613663e3206abb91b14efa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9682.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T09%3A48%3A06%2B01%3A00&amp;precision=second" title="2014-06-23T09:48:06+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The unit test "testStreamOperatorsNonEmpty" fails on the old code and passes with the suggested data-reset-method.
+</p>
+<p>
+In summary, having each data pair twice in the table makes the interpolation results incorrect outside the interpolation range, because the slope of the first two values is always zero (since the values are identical), the same is true for the last two values.
+</p>
+<p>
+Results at the limits are incorrect as well, as they are handled in the same way.
+</p>
+<p>
+The "bulk" values inside the interpolation range are not affected.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9682.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T13%3A29%3A30%2B01%3A00&amp;precision=second" title="2014-06-23T13:29:30+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9682.html" title="defect: Refactor Kernel::Interpolation to correctly handle multiple loading from ... (closed: fixed)">#9682</a>. Expanded unit tests for Interpolation
+</p>
+<p>
+The edge-cases of an interpolation are now clearly separated and checked in a uniform way.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1804557f30cb21b6d7293b9a010c30fd744be79e" title="1804557f30cb21b6d7293b9a010c30fd744be79e">1804557f30cb21b6d7293b9a010c30fd744be79e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9682.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T13%3A34%3A24%2B01%3A00&amp;precision=second" title="2014-06-23T13:34:24+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+While spending some time looking at the code that performs the interpolation itself, I noticed that linear search is used to find the "nearest neighbor" in Interpolation::value(). Since the internal value list is always kept in sorted state, it could be an option to implement binary search instead.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9682.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T13%3A34%3A48%2B01%3A00&amp;precision=second" title="2014-06-23T13:34:48+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        set to <em>Michael Wedel</em>
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9682.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T15%3A41%3A26%2B01%3A00&amp;precision=second" title="2014-06-23T15:41:26+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9682.html" title="defect: Refactor Kernel::Interpolation to correctly handle multiple loading from ... (closed: fixed)">#9682</a>. Implemented binary search
+</p>
+<p>
+Replaced the linear search with a binary search and added unit tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ce9f979652762e124c5c942ca0b28cbdcbe4520b" title="ce9f979652762e124c5c942ca0b28cbdcbe4520b">ce9f979652762e124c5c942ca0b28cbdcbe4520b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9682.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T15%3A44%3A16%2B01%3A00&amp;precision=second" title="2014-06-23T15:44:16+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>Lookup table is filled twice when instrument is loaded</em> to <em>Refactor Kernel::Interpolation to correctly handle multiple loading from string</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9682.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T08%3A16%3A02%2B01%3A00&amp;precision=second" title="2014-06-24T08:16:02+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9682.html" title="defect: Refactor Kernel::Interpolation to correctly handle multiple loading from ... (closed: fixed)">#9682</a>. Fix initializer list in unit test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/625079cbe6c48ceadfb6d606f78c48d688c39b4c" title="625079cbe6c48ceadfb6d606f78c48d688c39b4c">625079cbe6c48ceadfb6d606f78c48d688c39b4c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9682.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T08%3A44%3A33%2B01%3A00&amp;precision=second" title="2014-06-24T08:44:33+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Testing information:</strong>
+</p>
+<p>
+Code review, making sure all tests pass.
+</p>
+<p>
+Finally, I am not 100% sure if my idea of "correct behavior" is actually what was intended. I guess it could be possible that a lookup-table defined in the IDF is extended through the parameter file, but replacement of the units and no checks for that in the stream operator lead me to the conclusion that the intended behavior is "replacment of interpolation values".
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9682.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T12%3A24%3A23%2B01%3A00&amp;precision=second" title="2014-06-24T12:24:23+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9682.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-27T07%3A08%3A41%2B01%3A00&amp;precision=second" title="2014-06-27T07:08:41+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Valgrind detected a memory problem caused by the copy constructor test. The error occurs when there is only one value in the interpolation, which should be handled like the 0-values case.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9682.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-27T07%3A11%3A01%2B01%3A00&amp;precision=second" title="2014-06-27T07:11:01+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9682.html" title="defect: Refactor Kernel::Interpolation to correctly handle multiple loading from ... (closed: fixed)">#9682</a>. Handling case with one interpolation value.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/167c634adf51144b0ea2d340bae149dd24ec6a9b" title="167c634adf51144b0ea2d340bae149dd24ec6a9b">167c634adf51144b0ea2d340bae149dd24ec6a9b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9682.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-30T11%3A43%3A21%2B01%3A00&amp;precision=second" title="2014-06-30T11:43:21+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9682.html" title="defect: Refactor Kernel::Interpolation to correctly handle multiple loading from ... (closed: fixed)">#9682</a>. Changed behavior of interpolation with one value
+</p>
+<p>
+In the previous commit, I fixed the problem caused by having only one value in the interpolation table by return 0. On second thought, it makes more sense to assume a "constant interpolation" and return the one stored y-value for any x.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2e6276269c0c5e33cf08c544fac3bd5b1e2606d7" title="2e6276269c0c5e33cf08c544fac3bd5b1e2606d7">2e6276269c0c5e33cf08c544fac3bd5b1e2606d7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9682.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-30T12%3A16%3A38%2B01%3A00&amp;precision=second" title="2014-06-30T12:16:38+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9682.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-10T08%3A26%3A12%2B01%3A00&amp;precision=second" title="2014-07-10T08:26:12+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9682.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-10T08%3A37%3A13%2B01%3A00&amp;precision=second" title="2014-07-10T08:37:13+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Not for 3.2 (my mistake) so putting back into the testing pool till after the release.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9682.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-18T10%3A48%3A50%2B01%3A00&amp;precision=second" title="2014-07-18T10:48:50+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>verify</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Owen Arnold</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9682.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-01T13%3A48%3A26%2B01%3A00&amp;precision=second" title="2014-08-01T13:48:26+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Wenduo Zhou</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9682.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-01T14%3A22%3A28%2B01%3A00&amp;precision=second" title="2014-08-01T14:22:28+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>verify</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Wenduo Zhou</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9682.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T09%3A30%3A15%2B01%3A00&amp;precision=second" title="2014-08-04T09:30:15+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9682.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T10%3A18%3A20%2B01%3A00&amp;precision=second" title="2014-08-04T10:18:20+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+After looking at the code in more detail I think the duplication has actually already been solved by <a class="closed ticket" href="9802.html" title="defect: Updating value of ParameterMap copy updates the original too (closed: fixed)">#9802</a>. The duplication was actually caused but the ParameterMap reusing the same Interpolation object when adding a new object rather than creating a new one. The old code looked like this:
+<a class="ext-link" href="https://github.com/mantidproject/mantid/blob/1669e65dc8194a70978468ac2063b372bd4bc502/Code/Mantid/Framework/Geometry/src/Instrument/ParameterMap.cpp#L235"><span class="icon">​</span>https://github.com/mantidproject/mantid/blob/1669e65dc8194a70978468ac2063b372bd4bc502/Code/Mantid/Framework/Geometry/src/Instrument/ParameterMap.cpp#L235</a>
+</p>
+<p>
+In <a class="closed ticket" href="9802.html" title="defect: Updating value of ParameterMap copy updates the original too (closed: fixed)">#9802</a> changes were made, for a different reason, so that adding a new value would always create a brand new object and I think this solved the problem.
+</p>
+<p>
+Despite this, I still believe the changes in this ticket are worth making as the way the <tt>Interpolation operator&gt;&gt;</tt> behaves does suggest that it expects a full clear each time. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9682.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T10%3A18%3A43%2B01%3A00&amp;precision=second" title="2014-08-04T10:18:43+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9682_lookup_table_read_multiple_times'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/3dd1903072fe8eb634c70a1cc5a63a8a016541fb"><span class="icon">​</span>3dd1903072fe8eb634c70a1cc5a63a8a016541fb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9682.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A28%3A21%2B01%3A00&amp;precision=second" title="2015-06-04T03:28:21+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10524"><span class="icon">​</span>10524</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9682?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9682?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9682?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

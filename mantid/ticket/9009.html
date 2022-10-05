@@ -1,0 +1,550 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9009 (Fix Units on ConvertMDHistoToMatrixWorkspace)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9008.html" title="Ticket #9008" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9009?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9009?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9009?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9010.html" title="Ticket #9010" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9009, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9008.html" title="Ticket #9008">Previous Ticket</a></span></li><li><span><a class="next" href="9010.html" title="Ticket #9010">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/9009.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9009.html">Ticket #9009</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-13T14%3A30%3A51Z&amp;precision=second" title="2014-02-13T14:30:51Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A00%3A23%2B01%3A00&amp;precision=second" title="2015-06-04T03:00:23+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Fix Units on ConvertMDHistoToMatrixWorkspace</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Owen+Arnold">Owen Arnold</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Owen+Arnold">Owen Arnold</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.1.1.html">Release 3.1.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Diffraction">Diffraction</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~PatchCandidate">PatchCandidate</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="8992.html" title="LineCuts units">#8992</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Peter Parker
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+The following illustrates the problem.
+</p>
+<div class="code"><pre>CreateMDWorkspace<span class="p">(</span>Dimensions<span class="o">=</span><span class="s">'2'</span><span class="p">,</span>EventType<span class="o">=</span><span class="s">'MDEvent'</span><span class="p">,</span>Extents<span class="o">=</span><span class="s">'-10,10,-10,10'</span><span class="p">,</span>Names<span class="o">=</span><span class="s">'Q_lab_x,Q_lab_y'</span><span class="p">,</span>Units<span class="o">=</span><span class="s">'A,B'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'test'</span><span class="p">)</span>
+FakeMDEventData<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'test'</span><span class="p">,</span>UniformParams<span class="o">=</span><span class="s">'1000'</span><span class="p">,</span>PeakParams<span class="o">=</span><span class="s">'100000,0,0,1'</span><span class="p">)</span>
+<span class="c"># Create a line cut</span>
+line_md <span class="o">=</span> BinMD<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'test'</span><span class="p">,</span>AxisAligned<span class="o">=</span><span class="s">'0'</span><span class="p">,</span>BasisVector0<span class="o">=</span><span class="s">'X,units,0.888154,0.459545'</span><span class="p">,</span>BasisVector1<span class="o">=</span><span class="s">'Y,units,-0.459545,0.888154'</span><span class="p">,</span>Translation<span class="o">=</span><span class="s">'-4.93562,-2.3918'</span><span class="p">,</span>OutputExtents<span class="o">=</span><span class="s">'0,9.61632,-0.1,0.1'</span><span class="p">,</span>OutputBins<span class="o">=</span><span class="s">'100,1'</span><span class="p">)</span>
+line_2d <span class="o">=</span> ConvertMDHistoToMatrixWorkspace<span class="p">(</span>line_md<span class="p">)</span>
+plotMD<span class="p">(</span>line_md<span class="p">)</span>
+plotSpectrum<span class="p">(</span>line_2d<span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div><p>
+These plots should be equivalent, but the X-units are wrong in the line_2d cut. This is because the Convert algorithm isn't properly sourcing the coordinate transformations. The default should be that it does. An optional parameter expressing the need to preserve the existing behaviour would be desirable.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9009.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T10%3A54%3A09Z&amp;precision=second" title="2014-02-14T10:54:09Z in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9009.html" title="defect: Fix Units on ConvertMDHistoToMatrixWorkspace (closed: fixed)">#9009</a>. For starters - need a test suite.
+</p>
+<p>
+No test coverage for existing functionality. This is required first.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/665cab907fd19a8780a96fb332226c030d65473b" title="665cab907fd19a8780a96fb332226c030d65473b">665cab907fd19a8780a96fb332226c030d65473b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9009.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T10%3A54%3A09Z&amp;precision=second" title="2014-02-14T10:54:09Z in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9009.html" title="defect: Fix Units on ConvertMDHistoToMatrixWorkspace (closed: fixed)">#9009</a>. Add desired transformation capabilities.
+</p>
+<p>
+Transform to original coordinates if workspace is present.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f68997c977c9d04ed26425c725687fcc755621a6" title="f68997c977c9d04ed26425c725687fcc755621a6">f68997c977c9d04ed26425c725687fcc755621a6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9009.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T10%3A54%3A09Z&amp;precision=second" title="2014-02-14T10:54:09Z in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9009.html" title="defect: Fix Units on ConvertMDHistoToMatrixWorkspace (closed: fixed)">#9009</a>. Design and implement coord trans test.
+</p>
+<p>
+Unit tests now contain a test which checks the coordinate transformations applied to the output MatrixWorkspace.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/73b5742714a2d4afdfce990f3c019f14d5cd949a" title="73b5742714a2d4afdfce990f3c019f14d5cd949a">73b5742714a2d4afdfce990f3c019f14d5cd949a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9009.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T09%3A17%3A31Z&amp;precision=second" title="2014-02-18T09:17:31Z in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9009.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T14%3A21%3A27Z&amp;precision=second" title="2014-02-19T14:21:27Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Parker</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9009.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T15%3A41%3A13Z&amp;precision=second" title="2014-02-19T15:41:13Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9009_fix_conversion'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/9ee190c6fb4aa4b9fa7e5c5ed5371b506bef849a"><span class="icon">​</span>9ee190c6fb4aa4b9fa7e5c5ed5371b506bef849a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9009.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T15%3A42%3A38Z&amp;precision=second" title="2014-02-19T15:42:38Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The script shows that the transforms are now taken into account.  Unit tests seem to cover the functionality and are passing.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9009.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-24T16%3A09%3A49Z&amp;precision=second" title="2014-02-24T16:09:49Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.2</em> to <em>Release 3.1.1</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to patch release 3.1.1
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9009.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-25T21%3A53%3A57Z&amp;precision=second" title="2014-02-25T21:53:57Z in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9009.html" title="defect: Fix Units on ConvertMDHistoToMatrixWorkspace (closed: fixed)">#9009</a>. For starters - need a test suite.
+</p>
+<p>
+No test coverage for existing functionality. This is required first.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/028b22af77ad1ba09d44202c70c10182eda809a1" title="028b22af77ad1ba09d44202c70c10182eda809a1">028b22af77ad1ba09d44202c70c10182eda809a1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9009.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-25T21%3A53%3A57Z&amp;precision=second" title="2014-02-25T21:53:57Z in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9009.html" title="defect: Fix Units on ConvertMDHistoToMatrixWorkspace (closed: fixed)">#9009</a>. Add desired transformation capabilities.
+</p>
+<p>
+Transform to original coordinates if workspace is present.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d51c54589e78d2a31f7c38e62a2e8c7acc951e59" title="d51c54589e78d2a31f7c38e62a2e8c7acc951e59">d51c54589e78d2a31f7c38e62a2e8c7acc951e59</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9009.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-25T21%3A53%3A57Z&amp;precision=second" title="2014-02-25T21:53:57Z in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9009.html" title="defect: Fix Units on ConvertMDHistoToMatrixWorkspace (closed: fixed)">#9009</a>. Design and implement coord trans test.
+</p>
+<p>
+Unit tests now contain a test which checks the coordinate transformations applied to the output MatrixWorkspace.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b5e5bda6f6b1904c394723eecf515e6331e8d811" title="b5e5bda6f6b1904c394723eecf515e6331e8d811">b5e5bda6f6b1904c394723eecf515e6331e8d811</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9009.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-25T21%3A54%3A43Z&amp;precision=second" title="2014-02-25T21:54:43Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The above 3 commits come from pulling the work in this ticket into the patch release branch.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9009.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A00%3A23%2B01%3A00&amp;precision=second" title="2015-06-04T03:00:23+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9852"><span class="icon">​</span>9852</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9009?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9009?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9009?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

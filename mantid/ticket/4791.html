@@ -1,0 +1,984 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #4791 (Investigate using floats instead of doubles as coord_t)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="4790.html" title="Ticket #4790" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4791?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4791?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4791?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="4792.html" title="Ticket #4792" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 4791, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="4790.html" title="Ticket #4790">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="4792.html" title="Ticket #4792">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="4791.html">Ticket #4791</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-10T22%3A03%3A02Z&amp;precision=second" title="2012-02-10T22:03:02Z in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A05%3A37%2B01%3A00&amp;precision=second" title="2015-06-04T00:05:37+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Investigate using floats instead of doubles as coord_t</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.1.html">Release 2.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              alex.buts@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Jose Borreguero
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2012-02-13 19:10:33.002587+00:00">
+        (last modified by Janik Zikovsky)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/4791?action=diff&amp;version=14">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Because this would reduce memory used by MDWorkspaces by approx 2.The "coord_t" typedef is currently defined as a double. Try to redefine it as a float, because this would reduce memory used by MDWorkspaces by approx 2.
+</p>
+<p>
+Go through the code and make sure the proper casts are there, and squash warning for both situations.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="4791.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-10T22%3A04%3A23Z&amp;precision=second" title="2012-02-10T22:04:23Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="4791.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-10T22%3A44%3A02Z&amp;precision=second" title="2012-02-10T22:44:02Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: prepare for testing coord_t = float
+</p>
+<p>
+Reduce warnings and avoid errors 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f865dd257b86ca493fbc3d7cf0e93d9c13fee568" title="f865dd257b86ca493fbc3d7cf0e93d9c13fee568">f865dd257b86ca493fbc3d7cf0e93d9c13fee568</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="4791.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-11T18%3A53%3A24Z&amp;precision=second" title="2012-02-11T18:53:24Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: templated VMD could be set to use floats
+</p>
+<p>
+Typedef for VMD points to the desired type. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/98eb8fa5c9793b8bdcac8ae4ff7ab308f720f4a1" title="98eb8fa5c9793b8bdcac8ae4ff7ab308f720f4a1">98eb8fa5c9793b8bdcac8ae4ff7ab308f720f4a1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="4791.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-11T20%3A45%3A59Z&amp;precision=second" title="2012-02-11T20:45:59Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> suppress more warnings 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6c1a29bb939f6c59db3278230a7fa83531249835" title="6c1a29bb939f6c59db3278230a7fa83531249835">6c1a29bb939f6c59db3278230a7fa83531249835</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="4791.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-11T21%3A17%3A50Z&amp;precision=second" title="2012-02-11T21:17:50Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> win build fix attempt 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d01ec0fa070175569b5327fb393b85e71071489c" title="d01ec0fa070175569b5327fb393b85e71071489c">d01ec0fa070175569b5327fb393b85e71071489c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="4791.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-12T02%3A49%3A50Z&amp;precision=second" title="2012-02-12T02:49:50Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> fix win build? 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8f9a0c03d69ca77fbfc4d1c10c55d26af629a5c1" title="8f9a0c03d69ca77fbfc4d1c10c55d26af629a5c1">8f9a0c03d69ca77fbfc4d1c10c55d26af629a5c1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="4791.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-12T03%3A02%3A30Z&amp;precision=second" title="2012-02-12T03:02:30Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: fix build maybe 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/604bd42a0c75f3048e62f92eb0d9aa5acf536f3a" title="604bd42a0c75f3048e62f92eb0d9aa5acf536f3a">604bd42a0c75f3048e62f92eb0d9aa5acf536f3a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="4791.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-12T03%3A07%3A58Z&amp;precision=second" title="2012-02-12T03:07:58Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: fix build maybe 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8fcaa2360ffe88a894f3cb49cf3c5dabc0e72a35" title="8fcaa2360ffe88a894f3cb49cf3c5dabc0e72a35">8fcaa2360ffe88a894f3cb49cf3c5dabc0e72a35</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="4791.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T16%3A05%3A35Z&amp;precision=second" title="2012-02-13T16:05:35Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> using coord_t in more places
+</p>
+<p>
+To reduce warnings when coord_t = float. Also, fix a warning <a class="closed ticket" href="4473.html" title="task: Ticket For Warnings (closed: fixed)">#4473</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6f3494ac95f1c044e7f90dabc251497334660215" title="6f3494ac95f1c044e7f90dabc251497334660215">6f3494ac95f1c044e7f90dabc251497334660215</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="4791.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T18%3A44%3A35Z&amp;precision=second" title="2012-02-13T18:44:35Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> fix errors and warnings in test for coord_t = float 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/54f88c1a94bdf0d5e4df44384670836f68879060" title="54f88c1a94bdf0d5e4df44384670836f68879060">54f88c1a94bdf0d5e4df44384670836f68879060</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="4791.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T18%3A44%3A36Z&amp;precision=second" title="2012-02-13T18:44:36Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> all tests work with coord_t = float 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/907db4684c786b5480d79e82cc532ae2abbf0306" title="907db4684c786b5480d79e82cc532ae2abbf0306">907db4684c786b5480d79e82cc532ae2abbf0306</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="4791.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T18%3A44%3A36Z&amp;precision=second" title="2012-02-13T18:44:36Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> squash all warnings when coord_t=float
+</p>
+<p>
+I think. Later I will replace c-style casts with c++ static_cast&lt;coord_t&gt; 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/740d83ac200d55494763630828c4baf13d2bbd9c" title="740d83ac200d55494763630828c4baf13d2bbd9c">740d83ac200d55494763630828c4baf13d2bbd9c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="4791.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T18%3A44%3A36Z&amp;precision=second" title="2012-02-13T18:44:36Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> fix last test 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2a21889b561267c5266c2d71af3d0f7a5499ecc6" title="2a21889b561267c5266c2d71af3d0f7a5499ecc6">2a21889b561267c5266c2d71af3d0f7a5499ecc6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="4791.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T19%3A10%3A33Z&amp;precision=second" title="2012-02-13T19:10:33Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>alex.buts@…</em> added
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/4791?action=diff&amp;version=14">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="4791.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T19%3A16%3A09Z&amp;precision=second" title="2012-02-13T19:16:09Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> use 0.123f instead of coord_t(0.123)
+</p>
+<p>
+Because that is more readable 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d7c6f88a1e55c6c87318dc0403702c68d42b5679" title="d7c6f88a1e55c6c87318dc0403702c68d42b5679">d7c6f88a1e55c6c87318dc0403702c68d42b5679</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="4791.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T19%3A16%3A09Z&amp;precision=second" title="2012-02-13T19:16:09Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> use 0.123f instead of coord_t(0.123)
+</p>
+<p>
+Because that is more readable 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1966776ce6eea348a6a19d284590245c5dce86eb" title="1966776ce6eea348a6a19d284590245c5dce86eb">1966776ce6eea348a6a19d284590245c5dce86eb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="4791.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T19%3A16%3A09Z&amp;precision=second" title="2012-02-13T19:16:09Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> use 0.123f instead of coord_t(0.123)
+</p>
+<p>
+Because that is more readable 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/efde066a3e31e1e93e76ef9a18d3784a4987449e" title="efde066a3e31e1e93e76ef9a18d3784a4987449e">efde066a3e31e1e93e76ef9a18d3784a4987449e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="4791.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T19%3A16%3A10Z&amp;precision=second" title="2012-02-13T19:16:10Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: use static_cast instead of c-style cast 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/24a9e2e5b09f5f7f12152712076398057d87caf5" title="24a9e2e5b09f5f7f12152712076398057d87caf5">24a9e2e5b09f5f7f12152712076398057d87caf5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="4791.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T19%3A16%3A10Z&amp;precision=second" title="2012-02-13T19:16:10Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: actually define coord_t as float to try it on
+</p>
+<p>
+the other build systems 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/44a262680dba5d34d96dec3ea76c3571002fa7ed" title="44a262680dba5d34d96dec3ea76c3571002fa7ed">44a262680dba5d34d96dec3ea76c3571002fa7ed</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="4791.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T19%3A27%3A44Z&amp;precision=second" title="2012-02-13T19:27:44Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a> load old MDEW .nxs files
+</p>
+<p>
+and fix windows build I hope 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1c7a6bd28341e9d2390fdad18518357b0036b5f9" title="1c7a6bd28341e9d2390fdad18518357b0036b5f9">1c7a6bd28341e9d2390fdad18518357b0036b5f9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="4791.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T19%3A40%3A58Z&amp;precision=second" title="2012-02-13T19:40:58Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: fix SliceViewerPythonInterfaceTest 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fad00c2b7565a65aa8ed819331b9f81239221b37" title="fad00c2b7565a65aa8ed819331b9f81239221b37">fad00c2b7565a65aa8ed819331b9f81239221b37</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="4791.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-13T20%3A07%3A55Z&amp;precision=second" title="2012-02-13T20:07:55Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: add warning when loading old MDEW nxs file 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b3b265e2a10fa3f4bc369ff33070466089456ab4" title="b3b265e2a10fa3f4bc369ff33070466089456ab4">b3b265e2a10fa3f4bc369ff33070466089456ab4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="4791.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T19%3A26%3A50Z&amp;precision=second" title="2012-02-14T19:26:50Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: make sure MDEvents are summed as doubles
+</p>
+<p>
+to preserve precision 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4888ce7b5915722b099a4643613199cfa61c38ca" title="4888ce7b5915722b099a4643613199cfa61c38ca">4888ce7b5915722b099a4643613199cfa61c38ca</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="4791.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T19%3A26%3A51Z&amp;precision=second" title="2012-02-14T19:26:51Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: Better code reuse. File-backed MDWS can save
+</p>
+<p>
+to the older file format too. Added warning for detector IDs &gt; 16 million for (possible) future generations of instruments 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/394db9f93c4827c9d1e5e20fab0c6fc191ab0b09" title="394db9f93c4827c9d1e5e20fab0c6fc191ab0b09">394db9f93c4827c9d1e5e20fab0c6fc191ab0b09</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="4791.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T19%3A32%3A57Z&amp;precision=second" title="2012-02-14T19:32:57Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Note to testers: this is not very easy to test. A code review would be good. Check that it works with older MDEventWorkspace .nxs files (that were saved in doubles).
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="4791.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A37Z&amp;precision=second" title="2012-02-17T19:16:37Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: make sure MDEvents are summed as doubles
+</p>
+<p>
+to preserve precision 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4888ce7b5915722b099a4643613199cfa61c38ca" title="4888ce7b5915722b099a4643613199cfa61c38ca">4888ce7b5915722b099a4643613199cfa61c38ca</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="4791.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A38Z&amp;precision=second" title="2012-02-17T19:16:38Z in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="4791.html" title="enhancement: Investigate using floats instead of doubles as coord_t (closed: fixed)">#4791</a>: Better code reuse. File-backed MDWS can save
+</p>
+<p>
+to the older file format too. Added warning for detector IDs &gt; 16 million for (possible) future generations of instruments 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/394db9f93c4827c9d1e5e20fab0c6fc191ab0b09" title="394db9f93c4827c9d1e5e20fab0c6fc191ab0b09">394db9f93c4827c9d1e5e20fab0c6fc191ab0b09</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="4791.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-30T20%3A41%3A31%2B01%3A00&amp;precision=second" title="2012-04-30T20:41:31+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Jose Borreguero</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="4791.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-02T16%3A33%3A55%2B01%3A00&amp;precision=second" title="2012-05-02T16:33:55+01:00 in Timeline">8 years</a> ago by Jose Borreguero
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="4791.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A05%3A37%2B01%3A00&amp;precision=second" title="2015-06-04T00:05:37+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/5638"><span class="icon">​</span>5638</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4791?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4791?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4791?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

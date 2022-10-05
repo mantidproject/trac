@@ -1,0 +1,2184 @@
+>>>>>>>>>>>>> MatrixWSDataSource.h <<<<<<<<<<<<<
+1,2c1,2
+< #ifndef REF_MATRIX_WS_DATA_SOURCE_H
+< #define REF_MATRIX_WS_DATA_SOURCE_H
+---
+> #ifndef MATRIX_WS_DATA_SOURCE_H
+> #define MATRIX_WS_DATA_SOURCE_H
+6,8c6,9
+< #include "MantidQtRefDetectorViewer/DataArray.h"
+< #include "MantidQtRefDetectorViewer/RefImageDataSource.h"
+< #include "MantidQtRefDetectorViewer/DllOptionIV.h"
+---
+> #include "MantidQtImageViewer/DataArray.h"
+> #include "MantidQtImageViewer/ImageDataSource.h"
+> #include "MantidQtImageViewer/EModeHandler.h"
+> #include "MantidQtImageViewer/DllOptionIV.h"
+13c14
+<     @class RefMatrixWSDataSource 
+---
+>     @class MatrixWSDataSource 
+44c45
+< namespace RefDetectorViewer
+---
+> namespace ImageView
+47c48
+< class EXPORT_OPT_MANTIDQT_IMAGEVIEWER RefMatrixWSDataSource: public RefImageDataSource
+---
+> class EXPORT_OPT_MANTIDQT_IMAGEVIEWER MatrixWSDataSource: public ImageDataSource
+52c53
+<     RefMatrixWSDataSource( Mantid::API::MatrixWorkspace_sptr mat_ws );
+---
+>     MatrixWSDataSource( Mantid::API::MatrixWorkspace_const_sptr mat_ws );
+54c55
+<    ~RefMatrixWSDataSource();
+---
+>    ~MatrixWSDataSource();
+70c71
+<     
+---
+> 
+79a81,83
+>     /// Set the class that gets the emode & efixed info from the user.
+>     void SetEModeHandler( EModeHandler* emode_handler );
+> 
+83a88,89
+> 
+> 
+85,86c91,92
+<     Mantid::API::MatrixWorkspace_sptr  mat_ws;
+<     
+---
+>     Mantid::API::MatrixWorkspace_const_sptr  mat_ws;
+>     EModeHandler* saved_emode_handler;
+92c98
+< #endif // REF_MATRIX_WS_DATA_SOURCE_H
+---
+> #endif // MATRIX_WS_DATA_SOURCE_H
+>>>>>>>>>>>>> MatrixWSDataSource.cpp <<<<<<<<<<<<<
+/**								/**
+ *  File: RefMatrixWSDataSource.cpp			      |	 *  File: MatrixWSDataSource.cpp
+ */								 */
+
+#include <iostream>						#include <iostream>
+							      >	#include <sstream>
+#include <math.h>						#include <math.h>
+
+#include <QThread>						#include <QThread>
+
+#include "MantidQtRefDetectorViewer/RefMatrixWSDataSource.h"  |	#include "MantidQtImageViewer/MatrixWSDataSource.h"
+#include "MantidQtRefDetectorViewer/IVUtils.h"		      |	#include "MantidQtImageViewer/IVUtils.h"
+#include "MantidAPI/ISpectrum.h"				#include "MantidAPI/ISpectrum.h"
+#include "MantidGeometry/Instrument/Detector.h"			#include "MantidGeometry/Instrument/Detector.h"
+#include "MantidGeometry/Instrument.h"				#include "MantidGeometry/Instrument.h"
+#include "MantidKernel/UnitFactory.h"				#include "MantidKernel/UnitFactory.h"
+#include "MantidAPI/Run.h"					#include "MantidAPI/Run.h"
+#include "MantidQtRefDetectorViewer/ErrorHandler.h"	      |	#include "MantidQtImageViewer/ErrorHandler.h"
+#include "MantidQtRefDetectorViewer/ArrayDataSource.h"	      <
+#include "MantidQtRefDetectorViewer/IVUtils.h"		      <
+
+using namespace Mantid;						using namespace Mantid;
+using namespace Kernel;						using namespace Kernel;
+using namespace API;						using namespace API;
+using namespace Geometry;					using namespace Geometry;
+
+namespace MantidQt						namespace MantidQt
+{								{
+namespace RefDetectorViewer				      |	namespace ImageView
+{								{
+
+/**								/**
+ * Construct a DataSource object around the specifed MatrixWo	 * Construct a DataSource object around the specifed MatrixWo
+ *								 *
+ * @param mat_ws  Shared pointer to the matrix workspace bein	 * @param mat_ws  Shared pointer to the matrix workspace bein
+ */								 */
+RefMatrixWSDataSource::RefMatrixWSDataSource( MatrixWorkspace |	MatrixWSDataSource::MatrixWSDataSource( MatrixWorkspace_const
+                 :RefImageDataSource( 0.0, 1.0, 0.0, 1.0, 0,  |	                 :ImageDataSource( 0.0, 1.0, 0.0, 1.0, 0, 0 )
+{								{
+  this->mat_ws = mat_ws;					  this->mat_ws = mat_ws;
+
+  total_xmin = mat_ws->getXMin(); 				  total_xmin = mat_ws->getXMin(); 
+  total_xmax = mat_ws->getXMax(); 				  total_xmax = mat_ws->getXMax(); 
+
+  total_ymin = 0;                 // y direction is spectrum 	  total_ymin = 0;                 // y direction is spectrum 
+  total_ymax = (double)mat_ws->getNumberHistograms();		  total_ymax = (double)mat_ws->getNumberHistograms();
+
+  total_rows = mat_ws->getNumberHistograms();			  total_rows = mat_ws->getNumberHistograms();
+
+  total_cols = 1000000;              // Default data resoluti	  total_cols = 1000000;              // Default data resoluti
+							      >
+							      >	  saved_emode_handler = 0;
+}								}
+    							      |
+RefMatrixWSDataSource::~RefMatrixWSDataSource()		      |
+							      >	MatrixWSDataSource::~MatrixWSDataSource()
+{								{
+}								}
+
+
+/**								/**
+ * Get the smallest 'x' value covered by the data.  Must over	 * Get the smallest 'x' value covered by the data.  Must over
+ * method, since the DataSource can be changed!			 * method, since the DataSource can be changed!
+ */								 */
+double RefMatrixWSDataSource::GetXMin()			      |	double MatrixWSDataSource::GetXMin()
+{								{
+  total_xmin = mat_ws->getXMin(); 				  total_xmin = mat_ws->getXMin(); 
+  return total_xmin;						  return total_xmin;
+}								}
+
+
+/**								/**
+ * Get the largest 'x' value covered by the data.  Must overr	 * Get the largest 'x' value covered by the data.  Must overr
+ * method, since the DataSource can be changed!			 * method, since the DataSource can be changed!
+ */								 */
+double RefMatrixWSDataSource::GetXMax()			      |	double MatrixWSDataSource::GetXMax()
+{								{
+  total_xmax = mat_ws->getXMax(); 				  total_xmax = mat_ws->getXMax(); 
+  return total_xmax;						  return total_xmax;
+}								}
+
+
+/**								/**
+ * Get the largest 'y' value covered by the data.  Must overr	 * Get the largest 'y' value covered by the data.  Must overr
+ * method, since the DataSource can be changed!			 * method, since the DataSource can be changed!
+ */								 */
+double RefMatrixWSDataSource::GetYMax()			      |	double MatrixWSDataSource::GetYMax()
+{								{
+  total_ymax = (double)mat_ws->getNumberHistograms();		  total_ymax = (double)mat_ws->getNumberHistograms();
+  return total_ymax;						  return total_ymax;
+}								}
+
+
+/**								/**
+ * Get the total number of rows the data is divided into.  Mu	 * Get the total number of rows the data is divided into.  Mu
+ * class method, since the DataSource can be changed!		 * class method, since the DataSource can be changed!
+ */								 */
+size_t RefMatrixWSDataSource::GetNRows()		      |	size_t MatrixWSDataSource::GetNRows()
+{								{
+  total_ymax = (double)mat_ws->getNumberHistograms();		  total_ymax = (double)mat_ws->getNumberHistograms();
+  return total_rows;						  return total_rows;
+}								}
+
+
+/**								/**
+ * Get a data array covering the specified range of data, at 	 * Get a data array covering the specified range of data, at 
+ * resolution.  NOTE: The calling code is responsible for del	 * resolution.  NOTE: The calling code is responsible for del
+ * DataArray that is constructed in and returned by this meth	 * DataArray that is constructed in and returned by this meth
+ *								 *
+ * @param xmin      Left edge of region to be covered.		 * @param xmin      Left edge of region to be covered.
+ * @param xmax      Right edge of region to be covered.		 * @param xmax      Right edge of region to be covered.
+ * @param ymin      Bottom edge of region to be covered.	 * @param ymin      Bottom edge of region to be covered.
+ * @param ymax      Top edge of region to be covered.		 * @param ymax      Top edge of region to be covered.
+ * @param n_rows    Number of rows to return. If the number o	 * @param n_rows    Number of rows to return. If the number o
+ *                  than the actual number of data rows in [y	 *                  than the actual number of data rows in [y
+ *                  data will be subsampled, and only the spe	 *                  data will be subsampled, and only the spe
+ *                  of rows will be returned.			 *                  of rows will be returned.
+ * @param n_cols    The specrum data will be rebinned using t	 * @param n_cols    The specrum data will be rebinned using t
+ *                  number of colums.				 *                  number of colums.
+ * @param is_log_x  Flag indicating whether or not the data s	 * @param is_log_x  Flag indicating whether or not the data s
+ *                  binned logarithmically.  (NOT USED YET)   |	 *                  binned logarithmically. 
+ */								 */
+DataArray* RefMatrixWSDataSource::GetDataArray( double xmin,  |	DataArray* MatrixWSDataSource::GetDataArray( double xmin,   d
+                                             double ymin,   d	                                             double ymin,   d
+                                             size_t n_rows, s	                                             size_t n_rows, s
+                                             bool   is_log_x 	                                             bool   is_log_x 
+{								{
+/*								/*
+  std::cout << "Start MatrixWSDataSource::GetDataArray " << s	  std::cout << "Start MatrixWSDataSource::GetDataArray " << s
+  std::cout << "  xmin   = " << xmin 				  std::cout << "  xmin   = " << xmin 
+            << "  xmax   = " << xmax 				            << "  xmax   = " << xmax 
+            << "  ymin   = " << ymin 				            << "  ymin   = " << ymin 
+            << "  ymax   = " << ymax 				            << "  ymax   = " << ymax 
+            << "  n_rows = " << n_rows				            << "  n_rows = " << n_rows
+            << "  n_cols = " << n_cols << std::endl;		            << "  n_cols = " << n_cols << std::endl;
+*/								*/
+                                                  // since we	                                                  // since we
+                                                  // columns 	                                                  // columns 
+                                                  // but rows	                                                  // but rows
+                                                  // to get w	                                                  // to get w
+  size_t first_row;						  size_t first_row;
+  IVUtils::CalculateInterval( total_ymin, total_ymax, total_r	  IVUtils::CalculateInterval( total_ymin, total_ymax, total_r
+                              first_row, ymin, ymax, n_rows )	                              first_row, ymin, ymax, n_rows )
+
+  float* new_data = new float[n_rows * n_cols];   // this arr	  float* new_data = new float[n_rows * n_cols];   // this arr
+                                                  // the Data	                                                  // the Data
+  MantidVec x_scale;						  MantidVec x_scale;
+  x_scale.resize(n_cols+1);					  x_scale.resize(n_cols+1);
+  if ( is_log_x )						  if ( is_log_x )
+  {								  {
+    for ( size_t i = 0; i < n_cols+1; i++ )			    for ( size_t i = 0; i < n_cols+1; i++ )
+    {								    {
+      x_scale[i] = xmin * exp ( (double)i / (double)n_cols * 	      x_scale[i] = xmin * exp ( (double)i / (double)n_cols * 
+    }								    }
+  }								  }
+  else								  else
+  {								  {
+    double dx = (xmax - xmin)/((double)n_cols + 1.0);		    double dx = (xmax - xmin)/((double)n_cols + 1.0);
+    for ( size_t i = 0; i < n_cols+1; i++ )			    for ( size_t i = 0; i < n_cols+1; i++ )
+    {								    {
+      x_scale[i] = xmin + (double)i * dx;			      x_scale[i] = xmin + (double)i * dx;
+    }								    }
+  }                                                // choose 	  }                                                // choose 
+                                                   // require	                                                   // require
+                                                   // spectru	                                                   // spectru
+  double y_step = (ymax - ymin) / (double)n_rows;		  double y_step = (ymax - ymin) / (double)n_rows;
+  double mid_y;							  double mid_y;
+  double d_y_index;						  double d_y_index;
+  size_t source_row;						  size_t source_row;
+
+  MantidVec y_vals;						  MantidVec y_vals;
+  MantidVec err;						  MantidVec err;
+  y_vals.resize(n_cols);					  y_vals.resize(n_cols);
+  err.resize(n_cols);						  err.resize(n_cols);
+  size_t index = 0;						  size_t index = 0;
+  for ( size_t i = 0; i < n_rows; i++ )				  for ( size_t i = 0; i < n_rows; i++ )
+  {								  {
+    mid_y = ymin + ((double)i + 0.5) * y_step;			    mid_y = ymin + ((double)i + 0.5) * y_step;
+    IVUtils::Interpolate( total_ymin, total_ymax, mid_y,	    IVUtils::Interpolate( total_ymin, total_ymax, mid_y,
+                                 0.0, (double)total_rows, d_y	                                 0.0, (double)total_rows, d_y
+    source_row = (size_t)d_y_index;				    source_row = (size_t)d_y_index;
+    y_vals.clear();						    y_vals.clear();
+    err.clear();						    err.clear();
+    y_vals.resize(n_cols,0);					    y_vals.resize(n_cols,0);
+    err.resize(n_cols,0);					    err.resize(n_cols,0);
+
+    mat_ws->generateHistogram( source_row, x_scale, y_vals, e	    mat_ws->generateHistogram( source_row, x_scale, y_vals, e
+    for ( size_t col = 0; col < n_cols; col++ )			    for ( size_t col = 0; col < n_cols; col++ )
+    {								    {
+      new_data[index] = (float)y_vals[col];			      new_data[index] = (float)y_vals[col];
+      index++;							      index++;
+    }								    }
+  }								  }
+                                // The calling code is respon	                                // The calling code is respon
+                                // the DataArray when it is d	                                // the DataArray when it is d
+  DataArray* new_data_array = new DataArray( xmin, xmax, ymin	  DataArray* new_data_array = new DataArray( xmin, xmax, ymin
+                                             is_log_x, 		                                             is_log_x, 
+                                             n_rows, n_cols, 	                                             n_rows, n_cols, 
+  return new_data_array;					  return new_data_array;
+}								}
+
+
+/**								/**
+ * Get a data array covering the full range of data.		 * Get a data array covering the full range of data.
+ *								 *
+ * @param is_log_x  Flag indicating whether or not the data s	 * @param is_log_x  Flag indicating whether or not the data s
+ *                  binned logarithmically.  (NOT USED YET)   |	 *                  binned logarithmically.
+ */								 */
+DataArray * RefMatrixWSDataSource::GetDataArray( bool is_log_ |	DataArray * MatrixWSDataSource::GetDataArray( bool is_log_x )
+{								{
+  return GetDataArray( total_xmin, total_xmax, total_ymin, to	  return GetDataArray( total_xmin, total_xmax, total_ymin, to
+                       total_rows, total_cols, is_log_x );	                       total_rows, total_cols, is_log_x );
+}								}
+
+							      >
+							      >	/**
+							      >	 * Set the class that gets the emode & efixed info from the u
+							      >	 *
+							      >	 * @param emode_handler  Pointer to the user interface handle
+							      >	 *                       can provide user values for emode an
+							      >	 */
+							      >	void MatrixWSDataSource::SetEModeHandler( EModeHandler* emode
+							      >	{
+							      >	  saved_emode_handler = emode_handler;
+							      >	}
+							      >
+							      >
+/**								/**
+ * Clear the vector of strings and then add pairs of strings 	 * Clear the vector of strings and then add pairs of strings 
+ * about the specified point, x, y.  The first string in a pa	 * about the specified point, x, y.  The first string in a pa
+ * generally be a string describing the value being presented	 * generally be a string describing the value being presented
+ * string should contain the value.				 * string should contain the value.
+ *  								 *  
+ * @param x    The x-coordinate of the point of interest in t	 * @param x    The x-coordinate of the point of interest in t
+ * @param y    The y-coordinate of the point of interest in t	 * @param y    The y-coordinate of the point of interest in t
+ * @param list Vector that will be filled out with the inform	 * @param list Vector that will be filled out with the inform
+ */								 */
+void RefMatrixWSDataSource::GetInfoList( double x, 	      |	void MatrixWSDataSource::GetInfoList( double x, 
+                                      double y,			                                      double y,
+                                      std::vector<std::string	                                      std::vector<std::string
+{								{
+  list.clear();							  list.clear();
+                                        // first get the info	                                        // first get the info
+                                        // available for any 	                                        // available for any 
+  int row = (int)y;						  int row = (int)y;
+  RestrictRow( row );						  RestrictRow( row );
+
+  ISpectrum* spec = mat_ws->getSpectrum( row );		      |	  const ISpectrum* spec = mat_ws->getSpectrum( row );
+
+  double spec_num = spec->getSpectrumNo();			  double spec_num = spec->getSpectrumNo();
+  IVUtils::PushNameValue( "Spec Num", 8, 0, spec_num, list );	  IVUtils::PushNameValue( "Spec Num", 8, 0, spec_num, list );
+
+  std::string x_label = "";					  std::string x_label = "";
+  Unit_sptr& old_unit = mat_ws->getAxis(0)->unit();		  Unit_sptr& old_unit = mat_ws->getAxis(0)->unit();
+  if ( old_unit != 0 )						  if ( old_unit != 0 )
+  {								  {
+    x_label = old_unit->caption();				    x_label = old_unit->caption();
+    IVUtils::PushNameValue( x_label, 8, 3, x, list );		    IVUtils::PushNameValue( x_label, 8, 3, x, list );
+  }								  }
+
+							      >	  double d_id = 0;
+  std::set<detid_t> ids = spec->getDetectorIDs();		  std::set<detid_t> ids = spec->getDetectorIDs();
+  if ( !ids.empty() )						  if ( !ids.empty() )
+  {								  {
+    std::set<detid_t>::iterator it = ids.begin();		    std::set<detid_t>::iterator it = ids.begin();
+    double d_id = (double)*it;				      |	    d_id = (double)*it;
+    IVUtils::PushNameValue( "Det ID", 8, 0, d_id, list );	    IVUtils::PushNameValue( "Det ID", 8, 0, d_id, list );
+  }								  }
+
+                                     // now try to do various |	  IDetector_const_sptr det;          // now try to do various
+  try                                // to get equivalent inf	  try                                // to get equivalent inf
+  {                                  // first make sure we ca	  {                                  // first make sure we ca
+                                     // information		                                     // information
+    if ( old_unit == 0 )					    if ( old_unit == 0 )
+    {								    {
+							      >	      ErrorHandler::Error("No UNITS on MatrixWorkspace X-axis
+      return;							      return;
+    }								    }
+
+    Instrument_const_sptr instrument = mat_ws->getInstrument(	    Instrument_const_sptr instrument = mat_ws->getInstrument(
+    if ( instrument == 0 )					    if ( instrument == 0 )
+    {								    {
+							      >	      ErrorHandler::Error("No INSTRUMENT on MatrixWorkspace")
+      return;							      return;
+    }								    }
+
+    IObjComponent_const_sptr source = instrument->getSource()	    IObjComponent_const_sptr source = instrument->getSource()
+    if ( source == 0 )						    if ( source == 0 )
+    {								    {
+							      >	      ErrorHandler::Error("No SOURCE on instrument in MatrixW
+      return;							      return;
+    }								    }
+
+    IObjComponent_const_sptr sample = instrument->getSample()	    IObjComponent_const_sptr sample = instrument->getSample()
+    if ( sample == 0 )						    if ( sample == 0 )
+    {								    {
+							      >	      ErrorHandler::Error("No SAMPLE on instrument in MatrixW
+      return;							      return;
+    }								    }
+
+    IDetector_const_sptr det = mat_ws->getDetector( row );    |	    det = mat_ws->getDetector( row );
+    if ( det == 0 )						    if ( det == 0 )
+    {								    {
+							      >	      std::ostringstream message;
+							      >	      message << "No DETECTOR for row " << row << " in Matrix
+							      >	      ErrorHandler::Error( message.str() );
+      return;							      return;
+    }								    }
+
+    double l1        = source->getDistance(*sample);		    double l1        = source->getDistance(*sample);
+    double l2        = 0;					    double l2        = 0;
+    double two_theta = 0;					    double two_theta = 0;
+    if ( det->isMonitor() )					    if ( det->isMonitor() )
+    {								    {
+      l2 = det->getDistance(*source);				      l2 = det->getDistance(*source);
+      l2 = l2-l1;						      l2 = l2-l1;
+    }								    }
+    else							    else
+    {								    {
+      l2 = det->getDistance(*sample);				      l2 = det->getDistance(*sample);
+      two_theta = mat_ws->detectorTwoTheta(det);		      two_theta = mat_ws->detectorTwoTheta(det);
+    }								    }
+                        // For now, only support diffractomet	                        // For now, only support diffractomet
+                        // We need a portable way to determin	                        // We need a portable way to determin
+                        // and efixed that will work for any 	                        // and efixed that will work for any 
+    int    emode  = 0;						    int    emode  = 0;
+    double efixed = 0;						    double efixed = 0;
+    double delta  = 0;						    double delta  = 0;
+
+    const API::Run & run = mat_ws->run();  // cases I checked |	//  std::cout << "Start of checks for emode" << std::endl;
+    if ( run.hasProperty("Ei") )              		      |
+							      >	                        // First try to get emode & efixed fr
+							      >	    if ( saved_emode_handler != 0 )
+    {								    {
+      Kernel::Property* prop = run.getProperty("Ei");	      |	      efixed = saved_emode_handler->GetEFixed();
+      efixed = boost::lexical_cast<double,std::string>(prop-> |	      if ( efixed != 0 )
+      emode  = 1;                         // only correct for |	      {
+    }                                     // instruments      |	        emode = saved_emode_handler->GetEMode();
+  							      |	        if ( emode == 0 )
+							      >	        {
+							      >	          ErrorHandler::Error("EMode invalid, spectrometer ne
+							      >	          ErrorHandler::Error("Assuming Direct Geometry Spect
+							      >	          emode = 1;
+							      >	        }
+							      >	      }
+							      >	    }
+							      >
+							      >	//  std::cout << "Done with calls to GetEFixed and GetEMode" 
+							      >	//  std::cout << "EMode  = " << emode  << std::endl;
+							      >	//  std::cout << "EFixed = " << efixed << std::endl;
+							      >
+							      >	    if ( efixed == 0 )    // Did NOT get emode & efixed from 
+							      >	    {                     // direct geometry information from
+							      >	      const API::Run & run = mat_ws->run(); 
+							      >	      if ( run.hasProperty("Ei") )              
+							      >	      {
+							      >	        Kernel::Property* prop = run.getProperty("Ei");
+							      >	        efixed = boost::lexical_cast<double,std::string>(prop
+							      >	        emode  = 1;                         // only correct i
+							      >	      }
+							      >	      else if ( run.hasProperty("EnergyRequested") )
+							      >	      {
+							      >	        Kernel::Property* prop = run.getProperty("EnergyReque
+							      >	        efixed = boost::lexical_cast<double,std::string>(prop
+							      >	        emode  = 1;     
+							      >	      }
+							      >	      else if ( run.hasProperty("EnergyEstimate") )
+							      >	      {
+							      >	        Kernel::Property* prop = run.getProperty("EnergyEstim
+							      >	        efixed = boost::lexical_cast<double,std::string>(prop
+							      >	        emode  = 1;     
+							      >	      }
+							      >	    }
+							      >
+							      >	//  std::cout << "Done with getting info from run" << std::en
+							      >	//  std::cout << "EMode  = " << emode  << std::endl;
+							      >	//  std::cout << "EFixed = " << efixed << std::endl;
+							      >
+							      >	    if ( efixed == 0 )    // finally, try getting indirect ge
+							      >	    {                     // from the detector object
+							      >	      if ( !(det->isMonitor() && det->hasParameter("Efixed"))
+							      >	      {
+							      >	        try
+							      >	        {
+							      >	          const ParameterMap& pmap = mat_ws->constInstrumentP
+							      >	          Parameter_sptr par = pmap.getRecursive(det.get(),"E
+							      >	          if (par)
+							      >	          {
+							      >	            efixed = par->value<double>();
+							      >	            emode = 2;
+							      >	          }
+							      >	        }
+							      >	        catch ( std::runtime_error& )
+							      >	        {
+							      >	          std::ostringstream message;
+							      >	          message << "Failed to get Efixed from detector ID: 
+							      >	                  << det->getID() << " in MatrixWSDataSource"
+							      >	          ErrorHandler::Error( message.str() );
+							      >	          efixed = 0;
+							      >	        }
+							      >	      } 
+							      >	    }
+							      >
+							      >	//  std::cout << "Done with getting info from detector" << st
+							      >	//  std::cout << "EMode  = " << emode  << std::endl;
+							      >	//  std::cout << "EFixed = " << efixed << std::endl;
+							      >	 
+							      >	    if ( efixed == 0 )
+							      >	    {
+							      >	      emode = 0;
+							      >	    }
+							      >	    
+							      >	    if ( saved_emode_handler != 0 )
+							      >	    {
+							      >	      saved_emode_handler -> SetEFixed( efixed );  
+							      >	      saved_emode_handler -> SetEMode ( emode );  
+							      >	    }
+							      >
+    double tof = old_unit->convertSingleToTOF( x, l1, l2, two	    double tof = old_unit->convertSingleToTOF( x, l1, l2, two
+                                               emode, efixed,	                                               emode, efixed,
+    if ( ! (x_label == "Time-of-flight") )			    if ( ! (x_label == "Time-of-flight") )
+    {								    {
+      IVUtils::PushNameValue( "Time-of-flight", 8, 1, tof, li	      IVUtils::PushNameValue( "Time-of-flight", 8, 1, tof, li
+    }								    }
+
+    if ( ! (x_label == "Wavelength") )				    if ( ! (x_label == "Wavelength") )
+    {								    {
+      const Unit_sptr& wl_unit = UnitFactory::Instance().crea	      const Unit_sptr& wl_unit = UnitFactory::Instance().crea
+      double wavelength = wl_unit->convertSingleFromTOF( tof,	      double wavelength = wl_unit->convertSingleFromTOF( tof,
+                                                         emod	                                                         emod
+      IVUtils::PushNameValue( "Wavelength", 8, 4, wavelength,	      IVUtils::PushNameValue( "Wavelength", 8, 4, wavelength,
+    }								    }
+
+    if ( ! (x_label == "Energy") )				    if ( ! (x_label == "Energy") )
+    {								    {
+      const Unit_sptr& e_unit = UnitFactory::Instance().creat	      const Unit_sptr& e_unit = UnitFactory::Instance().creat
+      double energy = e_unit->convertSingleFromTOF( tof, l1, 	      double energy = e_unit->convertSingleFromTOF( tof, l1, 
+                                                    emode, ef	                                                    emode, ef
+      IVUtils::PushNameValue( "Energy", 8, 4, energy, list );	      IVUtils::PushNameValue( "Energy", 8, 4, energy, list );
+    }								    }
+
+    if ( (! (x_label == "d-Spacing")) && (two_theta != 0.0) &	    if ( (! (x_label == "d-Spacing")) && (two_theta != 0.0) &
+    {								    {
+      const Unit_sptr& d_unit = UnitFactory::Instance().creat	      const Unit_sptr& d_unit = UnitFactory::Instance().creat
+      double d_spacing = d_unit->convertSingleFromTOF( tof, l	      double d_spacing = d_unit->convertSingleFromTOF( tof, l
+                                                       emode,	                                                       emode,
+      IVUtils::PushNameValue( "d-Spacing", 8, 4, d_spacing, l	      IVUtils::PushNameValue( "d-Spacing", 8, 4, d_spacing, l
+    }								    }
+
+    if ( (! (x_label == "q")) && (two_theta != 0.0) )		    if ( (! (x_label == "q")) && (two_theta != 0.0) )
+    {								    {
+      const Unit_sptr& q_unit=UnitFactory::Instance().create(	      const Unit_sptr& q_unit=UnitFactory::Instance().create(
+      double mag_q = q_unit->convertSingleFromTOF( tof, l1, l	      double mag_q = q_unit->convertSingleFromTOF( tof, l1, l
+                                                   emode, efi	                                                   emode, efi
+      IVUtils::PushNameValue( "|Q|", 8, 4, mag_q, list );	      IVUtils::PushNameValue( "|Q|", 8, 4, mag_q, list );
+    }								    }
+
+    if ( (! (x_label == "DeltaE")) && (two_theta != 0.0) && (	    if ( (! (x_label == "DeltaE")) && (two_theta != 0.0) && (
+    {								    {
+      const Unit_sptr& deltaE_unit=UnitFactory::Instance().cr	      const Unit_sptr& deltaE_unit=UnitFactory::Instance().cr
+      double delta_E = deltaE_unit->convertSingleFromTOF( tof	      double delta_E = deltaE_unit->convertSingleFromTOF( tof
+                                                          emo	                                                          emo
+      IVUtils::PushNameValue( "DeltaE", 8, 4, delta_E, list )	      IVUtils::PushNameValue( "DeltaE", 8, 4, delta_E, list )
+    }								    }
+  }								  }
+  catch (std::exception & e)					  catch (std::exception & e)
+  {								  {
+    ErrorHandler::Notice("Failed to get information from Work	    ErrorHandler::Notice("Failed to get information from Work
+    ErrorHandler::Notice( e.what() );				    ErrorHandler::Notice( e.what() );
+  }								  }
+}								}
+
+
+} // namespace MantidQt 					} // namespace MantidQt 
+} // namespace ImageView					} // namespace ImageView
+>>>>>>>>>>>>> GraphDisplay.h <<<<<<<<<<<<<
+8,9c8,9
+< #include "MantidQtRefDetectorViewer/RefImageDataSource.h"
+< #include "MantidQtRefDetectorViewer/DllOptionIV.h"
+---
+> #include "MantidQtImageViewer/ImageDataSource.h"
+> #include "MantidQtImageViewer/DllOptionIV.h"
+43c43
+< namespace RefDetectorViewer
+---
+> namespace ImageView
+52c52
+< //                 QTableWidget* graph_table,
+---
+>                  QTableWidget* graph_table,
+58c58
+<    void SetDataSource( RefImageDataSource* data_source );
+---
+>    void SetDataSource( ImageDataSource* data_source );
+83,84c83,84
+< //   QTableWidget*     graph_table;
+<    RefImageDataSource*  data_source;
+---
+>    QTableWidget*     graph_table;
+>    ImageDataSource*  data_source;
+98c98
+< } // namespace RefDetectorViewer
+---
+> } // namespace ImageView 
+>>>>>>>>>>>>> GraphDisplay.cpp <<<<<<<<<<<<<
+
+#include <iostream>						#include <iostream>
+#include <QtGui>						#include <QtGui>
+#include <QVector>						#include <QVector>
+#include <QString>						#include <QString>
+#include <qwt_scale_engine.h>					#include <qwt_scale_engine.h>
+
+#include "MantidQtRefDetectorViewer/GraphDisplay.h"	      |	#include "MantidQtImageViewer/GraphDisplay.h"
+#include "MantidQtRefDetectorViewer/QtUtils.h"		      |	#include "MantidQtImageViewer/QtUtils.h"
+#include "MantidQtRefDetectorViewer/IVUtils.h"		      |	#include "MantidQtImageViewer/IVUtils.h"
+
+namespace MantidQt						namespace MantidQt
+{								{
+namespace RefDetectorViewer				      |	namespace ImageView
+{								{
+
+/**								/**
+ *  Construct a GraphDisplay to display selected graph on the	 *  Construct a GraphDisplay to display selected graph on the
+ *  and to disply information in the specified table.		 *  and to disply information in the specified table.
+ *								 *
+ *  @param graph_plot    The QwtPlot where the graph will be 	 *  @param graph_plot    The QwtPlot where the graph will be 
+ *  @param graph_table   The QTableWidget where information a	 *  @param graph_table   The QTableWidget where information a
+ *                       pointed at location will be displaye	 *                       pointed at location will be displaye
+ *  @param is_vertical   Flag indicating whether this graph d	 *  @param is_vertical   Flag indicating whether this graph d
+ *                       vertical or horizontal cut through t	 *                       vertical or horizontal cut through t
+ */								 */
+GraphDisplay::GraphDisplay( QwtPlot*      graph_plot, 		GraphDisplay::GraphDisplay( QwtPlot*      graph_plot, 
+//                            QTableWidget* graph_table,      |	                            QTableWidget* graph_table,
+                            bool          is_vertical )		                            bool          is_vertical )
+{								{
+  this->graph_plot  = graph_plot;				  this->graph_plot  = graph_plot;
+//  this->graph_table = graph_table;			      |	  this->graph_table = graph_table;
+  this->data_source = 0;					  this->data_source = 0;
+  this->is_vertical = is_vertical;				  this->is_vertical = is_vertical;
+
+  is_log_x    = false;						  is_log_x    = false;
+  image_x     = 0;						  image_x     = 0;
+  image_y     = 0;						  image_y     = 0;
+  range_scale = 1.0;						  range_scale = 1.0;
+
+  if ( is_vertical )						  if ( is_vertical )
+  {								  {
+    graph_plot->setAxisMaxMajor( QwtPlot::xBottom, 3 );		    graph_plot->setAxisMaxMajor( QwtPlot::xBottom, 3 );
+  }								  }
+
+  curve = new QwtPlotCurve("Curve 1");				  curve = new QwtPlotCurve("Curve 1");
+}								}
+
+
+GraphDisplay::~GraphDisplay()					GraphDisplay::~GraphDisplay()
+{								{
+  // std::cout << "GraphDisplay destructor called" << std::en	  // std::cout << "GraphDisplay destructor called" << std::en
+  delete curve;							  delete curve;
+}								}
+
+
+/**								/**
+ * Set the data source from which the table information will 	 * Set the data source from which the table information will 
+ * (must be set to allow information to be displayed in the t	 * (must be set to allow information to be displayed in the t
+ *								 *
+ * @param data_source The ImageDataSource that provides infor	 * @param data_source The ImageDataSource that provides infor
+ *                    the table.				 *                    the table.
+ */								 */
+void GraphDisplay::SetDataSource( RefImageDataSource* data_so |	void GraphDisplay::SetDataSource( ImageDataSource* data_sourc
+{								{
+  this->data_source = data_source;				  this->data_source = data_source;
+}								}
+
+
+/**								/**
+ * Set flag indicating whether or not to use a log scale on t	 * Set flag indicating whether or not to use a log scale on t
+ *								 *
+ * @param is_log_x  Pass in true to use a log scale on the x-	 * @param is_log_x  Pass in true to use a log scale on the x-
+ *                  to use a linear scale. 			 *                  to use a linear scale. 
+ */								 */
+void GraphDisplay::SetLogX( bool is_log_x )			void GraphDisplay::SetLogX( bool is_log_x )
+{								{
+  this->is_log_x = is_log_x;					  this->is_log_x = is_log_x;
+}								}
+
+
+/**								/**
+ * Set the actual data that will be displayed on the graph an	 * Set the actual data that will be displayed on the graph an
+ * coordinates on the image corresponding to this data.  The 	 * coordinates on the image corresponding to this data.  The 
+ * coordinates are needed to determine the point of interest,	 * coordinates are needed to determine the point of interest,
+ * user points at a location on the graph.			 * user points at a location on the graph.
+ *								 *
+ * @param xData    Vector of x coordinates of points to plot	 * @param xData    Vector of x coordinates of points to plot
+ * @param yData    Vector of y coordinates of points to plot.	 * @param yData    Vector of y coordinates of points to plot.
+ *                 be the same size as the xData vector.	 *                 be the same size as the xData vector.
+ * @param image_x  X-coordinate of point on image that genera	 * @param image_x  X-coordinate of point on image that genera
+ *                 data						 *                 data
+ * @param image_y  Y-coordinate of point on image that genera	 * @param image_y  Y-coordinate of point on image that genera
+ *                 data						 *                 data
+ */								 */
+void GraphDisplay::SetData(const QVector<double> & xData, 	void GraphDisplay::SetData(const QVector<double> & xData, 
+                           const QVector<double> & yData,	                           const QVector<double> & yData,
+                                 double            cut_value 	                                 double            cut_value 
+{								{
+  if ( xData.size() == 0 ||          // ignore invalid data v	  if ( xData.size() == 0 ||          // ignore invalid data v
+       yData.size() == 0 ||					       yData.size() == 0 ||
+       xData.size() != yData.size()    )			       xData.size() != yData.size()    )
+  {								  {
+    return;							    return;
+  }								  }
+
+
+  curve->attach(0);                 // detach from any plot, 	  curve->attach(0);                 // detach from any plot, 
+                                    // the data and attaching	                                    // the data and attaching
+  if ( is_vertical )						  if ( is_vertical )
+  {								  {
+    this->image_x = cut_value;					    this->image_x = cut_value;
+    min_y = yData[0];						    min_y = yData[0];
+    max_y = yData[yData.size()-1];				    max_y = yData[yData.size()-1];
+    IVUtils::FindValidInterval( xData, min_x, max_x );		    IVUtils::FindValidInterval( xData, min_x, max_x );
+  }								  }
+  else								  else
+  {								  {
+    this->image_y = cut_value;					    this->image_y = cut_value;
+    min_x = xData[0];						    min_x = xData[0];
+    max_x = xData[xData.size()-1];				    max_x = xData[xData.size()-1];
+    IVUtils::FindValidInterval( yData, min_y, max_y );		    IVUtils::FindValidInterval( yData, min_y, max_y );
+
+    if ( is_log_x )                // only set log scale for 	    if ( is_log_x )                // only set log scale for 
+    {								    {
+      QwtLog10ScaleEngine* log_engine = new QwtLog10ScaleEngi	      QwtLog10ScaleEngine* log_engine = new QwtLog10ScaleEngi
+      graph_plot->setAxisScaleEngine( QwtPlot::xBottom, log_e	      graph_plot->setAxisScaleEngine( QwtPlot::xBottom, log_e
+    }								    }
+    else							    else
+    {								    {
+      QwtLinearScaleEngine* linear_engine = new QwtLinearScal	      QwtLinearScaleEngine* linear_engine = new QwtLinearScal
+      graph_plot->setAxisScaleEngine( QwtPlot::xBottom, linea	      graph_plot->setAxisScaleEngine( QwtPlot::xBottom, linea
+    }								    }
+  }								  }
+
+  curve->setData( xData, yData );				  curve->setData( xData, yData );
+  curve->attach( graph_plot );					  curve->attach( graph_plot );
+
+  SetRangeScale( range_scale );					  SetRangeScale( range_scale );
+
+  graph_plot->setAutoReplot(true);				  graph_plot->setAutoReplot(true);
+}								}
+
+
+void GraphDisplay::Clear()					void GraphDisplay::Clear()
+{								{
+  curve->attach(0);                 // detach from plot		  curve->attach(0);                 // detach from plot
+  graph_plot->replot();						  graph_plot->replot();
+}								}
+
+
+/**								/**
+ *  Set up axes using the specified scale factor and replot t	 *  Set up axes using the specified scale factor and replot t
+ *  This is useful for seeing low-level values, by clipping o	 *  This is useful for seeing low-level values, by clipping o
+ *  magnitude values.						 *  magnitude values.
+ *								 *
+ *  @param range_scale Value between 0 and 1 indicating what 	 *  @param range_scale Value between 0 and 1 indicating what 
+ *         graph value range should be plotted.			 *         graph value range should be plotted.
+ */								 */
+void GraphDisplay::SetRangeScale( double range_scale )		void GraphDisplay::SetRangeScale( double range_scale )
+{								{
+  this->range_scale = range_scale;				  this->range_scale = range_scale;
+  if ( is_vertical )						  if ( is_vertical )
+  {								  {
+    double axis_max = range_scale * ( max_x - min_x ) + min_x	    double axis_max = range_scale * ( max_x - min_x ) + min_x
+    graph_plot->setAxisScale( QwtPlot::xBottom, min_x, axis_m	    graph_plot->setAxisScale( QwtPlot::xBottom, min_x, axis_m
+    graph_plot->setAxisScale( QwtPlot::yLeft, min_y, max_y );	    graph_plot->setAxisScale( QwtPlot::yLeft, min_y, max_y );
+  }								  }
+  else								  else
+  {								  {
+    double axis_max = range_scale * ( max_y - min_y ) + min_y	    double axis_max = range_scale * ( max_y - min_y ) + min_y
+    graph_plot->setAxisScale( QwtPlot::yLeft, min_y, axis_max	    graph_plot->setAxisScale( QwtPlot::yLeft, min_y, axis_max
+    graph_plot->setAxisScale( QwtPlot::xBottom, min_x, max_x 	    graph_plot->setAxisScale( QwtPlot::xBottom, min_x, max_x 
+  }								  }
+  graph_plot->replot();						  graph_plot->replot();
+}								}
+
+
+/**								/**
+ * Show information about the specified point.			 * Show information about the specified point.
+ *								 *
+ * @param point  The point that the user is currently pointin	 * @param point  The point that the user is currently pointin
+ *               the mouse.					 *               the mouse.
+ */								 */
+void GraphDisplay::SetPointedAtPoint( QPoint point )		void GraphDisplay::SetPointedAtPoint( QPoint point )
+{								{
+  if ( data_source == 0 )					  if ( data_source == 0 )
+  {								  {
+    return;							    return;
+  }								  }
+  double x = graph_plot->invTransform( QwtPlot::xBottom, poin	  double x = graph_plot->invTransform( QwtPlot::xBottom, poin
+  double y = graph_plot->invTransform( QwtPlot::yLeft, point.	  double y = graph_plot->invTransform( QwtPlot::yLeft, point.
+
+  if ( is_vertical )             // x can be anywhere on grap	  if ( is_vertical )             // x can be anywhere on grap
+  {                              // a valid data source posit	  {                              // a valid data source posit
+    data_source->RestrictY( y );				    data_source->RestrictY( y );
+  }								  }
+  else                           // y can be anywhere on grap	  else                           // y can be anywhere on grap
+  {                              // a valid data source posit	  {                              // a valid data source posit
+    data_source->RestrictX( x );				    data_source->RestrictX( x );
+  }								  }
+
+  ShowInfoList( x, y );						  ShowInfoList( x, y );
+}								}
+
+
+/**								/**
+ *  Get the information about a pointed at location and show 	 *  Get the information about a pointed at location and show 
+ *  table.  NOTE: If this is the "horizontal" graph, the rele	 *  table.  NOTE: If this is the "horizontal" graph, the rele
+ *  are x and the image_y that generated the graph.  If this 	 *  are x and the image_y that generated the graph.  If this 
+ *  graph, the relevant coordinates are y and the image_x tha	 *  graph, the relevant coordinates are y and the image_x tha
+ *  the graph.							 *  the graph.
+ *								 *
+ *  @param x  The x coordinate of the pointed at location on 	 *  @param x  The x coordinate of the pointed at location on 
+ *  @param y  The y coordinate of the pointed at location on 	 *  @param y  The y coordinate of the pointed at location on 
+ */								 */
+void GraphDisplay::ShowInfoList( double x, double y )		void GraphDisplay::ShowInfoList( double x, double y )
+{								{
+  int n_infos = 0;						  int n_infos = 0;
+  int n_rows  = 1;						  int n_rows  = 1;
+  std::vector<std::string> info_list;				  std::vector<std::string> info_list;
+  if ( data_source != 0 )					  if ( data_source != 0 )
+  {								  {
+    if ( is_vertical )						    if ( is_vertical )
+    {								    {
+      data_source->GetInfoList( image_x, y, info_list );	      data_source->GetInfoList( image_x, y, info_list );
+    }								    }
+    else							    else
+    {								    {
+      data_source->GetInfoList( x, image_y, info_list );	      data_source->GetInfoList( x, image_y, info_list );
+    }								    }
+  }								  }
+  else								  else
+  {								  {
+    return;							    return;
+  }								  }
+  n_infos = (int)info_list.size()/2;				  n_infos = (int)info_list.size()/2;
+  n_rows += n_infos; 						  n_rows += n_infos; 
+
+//  graph_table->setRowCount(n_rows);			      |	  graph_table->setRowCount(n_rows);
+//  graph_table->setColumnCount(2);			      |	  graph_table->setColumnCount(2);
+//  graph_table->verticalHeader()->hide();		      |	  graph_table->verticalHeader()->hide();
+//  graph_table->horizontalHeader()->hide();		      |	  graph_table->horizontalHeader()->hide();
+							      <
+//  int width = 9;					      <
+//  int prec  = 3;					      <
+							      <
+//  if ( is_vertical )					      <
+//  {							      <
+//    QtUtils::SetTableEntry( 0, 0, "Value", graph_table );   <
+//    QtUtils::SetTableEntry( 0, 1, width, prec, x, graph_tab <
+//  }							      <
+//  else						      <
+//  {							      <
+//    QtUtils::SetTableEntry( 0, 0, "Value", graph_table );   <
+//    QtUtils::SetTableEntry( 0, 1, width, prec, y, graph_tab <
+//  }							      <
+//							      <
+//  for ( int i = 0; i < n_infos; i++ )			      <
+//  {							      <
+//    QtUtils::SetTableEntry( i+1, 0, info_list[2*i], graph_t <
+//    QtUtils::SetTableEntry( i+1, 1, info_list[2*i+1], graph <
+//  }							      <
+
+//  graph_table->resizeColumnsToContents();		      |	  int width = 9;
+							      >	  int prec  = 3;
+							      >
+							      >	  if ( is_vertical )
+							      >	  {
+							      >	    QtUtils::SetTableEntry( 0, 0, "Value", graph_table );
+							      >	    QtUtils::SetTableEntry( 0, 1, width, prec, x, graph_table
+							      >	  }
+							      >	  else
+							      >	  {
+							      >	    QtUtils::SetTableEntry( 0, 0, "Value", graph_table );
+							      >	    QtUtils::SetTableEntry( 0, 1, width, prec, y, graph_table
+							      >	  }
+							      >
+							      >	  for ( int i = 0; i < n_infos; i++ )
+							      >	  {
+							      >	    QtUtils::SetTableEntry( i+1, 0, info_list[2*i], graph_tab
+							      >	    QtUtils::SetTableEntry( i+1, 1, info_list[2*i+1], graph_t
+							      >	  }
+							      >
+							      >	  graph_table->resizeColumnsToContents();
+}								}
+
+} // namespace MantidQt 					} // namespace MantidQt 
+} // namespace ImageView 					} // namespace ImageView 
+>>>>>>>>>>>>> ImagePlotItem.h <<<<<<<<<<<<<
+1,2c1,2
+< #ifndef REF_IMAGE_PLOT_ITEM_H
+< #define REF_IMAGE_PLOT_ITEM_H
+---
+> #ifndef IMAGE_PLOT_ITEM_H
+> #define IMAGE_PLOT_ITEM_H
+10,11c10,11
+< #include "MantidQtRefDetectorViewer/DataArray.h"
+< #include "MantidQtRefDetectorViewer/DllOptionIV.h"
+---
+> #include "MantidQtImageViewer/DataArray.h"
+> #include "MantidQtImageViewer/DllOptionIV.h"
+45c45
+< namespace RefDetectorViewer
+---
+> namespace ImageView
+49c49
+< class EXPORT_OPT_MANTIDQT_IMAGEVIEWER RefImagePlotItem : public QwtPlotItem
+---
+> class EXPORT_OPT_MANTIDQT_IMAGEVIEWER ImagePlotItem : public QwtPlotItem
+55c55
+<   RefImagePlotItem();
+---
+>   ImagePlotItem();
+57c57
+<   ~RefImagePlotItem();
+---
+>   ~ImagePlotItem();
+88,89d87
+<     
+<     
+94c92
+< #endif  // REF_IMAGE_PLOT_ITEM_H 
+---
+> #endif  // IMAGE_PLOT_ITEM_H 
+>>>>>>>>>>>>> ImagePlotItem.cpp <<<<<<<<<<<<<
+4,5c4
+< #include "MantidQtRefDetectorViewer/RefImagePlotItem.h"
+< #include "MantidQtRefDetectorViewer/RefImageDisplay.h"
+---
+> #include "MantidQtImageViewer/ImagePlotItem.h"
+9c8
+< namespace RefDetectorViewer
+---
+> namespace ImageView
+11c10,11
+<  
+---
+>   
+> 
+15c15
+< RefImagePlotItem::RefImagePlotItem()
+---
+> ImagePlotItem::ImagePlotItem()
+26c26
+< RefImagePlotItem::~RefImagePlotItem()
+---
+> ImagePlotItem::~ImagePlotItem()
+54c54
+< void RefImagePlotItem::SetData( DataArray*         data_array, 
+---
+> void ImagePlotItem::SetData( DataArray*         data_array, 
+94c94
+< void RefImagePlotItem::SetIntensityTable( std::vector<double>* intensity_table )
+---
+> void ImagePlotItem::SetIntensityTable( std::vector<double>* intensity_table )
+114c114
+< void RefImagePlotItem::draw(       QPainter    * painter,
+---
+> void ImagePlotItem::draw(       QPainter    * painter,
+119c119
+<     if ( !positive_color_table )     // if no color table, the data is not yet
+---
+>   if ( !positive_color_table )     // if no color table, the data is not yet
+149,154d148
+< //    std::cout << "x_min: " << x_min << std::endl;  
+< //    std::cout << "x_max: " << x_max << std::endl;  
+< //    std::cout << "y_min: " << y_min << std::endl;  
+< //    std::cout << "y_max: " << y_max << std::endl;  
+< 
+<     
+163,167d156
+< //    std::cout << "pix_x_min: " << pix_x_min << std::endl;  
+< //    std::cout << "pix_x_max: " << pix_x_max << std::endl;  
+< //    std::cout << "pix_y_min: " << pix_y_min << std::endl;  
+< //    std::cout << "pix_y_max: " << pix_y_max << std::endl;  
+<     
+253,268d241
+<     
+<     float coeff_left = (float(y_max) - float(y_min)) / (float(pix_y_min) - float(pix_y_max));
+<     float coeff_top_right;
+<     int pixel_value;
+<     
+<     //for the peak selection
+<     painter->setPen(Qt::blue);
+< 
+<     //peak1
+<     float peakLeft = float(RefImageDisplay::getPeakLeft());
+<         
+<     if (peakLeft != 0) {
+<     coeff_top_right = float(y_max) - float(peakLeft);
+<     pixel_value = int((coeff_top_right / coeff_left) + float(pix_y_max));
+<     painter->drawLine(QPoint(pix_x_min,pixel_value), QPoint(pix_x_max,pixel_value));
+<     }
+270,319d242
+<     //peak2
+<     float peakRight = float(RefImageDisplay::getPeakRight());
+<     if (peakRight != 0) {
+<     coeff_top_right = float(y_max) - float(peakRight);
+<     pixel_value = int((coeff_top_right / coeff_left) + float(pix_y_max));
+<     painter->drawLine(QPoint(pix_x_min,pixel_value), QPoint(pix_x_max,pixel_value));
+<     }
+<     
+<     //for the background selection
+<     painter->setPen(Qt::red);
+< 
+<     //back1
+<     float backLeft = float(RefImageDisplay::getBackLeft());
+<     if (backLeft != 0) {
+<     coeff_top_right = float(y_max) - float(backLeft);
+<     pixel_value = int((coeff_top_right / coeff_left) + float(pix_y_max));
+<     painter->drawLine(QPoint(pix_x_min,pixel_value), QPoint(pix_x_max,pixel_value));
+<     }
+<     
+<     //back2
+<     float backRight = float(RefImageDisplay::getBackRight());
+<     if (backRight != 0) {
+<     coeff_top_right = float(y_max) - float(backRight);
+<     pixel_value = int((coeff_top_right / coeff_left) + float(pix_y_max));
+<     painter->drawLine(QPoint(pix_x_min,pixel_value), QPoint(pix_x_max,pixel_value));
+<     }
+<     
+<     //tof selection
+<     painter->setPen(Qt::green);
+<     
+<     coeff_left = (float(pix_x_max) - float(pix_x_min)) / (float(x_max) - float(x_min));
+<     int tof_value;
+<     float coeff_bottom_right;
+<     
+<     //tof min
+<     float TOFmin = float(RefImageDisplay::getTOFmin());
+<     if (TOFmin != 0) {
+<         coeff_bottom_right = float(TOFmin) - float(x_min);
+<         tof_value = int(coeff_left * coeff_bottom_right + static_cast<float>(pix_x_min));
+<         painter->drawLine(QPoint(tof_value,pix_y_min), QPoint(tof_value,pix_y_max));
+<     }
+< 
+<     //tof max
+<     float TOFmax = float(RefImageDisplay::getTOFmax());
+<     if (TOFmax != 0) {
+<         coeff_bottom_right = float(TOFmax) - float(x_min);
+<         tof_value = int(coeff_left * coeff_bottom_right + float(pix_x_min));
+<         painter->drawLine(QPoint(tof_value,pix_y_min), QPoint(tof_value,pix_y_max));
+<     }
+<     
+321c244,245
+<                                              // not earlier since the image                                             // and/or pixmap is using it
+---
+>                                              // not earlier since the image
+>                                              // and/or pixmap is using it
+324,325d247
+<     
+<     
+>>>>>>>>>>>>> ImageDisplay.h <<<<<<<<<<<<<
+1,2c1,2
+< #ifndef  REF_IMAGE_DISPLAY_H
+< #define  REF_IMAGE_DISPLAY_H
+---
+> #ifndef  IMAGE_DISPLAY_H
+> #define  IMAGE_DISPLAY_H
+10,15c10,15
+< #include "MantidQtRefDetectorViewer/RefImageDataSource.h"
+< #include "MantidQtRefDetectorViewer/GraphDisplay.h"
+< #include "MantidQtRefDetectorViewer/RefImagePlotItem.h"
+< #include "MantidQtRefDetectorViewer/SliderHandler.h"
+< #include "MantidQtRefDetectorViewer/RangeHandler.h"
+< #include "MantidQtRefDetectorViewer/DllOptionIV.h"
+---
+> #include "MantidQtImageViewer/ImageDataSource.h"
+> #include "MantidQtImageViewer/GraphDisplay.h"
+> #include "MantidQtImageViewer/ImagePlotItem.h"
+> #include "MantidQtImageViewer/SliderHandler.h"
+> #include "MantidQtImageViewer/RangeHandler.h"
+> #include "MantidQtImageViewer/DllOptionIV.h"
+18c18
+<     @class RefImageDisplay 
+---
+>     @class ImageDisplay 
+49c49
+< namespace RefDetectorViewer
+---
+> namespace ImageView
+53c53
+< class EXPORT_OPT_MANTIDQT_IMAGEVIEWER RefImageDisplay
+---
+> class EXPORT_OPT_MANTIDQT_IMAGEVIEWER ImageDisplay
+58c58
+<      RefImageDisplay( QwtPlot*       image_plot, 
+---
+>      ImageDisplay( QwtPlot*       image_plot, 
+63,75c63
+<                    QTableWidget*  table_widget,
+<                    QRadioButton*  radioButtonPeakLeft,
+<                    QRadioButton* radioButtonPeakRight,
+<                    QRadioButton* radioButtonBackLeft,
+<                    QRadioButton* radioButtonBackRight,
+<                    QRadioButton* radioButtonTOFmin,
+<                    QRadioButton* radioButtonTOFmax,
+<                    QLineEdit* lineEditPeakLeft,
+<                    QLineEdit* lineEditPeakRight,
+<                    QLineEdit* lineEditBackLeft,
+<                    QLineEdit* lineEditBackRight,
+<                    QLineEdit* lineEditTOFmin,
+<                    QLineEdit* lineEditTOFmax);
+---
+>                    QTableWidget*  table_widget );
+77c65
+<      ~RefImageDisplay();
+---
+>      ~ImageDisplay();
+80c68
+<      void SetDataSource( RefImageDataSource* data_source );
+---
+>      void SetDataSource( ImageDataSource* data_source );
+96,97c84
+<      /// default right click (mouseClick = 2)
+<      void SetPointedAtPoint( QPoint point, int mouseClick = 2 );
+---
+>      void SetPointedAtPoint( QPoint point );
+104,120c91,92
+<      
+<     /// get peak, back and tof values
+<     static int getPeakLeft();
+<     static int getPeakRight();
+<     static int getBackLeft();
+<     static int getBackRight();
+<     static int getTOFmin();
+<     static int getTOFmax();
+<     
+<     static void setPeakLeft(int value);
+<     static void setPeakRight(int value);
+<     static void setBackLeft(int value);
+<     static void setBackRight(int value);
+<     static void setTOFmin(int value);
+<     static void setTOFmax(int value);
+<     
+< private:
+---
+> 
+>   private:
+130,132d101
+<      // Show information about the x and y values selected in peak/back/tof/left/right boxes
+<      void ShowPeakBackSelectionValue(double x, double y );
+< 
+137c106
+<      RefImageDataSource*     data_source;
+---
+>      ImageDataSource*     data_source;
+141c110
+<      RefImagePlotItem*       image_plot_item;
+---
+>      ImagePlotItem*       image_plot_item;
+152,173c121
+<      //to update peak and back left and right infos
+<      QRadioButton*        radioButtonPeakLeft;
+<      QRadioButton*        radioButtonPeakRight;
+<      QRadioButton*        radioButtonBackLeft;
+<      QRadioButton*        radioButtonBackRight;
+<     QRadioButton*        radioButtonTOFmin;
+<     QRadioButton*        radioButtonTOFmax;
+<      QLineEdit*           lineEditPeakLeft;
+<      QLineEdit*           lineEditPeakRight;
+<      QLineEdit*           lineEditBackLeft;
+<      QLineEdit*           lineEditBackRight;
+<     QLineEdit*           lineEditTOFmin;
+<     QLineEdit*           lineEditTOFmax;
+<     
+<     static int peakLeft;
+<     static int peakRight;
+<     static int backLeft;
+<     static int backRight;
+<     static int TOFmin;
+<     static int TOFmax;
+<     
+<     QTableWidget*        image_table;
+---
+>      QTableWidget*        image_table;
+186c134,135
+< #endif   // REF_IMAGE_DISPLAY_H
+---
+> 
+> #endif   // IMAGE_DISPLAY_H
+>>>>>>>>>>>>> ImageDisplay.cpp <<<<<<<<<<<<<
+#include <iostream>						#include <iostream>
+#include <sstream>						#include <sstream>
+#include <cfloat>						#include <cfloat>
+
+#include <QtGui>						#include <QtGui>
+#include <QVector>						#include <QVector>
+#include <QString>						#include <QString>
+#include <qimage.h>						#include <qimage.h>
+#include <qwt_scale_engine.h>					#include <qwt_scale_engine.h>
+
+#include "MantidQtRefDetectorViewer/RefImageDisplay.h"	      |	#include "MantidQtImageViewer/ImageDisplay.h"
+#include "MantidQtRefDetectorViewer/RefImageDataSource.h"     |	#include "MantidQtImageViewer/ImageDataSource.h"
+#include "MantidQtRefDetectorViewer/DataArray.h"	      |	#include "MantidQtImageViewer/DataArray.h"
+#include "MantidQtRefDetectorViewer/ColorMaps.h"	      |	#include "MantidQtImageViewer/ColorMaps.h"
+#include "MantidQtRefDetectorViewer/QtUtils.h"		      |	#include "MantidQtImageViewer/QtUtils.h"
+#include "MantidQtRefDetectorViewer/IVUtils.h"		      |	#include "MantidQtImageViewer/IVUtils.h"
+#include "MantidQtRefDetectorViewer/RefImagePlotItem.h"	      <
+
+namespace MantidQt						namespace MantidQt
+{								{
+namespace RefDetectorViewer				      |	namespace ImageView
+{								{
+
+/**								/**
+ * Make an RefImageDisplay to display with the given widgets  |	 * Make an ImageDisplay to display with the given widgets and
+ *								 *
+ * @param image_plot      The QwtPlot that will hold the imag	 * @param image_plot      The QwtPlot that will hold the imag
+ * @param slider_handler  The object that manages interaction	 * @param slider_handler  The object that manages interaction
+ *                        horizontal and vertical scroll bars	 *                        horizontal and vertical scroll bars
+ * @param h_graph         The GraphDisplay for the graph show	 * @param h_graph         The GraphDisplay for the graph show
+ *                        cuts through the image at the botto	 *                        cuts through the image at the botto
+ * @param v_graph         The GraphDisplay for the graph show	 * @param v_graph         The GraphDisplay for the graph show
+ *                        cuts through the image at the left 	 *                        cuts through the image at the left 
+ * @param table_widget    The widget where the information ab	 * @param table_widget    The widget where the information ab
+ *                        at location will be displayed.	 *                        at location will be displayed.
+ */								 */
+RefImageDisplay::RefImageDisplay(  QwtPlot*       image_plot, |	ImageDisplay::ImageDisplay(  QwtPlot*       image_plot,
+                             SliderHandler* slider_handler,	                             SliderHandler* slider_handler,
+                             RangeHandler*  range_handler,	                             RangeHandler*  range_handler,
+                             GraphDisplay*  h_graph,		                             GraphDisplay*  h_graph,
+                             GraphDisplay*  v_graph,		                             GraphDisplay*  v_graph,
+                             QTableWidget*  table_widget,     |	                             QTableWidget*  table_widget )
+                             QRadioButton*  radioPeakLeft,    <
+                             QRadioButton* radioPeakRight,    <
+                             QRadioButton* radioBackLeft,     <
+                             QRadioButton* radioBackRight,    <
+                           QRadioButton* radioTOFmin,	      <
+                           QRadioButton* radioTOFmax,	      <
+                             QLineEdit* linePeakLeft,	      <
+                             QLineEdit* linePeakRight,	      <
+                             QLineEdit* lineBackLeft,	      <
+                             QLineEdit* lineBackRight,	      <
+                           QLineEdit* lineTOFmin,	      <
+                           QLineEdit* lineTOFmax)	      <
+{								{
+  ColorMaps::GetColorMap( ColorMaps::HEAT,			  ColorMaps::GetColorMap( ColorMaps::HEAT,
+                          256,					                          256,
+                          positive_color_table );		                          positive_color_table );
+  ColorMaps::GetColorMap( ColorMaps::GRAY,			  ColorMaps::GetColorMap( ColorMaps::GRAY,
+                          256,					                          256,
+                          negative_color_table );		                          negative_color_table );
+
+  this->image_plot     = image_plot;				  this->image_plot     = image_plot;
+  this->slider_handler = slider_handler;			  this->slider_handler = slider_handler;
+  this->range_handler  = range_handler;				  this->range_handler  = range_handler;
+
+  image_plot_item = new RefImagePlotItem;		      |	  image_plot_item = new ImagePlotItem;
+  image_plot_item->setXAxis( QwtPlot::xBottom );		  image_plot_item->setXAxis( QwtPlot::xBottom );
+  image_plot_item->setYAxis( QwtPlot::yLeft );			  image_plot_item->setYAxis( QwtPlot::yLeft );
+
+  image_plot_item->attach( image_plot ); 			  image_plot_item->attach( image_plot ); 
+
+  h_graph_display  = h_graph;					  h_graph_display  = h_graph;
+  v_graph_display  = v_graph;					  v_graph_display  = v_graph;
+  image_table      = table_widget;				  image_table      = table_widget;
+
+  lineEditPeakLeft = linePeakLeft;			      <
+  lineEditPeakRight = linePeakRight;			      <
+  lineEditBackLeft = lineBackLeft;			      <
+  lineEditBackRight = lineBackRight;			      <
+    lineEditTOFmin = lineTOFmin;			      <
+    lineEditTOFmax = lineTOFmax;			      <
+  radioButtonPeakLeft = radioPeakLeft;			      <
+  radioButtonPeakRight = radioPeakRight;		      <
+  radioButtonBackLeft = radioBackLeft;			      <
+  radioButtonBackRight = radioBackRight;		      <
+    radioButtonTOFmin = radioTOFmin;			      <
+    radioButtonTOFmax = radioTOFmax;			      <
+    							      <
+  data_source     = 0;						  data_source     = 0;
+
+  double DEFAULT_INTENSITY = 30;				  double DEFAULT_INTENSITY = 30;
+  SetIntensity( DEFAULT_INTENSITY );				  SetIntensity( DEFAULT_INTENSITY );
+}								}
+
+
+RefImageDisplay::~RefImageDisplay()			      |	ImageDisplay::~ImageDisplay()
+{								{
+							      >	  // std::cout << "ImageDisplay destructor called" << std::en
+  delete image_plot_item;					  delete image_plot_item;
+}								}
+
+
+/**								/**
+ * Set the data source from which the image and data table in	 * Set the data source from which the image and data table in
+ * be obtained.							 * be obtained.
+ *								 *
+ * @param data_source The ImageDataSource that provides the a	 * @param data_source The ImageDataSource that provides the a
+ *                    and information for the table.		 *                    and information for the table.
+ */								 */
+void RefImageDisplay::SetDataSource( RefImageDataSource* data |	void ImageDisplay::SetDataSource( ImageDataSource* data_sourc
+{								{
+  this->data_source = data_source;				  this->data_source = data_source;
+  h_graph_display->SetDataSource( data_source );		  h_graph_display->SetDataSource( data_source );
+  v_graph_display->SetDataSource( data_source );		  v_graph_display->SetDataSource( data_source );
+
+  total_y_min = data_source->GetYMin();				  total_y_min = data_source->GetYMin();
+  total_y_max = data_source->GetYMax();				  total_y_max = data_source->GetYMax();
+
+  total_x_min = data_source->GetXMin();				  total_x_min = data_source->GetXMin();
+  total_x_max = data_source->GetXMax();				  total_x_max = data_source->GetXMax();
+  								  
+  pointed_at_x = DBL_MAX;					  pointed_at_x = DBL_MAX;
+  pointed_at_y = DBL_MAX;					  pointed_at_y = DBL_MAX;
+
+  int    n_rows = 500;         // get reasonable size initial	  int    n_rows = 500;         // get reasonable size initial
+  int    n_cols = 500;     					  int    n_cols = 500;     
+                               // data_array is deleted in th	                               // data_array is deleted in th
+  data_array = data_source->GetDataArray( total_x_min, total_	  data_array = data_source->GetDataArray( total_x_min, total_
+                                          total_y_min, total_	                                          total_y_min, total_
+                                          n_rows, n_cols,	                                          n_rows, n_cols,
+                                          false );		                                          false );
+
+  image_plot->setAxisScale( QwtPlot::xBottom, data_array->Get	  image_plot->setAxisScale( QwtPlot::xBottom, data_array->Get
+                                              data_array->Get	                                              data_array->Get
+  image_plot->setAxisScale( QwtPlot::yLeft, data_array->GetYM	  image_plot->setAxisScale( QwtPlot::yLeft, data_array->GetYM
+                                            data_array->GetYM	                                            data_array->GetYM
+
+							      |	  image_plot_item->SetData(  data_array, 
+    image_plot_item->SetData(data_array, 		      <
+                            &positive_color_table, 		                            &positive_color_table, 
+                            &negative_color_table );		                            &negative_color_table );
+    							      |
+  range_handler->ConfigureRangeControls( data_source );		  range_handler->ConfigureRangeControls( data_source );
+
+  QRect draw_area;						  QRect draw_area;
+  GetDisplayRectangle( draw_area );				  GetDisplayRectangle( draw_area );
+  slider_handler->ConfigureSliders( draw_area, data_source );	  slider_handler->ConfigureSliders( draw_area, data_source );
+}								}
+
+/**								/**
+ *  Rebuild the scrollbars and image due to a change in the r	 *  Rebuild the scrollbars and image due to a change in the r
+ *  or step size.  It should be invoked when the user changes	 *  or step size.  It should be invoked when the user changes
+ *  the xmin, xmax or step controls.  It should not be called	 *  the xmin, xmax or step controls.  It should not be called
+ *  other threads.						 *  other threads.
+ */								 */
+void RefImageDisplay::UpdateRange()			      |	void ImageDisplay::UpdateRange()
+{								{
+  if ( data_source == 0 )					  if ( data_source == 0 )
+  {								  {
+    return;   // no image data to update			    return;   // no image data to update
+  }								  }
+
+  if ( DataSourceRangeChanged() )				  if ( DataSourceRangeChanged() )
+  {								  {
+    SetDataSource( data_source );   // re-initialize with the	    SetDataSource( data_source );   // re-initialize with the
+  }								  }
+
+  QRect display_rect;						  QRect display_rect;
+  GetDisplayRectangle( display_rect );				  GetDisplayRectangle( display_rect );
+                                           // range controls 	                                           // range controls 
+                                           // the number of b |	                                            // the number of 
+  double min  = total_x_min;					  double min  = total_x_min;
+  double max  = total_x_max;					  double max  = total_x_max;
+  double step = (total_x_max - total_x_min)/2000;		  double step = (total_x_max - total_x_min)/2000;
+  range_handler->GetRange( min, max, step );			  range_handler->GetRange( min, max, step );
+							      |	    
+  int n_bins = IVUtils::NumSteps( min, max, step );		  int n_bins = IVUtils::NumSteps( min, max, step );
+  if ( n_bins == 0 )						  if ( n_bins == 0 )
+  {								  {
+    return;							    return;
+  }								  }
+
+  slider_handler->ConfigureHSlider( n_bins, display_rect.widt	  slider_handler->ConfigureHSlider( n_bins, display_rect.widt
+
+  UpdateImage();						  UpdateImage();
+}								}
+
+/**								/**
+ *  This will rebuild the image from the data source.  It sho	 *  This will rebuild the image from the data source.  It sho
+ *  when the scroll bar is moved, the plot area is resize or 	 *  when the scroll bar is moved, the plot area is resize or 
+ *  intensity tables are changed.  It should not be called di	 *  intensity tables are changed.  It should not be called di
+ *  other threads.						 *  other threads.
+ */								 */
+void RefImageDisplay::UpdateImage()			      |	void ImageDisplay::UpdateImage()
+{								{
+  if ( data_source == 0 )					  if ( data_source == 0 )
+  {								  {
+    return;   // no image data to update			    return;   // no image data to update
+  }								  }
+
+  if ( DataSourceRangeChanged() )				  if ( DataSourceRangeChanged() )
+  {								  {
+    SetDataSource( data_source );   // re-initialize with the	    SetDataSource( data_source );   // re-initialize with the
+  }								  }
+
+  QRect display_rect;						  QRect display_rect;
+  GetDisplayRectangle( display_rect );				  GetDisplayRectangle( display_rect );
+
+  double scale_y_min = data_source->GetYMin();			  double scale_y_min = data_source->GetYMin();
+  double scale_y_max = data_source->GetYMax();			  double scale_y_max = data_source->GetYMax();
+
+  double scale_x_min  = total_x_min;				  double scale_x_min  = total_x_min;
+  double scale_x_max  = total_x_max;				  double scale_x_max  = total_x_max;
+  double x_step = (total_x_max - total_x_min)/2000;		  double x_step = (total_x_max - total_x_min)/2000;
+							      >
+  range_handler->GetRange( scale_x_min, scale_x_max, x_step )	  range_handler->GetRange( scale_x_min, scale_x_max, x_step )
+
+  int n_rows = (int)data_source->GetNRows();			  int n_rows = (int)data_source->GetNRows();
+  int n_cols = IVUtils::NumSteps( scale_x_min, scale_x_max, x	  int n_cols = IVUtils::NumSteps( scale_x_min, scale_x_max, x
+                                     // This works for linear <
+
+							      >	                                     // This works for linear
+  if ( n_rows == 0 || n_cols == 0 )				  if ( n_rows == 0 || n_cols == 0 )
+  {								  {
+    return;                          // can't draw empty imag	    return;                          // can't draw empty imag
+  }								  }
+
+  if ( slider_handler->VSliderOn() )				  if ( slider_handler->VSliderOn() )
+  {								  {
+    int y_min;							    int y_min;
+    int y_max;							    int y_max;
+    slider_handler->GetVSliderInterval( y_min, y_max );		    slider_handler->GetVSliderInterval( y_min, y_max );
+
+    double new_y_min = 0;					    double new_y_min = 0;
+    double new_y_max = 0;					    double new_y_max = 0;
+
+    IVUtils::Interpolate( 0, n_rows, y_min, 			    IVUtils::Interpolate( 0, n_rows, y_min, 
+                          scale_y_min, scale_y_max, new_y_min	                          scale_y_min, scale_y_max, new_y_min
+    IVUtils::Interpolate( 0, n_rows, y_max, 			    IVUtils::Interpolate( 0, n_rows, y_max, 
+                          scale_y_min, scale_y_max, new_y_max	                          scale_y_min, scale_y_max, new_y_max
+
+    scale_y_min = new_y_min;					    scale_y_min = new_y_min;
+    scale_y_max = new_y_max;					    scale_y_max = new_y_max;
+  }								  }
+
+  if ( slider_handler->HSliderOn() )				  if ( slider_handler->HSliderOn() )
+  {								  {
+    int x_min;							    int x_min;
+    int x_max;							    int x_max;
+    slider_handler->GetHSliderInterval( x_min, x_max );  	    slider_handler->GetHSliderInterval( x_min, x_max );  
+                            // NOTE: The interval [xmin,xmax]	                            // NOTE: The interval [xmin,xmax]
+                            // found linearly.  For log_x, we	                            // found linearly.  For log_x, we
+							      >	      
+    double new_x_min = 0;					    double new_x_min = 0;
+    double new_x_max = 0;					    double new_x_max = 0;
+
+    if ( x_step > 0 )       // linear scale, so interpolate l	    if ( x_step > 0 )       // linear scale, so interpolate l
+    {								    {
+      IVUtils::Interpolate( 0, n_cols, x_min,			      IVUtils::Interpolate( 0, n_cols, x_min,
+                            scale_x_min, scale_x_max, new_x_m	                            scale_x_min, scale_x_max, new_x_m
+      IVUtils::Interpolate( 0, n_cols, x_max,			      IVUtils::Interpolate( 0, n_cols, x_max,
+                            scale_x_min, scale_x_max, new_x_m	                            scale_x_min, scale_x_max, new_x_m
+    }								    }
+    else                    // log scale, so interpolate "log	    else                    // log scale, so interpolate "log
+    {								    {
+      IVUtils::LogInterpolate( 0, n_cols, x_min,		      IVUtils::LogInterpolate( 0, n_cols, x_min,
+                               scale_x_min, scale_x_max, new_	                               scale_x_min, scale_x_max, new_
+      IVUtils::LogInterpolate( 0, n_cols, x_max,		      IVUtils::LogInterpolate( 0, n_cols, x_max,
+                               scale_x_min, scale_x_max, new_	                               scale_x_min, scale_x_max, new_
+    }								    }
+
+    scale_x_min = new_x_min;					    scale_x_min = new_x_min;
+    scale_x_max = new_x_max;					    scale_x_max = new_x_max;
+  }								  }
+
+  if ( n_rows > display_rect.height() )				  if ( n_rows > display_rect.height() )
+  {								  {
+    n_rows = display_rect.height();				    n_rows = display_rect.height();
+  }								  }
+
+  if ( n_cols > display_rect.width() )				  if ( n_cols > display_rect.width() )
+  {								  {
+    n_cols = display_rect.width();				    n_cols = display_rect.width();
+  }								  }
+
+  bool is_log_x = ( x_step < 0 );				  bool is_log_x = ( x_step < 0 );
+                                         // NOTE: The DataArr	                                         // NOTE: The DataArr
+                                         //       in the Imag	                                         //       in the Imag
+  data_array = data_source->GetDataArray( scale_x_min, scale_	  data_array = data_source->GetDataArray( scale_x_min, scale_
+                                          scale_y_min, scale_	                                          scale_y_min, scale_
+                                          n_rows, n_cols,	                                          n_rows, n_cols,
+                                          is_log_x );		                                          is_log_x );
+
+  is_log_x = data_array->IsLogX();       // Data source might	  is_log_x = data_array->IsLogX();       // Data source might
+                                         // provide log binne	                                         // provide log binne
+                                         // if log binned dat	                                         // if log binned dat
+
+  image_plot->setAxisScale( QwtPlot::xBottom, data_array->Get	  image_plot->setAxisScale( QwtPlot::xBottom, data_array->Get
+                                              data_array->Get	                                              data_array->Get
+  if ( is_log_x )						  if ( is_log_x )
+  {								  {
+    QwtLog10ScaleEngine* log_engine = new QwtLog10ScaleEngine	    QwtLog10ScaleEngine* log_engine = new QwtLog10ScaleEngine
+    image_plot->setAxisScaleEngine( QwtPlot::xBottom, log_eng	    image_plot->setAxisScaleEngine( QwtPlot::xBottom, log_eng
+  }								  }
+  else								  else
+  {								  {
+    QwtLinearScaleEngine* linear_engine = new QwtLinearScaleE	    QwtLinearScaleEngine* linear_engine = new QwtLinearScaleE
+    image_plot->setAxisScaleEngine( QwtPlot::xBottom, linear_	    image_plot->setAxisScaleEngine( QwtPlot::xBottom, linear_
+  }								  }
+
+  image_plot->setAxisScale( QwtPlot::yLeft, data_array->GetYM	  image_plot->setAxisScale( QwtPlot::yLeft, data_array->GetYM
+                                            data_array->GetYM	                                            data_array->GetYM
+
+  image_plot_item->SetData( data_array, 			  image_plot_item->SetData( data_array, 
+                           &positive_color_table,		                           &positive_color_table,
+                           &negative_color_table );		                           &negative_color_table );
+    							      |	  image_plot->replot();
+    //Where I need to add the code that plot the selection    <
+
+    image_plot->replot();				      <
+    							      <
+  SetVGraph( pointed_at_x );					  SetVGraph( pointed_at_x );
+  SetHGraph( pointed_at_y );					  SetHGraph( pointed_at_y );
+}								}
+
+
+/**								/**
+ *  Change the color tables used to map intensity to color. T	 *  Change the color tables used to map intensity to color. T
+ *  used to allow psuedo-log scaling based on the magnitude o	 *  used to allow psuedo-log scaling based on the magnitude o
+ *  Typically if the positive color table is colorful, such a	 *  Typically if the positive color table is colorful, such a
+ *  scale, the negative color table should be a gray scale to	 *  scale, the negative color table should be a gray scale to
+ *  distinguish between positive and negative values.		 *  distinguish between positive and negative values.
+ *								 *
+ *  @param positive_color_table  The new color table used to 	 *  @param positive_color_table  The new color table used to 
+ *                               values to an RGB color.  Thi	 *                               values to an RGB color.  Thi
+ *                               positive number of values, b	 *                               positive number of values, b
+ *                               have 256 entries.		 *                               have 256 entries.
+ *  @param negative_color_table  The new color table used to 	 *  @param negative_color_table  The new color table used to 
+ *                               values to an RGB color.  Thi	 *                               values to an RGB color.  Thi
+ *                               same number of entries as th	 *                               same number of entries as th
+ *                               color table.			 *                               color table.
+ */								 */
+void RefImageDisplay::SetColorScales( std::vector<QRgb> & pos |	void ImageDisplay::SetColorScales( std::vector<QRgb> & positi
+                                   std::vector<QRgb> & negati	                                   std::vector<QRgb> & negati
+{								{
+  this->positive_color_table.resize( positive_color_table.siz	  this->positive_color_table.resize( positive_color_table.siz
+  for ( size_t i = 0; i < positive_color_table.size(); i++ )	  for ( size_t i = 0; i < positive_color_table.size(); i++ )
+  {								  {
+    this->positive_color_table[i] = positive_color_table[i];	    this->positive_color_table[i] = positive_color_table[i];
+  }								  }
+
+  this->negative_color_table.resize( negative_color_table.siz	  this->negative_color_table.resize( negative_color_table.siz
+  for ( size_t i = 0; i < negative_color_table.size(); i++ )	  for ( size_t i = 0; i < negative_color_table.size(); i++ )
+  {								  {
+    this->negative_color_table[i] = negative_color_table[i];	    this->negative_color_table[i] = negative_color_table[i];
+  }								  }
+ 								 
+  UpdateImage();						  UpdateImage();
+}								}
+
+
+/**								/**
+ *  Change the control parameter (0...100) used to brighten t	 *  Change the control parameter (0...100) used to brighten t
+ *  If the control parameter is 0, the mapping from data valu	 *  If the control parameter is 0, the mapping from data valu
+ *  table index will be linear.  As the control parameter is 	 *  table index will be linear.  As the control parameter is 
+ *  the mapping becomes more and more non-linear in a way tha	 *  the mapping becomes more and more non-linear in a way tha
+ *  the lower level values.  This is similar to a log intensi	 *  the lower level values.  This is similar to a log intensi
+ *  								 *  
+ *  @param control_parameter  This is clamped between 0 (line	 *  @param control_parameter  This is clamped between 0 (line
+ *                            100 (most emphasis on low inten	 *                            100 (most emphasis on low inten
+ */								 */
+void RefImageDisplay::SetIntensity( double control_parameter  |	void ImageDisplay::SetIntensity( double control_parameter )
+{								{
+  size_t DEFAULT_SIZE = 100000;					  size_t DEFAULT_SIZE = 100000;
+  ColorMaps::GetIntensityMap( control_parameter, DEFAULT_SIZE	  ColorMaps::GetIntensityMap( control_parameter, DEFAULT_SIZE
+  image_plot_item->SetIntensityTable( &intensity_table );	  image_plot_item->SetIntensityTable( &intensity_table );
+  UpdateImage();						  UpdateImage();
+}								}
+
+
+/**								/**
+ * Extract data from horizontal and vertical cuts across the 	 * Extract data from horizontal and vertical cuts across the 
+ * show those as graphs in the horizontal and vertical graphs	 * show those as graphs in the horizontal and vertical graphs
+ * information about the specified point.			 * information about the specified point.
+ *								 *
+ * @param point  The point that the user is currently pointin	 * @param point  The point that the user is currently pointin
+ *               the mouse.					 *               the mouse.
+ */								 */
+void RefImageDisplay::SetPointedAtPoint( QPoint point, int mo |	void ImageDisplay::SetPointedAtPoint( QPoint point )
+{								{
+  if ( data_source == 0 || data_array == 0 )			  if ( data_source == 0 || data_array == 0 )
+  { 								  { 
+    return;							    return;
+  }								  }
+
+  double x = image_plot->invTransform( QwtPlot::xBottom, poin	  double x = image_plot->invTransform( QwtPlot::xBottom, poin
+  double y = image_plot->invTransform( QwtPlot::yLeft, point.	  double y = image_plot->invTransform( QwtPlot::yLeft, point.
+
+  SetHGraph( y );						  SetHGraph( y );
+  SetVGraph( x );						  SetVGraph( x );
+
+  ShowInfoList( x, y );						  ShowInfoList( x, y );
+  if (mouseClick == 1)  //left click			      <
+  {							      <
+      ShowPeakBackSelectionValue(x, y);			      <
+  }							      <
+  							      <
+}								}
+
+/*								/*
+ *  Extract data for Horizontal graph from the image at the s	 *  Extract data for Horizontal graph from the image at the s
+ *  If the y value is NOT in the y-interval covered by the da	 *  If the y value is NOT in the y-interval covered by the da
+ *  return.							 *  return.
+ *								 *
+ *  @param y   The y-value of the horizontal cut through the 	 *  @param y   The y-value of the horizontal cut through the 
+ */								 */
+void RefImageDisplay::SetHGraph( double y )		      |	void ImageDisplay::SetHGraph( double y )
+{								{
+  if ( y < data_array->GetYMin() || y > data_array->GetYMax()	  if ( y < data_array->GetYMin() || y > data_array->GetYMax()
+  {								  {
+    h_graph_display->Clear();					    h_graph_display->Clear();
+    return;							    return;
+  }								  }
+
+  pointed_at_y = y;						  pointed_at_y = y;
+
+  float *data   = data_array->GetData();			  float *data   = data_array->GetData();
+
+  size_t n_cols = data_array->GetNCols();			  size_t n_cols = data_array->GetNCols();
+
+  double x_min = data_array->GetXMin();				  double x_min = data_array->GetXMin();
+  double x_max = data_array->GetXMax();				  double x_max = data_array->GetXMax();
+
+  size_t row = data_array->RowOfY( y );				  size_t row = data_array->RowOfY( y );
+
+  QVector<double> xData;					  QVector<double> xData;
+  QVector<double> yData;					  QVector<double> yData;
+
+  double x_val;							  double x_val;
+  xData.push_back( x_min );                              // s	  xData.push_back( x_min );                              // s
+  yData.push_back( data[ row * n_cols ] );			  yData.push_back( data[ row * n_cols ] );
+  for ( size_t col = 0; col < n_cols; col++ )			  for ( size_t col = 0; col < n_cols; col++ )
+  {								  {
+    x_val = data_array->XOfColumn( col );			    x_val = data_array->XOfColumn( col );
+    xData.push_back( x_val );                           // ma	    xData.push_back( x_val );                           // ma
+    yData.push_back( data[ row * n_cols + col ] );      // ce	    yData.push_back( data[ row * n_cols + col ] );      // ce
+  }								  }
+  xData.push_back( x_max );                             // en	  xData.push_back( x_max );                             // en
+  yData.push_back( data[ row * n_cols + n_cols-1 ] );		  yData.push_back( data[ row * n_cols + n_cols-1 ] );
+
+  h_graph_display->SetLogX( data_array->IsLogX() );		  h_graph_display->SetLogX( data_array->IsLogX() );
+  h_graph_display->SetData( xData, yData, y );			  h_graph_display->SetData( xData, yData, y );
+}								}
+
+
+/*								/*
+ *  Extract data for vertical graph from the image at the spe	 *  Extract data for vertical graph from the image at the spe
+ *  If the x value is NOT in the x-interval covered by the da	 *  If the x value is NOT in the x-interval covered by the da
+ *  return.							 *  return.
+ *								 *
+ *  @param x   The x-value of the vertical cut through the im	 *  @param x   The x-value of the vertical cut through the im
+ */								 */
+void RefImageDisplay::SetVGraph( double x )		      |	void ImageDisplay::SetVGraph( double x )
+{								{
+  if ( x < data_array->GetXMin() || x > data_array->GetXMax()	  if ( x < data_array->GetXMin() || x > data_array->GetXMax()
+  {								  {
+    v_graph_display->Clear();					    v_graph_display->Clear();
+    return;							    return;
+  }								  }
+
+  pointed_at_x = x;						  pointed_at_x = x;
+
+  float *data   = data_array->GetData();			  float *data   = data_array->GetData();
+
+  size_t n_rows = data_array->GetNRows();			  size_t n_rows = data_array->GetNRows();
+  size_t n_cols = data_array->GetNCols();			  size_t n_cols = data_array->GetNCols();
+
+  double y_min = data_array->GetYMin();				  double y_min = data_array->GetYMin();
+  double y_max = data_array->GetYMax();				  double y_max = data_array->GetYMax();
+
+  size_t col = data_array->ColumnOfX( x );			  size_t col = data_array->ColumnOfX( x );
+
+  QVector<double> v_xData;					  QVector<double> v_xData;
+  QVector<double> v_yData;					  QVector<double> v_yData;
+
+  double y_val;							  double y_val;
+  v_yData.push_back( y_min );                     // start at	  v_yData.push_back( y_min );                     // start at
+  v_xData.push_back( data[col] );				  v_xData.push_back( data[col] );
+  for ( size_t row = 0; row < n_rows; row++ )     // mark dat	  for ( size_t row = 0; row < n_rows; row++ )     // mark dat
+  {								  {
+    y_val = data_array->YOfRow( row );				    y_val = data_array->YOfRow( row );
+    v_yData.push_back( y_val );					    v_yData.push_back( y_val );
+    v_xData.push_back( data[ row * n_cols + col ] );		    v_xData.push_back( data[ row * n_cols + col ] );
+  }								  }
+  v_yData.push_back( y_max );                     // end at y	  v_yData.push_back( y_max );                     // end at y
+  v_xData.push_back( data[ (n_rows-1) * n_cols + col] );	  v_xData.push_back( data[ (n_rows-1) * n_cols + col] );
+
+  v_graph_display->SetData( v_xData, v_yData, x );		  v_graph_display->SetData( v_xData, v_yData, x );
+}								}
+
+
+/**								/**
+ *  Get the information about a pointed at location and show 	 *  Get the information about a pointed at location and show 
+ *  table. 							 *  table. 
+ *								 *
+ *  @param x  The x coordinate of the pointed at location on 	 *  @param x  The x coordinate of the pointed at location on 
+ *  @param y  The y coordinate of the pointed at location on 	 *  @param y  The y coordinate of the pointed at location on 
+ */								 */
+void RefImageDisplay::ShowInfoList( double x, double y )      |	void ImageDisplay::ShowInfoList( double x, double y )
+{								{
+  std::vector<std::string> info_list;				  std::vector<std::string> info_list;
+  data_source->GetInfoList( x, y, info_list );			  data_source->GetInfoList( x, y, info_list );
+  int n_infos = (int)info_list.size() / 2;			  int n_infos = (int)info_list.size() / 2;
+
+  image_table->setRowCount(n_infos + 1);			  image_table->setRowCount(n_infos + 1);
+  image_table->setColumnCount(2);				  image_table->setColumnCount(2);
+  image_table->verticalHeader()->hide();			  image_table->verticalHeader()->hide();
+  image_table->horizontalHeader()->hide();			  image_table->horizontalHeader()->hide();
+
+  int width = 9;						  int width = 9;
+  int prec  = 3;						  int prec  = 3;
+
+  double value = data_array->GetValue( x, y );			  double value = data_array->GetValue( x, y );
+  QtUtils::SetTableEntry( 0, 0, "Value", image_table );		  QtUtils::SetTableEntry( 0, 0, "Value", image_table );
+  QtUtils::SetTableEntry( 0, 1, width, prec, value, image_tab	  QtUtils::SetTableEntry( 0, 1, width, prec, value, image_tab
+
+  for ( int i = 0; i < n_infos; i++ )				  for ( int i = 0; i < n_infos; i++ )
+  {								  {
+    QtUtils::SetTableEntry( i+1, 0, info_list[2*i], image_tab	    QtUtils::SetTableEntry( i+1, 0, info_list[2*i], image_tab
+    QtUtils::SetTableEntry( i+1, 1, info_list[2*i+1], image_t	    QtUtils::SetTableEntry( i+1, 1, info_list[2*i+1], image_t
+  }								  }
+
+  image_table->resizeColumnsToContents();			  image_table->resizeColumnsToContents();
+}								}
+
+/**							      <
+*  Get the information about a pointed at location and show i <
+*  peak and background boxes 				      <
+*							      <
+*  @param y  The y coordinate of the pointed at location on t <
+*/							      <
+void RefImageDisplay::ShowPeakBackSelectionValue(double x, do <
+{							      <
+							      <
+    //    QString yValue = QString::number(int(y));	      <
+    QString yValue = QString("%1").arg(int(y));		      <
+    if (radioButtonPeakLeft->isChecked()) { //peak left selec <
+        lineEditPeakLeft->setText(yValue);		      <
+        RefImageDisplay::peakLeft = static_cast<int>(y);      <
+    }							      <
+    if (radioButtonPeakRight->isChecked()) { //peak right sel <
+        lineEditPeakRight->setText(yValue);		      <
+        RefImageDisplay::peakRight = static_cast<int>(y);     <
+    }							      <
+    if (radioButtonBackLeft->isChecked()) { //back left selec <
+        lineEditBackLeft->setText(yValue);		      <
+        RefImageDisplay::backLeft = static_cast<int>(y);      <
+    }							      <
+    if (radioButtonBackRight->isChecked()) { //back right sel <
+        lineEditBackRight->setText(yValue);		      <
+        RefImageDisplay::backRight = static_cast<int>(y);     <
+    }							      <
+    							      <
+    QString xValue = QString("%1").arg(int(x));		      <
+    if (radioButtonTOFmin->isChecked()) { //tof min selected  <
+        lineEditTOFmin->setText(xValue);		      <
+        RefImageDisplay::TOFmin = static_cast<int>(x);	      <
+    }							      <
+    if (radioButtonTOFmax->isChecked()) { // tof max selected <
+        lineEditTOFmax->setText(xValue);		      <
+        RefImageDisplay::TOFmax = static_cast<int>(x);	      <
+    }							      <
+    							      <
+    UpdateImage(); //force refresh of the plot		      <
+}							      <
+							      <
+    int RefImageDisplay::peakLeft = 0;			      <
+    int RefImageDisplay::peakRight = 0;			      <
+    int RefImageDisplay::backLeft = 0;			      <
+    int RefImageDisplay::backRight = 0;			      <
+    int RefImageDisplay::TOFmin = 0;			      <
+    int RefImageDisplay::TOFmax = 0;			      <
+							      <
+    /**							      <
+     * set the peak left				      <
+     */							      <
+    void RefImageDisplay::setPeakLeft(int value)	      <
+    {							      <
+        peakLeft = value;				      <
+    }							      <
+    							      <
+    /**							      <
+     * set the peak right				      <
+     */							      <
+    void RefImageDisplay::setPeakRight(int value)	      <
+    {							      <
+        peakRight = value;				      <
+    }							      <
+							      <
+    /**							      <
+     * set the back left				      <
+     */							      <
+    void RefImageDisplay::setBackLeft(int value)	      <
+    {							      <
+        backLeft = value;				      <
+    }							      <
+    							      <
+    /**							      <
+     * set the back right				      <
+     */							      <
+    void RefImageDisplay::setBackRight(int value)	      <
+    {							      <
+        backRight = value;				      <
+    }							      <
+							      <
+    /**							      <
+     * set the TOF min					      <
+     */							      <
+    void RefImageDisplay::setTOFmin(int value)		      <
+    {							      <
+        TOFmin = value;					      <
+    }							      <
+    							      <
+    /**							      <
+     * set the TOF max					      <
+     */							      <
+    void RefImageDisplay::setTOFmax(int value)		      <
+    {							      <
+        TOFmax = value;					      <
+    }							      <
+    							      <
+    /**							      <
+     * return the value of the peak left		      <
+     **/						      <
+    int RefImageDisplay::getPeakLeft()			      <
+    {							      <
+        return peakLeft;				      <
+    }							      <
+							      <
+    /**							      <
+     * return the value of the peak right		      <
+     **/						      <
+    int RefImageDisplay::getPeakRight()			      <
+    {							      <
+        return peakRight;				      <
+    }							      <
+							      <
+    /**							      <
+     * return the value of the back left		      <
+     **/						      <
+    int RefImageDisplay::getBackLeft()			      <
+    {							      <
+        return backLeft;				      <
+    }							      <
+    							      <
+    /**							      <
+     * return the value of the back right		      <
+     **/						      <
+    int RefImageDisplay::getBackRight()			      <
+    {							      <
+        return backRight;				      <
+    }							      <
+ 							      <
+    /**							      <
+     * return the value of the TOF min			      <
+     **/						      <
+    int RefImageDisplay::getTOFmin()			      <
+    {							      <
+        return TOFmin;					      <
+    }							      <
+    							      <
+    /**							      <
+     * return the value of the TOF max			      <
+     **/						      <
+    int RefImageDisplay::getTOFmax()			      <
+    {							      <
+        return TOFmax;					      <
+    }							      <
+
+/**								/**
+ *  Get the rectangle currently covered by the image in pixel	 *  Get the rectangle currently covered by the image in pixel
+ *								 *
+ *  @param rect  A QRect object that will be filled out with 	 *  @param rect  A QRect object that will be filled out with 
+ *               and height of the pixel region covered by th	 *               and height of the pixel region covered by th
+ */								 */
+void RefImageDisplay::GetDisplayRectangle( QRect &rect )      |	void ImageDisplay::GetDisplayRectangle( QRect &rect )
+{								{
+  QwtScaleMap xMap = image_plot->canvasMap( QwtPlot::xBottom 	  QwtScaleMap xMap = image_plot->canvasMap( QwtPlot::xBottom 
+  QwtScaleMap yMap = image_plot->canvasMap( QwtPlot::yLeft );	  QwtScaleMap yMap = image_plot->canvasMap( QwtPlot::yLeft );
+
+  double x_min = data_array->GetXMin();				  double x_min = data_array->GetXMin();
+  double x_max = data_array->GetXMax();				  double x_max = data_array->GetXMax();
+  double y_min = data_array->GetYMin();				  double y_min = data_array->GetYMin();
+  double y_max = data_array->GetYMax();				  double y_max = data_array->GetYMax();
+
+  int pix_x_min = (int)xMap.transform( x_min );			  int pix_x_min = (int)xMap.transform( x_min );
+  int pix_x_max = (int)xMap.transform( x_max );			  int pix_x_max = (int)xMap.transform( x_max );
+  int pix_y_min = (int)yMap.transform( y_min );			  int pix_y_min = (int)yMap.transform( y_min );
+  int pix_y_max = (int)yMap.transform( y_max );			  int pix_y_max = (int)yMap.transform( y_max );
+
+  rect.setLeft  ( pix_x_min );					  rect.setLeft  ( pix_x_min );
+  rect.setRight ( pix_x_max );					  rect.setRight ( pix_x_max );
+  rect.setBottom( pix_y_min );					  rect.setBottom( pix_y_min );
+  rect.setTop   ( pix_y_max );					  rect.setTop   ( pix_y_max );
+
+  if ( rect.height() <= 1 ||        // must not have been dra	  if ( rect.height() <= 1 ||        // must not have been dra
+       rect.width()  <= 1  )        // some reasonable defaul	       rect.width()  <= 1  )        // some reasonable defaul
+  {								  {
+    rect.setLeft  (   6 );					    rect.setLeft  (   6 );
+    rect.setRight ( 440 );					    rect.setRight ( 440 );
+    rect.setBottom( 440 );					    rect.setBottom( 440 );
+    rect.setTop   (   6 );					    rect.setTop   (   6 );
+  }								  }
+}								}
+
+
+bool RefImageDisplay::DataSourceRangeChanged()		      |	bool ImageDisplay::DataSourceRangeChanged()
+{								{
+  if ( total_y_min != data_source->GetYMin() ||			  if ( total_y_min != data_source->GetYMin() ||
+       total_y_max != data_source->GetYMax() ||			       total_y_max != data_source->GetYMax() ||
+       total_x_min != data_source->GetXMin() ||			       total_x_min != data_source->GetXMin() ||
+       total_x_max != data_source->GetXMax() )			       total_x_max != data_source->GetXMax() )
+  {								  {
+    return true;						    return true;
+  }								  }
+  else								  else
+  {								  {
+    return false;						    return false;
+  }								  }
+}								}
+
+							      >
+} // namespace MantidQt 					} // namespace MantidQt 
+} // namespace ImageView 					} // namespace ImageView 
+>>>>>>>>>>>>> SliderHandler.h <<<<<<<<<<<<<
+6,8c6,8
+< #include "ui_RefImageView.h"
+< #include "MantidQtRefDetectorViewer/RefImageDataSource.h"
+< #include "MantidQtRefDetectorViewer/DllOptionIV.h"
+---
+> #include "ui_ImageView.h"
+> #include "MantidQtImageViewer/ImageDataSource.h"
+> #include "MantidQtImageViewer/DllOptionIV.h"
+42c42
+< namespace RefDetectorViewer
+---
+> namespace ImageView
+51c51
+<     SliderHandler( Ui_RefImageViewer* iv_ui );
+---
+>     SliderHandler( Ui_ImageViewer* iv_ui );
+55c55
+<                            RefImageDataSource* data_source );
+---
+>                            ImageDataSource* data_source );
+80c80
+<     Ui_RefImageViewer*   iv_ui;
+---
+>     Ui_ImageViewer*   iv_ui;
+>>>>>>>>>>>>> SliderHandler.cpp <<<<<<<<<<<<<
+5c5
+< #include "MantidQtRefDetectorViewer/SliderHandler.h"
+---
+> #include "MantidQtImageViewer/SliderHandler.h"
+9c9
+< namespace RefDetectorViewer
+---
+> namespace ImageView
+16c16
+< SliderHandler::SliderHandler( Ui_RefImageViewer* iv_ui )
+---
+> SliderHandler::SliderHandler( Ui_ImageViewer* iv_ui )
+30c30
+<                                      RefImageDataSource* data_source )
+---
+>                                       ImageDataSource* data_source )
+>>>>>>>>>>>>> RangeHandler.h <<<<<<<<<<<<<
+4,6c4,6
+< #include "ui_RefImageView.h"
+< #include "MantidQtRefDetectorViewer/RefImageDataSource.h"
+< #include "MantidQtRefDetectorViewer/DllOptionIV.h"
+---
+> #include "ui_ImageView.h"
+> #include "MantidQtImageViewer/ImageDataSource.h"
+> #include "MantidQtImageViewer/DllOptionIV.h"
+40c40
+< namespace RefDetectorViewer
+---
+> namespace ImageView
+49c49
+<     RangeHandler( Ui_RefImageViewer* iv_ui );
+---
+>     RangeHandler( Ui_ImageViewer* iv_ui );
+52c52
+<     void ConfigureRangeControls( RefImageDataSource* data_source );
+---
+>     void ConfigureRangeControls( ImageDataSource* data_source );
+58c58
+<     void SetRange( double min, double max, double step, char type );
+---
+>     void SetRange( double min, double max, double step );
+61c61
+<     Ui_RefImageViewer* iv_ui;
+---
+>     Ui_ImageViewer* iv_ui;
+64,65d63
+<     double         total_max_y;
+<     double         total_min_y;
+>>>>>>>>>>>>> RangeHandler.cpp <<<<<<<<<<<<<
+
+#include <iostream>						#include <iostream>
+#include <QLineEdit>						#include <QLineEdit>
+
+#include "MantidQtRefDetectorViewer/RangeHandler.h"	      |	#include "MantidQtImageViewer/RangeHandler.h"
+#include "MantidQtRefDetectorViewer/QtUtils.h"		      |	#include "MantidQtImageViewer/QtUtils.h"
+#include "MantidQtRefDetectorViewer/IVUtils.h"		      |	#include "MantidQtImageViewer/IVUtils.h"
+#include "MantidQtRefDetectorViewer/ErrorHandler.h"	      |	#include "MantidQtImageViewer/ErrorHandler.h"
+
+namespace MantidQt						namespace MantidQt
+{								{
+namespace RefDetectorViewer				      |	namespace ImageView
+{								{
+
+/**								/**
+ *  Construct a RangeHandler object to manage min, max and st	 *  Construct a RangeHandler object to manage min, max and st
+ *  in the specified UI						 *  in the specified UI
+ */								 */
+RangeHandler::RangeHandler( Ui_RefImageViewer* iv_ui )	      |	RangeHandler::RangeHandler( Ui_ImageViewer* iv_ui )
+{								{
+  this->iv_ui = iv_ui;						  this->iv_ui = iv_ui;
+}								}
+
+
+/**								/**
+ * Configure the min, max and step controls for the specified	 * Configure the min, max and step controls for the specified
+ *								 *
+ * @param data_source  ImageDataSource that provides the data	 * @param data_source  ImageDataSource that provides the data
+ */								 */
+void RangeHandler::ConfigureRangeControls( RefImageDataSource |	void RangeHandler::ConfigureRangeControls( ImageDataSource* d
+{								{
+  								  
+    //x axis						      <
+  total_min_x   = data_source->GetXMin();			  total_min_x   = data_source->GetXMin();
+  total_max_x   = data_source->GetXMax();			  total_max_x   = data_source->GetXMax();
+  total_n_steps = data_source->GetNCols();			  total_n_steps = data_source->GetNCols();
+  total_min_y   = data_source->GetYMin();		      <
+  total_max_y   = data_source->GetYMax();		      <
+
+  double defaultx_step = (total_max_x - total_min_x)/(double) |	  double default_step = (total_max_x - total_min_x)/(double)t
+  if ( total_n_steps > 2000 )					  if ( total_n_steps > 2000 )
+  {								  {
+    defaultx_step = (total_max_x - total_min_x)/2000.0;	      |	    default_step = (total_max_x - total_min_x)/2000.0;
+  }								  }
+
+  SetRange( total_min_x, total_max_x, defaultx_step, 'x');    |	  SetRange( total_min_x, total_max_x, default_step );
+							      <
+    //y axis						      <
+    total_min_y   = data_source->GetYMin();		      <
+    total_max_y   = data_source->GetYMax();		      <
+    total_n_steps = data_source->GetNCols();		      <
+    							      <
+    double defaulty_step = (total_max_y - total_min_y)/(doubl <
+    if ( total_n_steps > 2000 )				      <
+    {							      <
+        defaulty_step = (total_max_y - total_min_y)/2000.0;   <
+    }							      <
+    							      <
+    SetRange( total_min_y, total_max_y, defaulty_step, 'y' ); <
+							      <
+							      <
+}								}
+
+
+/**								/**
+ * Get the interval of values and the step size to use for re	 * Get the interval of values and the step size to use for re
+ * spectra.  The range values are validated and adjusted if n	 * spectra.  The range values are validated and adjusted if n
+ * range values that are returned by this method will also be	 * range values that are returned by this method will also be
+ * the controls.						 * the controls.
+ *								 *
+ * @param min     On input, this should be the default value 	 * @param min     On input, this should be the default value 
+ *                min should be set to, if getting the range 	 *                min should be set to, if getting the range 
+ *                On output this is will be set to the x valu	 *                On output this is will be set to the x valu
+ *                left edge of the first bin to display, if g	 *                left edge of the first bin to display, if g
+ *                range succeeds.				 *                range succeeds.
+ * @param max     On input, this should be the default value 	 * @param max     On input, this should be the default value 
+ *                max should be set to if getting the range f	 *                max should be set to if getting the range f
+ *                On output, if getting the range succeeds, t	 *                On output, if getting the range succeeds, t
+ *                be set an x value at the right edge of the 	 *                be set an x value at the right edge of the 
+ *                to display.  This will be adjusted so that 	 *                to display.  This will be adjusted so that 
+ *                than min by an integer number of steps.  	 *                than min by an integer number of steps.  
+ * @param step    On input this should be the default number 	 * @param step    On input this should be the default number 
+ *                to use if getting the range information fai	 *                to use if getting the range information fai
+ *                On output, this is size of the step to use 	 *                On output, this is size of the step to use 
+ *                min and max.  If it is less than zero, a lo	 *                min and max.  If it is less than zero, a lo
+ *                is requested.					 *                is requested.
+ */								 */
+void RangeHandler::GetRange( double &min, double &max, double	void RangeHandler::GetRange( double &min, double &max, double
+{ 							      |	{
+   double original_min  = min;				      |	  double original_min  = min;
+  double original_max  = max;					  double original_max  = max;
+  double original_step = step;					  double original_step = step;
+
+  QLineEdit* min_control  = iv_ui->x_min_input;			  QLineEdit* min_control  = iv_ui->x_min_input;
+  QLineEdit* max_control  = iv_ui->x_max_input;			  QLineEdit* max_control  = iv_ui->x_max_input;
+//  QLineEdit* step_control = iv_ui->step_input;	      |	  QLineEdit* step_control = iv_ui->step_input;
+
+  if ( !IVUtils::StringToDouble(  min_control->text().toStdSt	  if ( !IVUtils::StringToDouble(  min_control->text().toStdSt
+  {								  {
+    ErrorHandler::Error("X Min is not a NUMBER! Value reset."	    ErrorHandler::Error("X Min is not a NUMBER! Value reset."
+    min = original_min;						    min = original_min;
+  }								  }
+  if ( !IVUtils::StringToDouble(  max_control->text().toStdSt	  if ( !IVUtils::StringToDouble(  max_control->text().toStdSt
+  {								  {
+    ErrorHandler::Error("X Max is not a NUMBER! Value reset."	    ErrorHandler::Error("X Max is not a NUMBER! Value reset."
+    max = original_max;						    max = original_max;
+  }								  }
+//  if ( !IVUtils::StringToDouble(  step_control->text().toSt |	  if ( !IVUtils::StringToDouble(  step_control->text().toStdS
+//  {							      |	  {
+//    ErrorHandler::Error("Step is not a NUMBER! Value reset. |	    ErrorHandler::Error("Step is not a NUMBER! Value reset.")
+//    step = original_step;				      |	    step = original_step;
+//  }							      |	  }
+
+                                 // just require step to be n	                                 // just require step to be n
+                                 // bounds. If zero, take a d	                                 // bounds. If zero, take a d
+  if ( step == 0 ) 						  if ( step == 0 ) 
+  {								  {
+    ErrorHandler::Error("Step = 0, resetting to default step"	    ErrorHandler::Error("Step = 0, resetting to default step"
+    step = original_step;					    step = original_step;
+  }								  }
+
+  if ( step > 0 )						  if ( step > 0 )
+  {								  {
+    if ( !IVUtils::FindValidInterval( min, max ) )		    if ( !IVUtils::FindValidInterval( min, max ) )
+    {								    {
+      ErrorHandler::Warning( 					      ErrorHandler::Warning( 
+             "In GetRange: [Min,Max] interval invalid, values	             "In GetRange: [Min,Max] interval invalid, values
+      min  = original_min;					      min  = original_min;
+      max  = original_max;					      max  = original_max;
+      step = original_step;					      step = original_step;
+    }								    }
+  }								  }
+  else								  else
+  {								  {
+    if ( !IVUtils::FindValidLogInterval( min, max ) )		    if ( !IVUtils::FindValidLogInterval( min, max ) )
+    {								    {
+      ErrorHandler::Warning(					      ErrorHandler::Warning(
+          "In GetRange: [Min,Max] log interval invalid, value	          "In GetRange: [Min,Max] log interval invalid, value
+      min  = original_min;					      min  = original_min;
+      max  = original_max;					      max  = original_max;
+      step = original_step;					      step = original_step;
+    }								    }
+  }								  }
+
+  SetRange( min, max, step, 'x' );			      |	  SetRange( min, max, step );
+}								}
+
+
+/**								/**
+ * Adjust the values to be consistent with the available data	 * Adjust the values to be consistent with the available data
+ * diplay them in the controls.					 * diplay them in the controls.
+ *								 *
+ * @param min     This is the x value at the left edge of the	 * @param min     This is the x value at the left edge of the
+ * @param max     This is an x value at the right edge of the	 * @param max     This is an x value at the right edge of the
+ * @param step    This is size of the step to use between min	 * @param step    This is size of the step to use between min
+ *                If it is less than zero, a log scale is req	 *                If it is less than zero, a log scale is req
+ */								 */
+void RangeHandler::SetRange( double min, double max, double s |	void RangeHandler::SetRange( double min, double max, double s
+{								{
+    if (type == 'x') {  				      <
+    							      <
+  if ( !IVUtils::FindValidInterval( min, max ) )		  if ( !IVUtils::FindValidInterval( min, max ) )
+  {								  {
+    ErrorHandler::Warning( 					    ErrorHandler::Warning( 
+            "In SetRange: [XMin,XMax] interval invalid, value |	            "In SetRange: [Min,Max] interval invalid, values 
+  }								  }
+
+  if ( min < total_min_x || min > total_max_x )			  if ( min < total_min_x || min > total_max_x )
+  {								  {
+//    ErrorHandler::Warning("X Min out of range, resetting to	//    ErrorHandler::Warning("X Min out of range, resetting to
+    min = total_min_x;						    min = total_min_x;
+  }								  }
+
+  if ( max < total_min_x || max > total_max_x )			  if ( max < total_min_x || max > total_max_x )
+  {								  {
+//    ErrorHandler::Warning("X Max out of range, resetting to	//    ErrorHandler::Warning("X Max out of range, resetting to
+    max = total_max_x;						    max = total_max_x;
+  }								  }
+
+  if ( step == 0 )						  if ( step == 0 )
+  {								  {
+    ErrorHandler::Error("Step = 0, resetting to default step"	    ErrorHandler::Error("Step = 0, resetting to default step"
+    step = (max-min)/2000.0;					    step = (max-min)/2000.0;
+  }								  }
+
+  QtUtils::SetText( 8, 2, min, iv_ui->x_min_input );		  QtUtils::SetText( 8, 2, min, iv_ui->x_min_input );
+  QtUtils::SetText( 8, 2, max, iv_ui->x_max_input );		  QtUtils::SetText( 8, 2, max, iv_ui->x_max_input );
+//  QtUtils::SetText( 8, 4, step, iv_ui->step_input );	      |	  QtUtils::SetText( 8, 6, step, iv_ui->step_input );
+        						      <
+    } 							      <
+    							      <
+    if (type == 'y') {  				      <
+        						      <
+        if ( !IVUtils::FindValidInterval( min, max ) )	      <
+        {						      <
+            ErrorHandler::Warning( 			      <
+                                  "In SetRange: [YMin,YMax] i <
+        }						      <
+        						      <
+        if ( min < total_min_y || min > total_max_y )	      <
+        {						      <
+            //    ErrorHandler::Warning("Y Min out of range,  <
+            min = total_min_y;				      <
+        }						      <
+        						      <
+        if ( max < total_min_y || max > total_max_y )	      <
+        {						      <
+            //    ErrorHandler::Warning("Y Max out of range,  <
+            max = total_max_y;				      <
+        }						      <
+        						      <
+        if ( step == 0 )				      <
+        {						      <
+            ErrorHandler::Error("Step = 0, resetting to defau <
+            step = (max-min)/2000.0;			      <
+        }						      <
+        						      <
+        QtUtils::SetText( 8, 2, min, iv_ui->y_min_input );    <
+        QtUtils::SetText( 8, 2, max, iv_ui->y_max_input );    <
+        //  QtUtils::SetText( 8, 4, step, iv_ui->step_input ) <
+        						      <
+    } 							      <
+    							      <
+}								}
+
+
+} // namespace MantidQt 					} // namespace MantidQt 
+} // namespace ImageView					} // namespace ImageView

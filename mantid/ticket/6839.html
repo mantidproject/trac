@@ -1,0 +1,1357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #6839 (Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="6838.html" title="Ticket #6838" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6839?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6839?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6839?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="6840.html" title="Ticket #6840" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 6839, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="6838.html" title="Ticket #6838">Previous Ticket</a></span></li><li><span><a class="next" href="6840.html" title="Ticket #6840">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/6839.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="6839.html">Ticket #6839</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-08T11%3A34%3A19%2B01%3A00&amp;precision=second" title="2013-04-08T11:34:19+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A30%3A31%2B01%3A00&amp;precision=second" title="2015-06-04T01:30:31+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Gesner+Passos">Gesner Passos</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=blocker">blocker</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.5.html">Release 2.5</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              anders.markvardsen@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="6929.html" title="Use sanCAS v1.1 in SANS isis reduction">#6929</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Anders Markvardsen
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+V1.1 of the canSAS XML reduced data file standard is now released (see link below).
+</p>
+<p>
+<a class="ext-link" href="http://www.cansas.org/svn/1dwg/trunk/doc/cansas-1d-1_1-manual.pdf"><span class="icon">​</span>http://www.cansas.org/svn/1dwg/trunk/doc/cansas-1d-1_1-manual.pdf</a>
+</p>
+<p>
+Please could the necessary changes to SaveCansas1D be ticketed, please.
+</p>
+<p>
+I also attach a non-Mantid-generated example output file to show what the revised data files should look like.
+</p>
+<p>
+The way I would envisage the new SaveCansas1D algorithm working is that when called to write a reduced 1D data workspace, Mantid checks to see if either or both of the transmissions (sample &amp; can) used to calculate that data have been generated as part of the reduction process. If they have then they should be automatically inserted into the XML file. If they are not present (eg, the user has chosen to reduce data without transmisisons or has deleted both of the transmission workspaces associated with the reduction before choosing to write the file) then the file is written without any SAStransmission_spectrum blocks.
+</p>
+<p>
+Note that it would be perfectly acceptable for a file to ONLY contain a sample transmission or a can transmission; though the latter case would indeed be odd, it is not forbidden; the former case would be quite common (a reduction without any can subtraction).
+</p>
+<p>
+Any chance these changes could make it into the May release?
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/6839/samdata_WITHTX.xml.html" title="View attachment">samdata_WITHTX.xml</a><a href="../raw-attachment/ticket/6839/samdata_WITHTX.xml" class="trac-rawlink" title="Download">​</a>
+       (<span title="37037 bytes">36.2 KB</span>) -
+      added by <em>Martyn Gigg</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-08T17%3A25%3A54%2B01%3A00&amp;precision=second" title="2013-04-08T17:25:54+01:00 in Timeline">8 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/6839/reducted_data.nxs.html" title="View attachment">reducted_data.nxs</a><a href="../raw-attachment/ticket/6839/reducted_data.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="1108249 bytes">1.1 MB</span>) -
+      added by <em>Gesner Passos</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A43%3A36%2B01%3A00&amp;precision=second" title="2013-04-25T11:43:36+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                The reduced data.
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/6839/transmission_sample_data.nxs.html" title="View attachment">transmission_sample_data.nxs</a><a href="../raw-attachment/ticket/6839/transmission_sample_data.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="296715 bytes">289.8 KB</span>) -
+      added by <em>Gesner Passos</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A43%3A53%2B01%3A00&amp;precision=second" title="2013-04-25T11:43:53+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                The transmission sample data
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/6839/transmission_can_data.nxs.html" title="View attachment">transmission_can_data.nxs</a><a href="../raw-attachment/ticket/6839/transmission_can_data.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="270983 bytes">264.6 KB</span>) -
+      added by <em>Gesner Passos</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A44%3A05%2B01%3A00&amp;precision=second" title="2013-04-25T11:44:05+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                the transmission can data.
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-08T17%3A25%3A54%2B01%3A00&amp;precision=second" title="2013-04-08T17:25:54+01:00 in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6839/samdata_WITHTX.xml.html"><em>samdata_WITHTX.xml</em></a><a href="../raw-attachment/ticket/6839/samdata_WITHTX.xml" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="6839.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-11T08%3A40%3A58%2B01%3A00&amp;precision=second" title="2013-04-11T08:40:58+01:00 in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Owner</strong>
+        changed from <em>Anders Markvardsen</em> to <em>Gesner Passos</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="6839.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-12T10%3A12%3A22%2B01%3A00&amp;precision=second" title="2013-04-12T10:12:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="6839.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-15T10%3A43%3A46%2B01%3A00&amp;precision=second" title="2013-04-15T10:43:46+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>Implement v1.1 of CanSAS standard in SaveCansas1D</em> to <em>Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="6839.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A16%3A22%2B01%3A00&amp;precision=second" title="2013-04-25T11:16:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Render SaveCanSAS1D extendable
+</p>
+<p>
+Make protected methods and chose some methods to be virtual.
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0" title="447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0">447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="6839.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A16%3A22%2B01%3A00&amp;precision=second" title="2013-04-25T11:16:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Introduction of SaveCanSAS1D2.
+</p>
+<p>
+This algorithm implements the CanSAS version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2441d60e53432887c149f21175c235dcd589844c" title="2441d60e53432887c149f21175c235dcd589844c">2441d60e53432887c149f21175c235dcd589844c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="6839.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A16%3A22%2B01%3A00&amp;precision=second" title="2013-04-25T11:16:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test to SaveCanSAS1D2
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d09ac84d8897a16e2f86ec529bf26a6add1123aa" title="d09ac84d8897a16e2f86ec529bf26a6add1123aa">d09ac84d8897a16e2f86ec529bf26a6add1123aa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="6839.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A16%3A22%2B01%3A00&amp;precision=second" title="2013-04-25T11:16:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add LoadCanSAS1D2 the second version
+</p>
+<p>
+it allows to load cansas version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/621e3ab8e701d28a71675b0a4751d3606fe609d2" title="621e3ab8e701d28a71675b0a4751d3606fe609d2">621e3ab8e701d28a71675b0a4751d3606fe609d2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="6839.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A34%3A06%2B01%3A00&amp;precision=second" title="2013-04-25T11:34:06+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+There was one note at the description: 
+</p>
+<p>
+Note that it would be perfectly acceptable for a file to ONLY contain a sample transmission or a can transmission; though the latter case would indeed be odd, it is not forbidden; the former case would be quite common (a reduction without any can subtraction).
+</p>
+<p>
+I've considered this an invalid request. Mainly because it breaks the xml-schema. Speaking about the required SASentryType, it says that SASdata (the reduction data) must occur at least 1 (minOccurs). So, we can not save only transmission data. 
+</p>
+<pre class="wiki">&lt;element name="SASdata" minOccurs="1" maxOccurs="unbounded" type="tns:SASdataType" /&gt;
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="6839.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A37%3A15%2B01%3A00&amp;precision=second" title="2013-04-25T11:37:15+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6929</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="6839.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A38%3A22%2B01%3A00&amp;precision=second" title="2013-04-25T11:38:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6929</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This ticket will only implement the second version of load and save canSAS. It will let the introduction of this new feature inside the Reduction to the ticked <a class="closed ticket" href="6929.html" title="enhancement: Use sanCAS v1.1 in SANS isis reduction (closed: fixed)">#6929</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A43%3A36%2B01%3A00&amp;precision=second" title="2013-04-25T11:43:36+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6839/reducted_data.nxs.html"><em>reducted_data.nxs</em></a><a href="../raw-attachment/ticket/6839/reducted_data.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The reduced data.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A43%3A53%2B01%3A00&amp;precision=second" title="2013-04-25T11:43:53+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6839/transmission_sample_data.nxs.html"><em>transmission_sample_data.nxs</em></a><a href="../raw-attachment/ticket/6839/transmission_sample_data.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The transmission sample data
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A44%3A05%2B01%3A00&amp;precision=second" title="2013-04-25T11:44:05+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6839/transmission_can_data.nxs.html"><em>transmission_can_data.nxs</em></a><a href="../raw-attachment/ticket/6839/transmission_can_data.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+the transmission can data.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="6839.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T11%3A53%3A25%2B01%3A00&amp;precision=second" title="2013-04-25T11:53:25+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>anders.markvardsen@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Tester: 
+</p>
+<p>
+The version 1.1 introduced the possibility to add transmission data correlated to reduced data. These new values are optionals. So, I suggest you to try the following. Load the three nexus files 
+attached to this ticket (reduced_data, transmission_sample_dta, transmission_can_data). Then, 
+apply the SaveCanSAS some times: 
+</p>
+<pre class="wiki">SaveCanSAS('reduced_data','/tmp/reduced_data_only.xml')
+SaveCanSAS('reduced_data','/tmp/reduced_with_sample.xml', 'transmission_sample_data')
+SaveCanSAS('reduced_dta','/tmp/all_three.xml','transsmission_sample_data','transmission_can_data')
+</pre><p>
+You can then, check that all these files are conformed the xml-schema: 
+</p>
+<pre class="wiki">xmllint --schema http://www.cansas.org/svn/1dwg/trunk/cansas1d.xsd /tmp/reduced_data_only.xml  --noout
+</pre><p>
+Finally, you may Load all these files (enabling the LoadTransmission flag) to check if the Load can load all these files correctly. 
+</p>
+<p>
+One test that will not pass is to check the workspace with the one loaded from nexus. The reason is that CanSAS does not define bins, but single position for the pixels, and it was choosen to set the center of the bin as its position. So, the X values are different. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="6839.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T12%3A13%3A23%2B01%3A00&amp;precision=second" title="2013-04-25T12:13:23+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+You must add the entry DetectorNames=HAB for Saving SaveCanSAS
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="6839.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T14%3A34%3A39%2B01%3A00&amp;precision=second" title="2013-04-25T14:34:39+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="6839.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T16%3A07%3A59%2B01%3A00&amp;precision=second" title="2013-04-25T16:07:59+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6929</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="6839.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-25T16%3A14%3A28%2B01%3A00&amp;precision=second" title="2013-04-25T16:14:28+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+branch feature/6839_cansas_v1.1
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="6839.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A34%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:34+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Render SaveCanSAS1D extendable
+</p>
+<p>
+Make protected methods and chose some methods to be virtual.
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0" title="447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0">447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="6839.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A34%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:34+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Introduction of SaveCanSAS1D2.
+</p>
+<p>
+This algorithm implements the CanSAS version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2441d60e53432887c149f21175c235dcd589844c" title="2441d60e53432887c149f21175c235dcd589844c">2441d60e53432887c149f21175c235dcd589844c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="6839.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A34%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:34+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test to SaveCanSAS1D2
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d09ac84d8897a16e2f86ec529bf26a6add1123aa" title="d09ac84d8897a16e2f86ec529bf26a6add1123aa">d09ac84d8897a16e2f86ec529bf26a6add1123aa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="6839.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T10%3A43%3A35%2B01%3A00&amp;precision=second" title="2013-04-26T10:43:35+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add LoadCanSAS1D2 the second version
+</p>
+<p>
+it allows to load cansas version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/621e3ab8e701d28a71675b0a4751d3606fe609d2" title="621e3ab8e701d28a71675b0a4751d3606fe609d2">621e3ab8e701d28a71675b0a4751d3606fe609d2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="6839.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T14%3A05%3A11%2B01%3A00&amp;precision=second" title="2013-04-26T14:05:11+01:00 in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Anders Markvardsen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="6839.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T15%3A18%3A52%2B01%3A00&amp;precision=second" title="2013-04-26T15:18:52+01:00 in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tested by using sans2d run 11109 where I saved cansas and loaded in again. also tested that i could load in old format
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="6839.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T15%3A19%3A06%2B01%3A00&amp;precision=second" title="2013-04-26T15:19:06+01:00 in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="6839.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T15%3A22%3A22%2B01%3A00&amp;precision=second" title="2013-04-26T15:22:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Render SaveCanSAS1D extendable
+</p>
+<p>
+Make protected methods and chose some methods to be virtual.
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0" title="447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0">447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="6839.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T15%3A22%3A22%2B01%3A00&amp;precision=second" title="2013-04-26T15:22:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Introduction of SaveCanSAS1D2.
+</p>
+<p>
+This algorithm implements the CanSAS version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2441d60e53432887c149f21175c235dcd589844c" title="2441d60e53432887c149f21175c235dcd589844c">2441d60e53432887c149f21175c235dcd589844c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="6839.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T15%3A22%3A23%2B01%3A00&amp;precision=second" title="2013-04-26T15:22:23+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test to SaveCanSAS1D2
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d09ac84d8897a16e2f86ec529bf26a6add1123aa" title="d09ac84d8897a16e2f86ec529bf26a6add1123aa">d09ac84d8897a16e2f86ec529bf26a6add1123aa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="6839.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-26T15%3A22%3A23%2B01%3A00&amp;precision=second" title="2013-04-26T15:22:23+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add LoadCanSAS1D2 the second version
+</p>
+<p>
+it allows to load cansas version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/621e3ab8e701d28a71675b0a4751d3606fe609d2" title="621e3ab8e701d28a71675b0a4751d3606fe609d2">621e3ab8e701d28a71675b0a4751d3606fe609d2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="6839.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T15%3A31%3A32%2B01%3A00&amp;precision=second" title="2013-04-29T15:31:32+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Render SaveCanSAS1D extendable
+</p>
+<p>
+Make protected methods and chose some methods to be virtual.
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0" title="447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0">447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="6839.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T15%3A31%3A32%2B01%3A00&amp;precision=second" title="2013-04-29T15:31:32+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Introduction of SaveCanSAS1D2.
+</p>
+<p>
+This algorithm implements the CanSAS version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2441d60e53432887c149f21175c235dcd589844c" title="2441d60e53432887c149f21175c235dcd589844c">2441d60e53432887c149f21175c235dcd589844c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="6839.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T15%3A31%3A32%2B01%3A00&amp;precision=second" title="2013-04-29T15:31:32+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test to SaveCanSAS1D2
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d09ac84d8897a16e2f86ec529bf26a6add1123aa" title="d09ac84d8897a16e2f86ec529bf26a6add1123aa">d09ac84d8897a16e2f86ec529bf26a6add1123aa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="6839.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T15%3A31%3A33%2B01%3A00&amp;precision=second" title="2013-04-29T15:31:33+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add LoadCanSAS1D2 the second version
+</p>
+<p>
+it allows to load cansas version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/621e3ab8e701d28a71675b0a4751d3606fe609d2" title="621e3ab8e701d28a71675b0a4751d3606fe609d2">621e3ab8e701d28a71675b0a4751d3606fe609d2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="6839.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A38%3A22%2B01%3A00&amp;precision=second" title="2013-05-16T22:38:22+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Render SaveCanSAS1D extendable
+</p>
+<p>
+Make protected methods and chose some methods to be virtual.
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0" title="447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0">447cc308bf146fcd5b0cc1fdf0aad2b4acfe2bd0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="6839.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A38%3A23%2B01%3A00&amp;precision=second" title="2013-05-16T22:38:23+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Introduction of SaveCanSAS1D2.
+</p>
+<p>
+This algorithm implements the CanSAS version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2441d60e53432887c149f21175c235dcd589844c" title="2441d60e53432887c149f21175c235dcd589844c">2441d60e53432887c149f21175c235dcd589844c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="6839.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A38%3A23%2B01%3A00&amp;precision=second" title="2013-05-16T22:38:23+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test to SaveCanSAS1D2
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d09ac84d8897a16e2f86ec529bf26a6add1123aa" title="d09ac84d8897a16e2f86ec529bf26a6add1123aa">d09ac84d8897a16e2f86ec529bf26a6add1123aa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="6839.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A38%3A29%2B01%3A00&amp;precision=second" title="2013-05-16T22:38:29+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add LoadCanSAS1D2 the second version
+</p>
+<p>
+it allows to load cansas version 1.1
+</p>
+<p>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/621e3ab8e701d28a71675b0a4751d3606fe609d2" title="621e3ab8e701d28a71675b0a4751d3606fe609d2">621e3ab8e701d28a71675b0a4751d3606fe609d2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="6839.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-24T15%3A30%3A05%2B01%3A00&amp;precision=second" title="2013-06-24T15:30:05+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+correct the number of bins at transmission
+</p>
+<p>
+Correct a wrong implementation of saving cansas that does not take the
+correct number of values to save them.
+</p>
+<p>
+re <a class="closed ticket" href="6929.html" title="enhancement: Use sanCAS v1.1 in SANS isis reduction (closed: fixed)">#6929</a>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a542e0b51658f4f324fbf0ac649aed3380469fd7" title="a542e0b51658f4f324fbf0ac649aed3380469fd7">a542e0b51658f4f324fbf0ac649aed3380469fd7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="6839.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-25T09%3A30%3A54%2B01%3A00&amp;precision=second" title="2013-06-25T09:30:54+01:00 in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct the unit test to adjust the units
+</p>
+<p>
+the commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a542e0b51658f4f324fbf0ac649aed3380469fd7" title="a542e0b51658f4f324fbf0ac649aed3380469fd7">a542e0b51658f4f324fbf0ac649aed3380469fd7</a> changed the units,
+and this commit, updates the unit test.
+</p>
+<p>
+re <a class="closed ticket" href="6929.html" title="enhancement: Use sanCAS v1.1 in SANS isis reduction (closed: fixed)">#6929</a>
+re <a class="closed ticket" href="6839.html" title="enhancement: Implement v1.1 of CanSAS standard in SaveCansas1D and LoadCansas1D (closed: fixed)">#6839</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/94126a9398bef8b9c69d796fee5ca48ab0c7a508" title="94126a9398bef8b9c69d796fee5ca48ab0c7a508">94126a9398bef8b9c69d796fee5ca48ab0c7a508</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="6839.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A30%3A31%2B01%3A00&amp;precision=second" title="2015-06-04T01:30:31+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/7685"><span class="icon">​</span>7685</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6839?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6839?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6839?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

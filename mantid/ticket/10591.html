@@ -1,0 +1,1968 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10591 (Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction as a particular case))
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10590.html" title="Ticket #10590" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10591?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10591?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10591?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10592.html" title="Ticket #10592" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10591, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10590.html" title="Ticket #10590">Previous Ticket</a></span></li><li><span><a class="next" href="10592.html" title="Ticket #10592">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10591.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10591.html">Ticket #10591</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-19T13%3A48%3A00Z&amp;precision=second" title="2014-11-19T13:48:00Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A03%3A29%2B01%3A00&amp;precision=second" title="2015-06-04T04:03:29+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction as a particular case)</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=John+Hill">John Hill</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Federico+M+Pouzols">Federico M Pouzols</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="10564.html" title="Design and create GUI for IMAT reconstruction">#10564</a>, <a class="closed ticket" href="11064.html" title="Fit the SCARF job scheduler remote algorithm in the 'RemoteJobManager' design">#11064</a>, <a class="closed ticket" href="11122.html" title="Add unit tests for the remote algorithms">#11122</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Raquel Alvarez
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2015-02-09 16:14:23.514627+00:00">
+        (last modified by Federico M Pouzols)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/10591?action=diff&amp;version=10">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Create a remote algorithm for use at ISIS to control (submit, monitor, cancel, etc.) tomographic reconstruction jobs on the SCARF cluster (<a class="ext-link" href="http://www.scarf.rl.ac.uk"><span class="icon">​</span>http://www.scarf.rl.ac.uk</a>).
+</p>
+<p>
+The SCARF cluster uses the LSF scheduling system. It is possible to interact with the job scheduler via ssh login, the interactive portal (<a class="ext-link" href="https://portal.scarf.rl.ac.uk/"><span class="icon">​</span>https://portal.scarf.rl.ac.uk/</a>), and a web service. The algorithm to implement here should provide several actions, using the web service as underlying mechanism:
+</p>
+<ul><li>log in/out
+</li><li>submit a job
+</li><li>query the jobs in the queue and their status
+</li><li>cancel a job
+</li></ul><p>
+At present this algorithm could submit 'savu' or 'imat_recon_FBP' jobs. This runs the 'savu' tool produced at Diamond LS, and tomopy, respectively. The inputs required include (with variations...):
+</p>
+<ul><li>directory with input FITS image files
+</li><li>an NXtomo input file
+</li><li>a nexus file with the list (specification not available as yet)
+</li><li>output directory
+</li></ul><p>
+We also assume that we have somewhere to put the files on SCARF (currently it's /work/imat/ for the imat project).
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10591.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-19T18%3A19%3A47Z&amp;precision=second" title="2014-11-19T18:19:47Z in Timeline">6 years</a> ago by John Hill
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a> creating base files for algorithm
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8dff93c102cb6f25602831332fd16e511073bea6" title="8dff93c102cb6f25602831332fd16e511073bea6">8dff93c102cb6f25602831332fd16e511073bea6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10591.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T10%3A59%3A11Z&amp;precision=second" title="2014-11-28T10:59:11Z in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10591.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-05T17%3A40%3A45Z&amp;precision=second" title="2014-12-05T17:40:45Z in Timeline">6 years</a> ago by John Hill
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.3</em> to <em>Release 3.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10591.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-09T12%3A12%3A23Z&amp;precision=second" title="2015-01-09T12:12:23Z in Timeline">6 years</a> ago by John Hill
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>John Hill</em> to <em>Federico M Pouzols</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10591.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T10%3A08%3A15Z&amp;precision=second" title="2015-01-16T10:08:15Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+clang-format, copyright line, etc, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/08daa727c70a035461b26e946fc7b8ddbfead96e" title="08daa727c70a035461b26e946fc7b8ddbfead96e">08daa727c70a035461b26e946fc7b8ddbfead96e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10591.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T10%3A08%3A15Z&amp;precision=second" title="2015-01-16T10:08:15Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+minor header details, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd73dc996e850dbe60d48d52c0ee45c616c16b64" title="bd73dc996e850dbe60d48d52c0ee45c616c16b64">bd73dc996e850dbe60d48d52c0ee45c616c16b64</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10591.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T10%3A08%3A15Z&amp;precision=second" title="2015-01-16T10:08:15Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+get it to compile, fill in algorithm a bit more, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d0ff924051c3bfcd982aa3d7c9fa2bc569468e89" title="d0ff924051c3bfcd982aa3d7c9fa2bc569468e89">d0ff924051c3bfcd982aa3d7c9fa2bc569468e89</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10591.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T11%3A15%3A58Z&amp;precision=second" title="2015-01-16T11:15:58Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added algorithm doc/doctest (no test), re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2aa897ac74c889afd126145613d9cce72c6272bb" title="2aa897ac74c889afd126145613d9cce72c6272bb">2aa897ac74c889afd126145613d9cce72c6272bb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10591.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T14%3A35%3A05Z&amp;precision=second" title="2015-02-09T14:35:05Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Diffraction</em> to <em>Framework</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/10591?action=diff&amp;version=9">diff</a>)
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>Algorithm to initiate an NXTomo reconstruction on SCARF</em> to <em>Algorithm to control NXTomo reconstruction jobs on the SCARF cluster</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10591.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-09T16%3A14%3A23Z&amp;precision=second" title="2015-02-09T16:14:23Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/10591?action=diff&amp;version=10">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10591.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-10T12%3A55%3A38Z&amp;precision=second" title="2015-02-10T12:55:38Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Login working with federal id on SCARF, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37b77afe00a1a2cb60c4a29bda0e1c765a0f4172" title="37b77afe00a1a2cb60c4a29bda0e1c765a0f4172">37b77afe00a1a2cb60c4a29bda0e1c765a0f4172</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10591.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-10T12%3A55%3A38Z&amp;precision=second" title="2015-02-10T12:55:38Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Logout, still issues with the cookie, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f734f4186939678b2a3d653347f0082e71de7e70" title="f734f4186939678b2a3d653347f0082e71de7e70">f734f4186939678b2a3d653347f0082e71de7e70</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10591.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-10T17%3A40%3A00Z&amp;precision=second" title="2015-02-10T17:40:00Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+log in/out and submit working fine, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c5de82aa5bd2e5cb94657564081823fc20fa11e0" title="c5de82aa5bd2e5cb94657564081823fc20fa11e0">c5de82aa5bd2e5cb94657564081823fc20fa11e0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10591.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-11T16%3A42%3A13Z&amp;precision=second" title="2015-02-11T16:42:13Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added full doc, with dummy/exception doc-test, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a1cb6b0a73e7bd4b696d111b25d262efc8817485" title="a1cb6b0a73e7bd4b696d111b25d262efc8817485">a1cb6b0a73e7bd4b696d111b25d262efc8817485</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10591.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-11T16%3A42%3A13Z&amp;precision=second" title="2015-02-11T16:42:13Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+add support for other Content-Types in InternetHelper, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e678ce2553ca48e1306bb8371751bfd3b4958125" title="e678ce2553ca48e1306bb8371751bfd3b4958125">e678ce2553ca48e1306bb8371751bfd3b4958125</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10591.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-11T16%3A42%3A13Z&amp;precision=second" title="2015-02-11T16:42:13Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added SCARF 'computeResource', re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e0aa88aa3575fa3714a882ee758cdc178f5fa46a" title="e0aa88aa3575fa3714a882ee758cdc178f5fa46a">e0aa88aa3575fa3714a882ee758cdc178f5fa46a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10591.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-11T16%3A42%3A13Z&amp;precision=second" title="2015-02-11T16:42:13Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added query all-jobs status, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/397825fb637bc0e89455f994abd563afc662474c" title="397825fb637bc0e89455f994abd563afc662474c">397825fb637bc0e89455f994abd563afc662474c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10591.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-11T16%3A42%3A13Z&amp;precision=second" title="2015-02-11T16:42:13Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added query status by ID, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9b5e41be42107e560eab11040eebe09b531c3f60" title="9b5e41be42107e560eab11040eebe09b531c3f60">9b5e41be42107e560eab11040eebe09b531c3f60</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10591.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-12T13%3A08%3A46Z&amp;precision=second" title="2015-02-12T13:08:46Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added cancel job and ping actions, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f9e4776e10cbfff43856ba3b34a1e9bc21a40d75" title="f9e4776e10cbfff43856ba3b34a1e9bc21a40d75">f9e4776e10cbfff43856ba3b34a1e9bc21a40d75</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10591.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-12T13%3A08%3A46Z&amp;precision=second" title="2015-02-12T13:08:46Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added download and download all job files, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/389b5eb6a00be51df791dcebc0fd0196bef81a93" title="389b5eb6a00be51df791dcebc0fd0196bef81a93">389b5eb6a00be51df791dcebc0fd0196bef81a93</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10591.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-12T13%3A08%3A46Z&amp;precision=second" title="2015-02-12T13:08:46Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+log (debug) request string, skipping passwords, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a443052744e4d6bec9f05ffc2c5d8cb2c91aa9b2" title="a443052744e4d6bec9f05ffc2c5d8cb2c91aa9b2">a443052744e4d6bec9f05ffc2c5d8cb2c91aa9b2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10591.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-12T16%3A21%3A54Z&amp;precision=second" title="2015-02-12T16:21:54Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+deal with PAC names so multi-download works safely, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3a084ab6ebd77a6e94baba39d9df496308bd130e" title="3a084ab6ebd77a6e94baba39d9df496308bd130e">3a084ab6ebd77a6e94baba39d9df496308bd130e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10591.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-12T16%3A21%3A54Z&amp;precision=second" title="2015-02-12T16:21:54Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+props for the exec/runnable and its command line options, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f086705d9edb840bffd38c9e2e6023be146c5acc" title="f086705d9edb840bffd38c9e2e6023be146c5acc">f086705d9edb840bffd38c9e2e6023be146c5acc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10591.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-12T18%3A06%3A32Z&amp;precision=second" title="2015-02-12T18:06:32Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+upload files working, remove excessive debug logs, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/39fd8472d9a316dcfc2c35328c95c3d830dda706" title="39fd8472d9a316dcfc2c35328c95c3d830dda706">39fd8472d9a316dcfc2c35328c95c3d830dda706</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10591.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-12T18%3A06%3A32Z&amp;precision=second" title="2015-02-12T18:06:32Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+handle err messages from PAC and give informative log msgs, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d41a32dbf4a7f94386c0cb926cf09b48093d7284" title="d41a32dbf4a7f94386c0cb926cf09b48093d7284">d41a32dbf4a7f94386c0cb926cf09b48093d7284</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10591.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T10%3A10%3A36Z&amp;precision=second" title="2015-02-13T10:10:36Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11064</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10591.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T10%3A21%3A04Z&amp;precision=second" title="2015-02-13T10:21:04Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>Algorithm to control NXTomo reconstruction jobs on the SCARF cluster</em> to <em>Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction as a particular case)</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10591.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T11%3A42%3A16Z&amp;precision=second" title="2015-02-13T11:42:16Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+add some properties, and validators, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9b801a415275d4738195579845f3cd5e7d1cd4ee" title="9b801a415275d4738195579845f3cd5e7d1cd4ee">9b801a415275d4738195579845f3cd5e7d1cd4ee</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10591.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T11%3A42%3A17Z&amp;precision=second" title="2015-02-13T11:42:17Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added better err messages and property info strings , re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1269511fa2e70905e33b5539a7739b22b0cc89e5" title="1269511fa2e70905e33b5539a7739b22b0cc89e5">1269511fa2e70905e33b5539a7739b22b0cc89e5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10591.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T18%3A05%3A15Z&amp;precision=second" title="2015-02-13T18:05:15Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+doc clarifications and update, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b33eb756609fb4b99cf61d56fbedc117fbe51ecd" title="b33eb756609fb4b99cf61d56fbedc117fbe51ecd">b33eb756609fb4b99cf61d56fbedc117fbe51ecd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10591.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T18%3A05%3A15Z&amp;precision=second" title="2015-02-13T18:05:15Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added query job status to doc, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dbfd6dde28c81d938ce0614e69ea1b6b73bfa5d8" title="dbfd6dde28c81d938ce0614e69ea1b6b73bfa5d8">dbfd6dde28c81d938ce0614e69ea1b6b73bfa5d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10591.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T18%3A05%3A15Z&amp;precision=second" title="2015-02-13T18:05:15Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+job status is now stored in table workspaces, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/450b5d4ee672bfdf9a089ed7c7a1503a8b57110c" title="450b5d4ee672bfdf9a089ed7c7a1503a8b57110c">450b5d4ee672bfdf9a089ed7c7a1503a8b57110c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="10591.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T17%3A19%3A06Z&amp;precision=second" title="2015-02-16T17:19:06Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+catch-throw with informative message inet helper excepts, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a8b6d0fdab96068709ea8772ac62dd28b54b49ea" title="a8b6d0fdab96068709ea8772ac62dd28b54b49ea">a8b6d0fdab96068709ea8772ac62dd28b54b49ea</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="10591.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A43%3A29Z&amp;precision=second" title="2015-02-18T08:43:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+First basic cmakelists for tests in remote algs, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cfb93d432c74d64017c71aa23421a08157d142a7" title="cfb93d432c74d64017c71aa23421a08157d142a7">cfb93d432c74d64017c71aa23421a08157d142a7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="10591.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A43%3A29Z&amp;precision=second" title="2015-02-18T08:43:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+added cmakelists for tests in remote algs, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6c5b3e0fc627544f0ffcb781b15085cee1dd9b99" title="6c5b3e0fc627544f0ffcb781b15085cee1dd9b99">6c5b3e0fc627544f0ffcb781b15085cee1dd9b99</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="10591.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A43%3A29Z&amp;precision=second" title="2015-02-18T08:43:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fixed doxygen @param name, moved getAction helper, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/895ee602d8a73cdd0a96d33f9fb2f211e3cc3fb3" title="895ee602d8a73cdd0a96d33f9fb2f211e3cc3fb3">895ee602d8a73cdd0a96d33f9fb2f211e3cc3fb3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="10591.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A43%3A29Z&amp;precision=second" title="2015-02-18T08:43:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+first and very crude version of RemoteAlgorithms/SCARF test, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/701ec416b5f7edbd04aa8778ab0997dc405428ed" title="701ec416b5f7edbd04aa8778ab0997dc405428ed">701ec416b5f7edbd04aa8778ab0997dc405428ed</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="10591.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T08%3A14%3A18Z&amp;precision=second" title="2015-02-20T08:14:18Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+forget token after logout, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd773cd8b00c4bda7d2f6abce29c9090f50ce30b" title="bd773cd8b00c4bda7d2f6abce29c9090f50ce30b">bd773cd8b00c4bda7d2f6abce29c9090f50ce30b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="10591.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T08%3A14%3A18Z&amp;precision=second" title="2015-02-20T08:14:18Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+new and better adjusted tests, not yet consistent, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa4018e25edf2d53d48650dee8cc053ddc929d3a" title="fa4018e25edf2d53d48650dee8cc053ddc929d3a">fa4018e25edf2d53d48650dee8cc053ddc929d3a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="10591.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T08%3A14%3A19Z&amp;precision=second" title="2015-02-20T08:14:19Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+all inet sends inside doSendRequestGetResponse (for tests), re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fe881632d828ac215ee689c22f75120ebf01bcf2" title="fe881632d828ac215ee689c22f75120ebf01bcf2">fe881632d828ac215ee689c22f75120ebf01bcf2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="10591.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T08%3A18%3A04Z&amp;precision=second" title="2015-02-20T08:18:04Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+extend tests, new mock-ups, all pass, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/245d7c57c67ee76b260258027323c968d0710f9f" title="245d7c57c67ee76b260258027323c968d0710f9f">245d7c57c67ee76b260258027323c968d0710f9f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="10591.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T08%3A24%3A48Z&amp;precision=second" title="2015-02-20T08:24:48Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix typo in action name, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c3ff61568ad9602919eea8ae9534209f66f36e1c" title="c3ff61568ad9602919eea8ae9534209f66f36e1c">c3ff61568ad9602919eea8ae9534209f66f36e1c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="10591.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T08%3A24%3A48Z&amp;precision=second" title="2015-02-20T08:24:48Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix expected output string, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/400d51e253af22ee7a7b9bd61d5fc9551fb8d575" title="400d51e253af22ee7a7b9bd61d5fc9551fb8d575">400d51e253af22ee7a7b9bd61d5fc9551fb8d575</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="10591.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T08%3A43%3A31Z&amp;precision=second" title="2015-02-20T08:43:31Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10591_scarf_reconstruction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/Kernel/inc/MantidKernel/InternetHelper.h
+Code/Mantid/Framework/Kernel/src/InternetHelper.cpp
+</p>
+</blockquote>
+<p>
+Smallish conflicts after changes in inet helper, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b83a9517a6f707e541b72528999c1726b76c3071" title="b83a9517a6f707e541b72528999c1726b76c3071">b83a9517a6f707e541b72528999c1726b76c3071</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="10591.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T08%3A43%3A31Z&amp;precision=second" title="2015-02-20T08:43:31Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix issues introduced in merge, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8c40fac3cec16548d37a5a412c9aee5462d71703" title="8c40fac3cec16548d37a5a412c9aee5462d71703">8c40fac3cec16548d37a5a412c9aee5462d71703</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="10591.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T12%3A30%3A22Z&amp;precision=second" title="2015-02-20T12:30:22Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+skip unneeded test data dependency, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9ab9fe586eaa6827c7c3f2a8daa3a9057b7c20ac" title="9ab9fe586eaa6827c7c3f2a8daa3a9057b7c20ac">9ab9fe586eaa6827c7c3f2a8daa3a9057b7c20ac</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="10591.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T12%3A30%3A22Z&amp;precision=second" title="2015-02-20T12:30:22Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+additional string var not really needed, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/948188dc50455396d2356289664ea42d7278239b" title="948188dc50455396d2356289664ea42d7278239b">948188dc50455396d2356289664ea42d7278239b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="10591.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T12%3A30%3A23Z&amp;precision=second" title="2015-02-20T12:30:23Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+even if InetHelper =POST, set GET if needed, polishing logs, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ae4718f9f12498e6c64edeec8b403fd35764360" title="6ae4718f9f12498e6c64edeec8b403fd35764360">6ae4718f9f12498e6c64edeec8b403fd35764360</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="10591.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T12%3A30%3A23Z&amp;precision=second" title="2015-02-20T12:30:23Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+return job status and info as out props, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5dac5d7d2e1bbec9d5e3a58465c4a404ae69239b" title="5dac5d7d2e1bbec9d5e3a58465c4a404ae69239b">5dac5d7d2e1bbec9d5e3a58465c4a404ae69239b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="10591.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T12%3A55%3A11Z&amp;precision=second" title="2015-02-20T12:55:11Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10564</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="10591.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T12%3A58%3A28Z&amp;precision=second" title="2015-02-20T12:58:28Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+update to new setContentType, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3094e98965b8adcb0f149e3ffd97f3f4d56b25c7" title="3094e98965b8adcb0f149e3ffd97f3f4d56b25c7">3094e98965b8adcb0f149e3ffd97f3f4d56b25c7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="10591.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T12%3A58%3A28Z&amp;precision=second" title="2015-02-20T12:58:28Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+doc updates and doxygen fixes, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b084108a83f9d8b1e10eea8fa86c9a54d3ad7642" title="b084108a83f9d8b1e10eea8fa86c9a54d3ad7642">b084108a83f9d8b1e10eea8fa86c9a54d3ad7642</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="10591.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T13%3A02%3A55Z&amp;precision=second" title="2015-02-20T13:02:55Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Note that this implementation is now more general than initially
+described. File upload/download is supported, and savu, etc. jobs are
+only particular cases. Testing of real jobs running on SCARF is
+limited at this point but we already provide support for all we can
+from our side.
+</p>
+<p>
+I'd say I'm happy with the functionality but not with names, design,
+etc. More work will follow when a few issues are clarified. For now
+this implementation should be enough to move forward with the
+Tomography GUI and other components needed for IMAT. More details:
+</p>
+<ul><li>This algorithm is fully functional but its design is not in its final form. We'd like to use the JobManager design (<a class="closed ticket" href="11064.html" title="Fit the SCARF job scheduler remote algorithm in the 'RemoteJobManager' ... (closed: fixed)">#11064</a>) but we have to see how to do that without breaking other algorithms. For now this implementation should be enough to move forward with the Tomography GUI and other components needed for IMAT.
+</li></ul><ul><li>Also, this algorithm would be split into a few (&gt;=9) ones and it may disappear or stay just an interface that would use several child algorithms.
+</li></ul><ul><li>- I don't even think it should be called SCARFTomoReconstruction, as it is more general. Something like SCARFJobControl or LSFSCARFJobControl would be better. Much but not all of the functionality is in principle generic for clusters with an LSF job scheduler. It will be renamed to be used with the JobManager / IJobManager design.
+</li></ul><ul><li>These issues should be dealt with in ticket <a class="closed ticket" href="11064.html" title="Fit the SCARF job scheduler remote algorithm in the 'RemoteJobManager' ... (closed: fixed)">#11064</a> and the ones that block it.
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="10591.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T14%3A17%3A40Z&amp;precision=second" title="2015-02-20T14:17:40Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/266"><span class="icon">​</span>pull request #266</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="10591.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T15%3A27%3A09Z&amp;precision=second" title="2015-02-20T15:27:09Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+strict about standards so it builds on all ci platforms, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/51e10384786ca734fb66f312c3690951551a2278" title="51e10384786ca734fb66f312c3690951551a2278">51e10384786ca734fb66f312c3690951551a2278</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="10591.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T15%3A39%3A01Z&amp;precision=second" title="2015-02-20T15:39:01Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+and the DLL export macro had been missing all this time, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6c7d435d3e58e18aff3d99ebfd71fd0aae39bb06" title="6c7d435d3e58e18aff3d99ebfd71fd0aae39bb06">6c7d435d3e58e18aff3d99ebfd71fd0aae39bb06</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="10591.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T17%3A04%3A01Z&amp;precision=second" title="2015-02-20T17:04:01Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+better sorting for headers, indentation in CMakeLists, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e1ce967f18de95afbdadaf4a3b370cef8ce60da8" title="e1ce967f18de95afbdadaf4a3b370cef8ce60da8">e1ce967f18de95afbdadaf4a3b370cef8ce60da8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="10591.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T17%3A18%3A20Z&amp;precision=second" title="2015-02-20T17:18:20Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Dear and tireless Jenkins could you retest this please?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="10591.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T17%3A19%3A37Z&amp;precision=second" title="2015-02-20T17:19:37Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins could you retest this please?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="10591.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T17%3A39%3A30Z&amp;precision=second" title="2015-02-20T17:39:30Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, retest this please.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="10591.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T17%3A42%3A08Z&amp;precision=second" title="2015-02-20T17:42:08Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, retest this please.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="10591.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T17%3A53%3A23Z&amp;precision=second" title="2015-02-20T17:53:23Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+forget about precompile headers for now, so win7 compiles, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46e8b383915fd5e8162aa77362b0af606edf1f42" title="46e8b383915fd5e8162aa77362b0af606edf1f42">46e8b383915fd5e8162aa77362b0af606edf1f42</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="10591.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T19%3A24%3A57Z&amp;precision=second" title="2015-02-20T19:24:57Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, retest this please.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="10591.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-25T16%3A07%3A56Z&amp;precision=second" title="2015-02-25T16:07:56Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, could you retest this please?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="10591.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-25T23%3A18%3A18Z&amp;precision=second" title="2015-02-25T23:18:18Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, retest this please?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="10591.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-26T08%3A25%3A51Z&amp;precision=second" title="2015-02-26T08:25:51Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Good morning Jenkins, retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="10591.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-26T09%3A38%3A55Z&amp;precision=second" title="2015-02-26T09:38:55Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="10591.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-26T11%3A53%3A33Z&amp;precision=second" title="2015-02-26T11:53:33Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, retest this please...
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="10591.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-26T20%3A54%3A40Z&amp;precision=second" title="2015-02-26T20:54:40Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, be goode and retest this please.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="10591.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-27T15%3A37%3A43Z&amp;precision=second" title="2015-02-27T15:37:43Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11122</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="closed ticket" href="11122.html" title="Add unit tests for the remote algorithms (closed: fixed)">#11122</a>) <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a> added a test for a new remote algorithm. To prevent conflicts it would be best to have that one in master before working on this one.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="10591.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T11%3A36%3A04Z&amp;precision=second" title="2015-03-02T11:36:04Z in Timeline">6 years</a> ago by Raquel Alvarez
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Raquel Alvarez</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="10591.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T16%3A06%3A46Z&amp;precision=second" title="2015-03-02T16:06:46Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+remove unused visibility sets of non-ws output props, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d34ad21cfa2616c543b3626045eb1d033f8d59bf" title="d34ad21cfa2616c543b3626045eb1d033f8d59bf">d34ad21cfa2616c543b3626045eb1d033f8d59bf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="10591.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T17%3A44%3A53Z&amp;precision=second" title="2015-03-02T17:44:53Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fixed typo in property description, re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d4b05baad4367c141038e0a297a47bd159a8b25e" title="d4b05baad4367c141038e0a297a47bd159a8b25e">d4b05baad4367c141038e0a297a47bd159a8b25e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="10591.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-03T17%3A28%3A57Z&amp;precision=second" title="2015-03-03T17:28:57Z in Timeline">6 years</a> ago by Raquel Alvarez
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="266.html" title="defect: Modify ConvertUnits to do the right thing for monitor spectra (closed: fixed)">#266</a> from mantidproject/feature/10591_scarf_reconstruction
+</p>
+<p>
+Algorithm to control remote jobs on the SCARF cluster (for tomography reconstruction - IMAT)
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/ff394aa38bc11d9b9ebb49432fbd780288389eb0"><span class="icon">​</span>ff394aa38bc11d9b9ebb49432fbd780288389eb0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="10591.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-03T22%3A31%3A35Z&amp;precision=second" title="2015-03-03T22:31:35Z in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Unused variable shows up in cppcheck
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="10591.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-04T09%3A12%3A19Z&amp;precision=second" title="2015-03-04T09:12:19Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+remove unused var (cppcheck) and check return val (cvrity), re <a class="closed ticket" href="10591.html" title="Algorithm to control jobs on the SCARF cluster (and NXtomo reconstruction ... (closed: fixed)">#10591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3f092385001c75b81bd1ee8a1deba82716ce88e2" title="3f092385001c75b81bd1ee8a1deba82716ce88e2">3f092385001c75b81bd1ee8a1deba82716ce88e2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="10591.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T10%3A21%3A42%2B01%3A00&amp;precision=second" title="2015-04-22T10:21:42+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Somehow these slipped through without a resolution.  Set to Fixed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="10591.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A03%3A29%2B01%3A00&amp;precision=second" title="2015-06-04T04:03:29+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11433"><span class="icon">​</span>11433</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10591?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10591?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10591?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Use to debug plugins
+#export PV_PLUGIN_DEBUG=1
+
+mantid_loc=/Applications/MantidPlot.app
+pv_loc=/Applications/paraview.app
+
+# Need Qt libs brought in for some strange reason
+qt_loc=${mantid_loc}/Contents/Frameworks
+qt3_support=${qt_loc}/Qt3Support.framework/Versions/4/
+qtcore=${qt_loc}/QtCore.framework/Versions/4/
+qtgui=${qt_loc}/QtGui.framework/Versions/4/
+qtopengl=${qt_loc}/QtOpenGL.framework/Versions/4/
+qtsvg=${qt_loc}/QtSvg.framework/Versions/4/
+
+qt_libs=${qtcore}:${qtgui}:${qtopengl}:${qt3_support}:${qtsvg}
+
+export MANTIDPATH=${mantid_loc}/Contents/MacOS
+export PV_PLUGIN_PATH=${mantid_loc}/pvplugins/pvplugins
+export DYLD_LIBRARY_PATH=${qt_libs}:${pv_loc}/Contents/Libraries:${MANTIDPATH}
+${pv_loc}/Contents/MacOS/paraview

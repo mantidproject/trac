@@ -1,0 +1,756 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8646 (Refactor FitPeak for FindPeaks)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8645.html" title="Ticket #8645" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8646?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8646?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8646?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8647.html" title="Ticket #8647" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8646, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8645.html" title="Ticket #8645">Previous Ticket</a></span></li><li><span><a class="next" href="8647.html" title="Ticket #8647">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8646.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8646.html">Ticket #8646</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-20T15%3A32%3A57Z&amp;precision=second" title="2013-12-20T15:32:57Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A45%3A21%2B01%3A00&amp;precision=second" title="2015-06-04T02:45:21+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Refactor FitPeak for FindPeaks</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.1.html">Release 3.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              petersonpf@…, taylorrj@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="7789.html" title="Refactor FindPeaks with FitPeak">#7789</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Vickie Lynch
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+FindPeaks may call FitPeak N times if N peaks are to find.  Calling through Algorithm might have a significant cost of computation time, as it is found that with new FindPeaks algorithm calling FitPeak (ticket <a class="closed ticket" href="7789.html" title="enhancement: Refactor FindPeaks with FitPeak (closed: fixed)">#7789</a>), system test CalibrateRectangularDetectorsTest is slowed down by 3 times.  
+</p>
+<p>
+Thus, one approach is to refactor FitPeak such that FindPeak can fit peak through a class object but not calling a Mantid Algorithm.  
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/8646/test8646a.py.html" title="View attachment">test8646a.py</a><a href="../raw-attachment/ticket/8646/test8646a.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="458 bytes">458 bytes</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-28T20%3A04%3A34Z&amp;precision=second" title="2014-01-28T20:04:34Z in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/8646/test8646b.py.html" title="View attachment">test8646b.py</a><a href="../raw-attachment/ticket/8646/test8646b.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="861 bytes">861 bytes</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-28T20%3A04%3A47Z&amp;precision=second" title="2014-01-28T20:04:47Z in Timeline">7 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8646.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-26T15%3A39%3A10Z&amp;precision=second" title="2013-12-26T15:39:10Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3986e29f7ae6186a3b3157c119a856427b86b704" title="3986e29f7ae6186a3b3157c119a856427b86b704">3986e29f7ae6186a3b3157c119a856427b86b704</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8646.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-12-27T18%3A35%3A29Z&amp;precision=second" title="2013-12-27T18:35:29Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/75140c3a4bcddf7c0abf6edbdd427028180c0672" title="75140c3a4bcddf7c0abf6edbdd427028180c0672">75140c3a4bcddf7c0abf6edbdd427028180c0672</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8646.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-15T15%3A17%3A58Z&amp;precision=second" title="2014-01-15T15:17:58Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/350d829ff7427751fb4ac4c0f11a998a9f8e7599" title="350d829ff7427751fb4ac4c0f11a998a9f8e7599">350d829ff7427751fb4ac4c0f11a998a9f8e7599</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8646.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-27T22%3A21%3A29Z&amp;precision=second" title="2014-01-27T22:21:29Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Corrected build errors from refactoring. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c61600077bc2e7dd77edf15c2e99868add37e184" title="c61600077bc2e7dd77edf15c2e99868add37e184">c61600077bc2e7dd77edf15c2e99868add37e184</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8646.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-27T22%3A21%3A30Z&amp;precision=second" title="2014-01-27T22:21:30Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Finished the implementation on new fit peak class. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac67720cb5ab8204c1b44ad2e4ebddf7237e5160" title="ac67720cb5ab8204c1b44ad2e4ebddf7237e5160">ac67720cb5ab8204c1b44ad2e4ebddf7237e5160</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8646.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-28T14%3A37%3A22Z&amp;precision=second" title="2014-01-28T14:37:22Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cleaned the code and unit tests. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8ff4af3a59d53fdaa3baa2ae746a550b1969dcb2" title="8ff4af3a59d53fdaa3baa2ae746a550b1969dcb2">8ff4af3a59d53fdaa3baa2ae746a550b1969dcb2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8646.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-28T14%3A52%3A36Z&amp;precision=second" title="2014-01-28T14:52:36Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved conflict. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/854120e8debfc4330ae2571857677a184dfaf335" title="854120e8debfc4330ae2571857677a184dfaf335">854120e8debfc4330ae2571857677a184dfaf335</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8646.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-28T20%3A04%3A06Z&amp;precision=second" title="2014-01-28T20:04:06Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <h2 id="Howtoverify">How to verify</h2>
+<ol><li>Locate data file PG3_4866.gsa and PG3_2538_event.nxs in Mantid's system test's data;
+</li></ol><ol start="2"><li>Load PG3_4866.gsa by LoadGSS.  Pick up any peak to fit by FitPeak. For example you can find a peak centered close to 11190..  Give the algorithm a rough estimation on peak height (100.0) and peak width (20.0).  Set the peak range between 11180=0.0 and 11300. Set the fit window between 11000 and 11400. And set 'FitBackgroundFirst' to true because the background is high relative to the peak.  
+</li></ol><p>
+You can also refer to test8646a.py attached. 
+</p>
+<ol start="3"><li>Load PG3_2538_event.nxs.  Process the data referring to attached script test8646b.py. Select any spectrum and any peak to fit.  For example, you can select peak near d=1.26 in spectrum 22000.  Make a rough estimation on peak's parameters.  As the background is low and flat you can use 'LinearBackground' and set 'FitBackgroundFirst' to false. 
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-28T20%3A04%3A34Z&amp;precision=second" title="2014-01-28T20:04:34Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8646/test8646a.py.html"><em>test8646a.py</em></a><a href="../raw-attachment/ticket/8646/test8646a.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-28T20%3A04%3A47Z&amp;precision=second" title="2014-01-28T20:04:47Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8646/test8646b.py.html"><em>test8646b.py</em></a><a href="../raw-attachment/ticket/8646/test8646b.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8646.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-29T20%3A12%3A05Z&amp;precision=second" title="2014-01-29T20:12:05Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added more in wiki. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/158d08c494adb8ae318dadbbbf9629e28377ac71" title="158d08c494adb8ae318dadbbbf9629e28377ac71">158d08c494adb8ae318dadbbbf9629e28377ac71</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8646.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-30T19%3A20%3A03Z&amp;precision=second" title="2014-01-30T19:20:03Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed issues with fit error passing. Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/20c0caddc7b9ac09ea36f5d60d6c69f962ed839a" title="20c0caddc7b9ac09ea36f5d60d6c69f962ed839a">20c0caddc7b9ac09ea36f5d60d6c69f962ed839a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8646.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-30T20%3A15%3A36Z&amp;precision=second" title="2014-01-30T20:15:36Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8646.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T12%3A10%3A13Z&amp;precision=second" title="2014-01-31T12:10:13Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Samuel Jackson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8646.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T12%3A15%3A44Z&amp;precision=second" title="2014-01-31T12:15:44Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I'm getting a merge conflict in FitPeak when trying to test. Fix and I'll retest.
+</p>
+<pre class="wiki">Auto-merging Code/Mantid/Framework/Algorithms/src/FitPeak.cpp
+CONFLICT (content): Merge conflict in Code/Mantid/Framework/Algorithms/src/FitPeak.cpp
+Auto-merging Code/Mantid/Framework/Algorithms/src/FindPeaks.cpp
+Automatic merge failed; fix conflicts and then commit the result.
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8646.html#comment:14">comment:14</a>
+    </span>
+                          <span>follow-up:</span>
+      <a href="8646.html#comment:15">↓ 15</a>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T14%3A18%3A30Z&amp;precision=second" title="2014-01-31T14:18:30Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The title of this ticket is very similar to <a class="closed ticket" href="7789.html" title="enhancement: Refactor FindPeaks with FitPeak (closed: fixed)">#7789</a>  is it a duplicate?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8646.html#comment:15">comment:15</a>
+    </span>
+                        in reply to:
+      <a href="8646.html#comment:14">↑ 14</a>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T14%3A50%3A17Z&amp;precision=second" title="2014-01-31T14:50:17Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replying to <a href="8646.html#comment:14" title="Comment 14 for Ticket #8646">Nick Draper</a>:
+</p>
+<blockquote class="citation">
+<p>
+The title of this ticket is very similar to <a class="closed ticket" href="7789.html" title="enhancement: Refactor FindPeaks with FitPeak (closed: fixed)">#7789</a>  is it a duplicate?
+</p>
+</blockquote>
+<p>
+These two tickets are different though somehow related.  In ticket <a class="closed ticket" href="7789.html" title="enhancement: Refactor FindPeaks with FitPeak (closed: fixed)">#7789</a>, the section of codes in FindPeaks to fit a single peak will be replaced by calling algorithm FitPeak. 
+</p>
+<p>
+Some tests show that calling FitPeak as a sub algorithm is very costly.  And it slowed down some algorithm, such as GetDetOffsetsMultiPeaks that calls FindPeaks thousands of times, significantly.  So I created this ticket to implement a class to fit peak.  And this class is used by FitPeak and will be used by FindPeaks in order to avoid the overhead to start sub algorithms. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8646.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T14%3A53%3A18Z&amp;precision=second" title="2014-01-31T14:53:18Z in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8646.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T15%3A21%3A11Z&amp;precision=second" title="2014-01-31T15:21:11Z in Timeline">7 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        changed from <em>Samuel Jackson</em> to <em>Vickie Lynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8646.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T17%3A38%3A01Z&amp;precision=second" title="2014-01-31T17:38:01Z in Timeline">7 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8646.html" title="enhancement: Refactor FitPeak for FindPeaks (closed: fixed)">#8646</a> fix merge conflict
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5a18232cf2bedf44008edd94054587a72f17b16d" title="5a18232cf2bedf44008edd94054587a72f17b16d">5a18232cf2bedf44008edd94054587a72f17b16d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8646.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T17%3A42%3A14Z&amp;precision=second" title="2014-01-31T17:42:14Z in Timeline">7 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+My gsa data did not have errors in file which caused chisq to be wrong, but this was not caused by these changes.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8646.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A45%3A21%2B01%3A00&amp;precision=second" title="2015-06-04T02:45:21+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9490"><span class="icon">​</span>9490</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8646?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8646?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8646?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

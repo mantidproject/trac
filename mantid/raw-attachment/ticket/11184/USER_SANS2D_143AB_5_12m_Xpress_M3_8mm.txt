@@ -1,0 +1,68 @@
+SANS2D
+PRINT new 120rows x 512 columns gas tubes
+! L1=L2=12m
+MASK/CLEAR
+MASK/CLEAR/TIME
+L/WAV 1.75 12.5 0.05/LOG
+L/Q 0.001 1.0 0.08/log
+L/QXY 0 0.15 .002/lin
+BACK/M1 35000 65000
+BACK/M2 85000 98000
+!check BACK/M4
+DET/MERGE
+GRAVITY/ON
+!
+MASKFILE=MASK_SANS2D_REAR_Edges_16Mar2015.xml,MASK_SANS2D_REAR_Bottom_3_tubes_16May2014.xml,MASK_SANS2D_FRONT_Edges_16Mar2015.xml
+!     
+mask/time 17500 22000
+!
+!PRINT masking off beamstop arm 13mm wide at 20 degrees
+PRINT not masking beam stop arm, M4 out
+!mask/line 13 20
+!
+PRINT Medium beam stop, CHECK later
+L/R 41 -1 3
+! use this for rear
+TUBECALIBFILE=TUBE_SANS2D_BOTH_27345_20Mar15.nxs
+MON/DIRECT=DIRECT_SANS2d_27511_12m_Rear_23Mar15.txt
+! use for front, this command has to come second!
+MON/DIRECT/FRONT=DIRECT_SANS2d_27511_12m_Rear_23Mar15.txt
+MON/TRANS/SPECTRUM=1
+!TRANS/TRANSPEC=4/SHIFT=-55
+TRANS/TRANSPEC=3
+MON/SPECTRUM=1
+FIT/TRANS/LOG 1.75 12.5
+!PRINT FIT/TRANS/OFF
+!FIT/TRANS/OFF
+!
+! 26/04/15 scale from 28782 gdw20 & centre from 28780 glassy C
+set centre 117.57 -86.73
+!
+set scales 0.02830 1.0 1.0 1.0 1.0
+! correction to actual sample position, measured cryo at 320mm before shutter, 
+! "notional sample" is 81mm before shutter (96mm before the 6mm thick sapphire window)
+! DLS set up 81 - 133 =-52
+! normal changer offset +53
+! rotating rack 100mm before shutter = 81 - 100 = -19
+! old rotating rack 131mm before shutter = 81 - 131 = -50
+! linkam 42mm before shutter = 81 - 42 = 39
+! foam cell 75mm before shutter 81-75= 6
+! p-cell 142mm before shutter = 81 - 142 = -61
+! rheometer 239mm before shutter = 81 - 239 = -158
+SAMPLE/OFFSET 53
+! Correction to SANS2D encoders in mm 
+DET/CORR REAR X +13.0
+! 27/3/15 use survey values REAR Z, at 4,6,8,12m is 113.7, 115.6, 116.2, 119.3mm
+DET/CORR REAR Z +119.3
+! from SANS2d_survey, expect about -26 for front at 6m, +13 for rear at 12m, note Mantid only applies XCORR difference to front det 
+DET/CORR FRONT X -26.0
+DET/CORR FRONT Y 0.0
+DET/CORR FRONT Z 5.0
+DET/CORR FRONT ROT 0.0
+! 11/11/14 fit to survey data gives radius to tube centres at 381.7 (instead of DT's 306)
+DET/CORR FRONT RADIUS 75.7
+DET/CORR FRONT SIDE 0.19
+! test new tilts  ~6m -9deg from RKH's SANS2d_survey spreadsheet
+DET/CORR FRONT YTILT 0.2257
+DET/CORR FRONT XTILT -0.0964
+!! 26/04/15 143AB Xpress 5m, 12m A1=20,A2=8

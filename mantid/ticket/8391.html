@@ -1,0 +1,820 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8391 ([IBayes] Replace erange Fortran code with Python)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8390.html" title="Ticket #8390" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8391?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8391?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8391?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8392.html" title="Ticket #8392" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8391, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8390.html" title="Ticket #8390">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="8392.html" title="Ticket #8392">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8391.html">Ticket #8391</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-07T10%3A02%3A30Z&amp;precision=second" title="2013-11-07T10:02:30Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A34%3A49%2B01%3A00&amp;precision=second" title="2015-06-04T02:34:49+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">[IBayes] Replace erange Fortran code with Python</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.1.html">Release 3.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              spencer.howells@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Roman Tolchenov
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Spencer has kindly provided a python implementation of the erange function used in IndirectBayes. Meaning one less f2py call.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/8391/IndirectBayes.py.html" title="View attachment">IndirectBayes.py</a><a href="../raw-attachment/ticket/8391/IndirectBayes.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="32445 bytes">31.7 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-07T10%3A02%3A51Z&amp;precision=second" title="2013-11-07T10:02:51Z in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Updated version of the script
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-07T10%3A02%3A51Z&amp;precision=second" title="2013-11-07T10:02:51Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8391/IndirectBayes.py.html"><em>IndirectBayes.py</em></a><a href="../raw-attachment/ticket/8391/IndirectBayes.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Updated version of the script
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8391.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-12T10%3A00%3A45Z&amp;precision=second" title="2013-11-12T10:00:45Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a> Added python implementation of energy range function
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b675835654e420480ebeaae916ee980865568016" title="b675835654e420480ebeaae916ee980865568016">b675835654e420480ebeaae916ee980865568016</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8391.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-12T10%3A00%3A45Z&amp;precision=second" title="2013-11-12T10:00:45Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a> Correcting function to pass system tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7e6fd151f57e4dfba6f149c05e402f41cb148903" title="7e6fd151f57e4dfba6f149c05e402f41cb148903">7e6fd151f57e4dfba6f149c05e402f41cb148903</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8391.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-12T14%3A43%3A46Z&amp;precision=second" title="2013-11-12T14:43:46Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a> Remove unused Fortran modules.
+</p>
+<p>
+As the implementation in this ticket replaces them.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3890f85f841365bbbdc3f554eca4108354d54501" title="3890f85f841365bbbdc3f554eca4108354d54501">3890f85f841365bbbdc3f554eca4108354d54501</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8391.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-13T09%3A11%3A36Z&amp;precision=second" title="2013-11-13T09:11:36Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>To Tester</strong>
+</p>
+<p>
+This function is shared between most of the Bayes programs (ResNorm, Stretch and Quasi). The system test should already be checking that we're getting the same output as before, but I would also suggest running through them with some example data. Instructions for running them can be found here:
+</p>
+<p>
+<a href="http://www.mantidproject.org/Indirect:Indirect_Bayes">http://www.mantidproject.org/Indirect:Indirect_Bayes</a>
+</p>
+<p>
+I've also removed the Fortran module erange, so make sure there are no references to it left in the project.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8391.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-13T10%3A22%3A38Z&amp;precision=second" title="2013-11-13T10:22:38Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.1</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8391.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-14T16%3A56%3A40Z&amp;precision=second" title="2013-11-14T16:56:40Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8391.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-15T09%3A12%3A27Z&amp;precision=second" title="2013-11-15T09:12:27Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a> Fix bin width counting.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5c5d04fec16c39f36b22f9c36bbbce32a92245cb" title="5c5d04fec16c39f36b22f9c36bbbce32a92245cb">5c5d04fec16c39f36b22f9c36bbbce32a92245cb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8391.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-15T09%3A34%3A04Z&amp;precision=second" title="2013-11-15T09:34:04Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a> Fix bin widths again.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/53f6c8ae2caa0ce677acfdaaa5fc0fbcc5ef5763" title="53f6c8ae2caa0ce677acfdaaa5fc0fbcc5ef5763">53f6c8ae2caa0ce677acfdaaa5fc0fbcc5ef5763</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8391.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-19T14%3A14%3A46Z&amp;precision=second" title="2013-11-19T14:14:46Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a> Fix bound overflow issue.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/441f2e29230b3fcce38a115966f167c2e5e9f55d" title="441f2e29230b3fcce38a115966f167c2e5e9f55d">441f2e29230b3fcce38a115966f167c2e5e9f55d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8391.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-19T14%3A14%3A46Z&amp;precision=second" title="2013-11-19T14:14:46Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/8391_bayes_erange_python' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/scripts/Inelastic/IndirectBayes.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c51367a183d01fec16632851b7f6b63c37830e4b" title="c51367a183d01fec16632851b7f6b63c37830e4b">c51367a183d01fec16632851b7f6b63c37830e4b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8391.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-19T14%3A15%3A07Z&amp;precision=second" title="2013-11-19T14:15:07Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a> Updated reference results.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5db0afc2814c25fea141360d38efedd8629cb42a" title="5db0afc2814c25fea141360d38efedd8629cb42a">5db0afc2814c25fea141360d38efedd8629cb42a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8391.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-20T10%3A06%3A47Z&amp;precision=second" title="2013-11-20T10:06:47Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>To Tester</strong>
+</p>
+<p>
+As above. Additionally, check the system tests are passing. Also be sure to run with the upper bound of the energy range set to the maximum possible and check that Mantid does not crash.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8391.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-22T13%3A53%3A57Z&amp;precision=second" title="2013-11-22T13:53:57Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8391.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-27T13%3A29%3A54Z&amp;precision=second" title="2014-01-27T13:29:54Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/8391_bayes_erange_python' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/scripts/Inelastic/IndirectBayes.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c51367a183d01fec16632851b7f6b63c37830e4b" title="c51367a183d01fec16632851b7f6b63c37830e4b">c51367a183d01fec16632851b7f6b63c37830e4b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8391.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-30T14%3A30%3A59Z&amp;precision=second" title="2014-01-30T14:30:59Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/8391_bayes_erange_python' of github.com:mantidproject/mantid into feature/8391_bayes_erange_python
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/82658b19ac9fc7936d5b37af7007836f5d2aef1d"><span class="icon">​</span>82658b19ac9fc7936d5b37af7007836f5d2aef1d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8391.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-30T14%3A31%3A00Z&amp;precision=second" title="2014-01-30T14:31:00Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8391_bayes_erange_python'
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/scripts/Inelastic/IndirectBayes.py
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/11ec9b43a89b14e5921bd485096a2c1f33393aa9" title="11ec9b43a89b14e5921bd485096a2c1f33393aa9">11ec9b43a89b14e5921bd485096a2c1f33393aa9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8391.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-30T14%3A31%3A00Z&amp;precision=second" title="2014-01-30T14:31:00Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8391_bayes_erange_python'
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/scripts/Inelastic/IndirectBayes.py
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a>
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/11ec9b43a89b14e5921bd485096a2c1f33393aa9"><span class="icon">​</span>11ec9b43a89b14e5921bd485096a2c1f33393aa9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8391.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-30T15%3A56%3A40Z&amp;precision=second" title="2014-01-30T15:56:40Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/scripts/Inelastic/IndirectBayes.py
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="8391.html" title="enhancement: [IBayes] Replace erange Fortran code with Python (closed: fixed)">#8391</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/71e8a9ca65361a0627a2dbe94b5b8adb029ba44f" title="71e8a9ca65361a0627a2dbe94b5b8adb029ba44f">71e8a9ca65361a0627a2dbe94b5b8adb029ba44f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8391.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T08%3A30%3A58Z&amp;precision=second" title="2014-01-31T08:30:58Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+It looks as if there was a branch in the systemtests repository that also needs merging. The tests on master on windows are currently failing.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8391.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T08%3A55%3A46Z&amp;precision=second" title="2014-01-31T08:55:46Z in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8391_bayes_erange_python'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/5d879c186badfb22b880045fccce30e9b1a68472"><span class="icon">​</span>5d879c186badfb22b880045fccce30e9b1a68472</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8391.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A34%3A49%2B01%3A00&amp;precision=second" title="2015-06-04T02:34:49+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9236"><span class="icon">​</span>9236</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8391?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8391?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8391?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+diff --git a/Code/Mantid/scripts/reduction/instruments/sans/sans_reduction_steps.py b/Code/Mantid/scripts/reduction/instruments/sans/sans_reduction_steps.py
+index 260bdd3..12ebbe3 100644
+--- a/Code/Mantid/scripts/reduction/instruments/sans/sans_reduction_steps.py
++++ b/Code/Mantid/scripts/reduction/instruments/sans/sans_reduction_steps.py
+@@ -750,35 +750,45 @@ class SampleGeomCor(ReductionStep):
+         ORNL only divides by thickness, in the absolute scaling step
+ 
+     """
+-    def execute(self, reducer, workspace):
+-        """
+-            Divide the counts by the volume of the sample
+-        """
+-        self.geo = reducer._sample_run.geometry
+-        assert( issubclass(self.geo.__class__, GetSampleGeom))
++    def __init__(self):
++        self.volume = 1.0
++
++    def calculate_volume(self, reducer):
++        geo = reducer.get_sample().geometry
++        assert( issubclass(geo.__class__, GetSampleGeom))
+ 
+         try:
+-            if self.geo.shape == 'cylinder-axis-up':
++            if geo.shape == 'cylinder-axis-up':
+                 # Volume = circle area * height
+                 # Factor of four comes from radius = width/2
+-                volume = self.geo.height*math.pi
+-                volume *= math.pow(self.geo.width,2)/4.0
+-            elif self.geo.shape == 'cuboid':
++                volume = geo.height*math.pi
++                volume *= math.pow(geo.width,2)/4.0
++            elif geo.shape == 'cuboid':
+                 # Flat plate sample
+-                volume = self.geo.width
+-                volume *= self.geo.height*self.geo.thickness
+-            elif self.geo.shape == 'cylinder-axis-along':
++                volume = geo.width
++                volume *= geo.height*geo.thickness
++            elif geo.shape == 'cylinder-axis-along':
+                 # Factor of four comes from radius = width/2
+                 # Disc - where height is not used
+-                volume = self.geo.thickness*math.pi
+-                volume *= math.pow(self.geo.width, 2)/4.0
++                volume = geo.thickness*math.pi
++                volume *= math.pow(geo.width, 2)/4.0
+             else:
+-                raise NotImplemented('Shape "'+self.geo.shape+'" is not in the list of supported shapes')
++                raise NotImplemented('Shape "'+geo.shape+'" is not in the list of supported shapes')
+         except TypeError:
+-            raise TypeError('Error calculating sample volume with width='+str(self._width) + ' height='+str(self._height) + 'and thickness='+str(self._thickness)) 
+-        
+-        ws = mtd[workspace]
+-        ws /= volume
++            raise TypeError('Error calculating sample volume with width='+str(geo.width) + ' height='+str(geo.height) + 'and thickness='+str(geo.thickness)) 
++                
++        return volume
++
++    def execute(self, reducer, workspace):
++        """
++            Divide the counts by the volume of the sample
++        """
++        if not reducer.is_can():
++            # it calculates the volume for the sample and may or not apply to the can as well.
++            self.volume = self.calculate_volume(reducer)
++            
++        ws = mtd[str(workspace)]
++        ws /= self.volume
+ 
+ class StripEndZeros(ReductionStep):
+     # ISIS only

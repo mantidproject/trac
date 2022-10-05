@@ -1,0 +1,1817 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #5591 ([Indirect] - Cubic spline algorithms)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="5590.html" title="Ticket #5590" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5591?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5591?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5591?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="5592.html" title="Ticket #5592" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 5591, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="5590.html" title="Ticket #5590">Previous Ticket</a></span></li><li><span><a class="next" href="5592.html" title="Ticket #5592">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/5591.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="5591.html">Ticket #5591</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-09T12%3A06%3A58%2B01%3A00&amp;precision=second" title="2012-07-09T12:06:58+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A38%3A50%2B01%3A00&amp;precision=second" title="2015-06-04T00:38:50+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">[Indirect] - Cubic spline algorithms</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Peter+Parker">Peter Parker</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.6.html">Release 2.6</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~Indirect">Indirect</a>, <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~Student">Student</a> <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~First">First</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              spencer.howells@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="7565.html" title="Progress Reporting Missing from Algorithms">#7565</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Owen Arnold
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-07-25 11:31:24.395914+00:00">
+        (last modified by Nick Draper)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/5591?action=diff&amp;version=43">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Requested ticket from Spencer:
+</p>
+<blockquote class="citation">
+<p>
+Could you add another ticket for me:
+</p>
+<p>
+GSL has routines for doing cubic spline interpolation. This is useful for:
+</p>
+<ul><li>interpolation : where the number of intyerpolation points is much greater than input and/or the x-increment for interpolation is much smaller that input.
+</li><li>smoothing : using interpolation range same as input. Good for sharp peaks.
+</li><li>derivatives : these come as by-product of the prodecure. Advantages as above.
+</li></ul><p>
+Implement on Genie and tried &amp; tested.
+</p>
+</blockquote>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/5591/g-ZnCl2_ND_Stheta.nxs.html" title="View attachment">g-ZnCl2_ND_Stheta.nxs</a><a href="../raw-attachment/ticket/5591/g-ZnCl2_ND_Stheta.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="131043 bytes">128.0 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T10%3A50%3A56%2B01%3A00&amp;precision=second" title="2013-07-26T10:50:56+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Example data for SplineInterpolation
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/5591/l-ZnCl2_ND_Mome.nxs.html" title="View attachment">l-ZnCl2_ND_Mome.nxs</a><a href="../raw-attachment/ticket/5591/l-ZnCl2_ND_Mome.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="67088 bytes">65.5 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T10%3A51%3A18%2B01%3A00&amp;precision=second" title="2013-07-26T10:51:18+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Example data for SplineInterpolation
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/5591/ZnCl2_Stheta.nxs.html" title="View attachment">ZnCl2_Stheta.nxs</a><a href="../raw-attachment/ticket/5591/ZnCl2_Stheta.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="131824 bytes">128.7 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T10%3A51%3A52%2B01%3A00&amp;precision=second" title="2013-07-26T10:51:52+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Example data for SplineSmoothing
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="5591.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T13%3A43%3A55%2B01%3A00&amp;precision=second" title="2012-08-10T13:43:55+01:00 in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.2</em> to <em>Release 2.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved at the end of release 2.2
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="5591.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-24T10%3A10%3A52%2B01%3A00&amp;precision=second" title="2012-08-24T10:10:52+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Update</strong>:
+</p>
+<p>
+Talk to Spencer for more info, but Nick also seemed keen to add some comments about how best to proceed with this.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="5591.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-24T11%3A30%3A02%2B01%3A00&amp;precision=second" title="2012-08-24T11:30:02+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Keywords</strong>
+        <em>Indirect</em> added
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>Cubic spline algorithms</em> to <em>[Indirect] - Cubic spline algorithms</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="5591.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-28T11%3A39%3A03Z&amp;precision=second" title="2012-10-28T11:39:03Z in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.3</em> to <em>Release 2.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to milestone 2.4
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="5591.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-28T09%3A23%3A11Z&amp;precision=second" title="2013-01-28T09:23:11Z in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.4</em> to <em>Release 2.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved at the code freeze for release 2.4
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="5591.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T10%3A49%3A45%2B01%3A00&amp;precision=second" title="2013-04-29T10:49:45+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.5</em> to <em>Release 2.6</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to <a class="missing changeset" title="No default repository defined">r2</a>.6 at the end of <a class="missing changeset" title="No default repository defined">r2</a>.5
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="5591.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-02T15%3A16%3A53%2B01%3A00&amp;precision=second" title="2013-07-02T15:16:53+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Peter Parker</em> to <em>Anyone</em>
+    </li><li>
+      <strong>Keywords</strong>
+        <em>Indirect,</em> <em>Student</em> added; <em>Indirect</em> removed
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="5591.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-02T15%3A17%3A29%2B01%3A00&amp;precision=second" title="2013-07-02T15:17:29+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Keywords</strong>
+        <em>First</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="5591.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T14%3A28%3A40%2B01%3A00&amp;precision=second" title="2013-07-04T14:28:40+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Anyone</em> to <em>Samuel Jackson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="5591.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T13%3A47%3A50%2B01%3A00&amp;precision=second" title="2013-07-05T13:47:50+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="5591.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T11%3A33%3A59%2B01%3A00&amp;precision=second" title="2013-07-09T11:33:59+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Initial files stored before starting testing. Not yet working.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d7e654346a139309bdc2cba867528e4c6b20d45d" title="d7e654346a139309bdc2cba867528e4c6b20d45d">d7e654346a139309bdc2cba867528e4c6b20d45d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="5591.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T11%3A33%3A59%2B01%3A00&amp;precision=second" title="2013-07-09T11:33:59+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Working on CubicSpline test class.
+</p>
+<p>
+Refactored CubicSpline to remove reallocating the spline on every run of the function.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b4fd004d5347fa404d8b2dd7360643e27b63cf34" title="b4fd004d5347fa404d8b2dd7360643e27b63cf34">b4fd004d5347fa404d8b2dd7360643e27b63cf34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="5591.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T11%3A33%3A59%2B01%3A00&amp;precision=second" title="2013-07-09T11:33:59+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added tests for a selection of known and unknown data set points.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d10d4975adb21be6aa95bf4b46d1d0ff2788ae33" title="d10d4975adb21be6aa95bf4b46d1d0ff2788ae33">d10d4975adb21be6aa95bf4b46d1d0ff2788ae33</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="5591.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T11%3A33%3A59%2B01%3A00&amp;precision=second" title="2013-07-09T11:33:59+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Finished writing unit tests for basic CubicSpline.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3ef6a42a6e1e7450b41268fc8072d0ff78f5855a" title="3ef6a42a6e1e7450b41268fc8072d0ff78f5855a">3ef6a42a6e1e7450b41268fc8072d0ff78f5855a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="5591.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T12%3A08%3A31%2B01%3A00&amp;precision=second" title="2013-07-10T12:08:31+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Updated algorithm with a function to calculate derivatives.
+</p>
+<p>
+Algorithm should now be able to calculate both the first and second derivatives.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d48cda0ebfd4e56f5d04d5f2d47507ad60cd4d4d" title="d48cda0ebfd4e56f5d04d5f2d47507ad60cd4d4d">d48cda0ebfd4e56f5d04d5f2d47507ad60cd4d4d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="5591.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T12%3A08%3A31%2B01%3A00&amp;precision=second" title="2013-07-10T12:08:31+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Finishing up derivatives implementation.
+</p>
+<p>
+Added correction for x points being out of order.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/edb46705c48865c6f718541c8f3606d62aae3e3f" title="edb46705c48865c6f718541c8f3606d62aae3e3f">edb46705c48865c6f718541c8f3606d62aae3e3f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="5591.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T12%3A28%3A43%2B01%3A00&amp;precision=second" title="2013-07-10T12:28:43+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixing exception checking.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/18d8de0c1cfe066440d2c215cb31e3d50c0003b7" title="18d8de0c1cfe066440d2c215cb31e3d50c0003b7">18d8de0c1cfe066440d2c215cb31e3d50c0003b7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="5591.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T13%3A49%3A55%2B01%3A00&amp;precision=second" title="2013-07-10T13:49:55+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Swapping arrays to boost scoped arrays.
+</p>
+<p>
+Also changing test to run correctly on mac build server.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f5ad3d7205ed8719f454dfbfae9651e12b15ec53" title="f5ad3d7205ed8719f454dfbfae9651e12b15ec53">f5ad3d7205ed8719f454dfbfae9651e12b15ec53</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="5591.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T14%3A07%3A41%2B01%3A00&amp;precision=second" title="2013-07-10T14:07:41+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixing arrays issue in CubicSplineTest
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f3657d762134dbeefc48c71b6736e0f209febb8" title="4f3657d762134dbeefc48c71b6736e0f209febb8">4f3657d762134dbeefc48c71b6736e0f209febb8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="5591.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T18%3A00%3A09%2B01%3A00&amp;precision=second" title="2013-07-10T18:00:09+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Heads up on a few gcc compiler warnings (IFunction1D.cpp line 55): <a class="ext-link" href="http://download.mantidproject.org/jenkins/job/is_inc_rhel6_develop/1248/warnings14Result/NORMAL/"><span class="icon">​</span>http://download.mantidproject.org/jenkins/job/is_inc_rhel6_develop/1248/warnings14Result/NORMAL/</a>?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="5591.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-11T16%3A52%3A15%2B01%3A00&amp;precision=second" title="2013-07-11T16:52:15+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Created Spline algorithm as wrapper to CubicSpline
+</p>
+<p>
+Spline calculates smoothing of noisy data from an input workspace.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/72b2941558438c514df0bc5bec88dc01e23d632d" title="72b2941558438c514df0bc5bec88dc01e23d632d">72b2941558438c514df0bc5bec88dc01e23d632d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="5591.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-12T13%3A42%3A27%2B01%3A00&amp;precision=second" title="2013-07-12T13:42:27+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Creating new algorithm for SplineInterpolation.
+</p>
+<p>
+Renaming Spline to SplineSmoothing.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bf598468094f73bce922f629e2b1a4fde5873c04" title="bf598468094f73bce922f629e2b1a4fde5873c04">bf598468094f73bce922f629e2b1a4fde5873c04</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="5591.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-12T13%3A42%3A27%2B01%3A00&amp;precision=second" title="2013-07-12T13:42:27+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+SplineInterpolation algorithm written.
+</p>
+<p>
+Improved error handling in CubicSpline.
+Fixed Attribute setting bug in SplineSmoothing.
+Suppressed unused function variables warning in unimplemented method
+derivative1D in IFunction1D.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8c66d3982a41af48ce7a44eb20680e60fe8fa1cf" title="8c66d3982a41af48ce7a44eb20680e60fe8fa1cf">8c66d3982a41af48ce7a44eb20680e60fe8fa1cf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="5591.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-12T14%3A25%3A42%2B01%3A00&amp;precision=second" title="2013-07-12T14:25:42+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Touching up failed tests.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19a12bb178b5d29613b8e17d81cde077546cbf86" title="19a12bb178b5d29613b8e17d81cde077546cbf86">19a12bb178b5d29613b8e17d81cde077546cbf86</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="5591.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-15T13%3A54%3A24%2B01%3A00&amp;precision=second" title="2013-07-15T13:54:24+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a> Algorithms now support both binned and point data.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f0bf22040d7d946f5f61bd0b89e27f3ab8ac8910" title="f0bf22040d7d946f5f61bd0b89e27f3ab8ac8910">f0bf22040d7d946f5f61bd0b89e27f3ab8ac8910</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="5591.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-15T16%3A29%3A16%2B01%3A00&amp;precision=second" title="2013-07-15T16:29:16+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>spencer.howells@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="5591.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-17T11%3A45%3A39%2B01%3A00&amp;precision=second" title="2013-07-17T11:45:39+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+SplineSmoothing now works with all histograms.
+</p>
+<p>
+Better range checking added to CubicSpline.
+Both algorithms should now return histogram data rather than point data.
+Changed "Order" property to "DerivOrder"
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b11cf720a064aa4a3462d26b2a224306685e4f29" title="b11cf720a064aa4a3462d26b2a224306685e4f29">b11cf720a064aa4a3462d26b2a224306685e4f29</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="5591.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-17T14%3A02%3A09%2B01%3A00&amp;precision=second" title="2013-07-17T14:02:09+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Forgot to change "order" to "DerivOrder" in SplineInterpolation.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46dc3e7e4f8230c1c6d2edb7431ded2204c75af6" title="46dc3e7e4f8230c1c6d2edb7431ded2204c75af6">46dc3e7e4f8230c1c6d2edb7431ded2204c75af6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="5591.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-17T14%3A46%3A54%2B01%3A00&amp;precision=second" title="2013-07-17T14:46:54+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Missed changing a parameter
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ae7617c37e3882aac06a3b4a17ab9bd442355cde" title="ae7617c37e3882aac06a3b4a17ab9bd442355cde">ae7617c37e3882aac06a3b4a17ab9bd442355cde</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="5591.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T12%3A07%3A48%2B01%3A00&amp;precision=second" title="2013-07-18T12:07:48+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="5591.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A27%3A11%2B01%3A00&amp;precision=second" title="2013-07-18T16:27:11+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>new</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="5591.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-19T09%3A02%3A16%2B01%3A00&amp;precision=second" title="2013-07-19T09:02:16+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Swapping raw pointers to boost shared pointers
+</p>
+<p>
+And general refactoring.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/97a67af5a14183618482f2ed941e40334b3eaa63" title="97a67af5a14183618482f2ed941e40334b3eaa63">97a67af5a14183618482f2ed941e40334b3eaa63</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="5591.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-19T09%3A02%3A16%2B01%3A00&amp;precision=second" title="2013-07-19T09:02:16+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidying up with typedefs to CubicSpline.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dfe9b80de0d43708155de380d407e79074bfb6cd" title="dfe9b80de0d43708155de380d407e79074bfb6cd">dfe9b80de0d43708155de380d407e79074bfb6cd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="5591.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-19T09%3A02%3A16%2B01%3A00&amp;precision=second" title="2013-07-19T09:02:16+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactoring, updating documentation, updating unit tests
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ea3b30e8a6aebdbe65d24ac1d76dfa07e3d5c91d" title="ea3b30e8a6aebdbe65d24ac1d76dfa07e3d5c91d">ea3b30e8a6aebdbe65d24ac1d76dfa07e3d5c91d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="5591.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-19T09%3A43%3A15%2B01%3A00&amp;precision=second" title="2013-07-19T09:43:15+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Adding support for histogram data in SplineInterpolation.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8094c0c0c53470c67792d967de80a4bd5e44f142" title="8094c0c0c53470c67792d967de80a4bd5e44f142">8094c0c0c53470c67792d967de80a4bd5e44f142</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="5591.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-19T10%3A21%3A27%2B01%3A00&amp;precision=second" title="2013-07-19T10:21:27+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixing support for GSL library function not present in Windows.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/af435cd9fd076624696cd80c5d8a753de4fb5946" title="af435cd9fd076624696cd80c5d8a753de4fb5946">af435cd9fd076624696cd80c5d8a753de4fb5946</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="5591.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-23T14%3A08%3A22%2B01%3A00&amp;precision=second" title="2013-07-23T14:08:22+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Working on derivatives with higher orders than 2.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3359aa7a5000b7a879df41ec6b7a2bc7c2084375" title="3359aa7a5000b7a879df41ec6b7a2bc7c2084375">3359aa7a5000b7a879df41ec6b7a2bc7c2084375</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="5591.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-23T14%3A08%3A22%2B01%3A00&amp;precision=second" title="2013-07-23T14:08:22+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implemented new approach to smoothing.
+</p>
+<p>
+Removed property "SplineSize"
+Added property "Error"
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d3476410cf407bfc0f0c14653f0b6c1656d2863f" title="d3476410cf407bfc0f0c14653f0b6c1656d2863f">d3476410cf407bfc0f0c14653f0b6c1656d2863f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="5591.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A08%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:08+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="5591.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T10%3A01%3A35%2B01%3A00&amp;precision=second" title="2013-07-24T10:01:35+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implemented better output workspace structure.
+</p>
+<p>
+Changed SplineInterpolation to all histograms against first reference histogram in a similar way to RebinToWorkspace.
+Updated unit tests on both algorithms to reflect workspace changes.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/59fe8831bdc5f0d3b0a74b8723144f159b40f533" title="59fe8831bdc5f0d3b0a74b8723144f159b40f533">59fe8831bdc5f0d3b0a74b8723144f159b40f533</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="5591.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-25T12%3A18%3A24%2B01%3A00&amp;precision=second" title="2013-07-25T12:18:24+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added additional fitting.
+</p>
+<p>
+Updated documentation and wiki descriptions.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/439829f13cff0646893480434f580b26482c7200" title="439829f13cff0646893480434f580b26482c7200">439829f13cff0646893480434f580b26482c7200</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="5591.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-25T12%3A18%3A24%2B01%3A00&amp;precision=second" title="2013-07-25T12:18:24+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Updating to pass unit tests.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4ae51a42947d4ae3f39eab7486d35dd743ef1b3a" title="4ae51a42947d4ae3f39eab7486d35dd743ef1b3a">4ae51a42947d4ae3f39eab7486d35dd743ef1b3a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="5591.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-25T12%3A31%3A24%2B01%3A00&amp;precision=second" title="2013-07-25T12:31:24+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Indirect Inelastic</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/5591?action=diff&amp;version=43">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="5591.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-25T16%3A20%3A49%2B01%3A00&amp;precision=second" title="2013-07-25T16:20:49+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Updated with better unit tests.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d28df37b7b5715da66155e4efc7664f20fdeaf0" title="4d28df37b7b5715da66155e4efc7664f20fdeaf0">4d28df37b7b5715da66155e4efc7664f20fdeaf0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="5591.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T09%3A02%3A32%2B01%3A00&amp;precision=second" title="2013-07-26T09:02:32+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Last minute bugfix to catch values outside of spline.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e022505d00e7556a2525fd26732d8d1f15851b18" title="e022505d00e7556a2525fd26732d8d1f15851b18">e022505d00e7556a2525fd26732d8d1f15851b18</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="5591.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T09%3A02%3A33%2B01%3A00&amp;precision=second" title="2013-07-26T09:02:33+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Adding more intelligent range overflow handling.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/03c155d9835e85b092c1cbde0495d22b6e41897a" title="03c155d9835e85b092c1cbde0495d22b6e41897a">03c155d9835e85b092c1cbde0495d22b6e41897a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="5591.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T10%3A29%3A00%2B01%3A00&amp;precision=second" title="2013-07-26T10:29:00+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixing workspaces being the wrong way round.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/84467e788a4fef46e05052ee75e439a37d996004" title="84467e788a4fef46e05052ee75e439a37d996004">84467e788a4fef46e05052ee75e439a37d996004</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T10%3A50%3A56%2B01%3A00&amp;precision=second" title="2013-07-26T10:50:56+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/5591/g-ZnCl2_ND_Stheta.nxs.html"><em>g-ZnCl2_ND_Stheta.nxs</em></a><a href="../raw-attachment/ticket/5591/g-ZnCl2_ND_Stheta.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Example data for SplineInterpolation
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T10%3A51%3A18%2B01%3A00&amp;precision=second" title="2013-07-26T10:51:18+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/5591/l-ZnCl2_ND_Mome.nxs.html"><em>l-ZnCl2_ND_Mome.nxs</em></a><a href="../raw-attachment/ticket/5591/l-ZnCl2_ND_Mome.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Example data for SplineInterpolation
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T10%3A51%3A52%2B01%3A00&amp;precision=second" title="2013-07-26T10:51:52+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/5591/ZnCl2_Stheta.nxs.html"><em>ZnCl2_Stheta.nxs</em></a><a href="../raw-attachment/ticket/5591/ZnCl2_Stheta.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Example data for SplineSmoothing
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="5591.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T11%3A18%3A14%2B01%3A00&amp;precision=second" title="2013-07-26T11:18:14+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>To Test:</strong>
+</p>
+<p>
+There have been two new algorithms added for this ticket. SplineInterpolation and SplineSmoothing both of which need to be tested. I have attached some sample files to help with this.
+</p>
+<p>
+<strong>Testing SplineSmoothing:</strong>
+</p>
+<p>
+The algorithm should take a 2D matrix workspace of either point or histogram data (e.g. ZnCl2_Stheta.nxs) and the following properties:
+</p>
+<ul><li>DerivOrder: order of derivatives to calculate (0-2)
+</li><li>Error: The error tolerance allowed between the spline and the input data
+</li></ul><p>
+And produce the following:
+</p>
+<p>
+1) A workspace containing the smoothed version of the input workspace in the same format (e.g. histogram data)
+</p>
+<p>
+2) A grouped workspace containing a set of workspaces (one per input histogram) containing the derivatives of the output data to the order specified by the DerivOrder property (entering zero for this should not produce a grouped workspace at all). 
+</p>
+<p>
+<strong>Testing SplineInterpolation:</strong>
+</p>
+<p>
+The algorithm should take two matrix workspaces (either point or histogram data):
+</p>
+<ul><li>WorkspaceToMatch: A workspace containing a data set to match against. This can have multiple spectra, but only the first set of values will be used. (e.g. g-ZnCl_ND_Stheta.nxs)
+</li></ul><ul><li>WorkspaceToInterpolate: A workspace containing a set of data to be interpolated. (e.g. l-ZnCl2_ND_Mome.nxs)
+</li></ul><p>
+It also takes the following property:
+</p>
+<ul><li>DerivOrder: order of the derivatives to calculate (0-2)
+</li></ul><p>
+The following output should be produced:
+</p>
+<p>
+1) A workspace containing the interpolated version of the input workspace in the same format (e.g. histogram data)
+</p>
+<p>
+2) A grouped workspace containing a set of workspaces (one per input histogram) containing the derivatives of the output data to the order specified by the DerivOrder property (entering zero for this should not produce a grouped workspace at all).
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="5591.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T14%3A09%3A42%2B01%3A00&amp;precision=second" title="2013-07-29T14:09:42+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="5591.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T15%3A28%3A18%2B01%3A00&amp;precision=second" title="2013-07-29T15:28:18+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>7565</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="5591.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T15%3A33%3A31%2B01%3A00&amp;precision=second" title="2013-07-29T15:33:31+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The zero default on SplineSmoothing is not a good default. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="5591.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T16%3A02%3A02%2B01%3A00&amp;precision=second" title="2013-07-29T16:02:02+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Changed validator property to be something more sensible than zero.
+</p>
+<p>
+Refs <a class="closed ticket" href="5591.html" title="enhancement: [Indirect] - Cubic spline algorithms (closed: fixed)">#5591</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/20399ef60b32c38bdb122f03c83fafca31d4b90b" title="20399ef60b32c38bdb122f03c83fafca31d4b90b">20399ef60b32c38bdb122f03c83fafca31d4b90b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="5591.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T16%3A13%3A18%2B01%3A00&amp;precision=second" title="2013-07-29T16:13:18+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tester Code Review:
+</p>
+<p>
+I don't see any problems with this ticket given a code review. Lots of units tests used, which is good to see. For future reference, it's good to try and weight more of your unit tests to be destructive rather than happy-path. Algorithms can also make use of the performance tests framework, which you might find useful.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="5591.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T16%3A35%3A16%2B01%3A00&amp;precision=second" title="2013-07-29T16:35:16+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="5591.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T16%3A35%3A51%2B01%3A00&amp;precision=second" title="2013-07-29T16:35:51+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="5591.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T16%3A37%3A47%2B01%3A00&amp;precision=second" title="2013-07-29T16:37:47+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/5591_cubic_spline_algorithms'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="5591.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A38%3A50%2B01%3A00&amp;precision=second" title="2015-06-04T00:38:50+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/6437"><span class="icon">​</span>6437</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5591?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5591?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5591?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

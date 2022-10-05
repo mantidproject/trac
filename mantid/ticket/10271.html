@@ -1,0 +1,1303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10271 (Move tcmalloc to a runtime-only library)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10270.html" title="Ticket #10270" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10271?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10271?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10271?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10272.html" title="Ticket #10272" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10271, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10270.html" title="Ticket #10270">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="10272.html" title="Ticket #10272">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10271.html">Ticket #10271</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-23T15%3A20%3A01%2B01%3A00&amp;precision=second" title="2014-09-23T15:20:01+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A52%3A17%2B01%3A00&amp;precision=second" title="2015-06-04T03:52:17+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Move tcmalloc to a runtime-only library</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Stuart Campbell
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+<a class="closed ticket" href="7798.html" title="defect: Linux: TCMalloc does not release free memory when requested (closed: wontfix)">#7798</a> prompted an investigation into memory allocation issues while using tcmalloc under Linux. The findings are listed <a class="ext-link" href="https://github.com/mantidproject/documents/blob/master/Project-Management/TechnicalSteeringCommittee/reports/TCmalloc.md"><span class="icon">​</span>here</a>.
+</p>
+<p>
+It was decided by the <a class="ext-link" href="https://github.com/mantidproject/documents/blob/master/Project-Management/TechnicalSteeringCommittee/meetings/TSC-meeting-2014-08-27.md"><span class="icon">​</span>TSC</a> that tcmalloc would become a library that is only used at runtime and is loaded via the LD_PRELOAD variable within a startup script.
+</p>
+<p>
+This will ensure that all libraries that are loaded by the program use the same allocation routines. Also, adding the TCMALLOC_RELEASE_RATE will remove the requirement for "Release Free Memory" calls as it will be handled by the library.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10271.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-24T10%3A59%3A46%2B01%3A00&amp;precision=second" title="2014-09-24T10:59:46+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove tcmalloc from list of globally linked libraries.
+</p>
+<p>
+It will become a library loaded through LD_PRELOAD so we keep the search
+for it but move tcmalloc_minimal to be found first if it exists.
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/076399a69163fdcaab182cb2f705192755404049" title="076399a69163fdcaab182cb2f705192755404049">076399a69163fdcaab182cb2f705192755404049</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10271.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-24T10%3A59%3A46%2B01%3A00&amp;precision=second" title="2014-09-24T10:59:46+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Simplify to process of loading the Python plugins on Linux.
+</p>
+<p>
+Remove any need to force some libraries to load first. Newer linkers
+seem to have removed the need for this.
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/afa941f09d461ca46cb46c8713f8762936e0a711" title="afa941f09d461ca46cb46c8713f8762936e0a711">afa941f09d461ca46cb46c8713f8762936e0a711</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10271.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-24T10%3A59%3A46%2B01%3A00&amp;precision=second" title="2014-09-24T10:59:46+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix library link order for older linkers.
+</p>
+<p>
+stdc++ is required to be linked first to avoid a segfault when
+exceptions are thrown and pass into the Python layer.
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a58da79b7447f15c69a5573f5c5c5a1d2adcd4f1" title="a58da79b7447f15c69a5573f5c5c5a1d2adcd4f1">a58da79b7447f15c69a5573f5c5c5a1d2adcd4f1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10271.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-21T12%3A05%3A59Z&amp;precision=second" title="2014-11-21T12:05:59Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Separate packaging from more general Linux setup.
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6c8911a1459733c3f858caf292298b79e1e3552a" title="6c8911a1459733c3f858caf292298b79e1e3552a">6c8911a1459733c3f858caf292298b79e1e3552a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10271.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-21T12%3A05%3A59Z&amp;precision=second" title="2014-11-21T12:05:59Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move maintainer scripts to be in their own files.
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/00c7a09f055f29994f0da8893fdd9a9ec5305975" title="00c7a09f055f29994f0da8893fdd9a9ec5305975">00c7a09f055f29994f0da8893fdd9a9ec5305975</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10271.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-21T12%3A05%3A59Z&amp;precision=second" title="2014-11-21T12:05:59Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use eval to call MantidPlot when not using scl
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8c4df195d292e186f463192b51f5f7c0f8fbf8fc" title="8c4df195d292e186f463192b51f5f7c0f8fbf8fc">8c4df195d292e186f463192b51f5f7c0f8fbf8fc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10271.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-24T17%3A20%3A24Z&amp;precision=second" title="2014-11-24T17:20:24Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10271_tcmalloc_ldpreload
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Build/CMake/FindTcmalloc.cmake
+Code/Mantid/Framework/API/src/MemoryManager.cpp
+Code/Mantid/Framework/Kernel/CMakeLists.txt
+Code/Mantid/Framework/Kernel/src/Memory.cpp
+Code/Mantid/Framework/PythonInterface/mantid/api/CMakeLists.txt
+Code/Mantid/Framework/PythonInterface/mantid/geometry/CMakeLists.txt
+Code/Mantid/Framework/PythonInterface/mantid/kernel/CMakeLists.txt
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3b15699e20468a71e9925ce1a55c2de0ab6c0ae5" title="3b15699e20468a71e9925ce1a55c2de0ab6c0ae5">3b15699e20468a71e9925ce1a55c2de0ab6c0ae5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10271.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-24T17%3A20%3A24Z&amp;precision=second" title="2014-11-24T17:20:24Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement a post install script for Debian
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0b53a3afde093c9c0da11ee7e1851ef7d7363482" title="0b53a3afde093c9c0da11ee7e1851ef7d7363482">0b53a3afde093c9c0da11ee7e1851ef7d7363482</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10271.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T08%3A46%3A19Z&amp;precision=second" title="2014-11-26T08:46:19Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add profile links if requested in post install
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa84dd348ed17041d829521fd8408be201e1bbbf" title="fa84dd348ed17041d829521fd8408be201e1bbbf">fa84dd348ed17041d829521fd8408be201e1bbbf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10271.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T08%3A46%3A19Z&amp;precision=second" title="2014-11-26T08:46:19Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add Debian pre &amp; post install scripts
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/91db9e83e78d9b20eb080ce2d1db65e0e29d4ec0" title="91db9e83e78d9b20eb080ce2d1db65e0e29d4ec0">91db9e83e78d9b20eb080ce2d1db65e0e29d4ec0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10271.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T08%3A46%3A19Z&amp;precision=second" title="2014-11-26T08:46:19Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Only remove profile scripts if they were installed by us in RPM
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ef214aeb32ff6a7bd6e72049895af7d60cfe65da" title="ef214aeb32ff6a7bd6e72049895af7d60cfe65da">ef214aeb32ff6a7bd6e72049895af7d60cfe65da</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10271.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T08%3A46%3A19Z&amp;precision=second" title="2014-11-26T08:46:19Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use RPM_INSTALL_PREFIX0 directly in rpm maintainer scripts
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/77055060698bb109db4dac3817541517c7f8b04b" title="77055060698bb109db4dac3817541517c7f8b04b">77055060698bb109db4dac3817541517c7f8b04b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10271.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T08%3A46%3A19Z&amp;precision=second" title="2014-11-26T08:46:19Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix install prefix for debian post install script
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b31f758c3ec4254e8f5c831281e1917db12c0e31" title="b31f758c3ec4254e8f5c831281e1917db12c0e31">b31f758c3ec4254e8f5c831281e1917db12c0e31</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10271.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T08%3A46%3A19Z&amp;precision=second" title="2014-11-26T08:46:19Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Don't wipe LD_PRELOAD in startup scripts.
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/35206479cda0aecbd6940f6e194aa63b70426c0a" title="35206479cda0aecbd6940f6e194aa63b70426c0a">35206479cda0aecbd6940f6e194aa63b70426c0a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10271.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T08%3A46%3A19Z&amp;precision=second" title="2014-11-26T08:46:19Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add LD_PRELOAD/TCMALLOC_RELEASE_RATE to MantidPlot launch script
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a89897786407fd50a77704e18cc05982b1bb6f1c" title="a89897786407fd50a77704e18cc05982b1bb6f1c">a89897786407fd50a77704e18cc05982b1bb6f1c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10271.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T08%3A46%3A19Z&amp;precision=second" title="2014-11-26T08:46:19Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add LD_PRELOAD/TCMALLOC_RELEASE to profile scripts
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b67ee4ee835574216559916a3eda1583e339d547" title="b67ee4ee835574216559916a3eda1583e339d547">b67ee4ee835574216559916a3eda1583e339d547</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10271.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T10%3A01%3A26Z&amp;precision=second" title="2014-11-26T10:01:26Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10271_tcmalloc_ldpreload
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/Kernel/CMakeLists.txt
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19552b9bf21a44d4786052c374053bdbf74749af" title="19552b9bf21a44d4786052c374053bdbf74749af">19552b9bf21a44d4786052c374053bdbf74749af</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10271.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T10%3A16%3A54Z&amp;precision=second" title="2014-11-26T10:16:54Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/81"><span class="icon">​</span>pull request #81</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10271.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T12%3A26%3A33Z&amp;precision=second" title="2014-11-26T12:26:33Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix install path for MantidPlot launcher script
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/50ddf1f6f03db576dee8c825e01649b80f060ffa" title="50ddf1f6f03db576dee8c825e01649b80f060ffa">50ddf1f6f03db576dee8c825e01649b80f060ffa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10271.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T12%3A26%3A34Z&amp;precision=second" title="2014-11-26T12:26:34Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove LD_PRELOAD from profile scripts.
+</p>
+<p>
+Tcmalloc causes emacs to crash so don't pollute the standard environment
+with it.
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b6cf1acc88c4686374b44a64b1899196c4bd92ab" title="b6cf1acc88c4686374b44a64b1899196c4bd92ab">b6cf1acc88c4686374b44a64b1899196c4bd92ab</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10271.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T13%3A13%3A02Z&amp;precision=second" title="2014-11-26T13:13:02Z in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Which kits are the best to use for testing ?  The latest unstable/develop with this change in, or a kit built from the pull request ?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10271.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T13%3A17%3A27Z&amp;precision=second" title="2014-11-26T13:17:27Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I've added package archiving to the pull request builds so it would be good to try those first. I've just merged to develop so those would be a good fall back.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10271.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-26T13%3A21%3A11Z&amp;precision=second" title="2014-11-26T13:21:11Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10271.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T14%3A53%3A36Z&amp;precision=second" title="2014-11-28T14:53:36Z in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10271.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T15%3A22%3A31Z&amp;precision=second" title="2014-11-28T15:22:31Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I think the current failures of the doctests are due to the launcher script. Don't merge this yet
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10271.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T16%3A06%3A15Z&amp;precision=second" title="2014-11-28T16:06:15Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix silly error in launcher script.
+</p>
+<p>
+It was calling the script recursively and running out of file descriptors
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ecd9f8f842948743d25cd67e0773d30294fc965b" title="ecd9f8f842948743d25cd67e0773d30294fc965b">ecd9f8f842948743d25cd67e0773d30294fc965b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10271.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T16%3A06%3A15Z&amp;precision=second" title="2014-11-28T16:06:15Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix launch_mantidplot script when not run under bash
+</p>
+<p>
+dirname is a bash function and is not available in all shells.
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dd80a6e02e4a7f3b8f5917c33f62d14907dfbc6d" title="dd80a6e02e4a7f3b8f5917c33f62d14907dfbc6d">dd80a6e02e4a7f3b8f5917c33f62d14907dfbc6d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10271.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T16%3A33%3A29Z&amp;precision=second" title="2014-11-28T16:33:29Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix install of launcher script.
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/73c8303462ea533891584db1410e4f963cdb3e9b" title="73c8303462ea533891584db1410e4f963cdb3e9b">73c8303462ea533891584db1410e4f963cdb3e9b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10271.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T21%3A11%3A22Z&amp;precision=second" title="2014-11-28T21:11:22Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix quotes in launcher script
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0672fd9c13afac4768530a0a81f4cd745dd75358" title="0672fd9c13afac4768530a0a81f4cd745dd75358">0672fd9c13afac4768530a0a81f4cd745dd75358</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10271.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T22%3A43%3A02Z&amp;precision=second" title="2014-11-28T22:43:02Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More quote fixes after moving from CMake string
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0c7063c1242f9229d675e28356634535227ca49" title="c0c7063c1242f9229d675e28356634535227ca49">c0c7063c1242f9229d675e28356634535227ca49</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10271.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-02T10%3A27%3A06Z&amp;precision=second" title="2014-12-02T10:27:06Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix path to MantidPlot exe for squish
+</p>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b4bf7f03f27d609ad59b4c8fec250fc6963d8c31" title="b4bf7f03f27d609ad59b4c8fec250fc6963d8c31">b4bf7f03f27d609ad59b4c8fec250fc6963d8c31</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10271.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-06T09%3A35%3A25Z&amp;precision=second" title="2014-12-06T09:35:25Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="10271.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-06T11%3A22%3A17Z&amp;precision=second" title="2014-12-06T11:22:17Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The build servers are happy at long last!
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="10271.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T13%3A12%3A59Z&amp;precision=second" title="2014-12-08T13:12:59Z in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Stuart Campbell</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="10271.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T13%3A14%3A15Z&amp;precision=second" title="2014-12-08T13:14:15Z in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+@martyngigg Can you merge master back in to get rid of the merge problems ?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="10271.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-08T13%3A28%3A07Z&amp;precision=second" title="2014-12-08T13:28:07Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10271_tcmalloc_ldpreload
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/CMakeLists.txt
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8af22ffdd98ef4e1d3f253d1dcac87ee26312665" title="8af22ffdd98ef4e1d3f253d1dcac87ee26312665">8af22ffdd98ef4e1d3f253d1dcac87ee26312665</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="10271.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-10T20%3A50%3A18Z&amp;precision=second" title="2014-12-10T20:50:18Z in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I had some issues with the packages, as in path conflicts and similar - but these should be really tested on later kits (although it looks like the archiving of packages is not working for the pull request jobs)
+</p>
+<p>
+Otherwise, the preloading of tcmalloc seems to work and MantidPlot is not linked against it.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="10271.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-10T20%3A50%3A30Z&amp;precision=second" title="2014-12-10T20:50:30Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10271_tcmalloc_ldpreload
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Build/CMake/FindTcmalloc.cmake
+Code/Mantid/Framework/API/src/MemoryManager.cpp
+Code/Mantid/Framework/Kernel/CMakeLists.txt
+Code/Mantid/Framework/Kernel/src/Memory.cpp
+Code/Mantid/Framework/PythonInterface/mantid/api/CMakeLists.txt
+Code/Mantid/Framework/PythonInterface/mantid/geometry/CMakeLists.txt
+Code/Mantid/Framework/PythonInterface/mantid/kernel/CMakeLists.txt
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/3b15699e20468a71e9925ce1a55c2de0ab6c0ae5"><span class="icon">​</span>3b15699e20468a71e9925ce1a55c2de0ab6c0ae5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="10271.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-10T20%3A50%3A30Z&amp;precision=second" title="2014-12-10T20:50:30Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10271_tcmalloc_ldpreload
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/Kernel/CMakeLists.txt
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/19552b9bf21a44d4786052c374053bdbf74749af"><span class="icon">​</span>19552b9bf21a44d4786052c374053bdbf74749af</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="10271.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-10T20%3A50%3A30Z&amp;precision=second" title="2014-12-10T20:50:30Z in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10271_tcmalloc_ldpreload
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/CMakeLists.txt
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10271.html" title="Move tcmalloc to a runtime-only library (closed: fixed)">#10271</a>
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/8af22ffdd98ef4e1d3f253d1dcac87ee26312665"><span class="icon">​</span>8af22ffdd98ef4e1d3f253d1dcac87ee26312665</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="10271.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-10T20%3A50%3A30Z&amp;precision=second" title="2014-12-10T20:50:30Z in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="81.html" title="enhancement: Extend QTIPlot to be able to us our workspaces as a data source for 1D and ... (closed: fixed)">#81</a> from mantidproject/feature/10271_tcmalloc_ldpreload
+</p>
+<p>
+Use tcmalloc via ld_preload
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/b04d8438bd8a74c88c5595938de317af7da74107"><span class="icon">​</span>b04d8438bd8a74c88c5595938de317af7da74107</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="10271.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A52%3A17%2B01%3A00&amp;precision=second" title="2015-06-04T03:52:17+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11113"><span class="icon">​</span>11113</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10271?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10271?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10271?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

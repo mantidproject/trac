@@ -1,0 +1,927 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #5805 (Trying to load a bad file causes a segfault)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="5804.html" title="Ticket #5804" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5805?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5805?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5805?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="5806.html" title="Ticket #5806" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 5805, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="5804.html" title="Ticket #5804">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="5806.html" title="Ticket #5806">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="5805.html">Ticket #5805</a>
+          <span class="status">(inprogress)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-27T19%3A49%3A17%2B01%3A00&amp;precision=second" title="2012-08-27T19:49:17+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A47%3A42%2B01%3A00&amp;precision=second" title="2015-06-04T00:47:42+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Trying to load a bad file causes a segfault</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Stuart+Campbell">Stuart Campbell</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Federico+M+Pouzols">Federico M Pouzols</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=minor">minor</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="milestone" href="../milestone/Release&#32;3.5.html">Release 3.5</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Lottie Greenwood
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-07-16 14:23:12.502626+00:00">
+        (last modified by Dan Nixon)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/5805?action=diff&amp;version=14">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+During the testing of the new streaming project at the SNS, I discovered that some of the files that were produced caused mantid to segfault and crash.  Although these files are probably created incorrectly and may contain junk, we still should fail gracefully rather than segfault.
+</p>
+<p>
+These files are supposed to be event nexus files.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/5805/HYSA_274_causes_crash.nxs.h5.html" title="View attachment">HYSA_274_causes_crash.nxs.h5</a><a href="../raw-attachment/ticket/5805/HYSA_274_causes_crash.nxs.h5" class="trac-rawlink" title="Download">​</a>
+       (<span title="1480456 bytes">1.4 MB</span>) -
+      added by <em>Stuart Campbell</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-27T19%3A51%3A06%2B01%3A00&amp;precision=second" title="2012-08-27T19:51:06+01:00 in Timeline">8 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/5805/HYSA_275_causes_crash.nxs.h5.html" title="View attachment">HYSA_275_causes_crash.nxs.h5</a><a href="../raw-attachment/ticket/5805/HYSA_275_causes_crash.nxs.h5" class="trac-rawlink" title="Download">​</a>
+       (<span title="1476050 bytes">1.4 MB</span>) -
+      added by <em>Stuart Campbell</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-27T19%3A51%3A34%2B01%3A00&amp;precision=second" title="2012-08-27T19:51:34+01:00 in Timeline">8 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-27T19%3A51%3A06%2B01%3A00&amp;precision=second" title="2012-08-27T19:51:06+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/5805/HYSA_274_causes_crash.nxs.h5.html"><em>HYSA_274_causes_crash.nxs.h5</em></a><a href="../raw-attachment/ticket/5805/HYSA_274_causes_crash.nxs.h5" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-27T19%3A51%3A34%2B01%3A00&amp;precision=second" title="2012-08-27T19:51:34+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/5805/HYSA_275_causes_crash.nxs.h5.html"><em>HYSA_275_causes_crash.nxs.h5</em></a><a href="../raw-attachment/ticket/5805/HYSA_275_causes_crash.nxs.h5" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="5805.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-27T19%3A53%3A00%2B01%3A00&amp;precision=second" title="2012-08-27T19:53:00+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The attached files were originally name <tt>HYSA_274.nxs.h5</tt> and <tt>HYSA_275.nxs.h5</tt>.  They can be renamed to the old format of <tt>HYSA_274_event.nxs</tt> and they still fail.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="5805.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-28T11%3A39%3A06Z&amp;precision=second" title="2012-10-28T11:39:06Z in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.3</em> to <em>Release 2.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to milestone 2.4
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="5805.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-03T15%3A58%3A24Z&amp;precision=second" title="2012-11-03T15:58:24Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li><li>
+      <strong>Owner</strong>
+        set to <em>Andrei Savici</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="5805.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-03T16%3A00%3A13Z&amp;precision=second" title="2012-11-03T16:00:13Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>worksforme</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Log values in DASLogs have problems. Seems to be working for me now (Ubuntu 12.10 and RHEL6)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="5805.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-28T20%3A25%3A25Z&amp;precision=second" title="2013-01-28T20:25:25Z in Timeline">8 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Russell Taylor</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="5805.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-28T20%3A46%3A28Z&amp;precision=second" title="2013-01-28T20:46:28Z in Timeline">8 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>worksforme</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The first file does just fail the algorithm, but the second one still crashes MantidPlot (both on RHEL6 &amp; OSX). The failure looks to be fairly deep inside hdf so I don't know how easy it will be to fix (or how much we're bothered).
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="5805.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-29T22%3A35%3A18Z&amp;precision=second" title="2013-01-29T22:35:18Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Andrei Savici</em> to <em>Anyone</em>
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="5805.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-30T09%3A41%3A41Z&amp;precision=second" title="2013-01-30T09:41:41Z in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Priority</strong>
+        changed from <em>major</em> to <em>minor</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.4</em> to <em>Release 2.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="5805.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T10%3A50%3A09%2B01%3A00&amp;precision=second" title="2013-04-29T10:50:09+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.5</em> to <em>Release 2.6</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to <a class="missing changeset" title="No default repository defined">r2</a>.6 at the end of <a class="missing changeset" title="No default repository defined">r2</a>.5
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="5805.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A27%3A13%2B01%3A00&amp;precision=second" title="2013-07-18T16:27:13+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>new</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="5805.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A43%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:43+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="5805.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T14%3A59%3A11%2B01%3A00&amp;precision=second" title="2013-07-26T14:59:11+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.6</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to the Backlog after the code freeze for R2.6
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="5805.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T11%3A07%3A57Z&amp;precision=second" title="2014-02-14T11:07:57Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+bulk move to assigned at the into of the triage step
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="5805.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-16T15%3A23%3A12%2B01%3A00&amp;precision=second" title="2014-07-16T15:23:12+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/5805?action=diff&amp;version=14">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I'm not sure if this is actually the cause of the fault, but in the Nexus code there is a <a class="ext-link" href="https://github.com/nexusformat/code/blob/295df9374c153398e3a4b6a483729d3a5c147794/bindings/cpp/NeXusFile.cpp#L1001"><span class="icon">​</span>comment</a> which implies getNextEntry is broken somehow.
+</p>
+<p>
+In the stack trace from GDB I see a call to getNextEntry from getEntries()
+</p>
+<pre class="wiki">#20 0x00007fffece93d15 in ?? () from /usr/lib/libNeXus.so.0
+#21 0x00007fffeeb7ff45 in NeXus::File::getNextEntry() ()
+   from /usr/lib/libNeXusCPP.so.0
+#22 0x00007fffeeb83d8a in NeXus::File::getEntries(std::map&lt;std::string, std::string, std::less&lt;std::string&gt;, std::allocator&lt;std::pair&lt;std::string const, std::string&gt; &gt; &gt;&amp;) () from /usr/lib/libNeXusCPP.so.0
+#23 0x00007fffeeb841f7 in NeXus::File::getEntries() ()
+   from /usr/lib/libNeXusCPP.so.0
+#24 0x00007ffff78eb95d in Mantid::Kernel::NexusDescriptor::walkFile (
+    this=0x7fffb7a57870, file=..., rootPath=..., className=..., pmap=..., 
+    level=3)
+    at /home/dan/mantid/Code/Mantid/Framework/Kernel/src/NexusDescriptor.cpp:242
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="5805.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-08T12%3A46%3A12Z&amp;precision=second" title="2015-01-08T12:46:12Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li><li>
+      <strong>Owner</strong>
+        changed from <em>Anyone</em> to <em>Federico M Pouzols</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="5805.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-08T12%3A48%3A04Z&amp;precision=second" title="2015-01-08T12:48:04Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+handle exceptions in input props when opening alg dialogs, re <a class="inprogress ticket" href="5805.html" title="defect: Trying to load a bad file causes a segfault (inprogress)">#5805</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9fae7e89036114ed811e7a223696f579b2c01a6c" title="9fae7e89036114ed811e7a223696f579b2c01a6c">9fae7e89036114ed811e7a223696f579b2c01a6c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="5805.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-08T12%3A48%3A05Z&amp;precision=second" title="2015-01-08T12:48:05Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+more informative exception messages when files badly broken, re <a class="inprogress ticket" href="5805.html" title="defect: Trying to load a bad file causes a segfault (inprogress)">#5805</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1cf5483fdc3447e3477c84c1b7d38ea43c20829b" title="1cf5483fdc3447e3477c84c1b7d38ea43c20829b">1cf5483fdc3447e3477c84c1b7d38ea43c20829b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="5805.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-08T12%3A55%3A35Z&amp;precision=second" title="2015-01-08T12:55:35Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Russell Taylor</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The first bad file (274) has some errors in the logs and that's reported gracefully by LoadNexusLogs. All is well here.
+</p>
+<p>
+The second one (275) has more obscure errors, and as this can cause a nasty crash in the generic Load algorithm. Independently of whether this could be better handled in libNeXus (see comment above), I've added error handling for this kind of unexpectedly, badly broken file that makes the chosen loader throw a wild exception.
+</p>
+<p>
+The current behavior for 275 is:
+</p>
+<ul><li>if you try load the broken file from Algorithms-&gt;Execute-&gt;Load or Workspaces-&gt;Load, it will be identified as a wrong input file, the file field will be marked with a red asterisk, and you should not get a crash. If you hover the red asterisk you should see an informative message.
+</li><li>if you try to load the broken file from File-&gt;Load-&gt;File, and error message will be printed in the results log.
+</li></ul><p>
+<strong>Suggestion to test</strong>: try to make mantid crash with the two example files or similar nasty files.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="5805.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T08%3A13%3A33Z&amp;precision=second" title="2015-01-21T08:13:33Z in Timeline">6 years</a> ago by Lottie Greenwood
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Lottie Greenwood</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="5805.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T11%3A33%3A32Z&amp;precision=second" title="2015-01-21T11:33:32Z in Timeline">6 years</a> ago by Lottie Greenwood
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+File 274 fails gracefully with informative error messages, but file 275 just crashed mantid, without any identifying it as a wrong input file, or giving an error message.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="5805.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-22T10%3A22%3A13Z&amp;precision=second" title="2015-01-22T10:22:13Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Yes, 275 still makes Mantid crash really badly on windows. I'm trying to figure out if this can be handled properly in Mantid. Linux seems ok.
+</p>
+<p>
+In view of this, and assuming that it could be fixed on windows, it might be a good idea to test this ticket also on a mac.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="5805.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-22T16%3A44%3A52Z&amp;precision=second" title="2015-01-22T16:44:52Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+more verbose excepts, handle sigsegv (happens on windows), re <a class="inprogress ticket" href="5805.html" title="defect: Trying to load a bad file causes a segfault (inprogress)">#5805</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3f00eb29183b6d40a886fab56dbc66bc88afdef2" title="3f00eb29183b6d40a886fab56dbc66bc88afdef2">3f00eb29183b6d40a886fab56dbc66bc88afdef2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="5805.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-23T10%3A15%3A11Z&amp;precision=second" title="2015-01-23T10:15:11Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+On windows libNeXus is segfaulting in NeXus::File::getNextEntry() -&gt; NXgetnextentry
+</p>
+<p>
+It should be possible to avoid this crash, as for example HDFView just doesn't open the entry that is making libNeXus crash.
+</p>
+<p>
+The last changes that I've committed handle this sigsegv. That doesn't look like an ideal solution to me, but it's probably the only thing that can be done. This anyway raises the issue of what do we do in Mantid when our dependencies/libraries misbehave -memory violation, etc.? At present, Mantid would crash instead of trying to show the exception critical error message.
+</p>
+<p>
+This ticket might remain open until the issue is fixed in libNeXus.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="5805.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-27T09%3A10%3A35%2B01%3A00&amp;precision=second" title="2015-04-27T09:10:35+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.4</em> to <em>Release 3.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to R3.5 at the R3.4 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="5805.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A47%3A42%2B01%3A00&amp;precision=second" title="2015-06-04T00:47:42+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/6651"><span class="icon">​</span>6651</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5805?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5805?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5805?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

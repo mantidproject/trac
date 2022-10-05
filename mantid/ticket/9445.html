@@ -1,0 +1,1570 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9445 (Create implementation of IFunction that uses workspace index)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9444.html" title="Ticket #9444" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9445?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9445?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9445?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9446.html" title="Ticket #9446" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9445, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9444.html" title="Ticket #9444">Previous Ticket</a></span></li><li><span><a class="next" href="9446.html" title="Ticket #9446">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/9445.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9445.html">Ticket #9445</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-12T16%3A21%3A37%2B01%3A00&amp;precision=second" title="2014-05-12T16:21:37+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A18%3A30%2B01%3A00&amp;precision=second" title="2015-06-04T03:18:30+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Create implementation of IFunction that uses workspace index</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Michael+Wedel">Michael Wedel</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Michael+Wedel">Michael Wedel</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~CurveFitting">CurveFitting</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              roman.tolchenov@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="9423.html" title="Domain created by FitMW should contain the workspace index.">#9423</a>, <a class="closed ticket" href="9432.html" title="Integrate peak search and fit algorithms specific to POLDI">#9432</a>, <a class="closed ticket" href="9448.html" title="Representation of source spectrum for POLDI">#9448</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="9990.html" title="Add background functions for PoldiCalculateSpectrum2D">#9990</a>, <a class="closed ticket" href="9991.html" title="Refactor PoldiSpectrumDomainFunction">#9991</a>, <a class="closed ticket" href="9992.html" title="Lattice parameter based PoldiSpectrumDomainFunction">#9992</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Roman Tolchenov
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+For fitting POLDI data an implementation of IFunction is required that computes function values while taking into account information associated to the spectrum it is applied to (each spectrum of a MatrixWorkspace is a domain).
+</p>
+<p>
+I am not sure whether it should inherit from IFunction1D, even though it is in fact a kind of 1D-function. But I don't see any meaningful implementation of function1D and functionDeriv1D, since there is no way these methods can "know" the domain type.
+</p>
+<p>
+On the other hand I am not sure if the fitting framework will be able to deal with a 1D-function that does not implement IFunction1D.
+</p>
+<p>
+Any thoughts on this?
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9445.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-12T16%3A23%3A32%2B01%3A00&amp;precision=second" title="2014-05-12T16:23:32+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9423</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9445.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-13T08%3A13%3A49%2B01%3A00&amp;precision=second" title="2014-05-13T08:13:49+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Cc</strong>
+        <em>roman.tolchenov@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+cc'd Roman so he can track what's going on here.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9445.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-14T08%3A53%3A05%2B01%3A00&amp;precision=second" title="2014-05-14T08:53:05+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9432, 9448</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9445.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-14T15%3A06%3A05%2B01%3A00&amp;precision=second" title="2014-05-14T15:06:05+01:00 in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        set to <em>Michael Wedel</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9445.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-16T16%3A00%3A30%2B01%3A00&amp;precision=second" title="2014-05-16T16:00:30+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added PoldiInstrumentAdapter
+</p>
+<p>
+This is needed in more than one place and bundling it in one place will make it easier to replace later.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/51db44932ea77935e418f2729ecf399f3c80d388" title="51db44932ea77935e418f2729ecf399f3c80d388">51db44932ea77935e418f2729ecf399f3c80d388</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9445.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-16T16%3A00%3A31%2B01%3A00&amp;precision=second" title="2014-05-16T16:00:31+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added PoldiSpectrumDomainFunction class
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/af76395d07bedf2364b7979dde57cdf43f3c572d" title="af76395d07bedf2364b7979dde57cdf43f3c572d">af76395d07bedf2364b7979dde57cdf43f3c572d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9445.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-16T16%3A00%3A31%2B01%3A00&amp;precision=second" title="2014-05-16T16:00:31+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Created 2D-spectrum calculation test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/39124fbec5ac553ef0599708fe72c04163943120" title="39124fbec5ac553ef0599708fe72c04163943120">39124fbec5ac553ef0599708fe72c04163943120</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9445.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-16T16%3A24%3A07%2B01%3A00&amp;precision=second" title="2014-05-16T16:24:07+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added missing typedef
+</p>
+<p>
+Missing typedef did not let the code compile
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/82623d2a11ae3b8b4da55dc51780477e447280e1" title="82623d2a11ae3b8b4da55dc51780477e447280e1">82623d2a11ae3b8b4da55dc51780477e447280e1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9445.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-19T14%3A33%3A39%2B01%3A00&amp;precision=second" title="2014-05-19T14:33:39+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Corrected the multi-domain Fit call.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac83d9250ba56c8c89c255ff9391e9db1850c669" title="ac83d9250ba56c8c89c255ff9391e9db1850c669">ac83d9250ba56c8c89c255ff9391e9db1850c669</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9445.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-20T15%3A46%3A25%2B01%3A00&amp;precision=second" title="2014-05-20T15:46:25+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9497</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9445.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-20T15%3A55%3A14%2B01%3A00&amp;precision=second" title="2014-05-20T15:55:14+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added PoldiSpectrumDomainTest.h to CMakeLists
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb6981234acb8fcb57c5c124529636a48742f944" title="bb6981234acb8fcb57c5c124529636a48742f944">bb6981234acb8fcb57c5c124529636a48742f944</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9445.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-21T10%3A05%3A42%2B01%3A00&amp;precision=second" title="2014-05-21T10:05:42+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. PoldiPeakCollection now holds peak intensity type
+</p>
+<p>
+A PoldiPeakCollection now stores information about the type of intensity
+information assigned to the contained peaks. Some parts need to work
+with the peak maxima, others need the area. This information is now put
+into the workspace logs and processed.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f5f6eab4fc2141e1ce308fcad86c2fb4a8663d3" title="4f5f6eab4fc2141e1ce308fcad86c2fb4a8663d3">4f5f6eab4fc2141e1ce308fcad86c2fb4a8663d3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9445.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-21T10%3A05%3A42%2B01%3A00&amp;precision=second" title="2014-05-21T10:05:42+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. PoldiCalculateSpectrum2D processes POLDI peaks
+</p>
+<p>
+Instead of the fixed example peak, a peak table is now loaded and the
+corresponding functions are constructed.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c7c8f284c93e34d908288a8befeaf4fcd9dfa783" title="c7c8f284c93e34d908288a8befeaf4fcd9dfa783">c7c8f284c93e34d908288a8befeaf4fcd9dfa783</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9445.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-21T13%3A25%3A06%2B01%3A00&amp;precision=second" title="2014-05-21T13:25:06+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Corrected calculation of deltaT
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4e1011f9eaf8ea4db8734d5b408bf4c15bcf090e" title="4e1011f9eaf8ea4db8734d5b408bf4c15bcf090e">4e1011f9eaf8ea4db8734d5b408bf4c15bcf090e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9445.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-21T14%3A38%3A45%2B01%3A00&amp;precision=second" title="2014-05-21T14:38:45+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added clone method to PoldiPeak
+</p>
+<p>
+Also added equality operator to MillerIndices, since the lack of it was
+failing the test for PoldiPeak::clone.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/16fe42876f886528be123baaebc0349dda628305" title="16fe42876f886528be123baaebc0349dda628305">16fe42876f886528be123baaebc0349dda628305</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9445.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-21T15%3A47%3A59%2B01%3A00&amp;precision=second" title="2014-05-21T15:47:59+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. PoldiPeakCollection stores profile information
+</p>
+<p>
+PoldiPeakCollection can now store information about which profile
+function has been used to fit the peak parameters. This is required for
+possible peak integration in PoldiCalculateSpectrum2D.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90e6ea498b8fafa051c47f701d1c1e1fe820ff94" title="90e6ea498b8fafa051c47f701d1c1e1fe820ff94">90e6ea498b8fafa051c47f701d1c1e1fe820ff94</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9445.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-22T12%3A30%3A39%2B01%3A00&amp;precision=second" title="2014-05-22T12:30:39+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added profile function check to PoldiPeakCollection
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ef6c6f72629551273da5dc194c2c1dda3b9d10f" title="7ef6c6f72629551273da5dc194c2c1dda3b9d10f">7ef6c6f72629551273da5dc194c2c1dda3b9d10f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9445.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-22T12%3A30%3A39%2B01%3A00&amp;precision=second" title="2014-05-22T12:30:39+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Extracted time conversion from PoldiSpectrumDomainFunction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2eda04a872490935e06e811f7ae63bae635d82ea" title="2eda04a872490935e06e811f7ae63bae635d82ea">2eda04a872490935e06e811f7ae63bae635d82ea</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9445.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-23T12%3A07%3A38%2B01%3A00&amp;precision=second" title="2014-05-23T12:07:38+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added PeakFunctionIntegrator
+</p>
+<p>
+PeakFunctionIntegrator takes an IPeakFunction and integrates it numerically using GSL routines.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f4146dace472d3501c163d95b6c0c36a7b57398" title="5f4146dace472d3501c163d95b6c0c36a7b57398">5f4146dace472d3501c163d95b6c0c36a7b57398</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9445.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-23T12%3A07%3A38%2B01%3A00&amp;precision=second" title="2014-05-23T12:07:38+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Fixed NaN-problem in PoldiTimeTransformer
+</p>
+<p>
+PoldiTimeTransformer::detectorElementIntensity produced NaN when a
+wavelength outside the spectrum boundaries was calculated, because that
+would be negative.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/efbd26b59be2de72e100bb4630c67a6e36eff1fa" title="efbd26b59be2de72e100bb4630c67a6e36eff1fa">efbd26b59be2de72e100bb4630c67a6e36eff1fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9445.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-23T12%3A07%3A38%2B01%3A00&amp;precision=second" title="2014-05-23T12:07:38+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added total intensity calculation to PoldiTimeTransformer
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/124e06c62755cc6e9cd8745cd70c879a2510a557" title="124e06c62755cc6e9cd8745cd70c879a2510a557">124e06c62755cc6e9cd8745cd70c879a2510a557</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9445.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-23T12%3A07%3A38%2B01%3A00&amp;precision=second" title="2014-05-23T12:07:38+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. PoldiCalculateSpectrum2D now integrates peak profiles
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c7798830e48ac6274d8fc778a728b340b77d3841" title="c7798830e48ac6274d8fc778a728b340b77d3841">c7798830e48ac6274d8fc778a728b340b77d3841</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9445.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-28T11%3A29%3A26%2B01%3A00&amp;precision=second" title="2014-05-28T11:29:26+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. PoldiFitPeaks1D stores profile information in table
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2cb03b251a265da5616da9f5d3d99820bda5b0db" title="2cb03b251a265da5616da9f5d3d99820bda5b0db">2cb03b251a265da5616da9f5d3d99820bda5b0db</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9445.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-12T23%3A10%3A12%2B01%3A00&amp;precision=second" title="2014-06-12T23:10:12+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added Poldi2DFunction.
+</p>
+<p>
+This function inherits from CompositeFunction to accumulate multiple functions and from IFunction1DSpectrum, so the correct domain creator is used in Fit.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/92564e73ebc2ba1b2ebd90bd246a2be70ddb9a54" title="92564e73ebc2ba1b2ebd90bd246a2be70ddb9a54">92564e73ebc2ba1b2ebd90bd246a2be70ddb9a54</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9445.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-12T23%3A10%3A13%2B01%3A00&amp;precision=second" title="2014-06-12T23:10:13+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Using Poldi2DFunction in spectrum calculation
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2e7352799c8569d29e7b349233a4e65b58fed710" title="2e7352799c8569d29e7b349233a4e65b58fed710">2e7352799c8569d29e7b349233a4e65b58fed710</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="9445.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-18T11%3A55%3A23%2B01%3A00&amp;precision=second" title="2014-06-18T11:55:23+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.2</em> to <em>Release 3.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="9445.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T12%3A32%3A34%2B01%3A00&amp;precision=second" title="2014-06-25T12:32:34+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added null pointer check to PoldiTimeTransformer
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c1aec4c57658fa2de6f0ec2c4c9c2676616edeb2" title="c1aec4c57658fa2de6f0ec2c4c9c2676616edeb2">c1aec4c57658fa2de6f0ec2c4c9c2676616edeb2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="9445.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T12%3A32%3A35%2B01%3A00&amp;precision=second" title="2014-06-25T12:32:35+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Cleaned up PoldiInstrumentAdapter.
+</p>
+<p>
+Added unit tests for chopper speed extraction functors.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6767d05baa6970ffa3d6db66d1f92557592e0acd" title="6767d05baa6970ffa3d6db66d1f92557592e0acd">6767d05baa6970ffa3d6db66d1f92557592e0acd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="9445.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T13%3A10%3A33%2B01%3A00&amp;precision=second" title="2014-06-25T13:10:33+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Cleaned up Poldi2DFunction.
+</p>
+<p>
+Added documentation and unit tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12e90797e07d157baa4a244bd65267671303a94c" title="12e90797e07d157baa4a244bd65267671303a94c">12e90797e07d157baa4a244bd65267671303a94c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="9445.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T16%3A28%3A08%2B01%3A00&amp;precision=second" title="2014-06-25T16:28:08+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Integrated PoldiInstrumentAdapter into PoldiAutoCorrelation
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/951f296d2b1cbc5ba9e68c8f685a0d2fa05da99f" title="951f296d2b1cbc5ba9e68c8f685a0d2fa05da99f">951f296d2b1cbc5ba9e68c8f685a0d2fa05da99f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="9445.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-27T12%3A53%3A02%2B01%3A00&amp;precision=second" title="2014-06-27T12:53:02+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Removed using namespace from PoldiMockInstrumentHelpers.h
+</p>
+<p>
+Had to adjust two unit tests to use the namespaces instead.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ec947a67cf1c0c612860af114a0b6f01695d69ad" title="ec947a67cf1c0c612860af114a0b6f01695d69ad">ec947a67cf1c0c612860af114a0b6f01695d69ad</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="9445.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-27T12%3A53%3A02%2B01%3A00&amp;precision=second" title="2014-06-27T12:53:02+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added clone method to PoldiPeakCollection
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0448cd9ec1d3b43d59c520b222eb0fc576f704cd" title="0448cd9ec1d3b43d59c520b222eb0fc576f704cd">0448cd9ec1d3b43d59c520b222eb0fc576f704cd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="9445.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-27T12%3A53%3A02%2B01%3A00&amp;precision=second" title="2014-06-27T12:53:02+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Cleaned up PoldiSpectrumDomainFunction.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b4dcfb25e256b096576345ea049dbf6ea22d9dc2" title="b4dcfb25e256b096576345ea049dbf6ea22d9dc2">b4dcfb25e256b096576345ea049dbf6ea22d9dc2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="9445.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-27T12%3A53%3A02%2B01%3A00&amp;precision=second" title="2014-06-27T12:53:02+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Refactored PoldiCalculateSpectrum2D.
+</p>
+<p>
+Most parts of the algorithm are tested by the unit tests now. The actual spectrum calculation will be done in a system test,
+as instrument definitions etc. are required for this.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/33232934c13174d2dd52f79739fcc947a84a6178" title="33232934c13174d2dd52f79739fcc947a84a6178">33232934c13174d2dd52f79739fcc947a84a6178</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="9445.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-27T15%3A49%3A23%2B01%3A00&amp;precision=second" title="2014-06-27T15:49:23+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Fixed comments in PoldiCalculateSpectrum2D
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/70314183c31f27c6bb4d3fcd7670b07495d541a9" title="70314183c31f27c6bb4d3fcd7670b07495d541a9">70314183c31f27c6bb4d3fcd7670b07495d541a9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="9445.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-27T15%3A49%3A24%2B01%3A00&amp;precision=second" title="2014-06-27T15:49:24+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added documentation with usage example.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0ac991de289d577684ccdf5fcc790ae1122d9af" title="c0ac991de289d577684ccdf5fcc790ae1122d9af">c0ac991de289d577684ccdf5fcc790ae1122d9af</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="9445.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-30T08%3A16%3A53%2B01%3A00&amp;precision=second" title="2014-06-30T08:16:53+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Integrate detector efficiency in IDF
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d051660674af7967e8d20126bee312aacc4cf5cd" title="d051660674af7967e8d20126bee312aacc4cf5cd">d051660674af7967e8d20126bee312aacc4cf5cd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="9445.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-30T08%3A16%3A53%2B01%3A00&amp;precision=second" title="2014-06-30T08:16:53+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added optional profile function parameter for integration.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fc88a1214af52e068381c690c2281461e01cf51b" title="fc88a1214af52e068381c690c2281461e01cf51b">fc88a1214af52e068381c690c2281461e01cf51b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="9445.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-30T08%3A48%3A39%2B01%3A00&amp;precision=second" title="2014-06-30T08:48:39+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Added system test for PoldiCalculateSpectrum2D
+</p>
+<p>
+The test uses a spectrum calculated with the original analysis software.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc5e7fbcb1933d14cb6e0bce630e085ebb1935fc" title="dc5e7fbcb1933d14cb6e0bce630e085ebb1935fc">dc5e7fbcb1933d14cb6e0bce630e085ebb1935fc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="9445.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-30T09%3A01%3A22%2B01%3A00&amp;precision=second" title="2014-06-30T09:01:22+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Casting GSL enums to int in test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46647d4239229c14532e94797a22bf486db05d22" title="46647d4239229c14532e94797a22bf486db05d22">46647d4239229c14532e94797a22bf486db05d22</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="9445.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-30T09%3A04%3A31%2B01%3A00&amp;precision=second" title="2014-06-30T09:04:31+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Adding export symbol to wrapper function
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19fb420a99e71c67cf97e3a501357f9448b91f71" title="19fb420a99e71c67cf97e3a501357f9448b91f71">19fb420a99e71c67cf97e3a501357f9448b91f71</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="9445.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-30T10%3A11%3A46%2B01%3A00&amp;precision=second" title="2014-06-30T10:11:46+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Testing information:</strong>
+</p>
+<p>
+This ticket looks quite big, but essentially it adds only one algorithm: PoldiCalculateSpectrum2D. How to use it is documented in the wiki-page. Running the usage example should result in a spectrum as shown there (with "color fill plot").
+</p>
+<p>
+There is a system test making sure that the calculated values do not deviate too much from the results produced by the existing analysis software.
+</p>
+<p>
+<strong>Remark/question:</strong>
+</p>
+<p>
+There is one class in PoldiUtilities which could potentially be useful for others as well, PeakFunctionIntegrator. As the name indicates, it integrates an IPeakFunction. If I had to guess, I would put it into CurveFitting.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="9445.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-08T12%3A35%3A11%2B01%3A00&amp;precision=second" title="2014-07-08T12:35:11+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Fixing some style problems
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc06bbb7a3b2fc74d50dcaa5f224d45e26f4965d" title="dc06bbb7a3b2fc74d50dcaa5f224d45e26f4965d">dc06bbb7a3b2fc74d50dcaa5f224d45e26f4965d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="9445.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-08T12%3A49%3A36%2B01%3A00&amp;precision=second" title="2014-07-08T12:49:36+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Fixing more style problems.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a7daa5d0accabe65a4022cb4afcc7f12291d793" title="7a7daa5d0accabe65a4022cb4afcc7f12291d793">7a7daa5d0accabe65a4022cb4afcc7f12291d793</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="9445.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-08T13%3A17%3A44%2B01%3A00&amp;precision=second" title="2014-07-08T13:17:44+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Peak function now uses time units instead of d.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/368923935c0a619eff46dfc990d0e33b592f1734" title="368923935c0a619eff46dfc990d0e33b592f1734">368923935c0a619eff46dfc990d0e33b592f1734</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="9445.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T08%3A19%3A07%2B01%3A00&amp;precision=second" title="2014-07-25T08:19:07+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "Refs <a class="closed ticket" href="9445.html" title="enhancement: Create implementation of IFunction that uses workspace index (closed: fixed)">#9445</a>. Peak function now uses time units instead of d."
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/368923935c0a619eff46dfc990d0e33b592f1734" title="368923935c0a619eff46dfc990d0e33b592f1734">368923935c0a619eff46dfc990d0e33b592f1734</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/485a9890ad16750c97225687da8e9684cce0d398" title="485a9890ad16750c97225687da8e9684cce0d398">485a9890ad16750c97225687da8e9684cce0d398</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="9445.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T08%3A20%3A24%2B01%3A00&amp;precision=second" title="2014-07-25T08:20:24+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Sorry about the confusion with the last two commits. I thought the change to time-based parameters was necessary, which turned out to be wrong after some detailed testing.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="9445.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T08%3A43%3A28%2B01%3A00&amp;precision=second" title="2014-07-25T08:43:28+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9497</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I am removing the block from <a class="assigned ticket" href="9497.html" title="defect: IFunction::clone alters parameter values in some cases (assigned)">#9497</a>, because in further going tests when actually performing a fit (which is the intention in the end), this did not seem to cause problems.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="9445.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T08%3A43%3A35%2B01%3A00&amp;precision=second" title="2014-07-25T08:43:35+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="9445.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T09%3A26%3A33%2B01%3A00&amp;precision=second" title="2014-07-25T09:26:33+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9990</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="9445.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T09%3A33%3A54%2B01%3A00&amp;precision=second" title="2014-07-25T09:33:54+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9991</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="9445.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T09%3A38%3A02%2B01%3A00&amp;precision=second" title="2014-07-25T09:38:02+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9992</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="9445.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T17%3A00%3A55%2B01%3A00&amp;precision=second" title="2014-07-25T17:00:55+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="9445.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T17%3A36%3A59%2B01%3A00&amp;precision=second" title="2014-07-25T17:36:59+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9445_poldi_spectrum_domain_function'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/97eb107c9250af5b12e54a7b9b4222f15eeabefc"><span class="icon">​</span>97eb107c9250af5b12e54a7b9b4222f15eeabefc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="9445.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-12T10%3A02%3A29%2B01%3A00&amp;precision=second" title="2014-08-12T10:02:29+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/9445_systemtest_for_poldi_2d_spectrum' into feature/10074_merge_poldi_system_tests
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/ad13d60fcd3acf298fae5b2ff6a43918a489120d"><span class="icon">​</span>ad13d60fcd3acf298fae5b2ff6a43918a489120d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="9445.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-12T10%3A02%3A30%2B01%3A00&amp;precision=second" title="2014-08-12T10:02:30+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/9445_systemtest_for_poldi_2d_spectrum'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/bacee637856abc704ed9c088ab43b0d788eb0dca"><span class="icon">​</span>bacee637856abc704ed9c088ab43b0d788eb0dca</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="9445.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A18%3A30%2B01%3A00&amp;precision=second" title="2015-06-04T03:18:30+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10288"><span class="icon">​</span>10288</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9445?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9445?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9445?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

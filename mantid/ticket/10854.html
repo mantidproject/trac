@@ -1,0 +1,3054 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10854 (Rewrite indirect energy transfer reduction algorithm)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10853.html" title="Ticket #10853" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10854?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10854?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10854?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10855.html" title="Ticket #10855" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10854, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10853.html" title="Ticket #10853">Previous Ticket</a></span></li><li><span><a class="next" href="10855.html" title="Ticket #10855">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10854.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10854.html">Ticket #10854</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-06T14%3A29%3A38Z&amp;precision=second" title="2015-01-06T14:29:38Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A13%3A59%2B01%3A00&amp;precision=second" title="2015-06-04T04:13:59+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Rewrite indirect energy transfer reduction algorithm</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Dan+Nixon">Dan Nixon</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Dan+Nixon">Dan Nixon</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="verify ticket" href="9093.html" title="remove dependency on reduction folder from Inelastic">#9093</a>, <a class="assigned ticket" href="11431.html" title="Create some basic reduction scripts for users">#11431</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Roman Tolchenov
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+The current algorithm is kind of a bodge using the Python reducer which is planned to be removed.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10854.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-06T14%3A29%3A53Z&amp;precision=second" title="2015-01-06T14:29:53Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10854.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T15%3A02%3A18Z&amp;precision=second" title="2015-01-16T15:02:18Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Added new algorithm skeleton
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c362021e63b330d3a309805e5a3152eec224caf5" title="c362021e63b330d3a309805e5a3152eec224caf5">c362021e63b330d3a309805e5a3152eec224caf5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10854.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T15%3A29%3A36Z&amp;precision=second" title="2015-01-16T15:29:36Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add common code borrowed from the diffraction routine
+</p>
+<p>
+Eventually when both tickets are passed the common features will be
+moved to their own source file
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a3fb7009944d3c41033fb9ea079caef13ac86ea5" title="a3fb7009944d3c41033fb9ea079caef13ac86ea5">a3fb7009944d3c41033fb9ea079caef13ac86ea5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10854.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-16T16%3A18%3A19Z&amp;precision=second" title="2015-01-16T16:18:19Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added backround removal, calibration division
+</p>
+<p>
+Added some unit tests for validation
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b2af9b32d1511f6d2734ab63671fffcd1d863283" title="b2af9b32d1511f6d2734ab63671fffcd1d863283">b2af9b32d1511f6d2734ab63671fffcd1d863283</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10854.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-19T10%3A20%3A20Z&amp;precision=second" title="2015-01-19T10:20:20Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement plotting results
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8f820db0a46731b90e7bb83d520dccde7495f474" title="8f820db0a46731b90e7bb83d520dccde7495f474">8f820db0a46731b90e7bb83d520dccde7495f474</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10854.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-19T10%3A56%3A48Z&amp;precision=second" title="2015-01-19T10:56:48Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Pretty much working for non-framed data
+</p>
+<p>
+Reducing a vanadium run when providing the vanadium calibration gives a
+near constant set of data at least.
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/980fbea605a74cfb6f9ab47a47e9d88e77279aef" title="980fbea605a74cfb6f9ab47a47e9d88e77279aef">980fbea605a74cfb6f9ab47a47e9d88e77279aef</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10854.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-19T15%3A29%3A26Z&amp;precision=second" title="2015-01-19T15:29:26Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix issue with monitors, support framed data
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/64d372ec6314a3cf720e2944e36ae7ece60b3c54" title="64d372ec6314a3cf720e2944e36ae7ece60b3c54">64d372ec6314a3cf720e2944e36ae7ece60b3c54</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10854.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-19T15%3A32%3A16Z&amp;precision=second" title="2015-01-19T15:32:16Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix plotting form non folded framed data
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8bfbfaa53424ebb01bd3ff96f54e0e23cf8fa24b" title="8bfbfaa53424ebb01bd3ff96f54e0e23cf8fa24b">8bfbfaa53424ebb01bd3ff96f54e0e23cf8fa24b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10854.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-19T15%3A51%3A03Z&amp;precision=second" title="2015-01-19T15:51:03Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct test for data chop
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/074820b178b5b485fc3975b045f8abcecc5e59aa" title="074820b178b5b485fc3975b045f8abcecc5e59aa">074820b178b5b485fc3975b045f8abcecc5e59aa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10854.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-19T16%3A10%3A45Z&amp;precision=second" title="2015-01-19T16:10:45Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename properties to match diffraction algo
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/203f63f6a4271fc52e1041a8b2fff2cdb73da7a3" title="203f63f6a4271fc52e1041a8b2fff2cdb73da7a3">203f63f6a4271fc52e1041a8b2fff2cdb73da7a3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10854.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-19T16%3A34%3A05Z&amp;precision=second" title="2015-01-19T16:34:05Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use new algorithm for tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/826bb32dd6ae0dab4b32d496746773c51974b30e" title="826bb32dd6ae0dab4b32d496746773c51974b30e">826bb32dd6ae0dab4b32d496746773c51974b30e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10854.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-19T16%3A40%3A43Z&amp;precision=second" title="2015-01-19T16:40:43Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix monitor unwrapping
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/05632d91d74dd046f574d55a451b7a9368e793cc" title="05632d91d74dd046f574d55a451b7a9368e793cc">05632d91d74dd046f574d55a451b7a9368e793cc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10854.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T12%3A15%3A55Z&amp;precision=second" title="2015-01-20T12:15:55Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace use of old algo on ET tab
+</p>
+<p>
+Need to add algorithms for saving
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/803f199a9932ffd6d5cd765495886ff4a88ecb82" title="803f199a9932ffd6d5cd765495886ff4a88ecb82">803f199a9932ffd6d5cd765495886ff4a88ecb82</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10854.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T12%3A15%3A55Z&amp;precision=second" title="2015-01-20T12:15:55Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix validation unit tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/756973ea3258961d46b2e4ebe1a6a820a8b66982" title="756973ea3258961d46b2e4ebe1a6a820a8b66982">756973ea3258961d46b2e4ebe1a6a820a8b66982</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10854.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T13%3A32%3A06Z&amp;precision=second" title="2015-01-20T13:32:06Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Swap usage in calibration and resolution algorithms
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/72373bf3f863f922891e89c4cda0b880d164985c" title="72373bf3f863f922891e89c4cda0b880d164985c">72373bf3f863f922891e89c4cda0b880d164985c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10854.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T13%3A46%3A10Z&amp;precision=second" title="2015-01-20T13:46:10Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed old algorithm, updated docs and test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4e946effa877ee7d1ceb6113da55a9e59f429954" title="4e946effa877ee7d1ceb6113da55a9e59f429954">4e946effa877ee7d1ceb6113da55a9e59f429954</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10854.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T14%3A29%3A39Z&amp;precision=second" title="2015-01-20T14:29:39Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove use of a reduction step in Calibration algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8ec208b47d9b8ed468c78c5653cd752659e384ec" title="8ec208b47d9b8ed468c78c5653cd752659e384ec">8ec208b47d9b8ed468c78c5653cd752659e384ec</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10854.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T15%3A03%3A48Z&amp;precision=second" title="2015-01-20T15:03:48Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement conversion to wavenumber
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d526f87d887f9ad6ba9c36f6806cc035c79424f8" title="d526f87d887f9ad6ba9c36f6806cc035c79424f8">d526f87d887f9ad6ba9c36f6806cc035c79424f8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10854.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T15%3A42%3A38Z&amp;precision=second" title="2015-01-20T15:42:38Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add all save algorithms
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f807fc1e1b0d37b4792ba69962b4265ec89f5fe7" title="f807fc1e1b0d37b4792ba69962b4265ec89f5fe7">f807fc1e1b0d37b4792ba69962b4265ec89f5fe7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10854.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T15%3A53%3A33Z&amp;precision=second" title="2015-01-20T15:53:33Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix issues in calibration
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dd59526edd45b1225f5956b695979de05bdd6fb6" title="dd59526edd45b1225f5956b695979de05bdd6fb6">dd59526edd45b1225f5956b695979de05bdd6fb6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10854.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T16%3A27%3A55Z&amp;precision=second" title="2015-01-20T16:27:55Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct ET and calibration tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/991ff18c3721503de74f4bd7963048824c833092" title="991ff18c3721503de74f4bd7963048824c833092">991ff18c3721503de74f4bd7963048824c833092</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10854.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T16%3A52%3A38Z&amp;precision=second" title="2015-01-20T16:52:38Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct rebinning options for multiple frames
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b1581327264f5a067e4c3c93c74ae6368a90ee8a" title="b1581327264f5a067e4c3c93c74ae6368a90ee8a">b1581327264f5a067e4c3c93c74ae6368a90ee8a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10854.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-20T17%3A01%3A39Z&amp;precision=second" title="2015-01-20T17:01:39Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Do not output in wavenumber
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/70f03a432359ccf1585d416055e9edd510b40282" title="70f03a432359ccf1585d416055e9edd510b40282">70f03a432359ccf1585d416055e9edd510b40282</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10854.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-21T14%3A06%3A43Z&amp;precision=second" title="2015-01-21T14:06:43Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use IPF based grouping
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0111fe8f009b11c0b2f6757fcbb1e2440c23a14a" title="0111fe8f009b11c0b2f6757fcbb1e2440c23a14a">0111fe8f009b11c0b2f6757fcbb1e2440c23a14a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10854.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-22T09%3A44%3A58Z&amp;precision=second" title="2015-01-22T09:44:58Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed one of the TOSCA system tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/03eb6800ce55a0ae18651ce3e008881c7f45196a" title="03eb6800ce55a0ae18651ce3e008881c7f45196a">03eb6800ce55a0ae18651ce3e008881c7f45196a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10854.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-22T11%3A11%3A19Z&amp;precision=second" title="2015-01-22T11:11:19Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Proper support for summing chopped runs
+</p>
+<p>
+Fixes another TOSCA system test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee70ffafc85408f3e5241c1638065937971eeff2" title="ee70ffafc85408f3e5241c1638065937971eeff2">ee70ffafc85408f3e5241c1638065937971eeff2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10854.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-22T11%3A14%3A11Z&amp;precision=second" title="2015-01-22T11:14:11Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove huge tolerance and debugging save
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b41fa7c1aeec11893d979b23b405eef7c54a2e71" title="b41fa7c1aeec11893d979b23b405eef7c54a2e71">b41fa7c1aeec11893d979b23b405eef7c54a2e71</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10854.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-26T11%3A52%3A31Z&amp;precision=second" title="2015-01-26T11:52:31Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix broken system test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/97dd3928066d9c6cfbbeee2cae6c8ab28931a074" title="97dd3928066d9c6cfbbeee2cae6c8ab28931a074">97dd3928066d9c6cfbbeee2cae6c8ab28931a074</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10854.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T16%3A13%3A55Z&amp;precision=second" title="2015-02-13T16:13:55Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/IndirectResolution.py
+Code/Mantid/MantidQt/CustomInterfaces/inc/MantidQtCustomInterfaces/IndirectDataReduction.ui
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/IndirectCalibration.cpp
+Code/Mantid/MantidQt/CustomInterfaces/src/IndirectConvertToEnergy.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81b9db99856dcc626abe777d4bee7b2930cc0517" title="81b9db99856dcc626abe777d4bee7b2930cc0517">81b9db99856dcc626abe777d4bee7b2930cc0517</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10854.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T16%3A13%3A55Z&amp;precision=second" title="2015-02-13T16:13:55Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix errors in merging master into branch
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f73b1e1e4fc02291cc16d72d2401e680e56a442a" title="f73b1e1e4fc02291cc16d72d2401e680e56a442a">f73b1e1e4fc02291cc16d72d2401e680e56a442a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10854.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T17%3A01%3A09Z&amp;precision=second" title="2015-02-13T17:01:09Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct errors in merge and tidy UI
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8c2e18163e57af1bbb28164d18e52a52d0d3309b" title="8c2e18163e57af1bbb28164d18e52a52d0d3309b">8c2e18163e57af1bbb28164d18e52a52d0d3309b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10854.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T14%3A07%3A46Z&amp;precision=second" title="2015-02-18T14:07:46Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>Rewrite indirect reduction algorithm</em> to <em>Rewrite indirect energy transfer reduction algorithm</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="10854.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T14%3A08%3A03Z&amp;precision=second" title="2015-02-18T14:08:03Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6971</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="10854.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T09%3A10%3A44Z&amp;precision=second" title="2015-02-20T09:10:44Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11139</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="10854.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T09%3A55%3A09Z&amp;precision=second" title="2015-02-20T09:55:09Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/IndirectResolution.py
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/IndirectCalibration.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d513ec8f98e80b53d2ef776df2c1254a1fd5b80" title="4d513ec8f98e80b53d2ef776df2c1254a1fd5b80">4d513ec8f98e80b53d2ef776df2c1254a1fd5b80</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="10854.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-03T11%3A18%3A21Z&amp;precision=second" title="2015-03-03T11:18:21Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6971</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="10854.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-16T16%3A36%3A37Z&amp;precision=second" title="2015-03-16T16:36:37Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11139</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="10854.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-18T10%3A24%3A56Z&amp;precision=second" title="2015-03-18T10:24:56Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/CreateCalibrationWorkspace.py
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/IndirectResolution.py
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/ISISEnergyTransfer.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/21305709f56ddd01823b001bb7f1c8912c1dd27a" title="21305709f56ddd01823b001bb7f1c8912c1dd27a">21305709f56ddd01823b001bb7f1c8912c1dd27a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="10854.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-18T12%3A06%3A48Z&amp;precision=second" title="2015-03-18T12:06:48Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct error in merge
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96525f2ad516cca2cc8bb8e4b3a720fe3b577699" title="96525f2ad516cca2cc8bb8e4b3a720fe3b577699">96525f2ad516cca2cc8bb8e4b3a720fe3b577699</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="10854.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-18T12%3A10%3A05Z&amp;precision=second" title="2015-03-18T12:10:05Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct another error in merge
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb935fd823b2280de4354450d0129529cc7aa19b" title="bb935fd823b2280de4354450d0129529cc7aa19b">bb935fd823b2280de4354450d0129529cc7aa19b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="10854.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-18T13%3A55%3A26Z&amp;precision=second" title="2015-03-18T13:55:26Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Passes unit, doc and some system tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b27e60285f5dee8b1e208a34226e5f91c0440148" title="b27e60285f5dee8b1e208a34226e5f91c0440148">b27e60285f5dee8b1e208a34226e5f91c0440148</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="10854.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-18T14%3A18%3A56Z&amp;precision=second" title="2015-03-18T14:18:56Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use new algorithm in systemtests
+</p>
+<p>
+IRIS and OSIRIS passing, TOSCA failing
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1c211b0c377962d63439b45c0b0995a71e2e0677" title="1c211b0c377962d63439b45c0b0995a71e2e0677">1c211b0c377962d63439b45c0b0995a71e2e0677</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="10854.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-18T14%3A28%3A14Z&amp;precision=second" title="2015-03-18T14:28:14Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Imporve error logging, fold by default
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd85d9ad06a72ac1d99d0183630eb87d8bd74f23" title="bd85d9ad06a72ac1d99d0183630eb87d8bd74f23">bd85d9ad06a72ac1d99d0183630eb87d8bd74f23</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="10854.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-19T16%3A01%3A49Z&amp;precision=second" title="2015-03-19T16:01:49Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+IPF mapping by default
+</p>
+<p>
+Fixes all but 1 TOSCA system test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/23d78431980485fd3a83ed56d5c9a731188d2bde" title="23d78431980485fd3a83ed56d5c9a731188d2bde">23d78431980485fd3a83ed56d5c9a731188d2bde</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="10854.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-19T16%3A15%3A24Z&amp;precision=second" title="2015-03-19T16:15:24Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The last failing TOSCA test I think is due to out of data reference results when several detectors were removed from the grouping as they did not work at the time.
+</p>
+<p>
+Will check this with Svemir and Stewart.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="10854.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-24T10%3A53%3A32Z&amp;precision=second" title="2015-03-24T10:53:32Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidy up rebinning code
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bf54f985967c09fce10889d82746d7494b9f9c3b" title="bf54f985967c09fce10889d82746d7494b9f9c3b">bf54f985967c09fce10889d82746d7494b9f9c3b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="10854.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-24T11%3A13%3A22Z&amp;precision=second" title="2015-03-24T11:13:22Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct order of some operations
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5a2dc088a4b249665907e7ce633c82efa81b72cc" title="5a2dc088a4b249665907e7ce633c82efa81b72cc">5a2dc088a4b249665907e7ce633c82efa81b72cc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="10854.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-25T16%3A30%3A25Z&amp;precision=second" title="2015-03-25T16:30:25Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11431</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="10854.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T14%3A06%3A44%2B01%3A00&amp;precision=second" title="2015-04-02T14:06:44+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/IndirectResolution.py
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/InelasticIndirectReduction.py
+Code/Mantid/Framework/PythonInterface/test/python/plugins/algorithms/CMakeLists.txt
+Code/Mantid/Framework/PythonInterface/test/python/plugins/algorithms/InelasticIndirectReductionTest.py
+Code/Mantid/Testing/SystemTests/tests/analysis/ISISIndirectInelastic.py
+Code/Mantid/docs/source/algorithms/CreateCalibrationWorkspace-v1.rst
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e00d11f89a4edccfc3b3ccc9e58bc85c075c4f97" title="e00d11f89a4edccfc3b3ccc9e58bc85c075c4f97">e00d11f89a4edccfc3b3ccc9e58bc85c075c4f97</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="10854.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T15%3A52%3A10%2B01%3A00&amp;precision=second" title="2015-04-02T15:52:10+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct systemtest for change in detector masking
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6af311f850cf50229e6342e9a696b72b6bb94fc" title="f6af311f850cf50229e6342e9a696b72b6bb94fc">f6af311f850cf50229e6342e9a696b72b6bb94fc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="10854.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T16%3A20%3A28%2B01%3A00&amp;precision=second" title="2015-04-02T16:20:28+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Support saving results
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7e884158fbdd3f9724321c9ab40fea3c52b188fb" title="7e884158fbdd3f9724321c9ab40fea3c52b188fb">7e884158fbdd3f9724321c9ab40fea3c52b188fb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="10854.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T16%3A21%3A32%2B01%3A00&amp;precision=second" title="2015-04-02T16:21:32+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/518"><span class="icon">​</span>pull request #518</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="10854.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T16%3A40%3A52%2B01%3A00&amp;precision=second" title="2015-04-02T16:40:52+01:00 in Timeline">6 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Is this just an ISIS thing ?  How does it fit in with the plans to produce a workflow algorithm similar to DgsReduction but for Indirect ?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="10854.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T16%3A54%3A47%2B01%3A00&amp;precision=second" title="2015-04-02T16:54:47+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+@stuartcampbell It is indeed ISIS only.
+If I had known about the plan to make a (I assume) cross facility workflow algorithm then I would have considered it before starting work on this.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="10854.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T11%3A58%3A20%2B01%3A00&amp;precision=second" title="2015-04-07T11:58:20+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix failing unit test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/18dd62d1a5618931c05bab5acbe9b1cdaa573a64" title="18dd62d1a5618931c05bab5acbe9b1cdaa573a64">18dd62d1a5618931c05bab5acbe9b1cdaa573a64</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="10854.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T12%3A23%3A09%2B01%3A00&amp;precision=second" title="2015-04-07T12:23:09+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct filename case
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bad7f2867c67dd1a47e1eb714e90c7e613c6ade8" title="bad7f2867c67dd1a47e1eb714e90c7e613c6ade8">bad7f2867c67dd1a47e1eb714e90c7e613c6ade8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="10854.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T12%3A23%3A09%2B01%3A00&amp;precision=second" title="2015-04-07T12:23:09+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re add output file test and clean up test script
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/82f6f1d87c2c4c6de6a88f960e5eda5cd6191669" title="82f6f1d87c2c4c6de6a88f960e5eda5cd6191669">82f6f1d87c2c4c6de6a88f960e5eda5cd6191669</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="10854.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T13%3A39%3A14%2B01%3A00&amp;precision=second" title="2015-04-07T13:39:14+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix test failure due to Python version
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a25359fb1823fcdda6938be81756060e5f6e7085" title="a25359fb1823fcdda6938be81756060e5f6e7085">a25359fb1823fcdda6938be81756060e5f6e7085</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="10854.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-09T11%3A12%3A16%2B01%3A00&amp;precision=second" title="2015-04-09T11:12:16+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="10854.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-09T11%3A53%3A46%2B01%3A00&amp;precision=second" title="2015-04-09T11:53:46+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Could you resolve the conflicts please?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="10854.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-09T12%3A07%3A02%2B01%3A00&amp;precision=second" title="2015-04-09T12:07:02+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/CustomInterfaces/inc/MantidQtCustomInterfaces/Indirect/ISISEnergyTransfer.ui
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/ISISEnergyTransfer.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eaa040bce5024f612e5e7e14360b03004d6708a1" title="eaa040bce5024f612e5e7e14360b03004d6708a1">eaa040bce5024f612e5e7e14360b03004d6708a1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="10854.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-10T10%3A10%3A22%2B01%3A00&amp;precision=second" title="2015-04-10T10:10:22+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Testing/SystemTests/tests/analysis/ISISIndirectInelastic.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/576c8f695ed72caefadb22f152fecbdfc5ed27fa" title="576c8f695ed72caefadb22f152fecbdfc5ed27fa">576c8f695ed72caefadb22f152fecbdfc5ed27fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="10854.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A07%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:07+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added new algorithm skeleton
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c362021e63b330d3a309805e5a3152eec224caf5" title="c362021e63b330d3a309805e5a3152eec224caf5">c362021e63b330d3a309805e5a3152eec224caf5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="10854.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A07%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:07+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add common code borrowed from the diffraction routine
+</p>
+<p>
+Eventually when both tickets are passed the common features will be
+moved to their own source file
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a3fb7009944d3c41033fb9ea079caef13ac86ea5" title="a3fb7009944d3c41033fb9ea079caef13ac86ea5">a3fb7009944d3c41033fb9ea079caef13ac86ea5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="10854.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A07%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:07+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added backround removal, calibration division
+</p>
+<p>
+Added some unit tests for validation
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b2af9b32d1511f6d2734ab63671fffcd1d863283" title="b2af9b32d1511f6d2734ab63671fffcd1d863283">b2af9b32d1511f6d2734ab63671fffcd1d863283</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="10854.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A07%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:07+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement plotting results
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8f820db0a46731b90e7bb83d520dccde7495f474" title="8f820db0a46731b90e7bb83d520dccde7495f474">8f820db0a46731b90e7bb83d520dccde7495f474</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="10854.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A07%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:07+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Pretty much working for non-framed data
+</p>
+<p>
+Reducing a vanadium run when providing the vanadium calibration gives a
+near constant set of data at least.
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/980fbea605a74cfb6f9ab47a47e9d88e77279aef" title="980fbea605a74cfb6f9ab47a47e9d88e77279aef">980fbea605a74cfb6f9ab47a47e9d88e77279aef</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="10854.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A07%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:07+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix issue with monitors, support framed data
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/64d372ec6314a3cf720e2944e36ae7ece60b3c54" title="64d372ec6314a3cf720e2944e36ae7ece60b3c54">64d372ec6314a3cf720e2944e36ae7ece60b3c54</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="10854.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A07%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:07+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix plotting form non folded framed data
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8bfbfaa53424ebb01bd3ff96f54e0e23cf8fa24b" title="8bfbfaa53424ebb01bd3ff96f54e0e23cf8fa24b">8bfbfaa53424ebb01bd3ff96f54e0e23cf8fa24b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="10854.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct test for data chop
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/074820b178b5b485fc3975b045f8abcecc5e59aa" title="074820b178b5b485fc3975b045f8abcecc5e59aa">074820b178b5b485fc3975b045f8abcecc5e59aa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="10854.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename properties to match diffraction algo
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/203f63f6a4271fc52e1041a8b2fff2cdb73da7a3" title="203f63f6a4271fc52e1041a8b2fff2cdb73da7a3">203f63f6a4271fc52e1041a8b2fff2cdb73da7a3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="10854.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix monitor unwrapping
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/05632d91d74dd046f574d55a451b7a9368e793cc" title="05632d91d74dd046f574d55a451b7a9368e793cc">05632d91d74dd046f574d55a451b7a9368e793cc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="10854.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace use of old algo on ET tab
+</p>
+<p>
+Need to add algorithms for saving
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/803f199a9932ffd6d5cd765495886ff4a88ecb82" title="803f199a9932ffd6d5cd765495886ff4a88ecb82">803f199a9932ffd6d5cd765495886ff4a88ecb82</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="10854.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix validation unit tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/756973ea3258961d46b2e4ebe1a6a820a8b66982" title="756973ea3258961d46b2e4ebe1a6a820a8b66982">756973ea3258961d46b2e4ebe1a6a820a8b66982</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="10854.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Swap usage in calibration and resolution algorithms
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/72373bf3f863f922891e89c4cda0b880d164985c" title="72373bf3f863f922891e89c4cda0b880d164985c">72373bf3f863f922891e89c4cda0b880d164985c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="10854.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed old algorithm, updated docs and test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4e946effa877ee7d1ceb6113da55a9e59f429954" title="4e946effa877ee7d1ceb6113da55a9e59f429954">4e946effa877ee7d1ceb6113da55a9e59f429954</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="10854.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove use of a reduction step in Calibration algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8ec208b47d9b8ed468c78c5653cd752659e384ec" title="8ec208b47d9b8ed468c78c5653cd752659e384ec">8ec208b47d9b8ed468c78c5653cd752659e384ec</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="10854.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement conversion to wavenumber
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d526f87d887f9ad6ba9c36f6806cc035c79424f8" title="d526f87d887f9ad6ba9c36f6806cc035c79424f8">d526f87d887f9ad6ba9c36f6806cc035c79424f8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="10854.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add all save algorithms
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f807fc1e1b0d37b4792ba69962b4265ec89f5fe7" title="f807fc1e1b0d37b4792ba69962b4265ec89f5fe7">f807fc1e1b0d37b4792ba69962b4265ec89f5fe7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="10854.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix issues in calibration
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dd59526edd45b1225f5956b695979de05bdd6fb6" title="dd59526edd45b1225f5956b695979de05bdd6fb6">dd59526edd45b1225f5956b695979de05bdd6fb6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="10854.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct rebinning options for multiple frames
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b1581327264f5a067e4c3c93c74ae6368a90ee8a" title="b1581327264f5a067e4c3c93c74ae6368a90ee8a">b1581327264f5a067e4c3c93c74ae6368a90ee8a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-82">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:82" class="cnum">
+      <a href="10854.html#comment:82">comment:82</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed one of the TOSCA system tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/03eb6800ce55a0ae18651ce3e008881c7f45196a" title="03eb6800ce55a0ae18651ce3e008881c7f45196a">03eb6800ce55a0ae18651ce3e008881c7f45196a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-83">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:83" class="cnum">
+      <a href="10854.html#comment:83">comment:83</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Proper support for summing chopped runs
+</p>
+<p>
+Fixes another TOSCA system test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee70ffafc85408f3e5241c1638065937971eeff2" title="ee70ffafc85408f3e5241c1638065937971eeff2">ee70ffafc85408f3e5241c1638065937971eeff2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-84">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:84" class="cnum">
+      <a href="10854.html#comment:84">comment:84</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix broken system test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/97dd3928066d9c6cfbbeee2cae6c8ab28931a074" title="97dd3928066d9c6cfbbeee2cae6c8ab28931a074">97dd3928066d9c6cfbbeee2cae6c8ab28931a074</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-85">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:85" class="cnum">
+      <a href="10854.html#comment:85">comment:85</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/IndirectResolution.py
+Code/Mantid/MantidQt/CustomInterfaces/inc/MantidQtCustomInterfaces/IndirectDataReduction.ui
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/IndirectCalibration.cpp
+Code/Mantid/MantidQt/CustomInterfaces/src/IndirectConvertToEnergy.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81b9db99856dcc626abe777d4bee7b2930cc0517" title="81b9db99856dcc626abe777d4bee7b2930cc0517">81b9db99856dcc626abe777d4bee7b2930cc0517</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-86">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:86" class="cnum">
+      <a href="10854.html#comment:86">comment:86</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix errors in merging master into branch
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f73b1e1e4fc02291cc16d72d2401e680e56a442a" title="f73b1e1e4fc02291cc16d72d2401e680e56a442a">f73b1e1e4fc02291cc16d72d2401e680e56a442a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-87">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:87" class="cnum">
+      <a href="10854.html#comment:87">comment:87</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A08%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:08+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct errors in merge and tidy UI
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8c2e18163e57af1bbb28164d18e52a52d0d3309b" title="8c2e18163e57af1bbb28164d18e52a52d0d3309b">8c2e18163e57af1bbb28164d18e52a52d0d3309b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-88">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:88" class="cnum">
+      <a href="10854.html#comment:88">comment:88</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/IndirectResolution.py
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/IndirectCalibration.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d513ec8f98e80b53d2ef776df2c1254a1fd5b80" title="4d513ec8f98e80b53d2ef776df2c1254a1fd5b80">4d513ec8f98e80b53d2ef776df2c1254a1fd5b80</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-89">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:89" class="cnum">
+      <a href="10854.html#comment:89">comment:89</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/CreateCalibrationWorkspace.py
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/IndirectResolution.py
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/ISISEnergyTransfer.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/21305709f56ddd01823b001bb7f1c8912c1dd27a" title="21305709f56ddd01823b001bb7f1c8912c1dd27a">21305709f56ddd01823b001bb7f1c8912c1dd27a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-90">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:90" class="cnum">
+      <a href="10854.html#comment:90">comment:90</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct error in merge
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96525f2ad516cca2cc8bb8e4b3a720fe3b577699" title="96525f2ad516cca2cc8bb8e4b3a720fe3b577699">96525f2ad516cca2cc8bb8e4b3a720fe3b577699</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-91">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:91" class="cnum">
+      <a href="10854.html#comment:91">comment:91</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct another error in merge
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb935fd823b2280de4354450d0129529cc7aa19b" title="bb935fd823b2280de4354450d0129529cc7aa19b">bb935fd823b2280de4354450d0129529cc7aa19b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-92">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:92" class="cnum">
+      <a href="10854.html#comment:92">comment:92</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Passes unit, doc and some system tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b27e60285f5dee8b1e208a34226e5f91c0440148" title="b27e60285f5dee8b1e208a34226e5f91c0440148">b27e60285f5dee8b1e208a34226e5f91c0440148</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-93">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:93" class="cnum">
+      <a href="10854.html#comment:93">comment:93</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use new algorithm in systemtests
+</p>
+<p>
+IRIS and OSIRIS passing, TOSCA failing
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1c211b0c377962d63439b45c0b0995a71e2e0677" title="1c211b0c377962d63439b45c0b0995a71e2e0677">1c211b0c377962d63439b45c0b0995a71e2e0677</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-94">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:94" class="cnum">
+      <a href="10854.html#comment:94">comment:94</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Imporve error logging, fold by default
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd85d9ad06a72ac1d99d0183630eb87d8bd74f23" title="bd85d9ad06a72ac1d99d0183630eb87d8bd74f23">bd85d9ad06a72ac1d99d0183630eb87d8bd74f23</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-95">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:95" class="cnum">
+      <a href="10854.html#comment:95">comment:95</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+IPF mapping by default
+</p>
+<p>
+Fixes all but 1 TOSCA system test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/23d78431980485fd3a83ed56d5c9a731188d2bde" title="23d78431980485fd3a83ed56d5c9a731188d2bde">23d78431980485fd3a83ed56d5c9a731188d2bde</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-96">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:96" class="cnum">
+      <a href="10854.html#comment:96">comment:96</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidy up rebinning code
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bf54f985967c09fce10889d82746d7494b9f9c3b" title="bf54f985967c09fce10889d82746d7494b9f9c3b">bf54f985967c09fce10889d82746d7494b9f9c3b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-97">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:97" class="cnum">
+      <a href="10854.html#comment:97">comment:97</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct order of some operations
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5a2dc088a4b249665907e7ce633c82efa81b72cc" title="5a2dc088a4b249665907e7ce633c82efa81b72cc">5a2dc088a4b249665907e7ce633c82efa81b72cc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-98">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:98" class="cnum">
+      <a href="10854.html#comment:98">comment:98</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/IndirectResolution.py
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/InelasticIndirectReduction.py
+Code/Mantid/Framework/PythonInterface/test/python/plugins/algorithms/CMakeLists.txt
+Code/Mantid/Framework/PythonInterface/test/python/plugins/algorithms/InelasticIndirectReductionTest.py
+Code/Mantid/Testing/SystemTests/tests/analysis/ISISIndirectInelastic.py
+Code/Mantid/docs/source/algorithms/CreateCalibrationWorkspace-v1.rst
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e00d11f89a4edccfc3b3ccc9e58bc85c075c4f97" title="e00d11f89a4edccfc3b3ccc9e58bc85c075c4f97">e00d11f89a4edccfc3b3ccc9e58bc85c075c4f97</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-99">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:99" class="cnum">
+      <a href="10854.html#comment:99">comment:99</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct systemtest for change in detector masking
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6af311f850cf50229e6342e9a696b72b6bb94fc" title="f6af311f850cf50229e6342e9a696b72b6bb94fc">f6af311f850cf50229e6342e9a696b72b6bb94fc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-100">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:100" class="cnum">
+      <a href="10854.html#comment:100">comment:100</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Support saving results
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7e884158fbdd3f9724321c9ab40fea3c52b188fb" title="7e884158fbdd3f9724321c9ab40fea3c52b188fb">7e884158fbdd3f9724321c9ab40fea3c52b188fb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-101">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:101" class="cnum">
+      <a href="10854.html#comment:101">comment:101</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix failing unit test
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/18dd62d1a5618931c05bab5acbe9b1cdaa573a64" title="18dd62d1a5618931c05bab5acbe9b1cdaa573a64">18dd62d1a5618931c05bab5acbe9b1cdaa573a64</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-102">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:102" class="cnum">
+      <a href="10854.html#comment:102">comment:102</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct filename case
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bad7f2867c67dd1a47e1eb714e90c7e613c6ade8" title="bad7f2867c67dd1a47e1eb714e90c7e613c6ade8">bad7f2867c67dd1a47e1eb714e90c7e613c6ade8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-103">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:103" class="cnum">
+      <a href="10854.html#comment:103">comment:103</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A09%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re add output file test and clean up test script
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/82f6f1d87c2c4c6de6a88f960e5eda5cd6191669" title="82f6f1d87c2c4c6de6a88f960e5eda5cd6191669">82f6f1d87c2c4c6de6a88f960e5eda5cd6191669</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-104">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:104" class="cnum">
+      <a href="10854.html#comment:104">comment:104</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A10%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:10+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix test failure due to Python version
+</p>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a25359fb1823fcdda6938be81756060e5f6e7085" title="a25359fb1823fcdda6938be81756060e5f6e7085">a25359fb1823fcdda6938be81756060e5f6e7085</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-105">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:105" class="cnum">
+      <a href="10854.html#comment:105">comment:105</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A10%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:10+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/CustomInterfaces/inc/MantidQtCustomInterfaces/Indirect/ISISEnergyTransfer.ui
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/ISISEnergyTransfer.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eaa040bce5024f612e5e7e14360b03004d6708a1" title="eaa040bce5024f612e5e7e14360b03004d6708a1">eaa040bce5024f612e5e7e14360b03004d6708a1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-106">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:106" class="cnum">
+      <a href="10854.html#comment:106">comment:106</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A10%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:10+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Testing/SystemTests/tests/analysis/ISISIndirectInelastic.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10854.html" title="Rewrite indirect energy transfer reduction algorithm (closed: fixed)">#10854</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/576c8f695ed72caefadb22f152fecbdfc5ed27fa" title="576c8f695ed72caefadb22f152fecbdfc5ed27fa">576c8f695ed72caefadb22f152fecbdfc5ed27fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-107">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:107" class="cnum">
+      <a href="10854.html#comment:107">comment:107</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-16T09%3A58%3A10%2B01%3A00&amp;precision=second" title="2015-04-16T09:58:10+01:00 in Timeline">5 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="518.html" title="defect: Plotting tools are no longer activated on creating a graph (closed: duplicate)">#518</a> from mantidproject/feature/10854_rewrite_indirect_et_reduction
+</p>
+<p>
+Rewrite ISIS indirect energy transfer reduction
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/a77c3846a562f6203c4d712e22fd41cd1792debc"><span class="icon">​</span>a77c3846a562f6203c4d712e22fd41cd1792debc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-108">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:108" class="cnum">
+      <a href="10854.html#comment:108">comment:108</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A13%3A59%2B01%3A00&amp;precision=second" title="2015-06-04T04:13:59+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11696"><span class="icon">​</span>11696</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10854?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10854?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10854?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

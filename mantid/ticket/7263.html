@@ -1,0 +1,4111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7263 (Load Algorithms, improve selection speed, particularly for Nexus files)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7262.html" title="Ticket #7262" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7263?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7263?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7263?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7264.html" title="Ticket #7264" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7263, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7262.html" title="Ticket #7262">Previous Ticket</a></span></li><li><span><a class="next" href="7264.html" title="Ticket #7264">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/7263.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7263.html">Ticket #7263</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-07T11%3A51%3A59%2B01%3A00&amp;precision=second" title="2013-06-07T11:51:59+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A48%3A05%2B01%3A00&amp;precision=second" title="2015-06-04T01:48:05+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Load Algorithms, improve selection speed, particularly for Nexus files</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Nick+Draper">Nick Draper</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.6.html">Release 2.6</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="7352.html" title="Add a performance test for searching the available loaders">#7352</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="7065.html" title="Load to run LoadEmptyInstrument when applied to an IDF file">#7065</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Owen Arnold
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-06-07 12:16:24.523812+00:00">
+        (last modified by Peter Peterson)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/7263?action=diff&amp;version=1">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+If we pass around an open file pointer to the FileCheck methods nexus loaders (and others) can use the open pointer to perform their tests, rather than each open the file themselves.  This should be much faster.
+</p>
+<p>
+Source email from James Lord:
+</p>
+<pre class="wiki">If I have a script/algorithm to process a batch of runs and I write it in a generic 
+way using Load(), it takes about twice as long as using the correct specific load 
+routine such as LoadMuonNexus(). I suspect Load() is first opening the file to 
+inspect the format then closing it and passing the filename onto the format-specific 
+version, which opens it again and ignores any cached data.
+
+I've checked with files from the local disk and those from a network drive 
+(//hifi/data) and while the local files load faster there is still the same 
+improvement to be had by switching to LoadMuonNexus().
+
+In this case I am (intentionally) loading all spectra, and the logs, from muon 
+Nexus files of about 750kbytes each (on disk).
+
+Is there any improvement to be made such as caching the file or being able to 
+"hint" to Load() that the next file in a sequence is almost certainly going to be 
+the same file format as the last one it just loaded?
+
+James Lord.
+(Mantid 2.5.3 at present, Windows 7)
+
+</pre>
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/7263/load.py.html" title="View attachment">load.py</a><a href="../raw-attachment/ticket/7263/load.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="223 bytes">223 bytes</span>) -
+      added by <em>Martyn Gigg</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T13%3A58%3A05%2B01%3A00&amp;precision=second" title="2013-07-05T13:58:05+01:00 in Timeline">7 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7263.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-07T13%3A16%3A24%2B01%3A00&amp;precision=second" title="2013-06-07T13:16:24+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/7263?action=diff&amp;version=1">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Just formatting the quote so it is a bit easier to read.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7263.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-07T14%3A48%3A30%2B01%3A00&amp;precision=second" title="2013-06-07T14:48:30+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+An additional bit of customization for the nexus readers:
+</p>
+<ol><li>We have several "nexus" readers
+</li><li>Nexus files have a hierarchical structure
+</li><li>For nexus based loaders we could pass around a bit of the hierarchy (as some sort of object?) for each one to do the deeper check against rather than the filehandle for each of them to build part of the hierarchy against
+</li><li>Most nexus readers should be looking at the value of /entry/definition (and its attributes) as their first check
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="7263.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-25T13%3A31%3A47%2B01%3A00&amp;precision=second" title="2013-06-25T13:31:47+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>7352</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7263.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A05%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:05+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Avoid duplicate Algorithm registration in API tests. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1ef3b9eac35deff16ec10b9663dd727eda2d2028" title="1ef3b9eac35deff16ec10b9663dd727eda2d2028">1ef3b9eac35deff16ec10b9663dd727eda2d2028</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7263.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A05%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:05+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FileLoaderRegistry now subscribes algorithms to factory
+</p>
+<p>
+and also defines two types of loader, NonHDF and HDF.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1571071e92df153fffebbf6e385cee40332ba18a" title="1571071e92df153fffebbf6e385cee40332ba18a">1571071e92df153fffebbf6e385cee40332ba18a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7263.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A05%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:05+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add HDFDescriptor class that will describe HDF files.
+</p>
+<p>
+The checks for the headers at the start of HDF4 &amp; HDF5 files have been
+put in a static isHDF member to encapsulate the details about
+checking for a HDF file and make it reusable.
+It will not retain an open file handle to the file so does not
+inherit from the standard FileDescriptor.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8220d8c039e66db09b6eb912fb067638eaab4eb0" title="8220d8c039e66db09b6eb912fb067638eaab4eb0">8220d8c039e66db09b6eb912fb067638eaab4eb0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="7263.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A05%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:05+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add pathExists &amp; classTypeExists checks to HDFDDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f28e98634808556c3a9f8349b8c8af86a36d00d8" title="f28e98634808556c3a9f8349b8c8af86a36d00d8">f28e98634808556c3a9f8349b8c8af86a36d00d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="7263.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A05%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:05+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement loader searching in FileLoaderRegistry.
+</p>
+<p>
+The FileLoaderRegistry can now be asked to search its list of loaders
+for the best that matches a given file. It passes along a *Descriptor
+object to minimize the number of times the file is opened.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b3a0dd67688dd1cfbc77f3f48e338195e012a689" title="b3a0dd67688dd1cfbc77f3f48e338195e012a689">b3a0dd67688dd1cfbc77f3f48e338195e012a689</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="7263.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A06%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:06+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add ability to restrict path search in HDF file by type.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/50a5d7fb76c0ef5de4032c8c131319a2e47db53c" title="50a5d7fb76c0ef5de4032c8c131319a2e47db53c">50a5d7fb76c0ef5de4032c8c131319a2e47db53c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="7263.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A06%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:06+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add root attribute query methods to HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/49fcfb3df704c1bff0f50f7fe064bb7644cf65b9" title="49fcfb3df704c1bff0f50f7fe064bb7644cf65b9">49fcfb3df704c1bff0f50f7fe064bb7644cf65b9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="7263.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A06%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:06+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+First lot of updates for new loader check style. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6b6a6ce3bf2184e13c6da4dc9590fc697345e50" title="f6b6a6ce3bf2184e13c6da4dc9590fc697345e50">f6b6a6ce3bf2184e13c6da4dc9590fc697345e50</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="7263.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A06%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:06+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a> Formatting changes only
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e97ed18738e429bb81d79607c8356146380b7543" title="e97ed18738e429bb81d79607c8356146380b7543">e97ed18738e429bb81d79607c8356146380b7543</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="7263.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T21%3A53%3A06%2B01%3A00&amp;precision=second" title="2013-06-28T21:53:06+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+LoadILL changes. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/79e76cb75788bcad9601485df20500795fdef3ea" title="79e76cb75788bcad9601485df20500795fdef3ea">79e76cb75788bcad9601485df20500795fdef3ea</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="7263.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T13%3A14%3A47%2B01%3A00&amp;precision=second" title="2013-06-29T13:14:47+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Convert more loaders to new structure. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ff828f6f5452c5b66e338597c9483779d9fb2676" title="ff828f6f5452c5b66e338597c9483779d9fb2676">ff828f6f5452c5b66e338597c9483779d9fb2676</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="7263.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T13%3A14%3A48%2B01%3A00&amp;precision=second" title="2013-06-29T13:14:48+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More NeXus loaders converted. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e61a0109313f6d000870dab7d139d4b44134791e" title="e61a0109313f6d000870dab7d139d4b44134791e">e61a0109313f6d000870dab7d139d4b44134791e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="7263.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A09%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:09+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add basic code for FileLoaderRegistry. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Currently based on string names.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/886d0b00f831d546c4a148ced4039a0d711ccf5c" title="886d0b00f831d546c4a148ced4039a0d711ccf5c">886d0b00f831d546c4a148ced4039a0d711ccf5c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="7263.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A14%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add DECLARE_FILELOADER_ALGORITHM macro. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b846d131744cfed0a7c35ea29b8eeb82323247ba" title="b846d131744cfed0a7c35ea29b8eeb82323247ba">b846d131744cfed0a7c35ea29b8eeb82323247ba</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="7263.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A14%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a simple FileDescriptor class that wraps a file stream
+</p>
+<p>
+The stream is open for as long as the object is alive.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+FileDescriptor uses streams rather than c file handles. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8681dffc29bc6a0c75b9fb931466d0857d76c23b" title="8681dffc29bc6a0c75b9fb931466d0857d76c23b">8681dffc29bc6a0c75b9fb931466d0857d76c23b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="7263.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A15%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Allow move_class.py to move untracked files. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12dfaa006ada5f6def6b4fe1b73f658741bf5185" title="12dfaa006ada5f6def6b4fe1b73f658741bf5185">12dfaa006ada5f6def6b4fe1b73f658741bf5185</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="7263.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A15%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix AlgorithmFactory::unsubscribe method to updates version map.
+</p>
+<p>
+It was previously not updating the version map when the algorithm was
+removed and then subscribing the same thing again would throw an error.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f6992fc0057c1d0c27020a953126df5282ef6e7b" title="f6992fc0057c1d0c27020a953126df5282ef6e7b">f6992fc0057c1d0c27020a953126df5282ef6e7b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="7263.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A15%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Have AlgorithmFactory::subscribe return the class name subscribed.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7cff7af939060c3d81fd2b47b1db92c29e5a69fc" title="7cff7af939060c3d81fd2b47b1db92c29e5a69fc">7cff7af939060c3d81fd2b47b1db92c29e5a69fc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="7263.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A15%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Avoid duplicate Algorithm registration in API tests. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2ba04b3ffffbd3ac9d4aef91165f4a325f314a4e" title="2ba04b3ffffbd3ac9d4aef91165f4a325f314a4e">2ba04b3ffffbd3ac9d4aef91165f4a325f314a4e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="7263.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A15%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FileLoaderRegistry now subscribes algorithms to factory
+</p>
+<p>
+and also defines two types of loader, NonHDF and HDF.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/79e6051d0c199175aca57ff8790994d1e49ceee0" title="79e6051d0c199175aca57ff8790994d1e49ceee0">79e6051d0c199175aca57ff8790994d1e49ceee0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="7263.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A15%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add HDFDescriptor class that will describe HDF files.
+</p>
+<p>
+The checks for the headers at the start of HDF4 &amp; HDF5 files have been
+put in a static isHDF member to encapsulate the details about
+checking for a HDF file and make it reusable.
+It will not retain an open file handle to the file so does not
+inherit from the standard FileDescriptor.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6568320654211aa04f89504190f6450efa5d4db1" title="6568320654211aa04f89504190f6450efa5d4db1">6568320654211aa04f89504190f6450efa5d4db1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="7263.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A16%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add pathExists &amp; classTypeExists checks to HDFDDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/429bce6457a2d585ed1968271810e6e8f1a1469c" title="429bce6457a2d585ed1968271810e6e8f1a1469c">429bce6457a2d585ed1968271810e6e8f1a1469c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="7263.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A16%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement loader searching in FileLoaderRegistry.
+</p>
+<p>
+The FileLoaderRegistry can now be asked to search its list of loaders
+for the best that matches a given file. It passes along a *Descriptor
+object to minimize the number of times the file is opened.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9b885511a5870d50b22e1eea10176edd20fe40f2" title="9b885511a5870d50b22e1eea10176edd20fe40f2">9b885511a5870d50b22e1eea10176edd20fe40f2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="7263.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A16%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add ability to restrict path search in HDF file by type.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eb79a4e433be3e3873635e2ed1e479068cb6b86a" title="eb79a4e433be3e3873635e2ed1e479068cb6b86a">eb79a4e433be3e3873635e2ed1e479068cb6b86a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="7263.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A16%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add root attribute query methods to HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4293cc33b80d553a09f04a4c5e5d0bf077cf8fef" title="4293cc33b80d553a09f04a4c5e5d0bf077cf8fef">4293cc33b80d553a09f04a4c5e5d0bf077cf8fef</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="7263.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A16%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+First lot of updates for new loader check style. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b4ba3236f57a206cd1b31c515a098ffdd555e47d" title="b4ba3236f57a206cd1b31c515a098ffdd555e47d">b4ba3236f57a206cd1b31c515a098ffdd555e47d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="7263.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A16%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a> Formatting changes only
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d6aabf8a2dc2a120d639feadce6d8089910cf8a6" title="d6aabf8a2dc2a120d639feadce6d8089910cf8a6">d6aabf8a2dc2a120d639feadce6d8089910cf8a6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="7263.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A16%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+LoadILL changes. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bc0d6b3e8b8d052e48c6ed3acdd7b0a5604ffd83" title="bc0d6b3e8b8d052e48c6ed3acdd7b0a5604ffd83">bc0d6b3e8b8d052e48c6ed3acdd7b0a5604ffd83</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="7263.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A17%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Convert more loaders to new structure. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4722d5bf1a76540bbc18180ee621d535cf427bd7" title="4722d5bf1a76540bbc18180ee621d535cf427bd7">4722d5bf1a76540bbc18180ee621d535cf427bd7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="7263.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A17%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More NeXus loaders converted. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/29d535d4c94d86696fd7770a89115dd2e1289b90" title="29d535d4c94d86696fd7770a89115dd2e1289b90">29d535d4c94d86696fd7770a89115dd2e1289b90</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="7263.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A17%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cache first entry name &amp; type in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e8d298baff3ff52270e8a02e3b75fc8f6af5be47" title="e8d298baff3ff52270e8a02e3b75fc8f6af5be47">e8d298baff3ff52270e8a02e3b75fc8f6af5be47</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="7263.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A17%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Final NeXus loader converted. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/04e325763073e37ed282d0501d29e298157d6621" title="04e325763073e37ed282d0501d29e298157d6621">04e325763073e37ed282d0501d29e298157d6621</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="7263.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A17%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add static isAscii checks to FileDescriptor class. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0b04b5be6d9c40d395f8b7d396dab6f3ffa6bd7" title="c0b04b5be6d9c40d395f8b7d396dab6f3ffa6bd7">c0b04b5be6d9c40d395f8b7d396dab6f3ffa6bd7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="7263.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-29T22%3A57%3A17%2B01%3A00&amp;precision=second" title="2013-06-29T22:57:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Start on general file loader conversion. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3f102e2d868d4f17f2f409f275bfe578539a0945" title="3f102e2d868d4f17f2f409f275bfe578539a0945">3f102e2d868d4f17f2f409f275bfe578539a0945</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="7263.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-30T21%3A39%3A11%2B01%3A00&amp;precision=second" title="2013-06-30T21:39:11+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More loaders converted. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/71706740104269b15e2ac7021086b1e961fda55f" title="71706740104269b15e2ac7021086b1e961fda55f">71706740104269b15e2ac7021086b1e961fda55f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="7263.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-30T21%3A39%3A12%2B01%3A00&amp;precision=second" title="2013-06-30T21:39:12+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More loaders migrated. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a1bd4e3e72dd409345dcd8c1dcbe863573ba59e" title="7a1bd4e3e72dd409345dcd8c1dcbe863573ba59e">7a1bd4e3e72dd409345dcd8c1dcbe863573ba59e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="7263.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T10%3A42%3A52%2B01%3A00&amp;precision=second" title="2013-07-03T10:42:52+01:00 in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>7065</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="7263.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A14%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add basic code for FileLoaderRegistry. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Currently based on string names.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c5ab6b955dfc544c1a43f00d526ebbb7829d1211" title="c5ab6b955dfc544c1a43f00d526ebbb7829d1211">c5ab6b955dfc544c1a43f00d526ebbb7829d1211</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="7263.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A14%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add DECLARE_FILELOADER_ALGORITHM macro. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af" title="9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af">9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="7263.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A14%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a simple FileDescriptor class that wraps a file stream
+</p>
+<p>
+The stream is open for as long as the object is alive.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+FileDescriptor uses streams rather than c file handles. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02509f87a8b33fd7973951c54abb5e7555685ec9" title="02509f87a8b33fd7973951c54abb5e7555685ec9">02509f87a8b33fd7973951c54abb5e7555685ec9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="7263.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A15%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Allow move_class.py to move untracked files. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/df6f2db124b0e3f6712adc42ea3f517ee6d02c2a" title="df6f2db124b0e3f6712adc42ea3f517ee6d02c2a">df6f2db124b0e3f6712adc42ea3f517ee6d02c2a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="7263.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A15%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix AlgorithmFactory::unsubscribe method to updates version map.
+</p>
+<p>
+It was previously not updating the version map when the algorithm was
+removed and then subscribing the same thing again would throw an error.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a23d639411aedc0dd1e726d369fcacbba28b73c4" title="a23d639411aedc0dd1e726d369fcacbba28b73c4">a23d639411aedc0dd1e726d369fcacbba28b73c4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="7263.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A15%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Have AlgorithmFactory::subscribe return the class name subscribed.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5fb5a0ba8fe71656ee4a4468bdea23acd9e85348" title="5fb5a0ba8fe71656ee4a4468bdea23acd9e85348">5fb5a0ba8fe71656ee4a4468bdea23acd9e85348</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="7263.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A15%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Avoid duplicate Algorithm registration in API tests. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/688d09f690685015f61289beb0a14f4bfc766480" title="688d09f690685015f61289beb0a14f4bfc766480">688d09f690685015f61289beb0a14f4bfc766480</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="7263.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A15%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FileLoaderRegistry now subscribes algorithms to factory
+</p>
+<p>
+and also defines two types of loader, NonHDF and HDF.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e77a0a5738a1914befe30741d366495a4953f4c3" title="e77a0a5738a1914befe30741d366495a4953f4c3">e77a0a5738a1914befe30741d366495a4953f4c3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="7263.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A15%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add HDFDescriptor class that will describe HDF files.
+</p>
+<p>
+The checks for the headers at the start of HDF4 &amp; HDF5 files have been
+put in a static isHDF member to encapsulate the details about
+checking for a HDF file and make it reusable.
+It will not retain an open file handle to the file so does not
+inherit from the standard FileDescriptor.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b33429b36beee34fcaf3d191ceb735522ce3e5ec" title="b33429b36beee34fcaf3d191ceb735522ce3e5ec">b33429b36beee34fcaf3d191ceb735522ce3e5ec</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="7263.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A16%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add pathExists &amp; classTypeExists checks to HDFDDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90537dd6136b16a531bd2e454e85bf32d086b5d8" title="90537dd6136b16a531bd2e454e85bf32d086b5d8">90537dd6136b16a531bd2e454e85bf32d086b5d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="7263.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A16%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement loader searching in FileLoaderRegistry.
+</p>
+<p>
+The FileLoaderRegistry can now be asked to search its list of loaders
+for the best that matches a given file. It passes along a *Descriptor
+object to minimize the number of times the file is opened.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee1d2ba84a8748c70ae32afb7f980b9d849a29c9" title="ee1d2ba84a8748c70ae32afb7f980b9d849a29c9">ee1d2ba84a8748c70ae32afb7f980b9d849a29c9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="7263.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A16%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add ability to restrict path search in HDF file by type.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0908502cb75249ec3a7431db2e11e4f3e2a44ff5" title="0908502cb75249ec3a7431db2e11e4f3e2a44ff5">0908502cb75249ec3a7431db2e11e4f3e2a44ff5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="7263.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A16%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add root attribute query methods to HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4743494db4debe9cf778e4a1610e67c89d76b89f" title="4743494db4debe9cf778e4a1610e67c89d76b89f">4743494db4debe9cf778e4a1610e67c89d76b89f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="7263.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A16%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cache first entry name &amp; type in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3b88b845022c5653d8cfa6ce34cf4fa229d43d3c" title="3b88b845022c5653d8cfa6ce34cf4fa229d43d3c">3b88b845022c5653d8cfa6ce34cf4fa229d43d3c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="7263.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A16%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:16+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a> Formatting changes only
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/574a70fe79a4720f96e73a0ef406e4679a57041b" title="574a70fe79a4720f96e73a0ef406e4679a57041b">574a70fe79a4720f96e73a0ef406e4679a57041b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="7263.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A17%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+First lot of updates for new loader check style. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/11988b9a591149fde1dd15e28d0e4b0968a5f8a8" title="11988b9a591149fde1dd15e28d0e4b0968a5f8a8">11988b9a591149fde1dd15e28d0e4b0968a5f8a8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="7263.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A17%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add static isAscii checks to FileDescriptor class. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d94c7d27c1d50d3549081a8c39608445dfa15beb" title="d94c7d27c1d50d3549081a8c39608445dfa15beb">d94c7d27c1d50d3549081a8c39608445dfa15beb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="7263.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A17%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+General file loader conversion. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5fa890fbdf81568763df6c5d16d16341ba9a6ed7" title="5fa890fbdf81568763df6c5d16d16341ba9a6ed7">5fa890fbdf81568763df6c5d16d16341ba9a6ed7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="7263.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A17%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cache isAscii flag in FileDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9a2601fcdf1a94350f05be91554ff82d9faa11c3" title="9a2601fcdf1a94350f05be91554ff82d9faa11c3">9a2601fcdf1a94350f05be91554ff82d9faa11c3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="7263.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A17%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Port final DataHandling loaders to new structure. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b3236b5c18c398bf322c23de241ba9e5384c5cdf" title="b3236b5c18c398bf322c23de241ba9e5384c5cdf">b3236b5c18c398bf322c23de241ba9e5384c5cdf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="7263.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A17%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move FileRegistry to singleton Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+It appears that we can't start the FrameworkManager during static
+initialization or the destruction of the FrameworkManager instance gets
+instance gets confused.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/db8d95c8cdaf648b2439c416724bb59ac2617d65" title="db8d95c8cdaf648b2439c416724bb59ac2617d65">db8d95c8cdaf648b2439c416724bb59ac2617d65</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="7263.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A17%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:17+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move the remaining loaders to the new scheme. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2a330f57d781248e4b8ec0502726d1821c5004c5" title="2a330f57d781248e4b8ec0502726d1821c5004c5">2a330f57d781248e4b8ec0502726d1821c5004c5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="7263.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove file access from some NeXus checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/146d72e7c593ab85fed6009cb6493a76633a0a40" title="146d72e7c593ab85fed6009cb6493a76633a0a40">146d72e7c593ab85fed6009cb6493a76633a0a40</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="7263.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug with running correct version of loader. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e1dcfe7d4145ea6c9a1d7d51435afffd3cc27c3d" title="e1dcfe7d4145ea6c9a1d7d51435afffd3cc27c3d">e1dcfe7d4145ea6c9a1d7d51435afffd3cc27c3d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="7263.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Flip path/type map in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Looking up paths is far more common so make that faster.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c4155e8e58c12d3dcac4430bc95d233fd442025" title="4c4155e8e58c12d3dcac4430bc95d233fd442025">4c4155e8e58c12d3dcac4430bc95d233fd442025</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="7263.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FileDescriptor::resetStreamToStart needs to reset ios flags too.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c9f87457614765bdf53272037f567d0eae486c13" title="c9f87457614765bdf53272037f567d0eae486c13">c9f87457614765bdf53272037f567d0eae486c13</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="7263.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add base-class checks to FILELOADER* check macros. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Also added runtime checks to the subscribe method. This allows it to static
+cast at runtime when checking rather than a more expensive dynamic cast.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/34785e5194cf9bc29e5435b4973f541ba76ed4df" title="34785e5194cf9bc29e5435b4973f541ba76ed4df">34785e5194cf9bc29e5435b4973f541ba76ed4df</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="7263.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix LoadMD::confidence path checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/961b02983a7752038c2532068499f794a8cbc60c" title="961b02983a7752038c2532068499f794a8cbc60c">961b02983a7752038c2532068499f794a8cbc60c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="7263.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix EventPreNexus &amp; RKH file checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7b1bfbe989a08c9dadc96056e2e8e9cfdd48fcee" title="7b1bfbe989a08c9dadc96056e2e8e9cfdd48fcee">7b1bfbe989a08c9dadc96056e2e8e9cfdd48fcee</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="7263.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add access to open NeXus file in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19119d59871acd545067afbca480bce35ee22941" title="19119d59871acd545067afbca480bce35ee22941">19119d59871acd545067afbca480bce35ee22941</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="7263.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Allow stored NeXus handle to be use in ::confidence checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d60fc3449766ac8f8a29363ca8099e65199ab7c2" title="d60fc3449766ac8f8a29363ca8099e65199ab7c2">d60fc3449766ac8f8a29363ca8099e65199ab7c2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="7263.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T16%3A03%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T16:03:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Ignore new LoaderVersion property in Python Load. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/62314ef77d2c164f7d87892da7a333e40628a12d" title="62314ef77d2c164f7d87892da7a333e40628a12d">62314ef77d2c164f7d87892da7a333e40628a12d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="7263.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add basic code for FileLoaderRegistry. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Currently based on string names.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c5ab6b955dfc544c1a43f00d526ebbb7829d1211" title="c5ab6b955dfc544c1a43f00d526ebbb7829d1211">c5ab6b955dfc544c1a43f00d526ebbb7829d1211</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="7263.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add DECLARE_FILELOADER_ALGORITHM macro. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af" title="9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af">9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="7263.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a simple FileDescriptor class that wraps a file stream
+</p>
+<p>
+The stream is open for as long as the object is alive.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+FileDescriptor uses streams rather than c file handles. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02509f87a8b33fd7973951c54abb5e7555685ec9" title="02509f87a8b33fd7973951c54abb5e7555685ec9">02509f87a8b33fd7973951c54abb5e7555685ec9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-82">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:82" class="cnum">
+      <a href="7263.html#comment:82">comment:82</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Allow move_class.py to move untracked files. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/df6f2db124b0e3f6712adc42ea3f517ee6d02c2a" title="df6f2db124b0e3f6712adc42ea3f517ee6d02c2a">df6f2db124b0e3f6712adc42ea3f517ee6d02c2a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-83">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:83" class="cnum">
+      <a href="7263.html#comment:83">comment:83</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix AlgorithmFactory::unsubscribe method to updates version map.
+</p>
+<p>
+It was previously not updating the version map when the algorithm was
+removed and then subscribing the same thing again would throw an error.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a23d639411aedc0dd1e726d369fcacbba28b73c4" title="a23d639411aedc0dd1e726d369fcacbba28b73c4">a23d639411aedc0dd1e726d369fcacbba28b73c4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-84">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:84" class="cnum">
+      <a href="7263.html#comment:84">comment:84</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Have AlgorithmFactory::subscribe return the class name subscribed.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5fb5a0ba8fe71656ee4a4468bdea23acd9e85348" title="5fb5a0ba8fe71656ee4a4468bdea23acd9e85348">5fb5a0ba8fe71656ee4a4468bdea23acd9e85348</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-85">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:85" class="cnum">
+      <a href="7263.html#comment:85">comment:85</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A19%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Avoid duplicate Algorithm registration in API tests. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/688d09f690685015f61289beb0a14f4bfc766480" title="688d09f690685015f61289beb0a14f4bfc766480">688d09f690685015f61289beb0a14f4bfc766480</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-86">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:86" class="cnum">
+      <a href="7263.html#comment:86">comment:86</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A20%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:20+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FileLoaderRegistry now subscribes algorithms to factory
+</p>
+<p>
+and also defines two types of loader, NonHDF and HDF.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e77a0a5738a1914befe30741d366495a4953f4c3" title="e77a0a5738a1914befe30741d366495a4953f4c3">e77a0a5738a1914befe30741d366495a4953f4c3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-87">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:87" class="cnum">
+      <a href="7263.html#comment:87">comment:87</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A20%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:20+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add HDFDescriptor class that will describe HDF files.
+</p>
+<p>
+The checks for the headers at the start of HDF4 &amp; HDF5 files have been
+put in a static isHDF member to encapsulate the details about
+checking for a HDF file and make it reusable.
+It will not retain an open file handle to the file so does not
+inherit from the standard FileDescriptor.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b33429b36beee34fcaf3d191ceb735522ce3e5ec" title="b33429b36beee34fcaf3d191ceb735522ce3e5ec">b33429b36beee34fcaf3d191ceb735522ce3e5ec</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-88">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:88" class="cnum">
+      <a href="7263.html#comment:88">comment:88</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A20%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:20+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add pathExists &amp; classTypeExists checks to HDFDDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90537dd6136b16a531bd2e454e85bf32d086b5d8" title="90537dd6136b16a531bd2e454e85bf32d086b5d8">90537dd6136b16a531bd2e454e85bf32d086b5d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-89">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:89" class="cnum">
+      <a href="7263.html#comment:89">comment:89</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A20%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:20+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement loader searching in FileLoaderRegistry.
+</p>
+<p>
+The FileLoaderRegistry can now be asked to search its list of loaders
+for the best that matches a given file. It passes along a *Descriptor
+object to minimize the number of times the file is opened.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee1d2ba84a8748c70ae32afb7f980b9d849a29c9" title="ee1d2ba84a8748c70ae32afb7f980b9d849a29c9">ee1d2ba84a8748c70ae32afb7f980b9d849a29c9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-90">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:90" class="cnum">
+      <a href="7263.html#comment:90">comment:90</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A20%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:20+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add ability to restrict path search in HDF file by type.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0908502cb75249ec3a7431db2e11e4f3e2a44ff5" title="0908502cb75249ec3a7431db2e11e4f3e2a44ff5">0908502cb75249ec3a7431db2e11e4f3e2a44ff5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-91">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:91" class="cnum">
+      <a href="7263.html#comment:91">comment:91</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A20%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:20+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add root attribute query methods to HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4743494db4debe9cf778e4a1610e67c89d76b89f" title="4743494db4debe9cf778e4a1610e67c89d76b89f">4743494db4debe9cf778e4a1610e67c89d76b89f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-92">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:92" class="cnum">
+      <a href="7263.html#comment:92">comment:92</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A20%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:20+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cache first entry name &amp; type in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3b88b845022c5653d8cfa6ce34cf4fa229d43d3c" title="3b88b845022c5653d8cfa6ce34cf4fa229d43d3c">3b88b845022c5653d8cfa6ce34cf4fa229d43d3c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-93">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:93" class="cnum">
+      <a href="7263.html#comment:93">comment:93</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A21%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:21+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a> Formatting changes only
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/574a70fe79a4720f96e73a0ef406e4679a57041b" title="574a70fe79a4720f96e73a0ef406e4679a57041b">574a70fe79a4720f96e73a0ef406e4679a57041b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-94">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:94" class="cnum">
+      <a href="7263.html#comment:94">comment:94</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A21%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:21+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+First lot of updates for new loader check style. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/11988b9a591149fde1dd15e28d0e4b0968a5f8a8" title="11988b9a591149fde1dd15e28d0e4b0968a5f8a8">11988b9a591149fde1dd15e28d0e4b0968a5f8a8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-95">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:95" class="cnum">
+      <a href="7263.html#comment:95">comment:95</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A21%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:21+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add static isAscii checks to FileDescriptor class. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d94c7d27c1d50d3549081a8c39608445dfa15beb" title="d94c7d27c1d50d3549081a8c39608445dfa15beb">d94c7d27c1d50d3549081a8c39608445dfa15beb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-96">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:96" class="cnum">
+      <a href="7263.html#comment:96">comment:96</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A21%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:21+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+General file loader conversion. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5fa890fbdf81568763df6c5d16d16341ba9a6ed7" title="5fa890fbdf81568763df6c5d16d16341ba9a6ed7">5fa890fbdf81568763df6c5d16d16341ba9a6ed7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-97">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:97" class="cnum">
+      <a href="7263.html#comment:97">comment:97</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A21%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:21+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cache isAscii flag in FileDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9a2601fcdf1a94350f05be91554ff82d9faa11c3" title="9a2601fcdf1a94350f05be91554ff82d9faa11c3">9a2601fcdf1a94350f05be91554ff82d9faa11c3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-98">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:98" class="cnum">
+      <a href="7263.html#comment:98">comment:98</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A22%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:22+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Port final DataHandling loaders to new structure. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b3236b5c18c398bf322c23de241ba9e5384c5cdf" title="b3236b5c18c398bf322c23de241ba9e5384c5cdf">b3236b5c18c398bf322c23de241ba9e5384c5cdf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-99">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:99" class="cnum">
+      <a href="7263.html#comment:99">comment:99</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A22%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:22+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move FileRegistry to singleton Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+It appears that we can't start the FrameworkManager during static
+initialization or the destruction of the FrameworkManager instance gets
+instance gets confused.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/db8d95c8cdaf648b2439c416724bb59ac2617d65" title="db8d95c8cdaf648b2439c416724bb59ac2617d65">db8d95c8cdaf648b2439c416724bb59ac2617d65</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-100">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:100" class="cnum">
+      <a href="7263.html#comment:100">comment:100</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A22%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:22+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move the remaining loaders to the new scheme. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2a330f57d781248e4b8ec0502726d1821c5004c5" title="2a330f57d781248e4b8ec0502726d1821c5004c5">2a330f57d781248e4b8ec0502726d1821c5004c5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-101">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:101" class="cnum">
+      <a href="7263.html#comment:101">comment:101</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A22%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:22+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove file access from some NeXus checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/146d72e7c593ab85fed6009cb6493a76633a0a40" title="146d72e7c593ab85fed6009cb6493a76633a0a40">146d72e7c593ab85fed6009cb6493a76633a0a40</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-102">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:102" class="cnum">
+      <a href="7263.html#comment:102">comment:102</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A22%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:22+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug with running correct version of loader. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e1dcfe7d4145ea6c9a1d7d51435afffd3cc27c3d" title="e1dcfe7d4145ea6c9a1d7d51435afffd3cc27c3d">e1dcfe7d4145ea6c9a1d7d51435afffd3cc27c3d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-103">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:103" class="cnum">
+      <a href="7263.html#comment:103">comment:103</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A22%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:22+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Flip path/type map in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Looking up paths is far more common so make that faster.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c4155e8e58c12d3dcac4430bc95d233fd442025" title="4c4155e8e58c12d3dcac4430bc95d233fd442025">4c4155e8e58c12d3dcac4430bc95d233fd442025</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-104">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:104" class="cnum">
+      <a href="7263.html#comment:104">comment:104</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A23%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:23+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FileDescriptor::resetStreamToStart needs to reset ios flags too.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c9f87457614765bdf53272037f567d0eae486c13" title="c9f87457614765bdf53272037f567d0eae486c13">c9f87457614765bdf53272037f567d0eae486c13</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-105">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:105" class="cnum">
+      <a href="7263.html#comment:105">comment:105</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A23%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:23+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add base-class checks to FILELOADER* check macros. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Also added runtime checks to the subscribe method. This allows it to static
+cast at runtime when checking rather than a more expensive dynamic cast.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/34785e5194cf9bc29e5435b4973f541ba76ed4df" title="34785e5194cf9bc29e5435b4973f541ba76ed4df">34785e5194cf9bc29e5435b4973f541ba76ed4df</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-106">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:106" class="cnum">
+      <a href="7263.html#comment:106">comment:106</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A23%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:23+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix LoadMD::confidence path checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/961b02983a7752038c2532068499f794a8cbc60c" title="961b02983a7752038c2532068499f794a8cbc60c">961b02983a7752038c2532068499f794a8cbc60c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-107">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:107" class="cnum">
+      <a href="7263.html#comment:107">comment:107</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A23%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:23+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix EventPreNexus &amp; RKH file checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7b1bfbe989a08c9dadc96056e2e8e9cfdd48fcee" title="7b1bfbe989a08c9dadc96056e2e8e9cfdd48fcee">7b1bfbe989a08c9dadc96056e2e8e9cfdd48fcee</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-108">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:108" class="cnum">
+      <a href="7263.html#comment:108">comment:108</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A23%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:23+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add access to open NeXus file in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19119d59871acd545067afbca480bce35ee22941" title="19119d59871acd545067afbca480bce35ee22941">19119d59871acd545067afbca480bce35ee22941</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-109">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:109" class="cnum">
+      <a href="7263.html#comment:109">comment:109</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A23%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:23+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Allow stored NeXus handle to be use in ::confidence checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7aad82fbecd50e5a2b784f68e954849571f06468" title="7aad82fbecd50e5a2b784f68e954849571f06468">7aad82fbecd50e5a2b784f68e954849571f06468</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-110">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:110" class="cnum">
+      <a href="7263.html#comment:110">comment:110</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A10%3A23%2B01%3A00&amp;precision=second" title="2013-07-03T17:10:23+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Ignore new LoaderVersion property in Python Load. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/775e5249f4dead9814565de7a26edd4afff5b6d2" title="775e5249f4dead9814565de7a26edd4afff5b6d2">775e5249f4dead9814565de7a26edd4afff5b6d2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-111">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:111" class="cnum">
+      <a href="7263.html#comment:111">comment:111</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T08%3A33%3A05%2B01%3A00&amp;precision=second" title="2013-07-04T08:33:05+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/7263_improve_load_selection_performance'
+</p>
+<p>
+into develop
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/DataHandling/inc/MantidDataHandling/LoadILL.h
+Code/Mantid/Framework/DataHandling/src/LoadEventNexus.cpp
+Code/Mantid/Framework/DataHandling/src/LoadILL.cpp
+Code/Mantid/Framework/DataHandling/src/LoadSassena.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/49a10d7e33c34eaa40e0cde4ceaebd0b23909473" title="49a10d7e33c34eaa40e0cde4ceaebd0b23909473">49a10d7e33c34eaa40e0cde4ceaebd0b23909473</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-112">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:112" class="cnum">
+      <a href="7263.html#comment:112">comment:112</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T08%3A44%3A35%2B01%3A00&amp;precision=second" title="2013-07-04T08:44:35+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove valgrind header left accidentally. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/82d931398d792e4d9a3e58ebdead81393687b85e" title="82d931398d792e4d9a3e58ebdead81393687b85e">82d931398d792e4d9a3e58ebdead81393687b85e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-113">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:113" class="cnum">
+      <a href="7263.html#comment:113">comment:113</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T08%3A50%3A14%2B01%3A00&amp;precision=second" title="2013-07-04T08:50:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix ifstream initialization in FileDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5ff698b5c973e64809b9a1b886215abbacc92a18" title="5ff698b5c973e64809b9a1b886215abbacc92a18">5ff698b5c973e64809b9a1b886215abbacc92a18</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-114">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:114" class="cnum">
+      <a href="7263.html#comment:114">comment:114</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T09%3A41%3A15%2B01%3A00&amp;precision=second" title="2013-07-04T09:41:15+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove compile-time checks on FileLoader classes.
+</p>
+<p>
+They don't seem to work everywhere. My guess is that the types isn't
+quite complete by the time we use it so some compiles don't like it.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d64a81a01043122ca1f1ada303ec6a1570d5b4c" title="4d64a81a01043122ca1f1ada303ec6a1570d5b4c">4d64a81a01043122ca1f1ada303ec6a1570d5b4c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-115">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:115" class="cnum">
+      <a href="7263.html#comment:115">comment:115</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T10%3A00%3A50%2B01%3A00&amp;precision=second" title="2013-07-04T10:00:50+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Avoid double-algorithm registration in tests. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6e678e5ca625f1f0b25695d4f1d334ce0fa1f920" title="6e678e5ca625f1f0b25695d4f1d334ce0fa1f920">6e678e5ca625f1f0b25695d4f1d334ce0fa1f920</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-116">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:116" class="cnum">
+      <a href="7263.html#comment:116">comment:116</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A42%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:42+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add basic code for FileLoaderRegistry. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Currently based on string names.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c5ab6b955dfc544c1a43f00d526ebbb7829d1211" title="c5ab6b955dfc544c1a43f00d526ebbb7829d1211">c5ab6b955dfc544c1a43f00d526ebbb7829d1211</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-117">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:117" class="cnum">
+      <a href="7263.html#comment:117">comment:117</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A42%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:42+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add DECLARE_FILELOADER_ALGORITHM macro. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af" title="9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af">9dc140841fdd8d29ca1d6ba2bdd949c7c41ee1af</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-118">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:118" class="cnum">
+      <a href="7263.html#comment:118">comment:118</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A42%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:42+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a simple FileDescriptor class that wraps a file stream
+</p>
+<p>
+The stream is open for as long as the object is alive.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+FileDescriptor uses streams rather than c file handles. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02509f87a8b33fd7973951c54abb5e7555685ec9" title="02509f87a8b33fd7973951c54abb5e7555685ec9">02509f87a8b33fd7973951c54abb5e7555685ec9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-119">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:119" class="cnum">
+      <a href="7263.html#comment:119">comment:119</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A42%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:42+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Allow move_class.py to move untracked files. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/df6f2db124b0e3f6712adc42ea3f517ee6d02c2a" title="df6f2db124b0e3f6712adc42ea3f517ee6d02c2a">df6f2db124b0e3f6712adc42ea3f517ee6d02c2a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-120">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:120" class="cnum">
+      <a href="7263.html#comment:120">comment:120</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A42%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:42+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix AlgorithmFactory::unsubscribe method to updates version map.
+</p>
+<p>
+It was previously not updating the version map when the algorithm was
+removed and then subscribing the same thing again would throw an error.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a23d639411aedc0dd1e726d369fcacbba28b73c4" title="a23d639411aedc0dd1e726d369fcacbba28b73c4">a23d639411aedc0dd1e726d369fcacbba28b73c4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-121">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:121" class="cnum">
+      <a href="7263.html#comment:121">comment:121</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A43%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:43+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Have AlgorithmFactory::subscribe return the class name subscribed.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/483acce7607ca2aeb6bae584523fd487a80754d5" title="483acce7607ca2aeb6bae584523fd487a80754d5">483acce7607ca2aeb6bae584523fd487a80754d5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-122">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:122" class="cnum">
+      <a href="7263.html#comment:122">comment:122</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A43%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:43+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Avoid duplicate Algorithm registration in API tests. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/885088de599e1d0f00bcd7cca06ef888a84fa802" title="885088de599e1d0f00bcd7cca06ef888a84fa802">885088de599e1d0f00bcd7cca06ef888a84fa802</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-123">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:123" class="cnum">
+      <a href="7263.html#comment:123">comment:123</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A43%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:43+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FileLoaderRegistry now subscribes algorithms to factory
+</p>
+<p>
+and also defines two types of loader, NonHDF and HDF.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/52b5f1a5a5a1884401f76143e09290e785c49142" title="52b5f1a5a5a1884401f76143e09290e785c49142">52b5f1a5a5a1884401f76143e09290e785c49142</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-124">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:124" class="cnum">
+      <a href="7263.html#comment:124">comment:124</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A43%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:43+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add HDFDescriptor class that will describe HDF files.
+</p>
+<p>
+The checks for the headers at the start of HDF4 &amp; HDF5 files have been
+put in a static isHDF member to encapsulate the details about
+checking for a HDF file and make it reusable.
+It will not retain an open file handle to the file so does not
+inherit from the standard FileDescriptor.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/da30646f22af90d25e18a0be3b2bb56cef973896" title="da30646f22af90d25e18a0be3b2bb56cef973896">da30646f22af90d25e18a0be3b2bb56cef973896</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-125">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:125" class="cnum">
+      <a href="7263.html#comment:125">comment:125</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A43%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:43+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add pathExists &amp; classTypeExists checks to HDFDDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/367b6232759944ca13e334dc859acf813fd687bc" title="367b6232759944ca13e334dc859acf813fd687bc">367b6232759944ca13e334dc859acf813fd687bc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-126">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:126" class="cnum">
+      <a href="7263.html#comment:126">comment:126</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A43%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:43+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement loader searching in FileLoaderRegistry.
+</p>
+<p>
+The FileLoaderRegistry can now be asked to search its list of loaders
+for the best that matches a given file. It passes along a *Descriptor
+object to minimize the number of times the file is opened.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/132675199cf21badd7d4952a78fe6b42c48c3bfb" title="132675199cf21badd7d4952a78fe6b42c48c3bfb">132675199cf21badd7d4952a78fe6b42c48c3bfb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-127">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:127" class="cnum">
+      <a href="7263.html#comment:127">comment:127</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A44%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:44+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add ability to restrict path search in HDF file by type.
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9a591118e449763fba5aefd5c9a84edac6d53e58" title="9a591118e449763fba5aefd5c9a84edac6d53e58">9a591118e449763fba5aefd5c9a84edac6d53e58</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-128">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:128" class="cnum">
+      <a href="7263.html#comment:128">comment:128</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A44%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:44+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add root attribute query methods to HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ec3e85aaf4496543aca35c186d190c2eba46e111" title="ec3e85aaf4496543aca35c186d190c2eba46e111">ec3e85aaf4496543aca35c186d190c2eba46e111</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-129">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:129" class="cnum">
+      <a href="7263.html#comment:129">comment:129</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A44%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:44+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cache first entry name &amp; type in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5d723229c6be4088067f51a6c250eeadad0721da" title="5d723229c6be4088067f51a6c250eeadad0721da">5d723229c6be4088067f51a6c250eeadad0721da</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-130">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:130" class="cnum">
+      <a href="7263.html#comment:130">comment:130</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A44%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:44+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a> Formatting changes only
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ff1f7ad4c9d894da2e96b50180809cca41273fb6" title="ff1f7ad4c9d894da2e96b50180809cca41273fb6">ff1f7ad4c9d894da2e96b50180809cca41273fb6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-131">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:131" class="cnum">
+      <a href="7263.html#comment:131">comment:131</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A44%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:44+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+First lot of updates for new loader check style. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5eec9296ab81d729b10ed22c87be140367bc9941" title="5eec9296ab81d729b10ed22c87be140367bc9941">5eec9296ab81d729b10ed22c87be140367bc9941</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-132">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:132" class="cnum">
+      <a href="7263.html#comment:132">comment:132</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A45%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:45+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add static isAscii checks to FileDescriptor class. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bbc2514e5a1fe7b238dd26fe5fb8baf70183a877" title="bbc2514e5a1fe7b238dd26fe5fb8baf70183a877">bbc2514e5a1fe7b238dd26fe5fb8baf70183a877</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-133">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:133" class="cnum">
+      <a href="7263.html#comment:133">comment:133</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A45%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:45+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+General file loader conversion. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/94047da498146c0db71a9a671ace0dacdb106b28" title="94047da498146c0db71a9a671ace0dacdb106b28">94047da498146c0db71a9a671ace0dacdb106b28</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-134">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:134" class="cnum">
+      <a href="7263.html#comment:134">comment:134</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A45%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:45+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cache isAscii flag in FileDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/248c7047a90f0972a4abc02d308e04a8d353d85f" title="248c7047a90f0972a4abc02d308e04a8d353d85f">248c7047a90f0972a4abc02d308e04a8d353d85f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-135">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:135" class="cnum">
+      <a href="7263.html#comment:135">comment:135</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A45%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:45+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Port final DataHandling loaders to new structure. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/076350e97bd4ff2c49f7dd2ab31b3b10620b2371" title="076350e97bd4ff2c49f7dd2ab31b3b10620b2371">076350e97bd4ff2c49f7dd2ab31b3b10620b2371</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-136">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:136" class="cnum">
+      <a href="7263.html#comment:136">comment:136</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A45%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:45+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move FileRegistry to singleton Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+It appears that we can't start the FrameworkManager during static
+initialization or the destruction of the FrameworkManager instance gets
+instance gets confused.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f4dbdb03111d909f57b1094dbbdffdc2f4fd564a" title="f4dbdb03111d909f57b1094dbbdffdc2f4fd564a">f4dbdb03111d909f57b1094dbbdffdc2f4fd564a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-137">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:137" class="cnum">
+      <a href="7263.html#comment:137">comment:137</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A45%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:45+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move the remaining loaders to the new scheme. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b008a1348f9862f22722d7d42bb3edb6c61c60be" title="b008a1348f9862f22722d7d42bb3edb6c61c60be">b008a1348f9862f22722d7d42bb3edb6c61c60be</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-138">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:138" class="cnum">
+      <a href="7263.html#comment:138">comment:138</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A46%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:46+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove file access from some NeXus checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9d03dfb0ad782579c16eca779ca9bf2ecae8e9bf" title="9d03dfb0ad782579c16eca779ca9bf2ecae8e9bf">9d03dfb0ad782579c16eca779ca9bf2ecae8e9bf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-139">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:139" class="cnum">
+      <a href="7263.html#comment:139">comment:139</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A46%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:46+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug with running correct version of loader. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5fd18f632d4bef0eda7dbd97e8732389f38fcabf" title="5fd18f632d4bef0eda7dbd97e8732389f38fcabf">5fd18f632d4bef0eda7dbd97e8732389f38fcabf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-140">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:140" class="cnum">
+      <a href="7263.html#comment:140">comment:140</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A46%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:46+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Flip path/type map in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Looking up paths is far more common so make that faster.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/14a7ab1ce7ae4b05b4f56e7596bd289591d6e679" title="14a7ab1ce7ae4b05b4f56e7596bd289591d6e679">14a7ab1ce7ae4b05b4f56e7596bd289591d6e679</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-141">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:141" class="cnum">
+      <a href="7263.html#comment:141">comment:141</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A46%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:46+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FileDescriptor::resetStreamToStart needs to reset ios flags too.
+</p>
+<p>
+Also fix initialization that is not a pointer.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4ff024a68acbb8083a6a2a69da44fce94e9ea4d8" title="4ff024a68acbb8083a6a2a69da44fce94e9ea4d8">4ff024a68acbb8083a6a2a69da44fce94e9ea4d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-142">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:142" class="cnum">
+      <a href="7263.html#comment:142">comment:142</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A46%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:46+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add base-class checks to FILELOADER* check macros. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Also added runtime checks to the subscribe method. This allows it to static
+cast at runtime when checking rather than a more expensive dynamic cast.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e3e18db9a3750df686e41badd27fb7ec0dfcc789" title="e3e18db9a3750df686e41badd27fb7ec0dfcc789">e3e18db9a3750df686e41badd27fb7ec0dfcc789</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-143">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:143" class="cnum">
+      <a href="7263.html#comment:143">comment:143</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A46%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:46+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix LoadMD::confidence path checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7d124b9dee7bed2b6a75677b542e56d9566fe9e7" title="7d124b9dee7bed2b6a75677b542e56d9566fe9e7">7d124b9dee7bed2b6a75677b542e56d9566fe9e7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-144">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:144" class="cnum">
+      <a href="7263.html#comment:144">comment:144</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A46%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:46+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix EventPreNexus &amp; RKH file checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0e0bd35179723d2b608093b619d3eb55ea9d4a04" title="0e0bd35179723d2b608093b619d3eb55ea9d4a04">0e0bd35179723d2b608093b619d3eb55ea9d4a04</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-145">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:145" class="cnum">
+      <a href="7263.html#comment:145">comment:145</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A47%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:47+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add access to open NeXus file in HDFDescriptor. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5a1a53c2c09e4b07f288cf35a32850492dd1e785" title="5a1a53c2c09e4b07f288cf35a32850492dd1e785">5a1a53c2c09e4b07f288cf35a32850492dd1e785</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-146">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:146" class="cnum">
+      <a href="7263.html#comment:146">comment:146</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A47%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:47+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Allow stored NeXus handle to be use in ::confidence checks. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96f42591d31ec8fddf76896e657631104b1e6622" title="96f42591d31ec8fddf76896e657631104b1e6622">96f42591d31ec8fddf76896e657631104b1e6622</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-147">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:147" class="cnum">
+      <a href="7263.html#comment:147">comment:147</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A47%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:47+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Ignore new LoaderVersion property in Python Load. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/aa26bb649bb8173d4b88af5c03ffa2356afc73ae" title="aa26bb649bb8173d4b88af5c03ffa2356afc73ae">aa26bb649bb8173d4b88af5c03ffa2356afc73ae</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-148">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:148" class="cnum">
+      <a href="7263.html#comment:148">comment:148</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A47%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:47+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove compile-time checks on FileLoader classes.
+</p>
+<p>
+They don't seem to work everywhere. My guess is that the types isn't
+quite complete by the time we use it so some compiles don't like it.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/84aa5968b2caacb2ac575ce7f3ff24cea2939b4b" title="84aa5968b2caacb2ac575ce7f3ff24cea2939b4b">84aa5968b2caacb2ac575ce7f3ff24cea2939b4b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-149">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:149" class="cnum">
+      <a href="7263.html#comment:149">comment:149</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A47%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:47+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix LoadSNSspec test.
+</p>
+<p>
+A \r left in the file after opening in binary mode confused the check.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6292160c0d040a146cd65649579a37b0f05c585a" title="6292160c0d040a146cd65649579a37b0f05c585a">6292160c0d040a146cd65649579a37b0f05c585a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-150">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:150" class="cnum">
+      <a href="7263.html#comment:150">comment:150</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A48%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:48+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add canLoad method to FileLoaderRegistry.
+</p>
+<p>
+This better encapsulates the file checking so that other places don't
+have to worry about the desciptor stuff.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a5c9c3096f25cdbbeedd23f65c320ea6f5083b76" title="a5c9c3096f25cdbbeedd23f65c320ea6f5083b76">a5c9c3096f25cdbbeedd23f65c320ea6f5083b76</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-151">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:151" class="cnum">
+      <a href="7263.html#comment:151">comment:151</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T15%3A38%3A48%2B01%3A00&amp;precision=second" title="2013-07-04T15:38:48+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove IDataFileChecker &amp; LoadAlgorithmFactory. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/39bfe42ca9f987cdcd0036799c070346c6a6a26e" title="39bfe42ca9f987cdcd0036799c070346c6a6a26e">39bfe42ca9f987cdcd0036799c070346c6a6a26e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-146">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:146" class="cnum">
+      <a href="7263.html#comment:146">comment:146</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T08%3A27%3A41%2B01%3A00&amp;precision=second" title="2013-07-05T08:27:41+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/7263_improve_load_selection_performance' into develop
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/DataHandling/inc/MantidDataHandling/LoadILL.h
+Code/Mantid/Framework/DataHandling/src/LoadEventNexus.cpp
+Code/Mantid/Framework/DataHandling/src/LoadILL.cpp
+Code/Mantid/Framework/DataHandling/src/LoadSassena.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/134bd768072544227c66568dd50764973035c92b" title="134bd768072544227c66568dd50764973035c92b">134bd768072544227c66568dd50764973035c92b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-147">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:147" class="cnum">
+      <a href="7263.html#comment:147">comment:147</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T08%3A27%3A41%2B01%3A00&amp;precision=second" title="2013-07-05T08:27:41+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Temp move LoadILLSANS to new loader hierachy on develop. Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/014f1fec3f379936607f4e72578e29b08e9c7c36" title="014f1fec3f379936607f4e72578e29b08e9c7c36">014f1fec3f379936607f4e72578e29b08e9c7c36</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-148">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:148" class="cnum">
+      <a href="7263.html#comment:148">comment:148</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T09%3A48%3A01%2B01%3A00&amp;precision=second" title="2013-07-05T09:48:01+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixes for OSX 10.8 &amp; Intel compiler.
+</p>
+<p>
+It doesn't generate a symbol for the destructor of the *FileLoader
+interfaces unless explicitly defined. All other platforms, including
+OS X 10.6, don't show this problem.
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/04e169774094e6307a6f24e20cc31f0c979242f8" title="04e169774094e6307a6f24e20cc31f0c979242f8">04e169774094e6307a6f24e20cc31f0c979242f8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-149">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:149" class="cnum">
+      <a href="7263.html#comment:149">comment:149</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T09%3A54%3A18%2B01%3A00&amp;precision=second" title="2013-07-05T09:54:18+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/7263_improve_load_selection_performance' into develop
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/API/inc/MantidAPI/IFileLoader.h
+Code/Mantid/Framework/API/inc/MantidAPI/IHDFFileLoader.h
+Code/Mantid/Framework/DataHandling/inc/MantidDataHandling/LoadILL.h
+Code/Mantid/Framework/DataHandling/src/LoadILL.cpp
+Code/Mantid/Framework/DataHandling/src/LoadSassena.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/10264aba28915ee6805abeb17bfa3f6aef967161" title="10264aba28915ee6805abeb17bfa3f6aef967161">10264aba28915ee6805abeb17bfa3f6aef967161</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-150">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:150" class="cnum">
+      <a href="7263.html#comment:150">comment:150</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T10%3A20%3A13%2B01%3A00&amp;precision=second" title="2013-07-05T10:20:13+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix istream construction in FileDescriptorTest.
+</p>
+<p>
+The standard is to only allow C strings but the other platforms seem to
+accept std::strings as well
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/367fe425b49a021bf1d6f71be23bde4429b8db48" title="367fe425b49a021bf1d6f71be23bde4429b8db48">367fe425b49a021bf1d6f71be23bde4429b8db48</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-151">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:151" class="cnum">
+      <a href="7263.html#comment:151">comment:151</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T11%3A04%3A00%2B01%3A00&amp;precision=second" title="2013-07-05T11:04:00+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-152">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:152" class="cnum">
+      <a href="7263.html#comment:152">comment:152</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T11%3A15%3A12%2B01%3A00&amp;precision=second" title="2013-07-05T11:15:12+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Branch: feature/7263_improve_load_selection_performance
+</p>
+<p>
+Tester: There are a lot of changes here. Things got rebased as well so the comments are little bit of a mess. Best to see <a class="ext-link" href="https://github.com/mantidproject/mantid/compare/feature;7263_improve_load_selection_performance"><span class="icon">​</span>here</a> for the changes. 
+</p>
+<p>
+The whole idea of file checking has now changed and is described here:
+</p>
+<p>
+<a href="http://www.mantidproject.org/Hooking_In_With_Load_Algorithm">http://www.mantidproject.org/Hooking_In_With_Load_Algorithm</a>
+</p>
+<p>
+so that it is available for developers. The file being checked now only gets opened once and a wrapper object is passed to each of the loaders that gives access to meta-data &amp; the open file stream.
+</p>
+<p>
+There is also a special object for HDF files that caches other aspects of the file to avoid each loader having to open &amp; parse the file.
+</p>
+<p>
+The tests, both unit &amp; system) should be passing, see here <a class="ext-link" href="https://builds.sns.gov/job/ornl_test_rhel6_develop/"><span class="icon">​</span>https://builds.sns.gov/job/ornl_test_rhel6_develop/</a>, for most up to date tests results.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-153">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:153" class="cnum">
+      <a href="7263.html#comment:153">comment:153</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T12%3A44%3A43%2B01%3A00&amp;precision=second" title="2013-07-05T12:44:43+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T13%3A58%3A05%2B01%3A00&amp;precision=second" title="2013-07-05T13:58:05+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7263/load.py.html"><em>load.py</em></a><a href="../raw-attachment/ticket/7263/load.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-154">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:154" class="cnum">
+      <a href="7263.html#comment:154">comment:154</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T14%3A00%3A32%2B01%3A00&amp;precision=second" title="2013-07-05T14:00:32+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Attached script has a loop for loading a file. Flip it between Load &amp; LoadMuonNexus to see the difference.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-155">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:155" class="cnum">
+      <a href="7263.html#comment:155">comment:155</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T14%3A22%3A41%2B01%3A00&amp;precision=second" title="2013-07-05T14:22:41+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Before changes. Script loads in 3.93 seconds. After changes, script loads in 2.33 seconds. Both running on a Debug build on the same Mac. By way of reference, I've also run the script using the LoadMuonNexus algorithm directly, and find that it takes 2.02 seconds. So the cost of finding the right loader is now quite small in comparison to what it was previously.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-156">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:156" class="cnum">
+      <a href="7263.html#comment:156">comment:156</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T15%3A14%3A57%2B01%3A00&amp;precision=second" title="2013-07-05T15:14:57+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-157">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:157" class="cnum">
+      <a href="7263.html#comment:157">comment:157</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-08T13%3A10%3A08%2B01%3A00&amp;precision=second" title="2013-07-08T13:10:08+01:00 in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/7263_improve_load_selection_performance'
+</p>
+<p>
+Refs <a class="closed ticket" href="7263.html" title="enhancement: Load Algorithms, improve selection speed, particularly for Nexus files (closed: fixed)">#7263</a>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/DataHandling/src/LoadEventNexus.cpp
+Code/Mantid/Framework/DataHandling/src/LoadSassena.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/28afe6d1afe3b8329978e5d8b0413f3938e08629" title="28afe6d1afe3b8329978e5d8b0413f3938e08629">28afe6d1afe3b8329978e5d8b0413f3938e08629</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-158">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:158" class="cnum">
+      <a href="7263.html#comment:158">comment:158</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A06%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:06+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-159">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:159" class="cnum">
+      <a href="7263.html#comment:159">comment:159</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A48%3A05%2B01%3A00&amp;precision=second" title="2015-06-04T01:48:05+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/8109"><span class="icon">​</span>8109</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7263?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7263?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7263?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

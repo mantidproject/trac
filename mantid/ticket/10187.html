@@ -1,0 +1,1054 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10187 (Proper group processing behaviour in SaveNexus and SaveProcessedNexus)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10186.html" title="Ticket #10186" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10187?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10187?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10187?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10188.html" title="Ticket #10188" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10187, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10186.html" title="Ticket #10186">Previous Ticket</a></span></li><li><span><a class="next" href="10188.html" title="Ticket #10188">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10187.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10187.html">Ticket #10187</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T15%3A33%3A45%2B01%3A00&amp;precision=second" title="2014-08-28T15:33:45+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A49%3A02%2B01%3A00&amp;precision=second" title="2015-06-04T03:49:02+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Proper group processing behaviour in SaveNexus and SaveProcessedNexus</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Owen+Arnold">Owen Arnold</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Owen+Arnold">Owen Arnold</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="verify ticket" href="9848.html" title="Multiperiod reflectometry processing">#9848</a>, <a class="closed ticket" href="10188.html" title="Multiperiod Nexus Design">#10188</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              mareuter
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+There is a lot of wasted effort as part of this algorithm, because it fails to recognise the speedup that can be achieved when you write the file in one-shot. see <a class="verify ticket" href="9848.html" title="defect: Multiperiod reflectometry processing (verify)">#9848</a> for preliminary investigation. This is hitting GroupWorkspace IO hard currently.
+</p>
+<ul><li>The end result file should be the same
+</li><li>There is no change to the format
+</li><li>Everything should work as it does, now, it should just be faster.
+</li></ul>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10187.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T15%3A40%3A05%2B01%3A00&amp;precision=second" title="2014-08-28T15:40:05+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10188</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10187.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T16%3A06%3A31%2B01%3A00&amp;precision=second" title="2014-08-28T16:06:31+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Pointers for code implementation</strong>
+</p>
+<p>
+We want to override processGroups and open the file once at the start, and close it once at the end, once we've finished.
+</p>
+<p>
+Line 232 in SaveNexusProcess.cpp, nexusFile-openNexusWrite() results in an m_handle to the file being generated. We need to find a way to keep hold of this without having to call openNexusWrite to regenerate it. Noe that openNexusWrite does things relating to creating the top level group for each workspace. We do still need to do this, so we probably need to refactor openNexusWrite to spit out the functionality.
+</p>
+<p>
+The close-out call is line 325. in SaveNexusProcessed.cpp. This should sit at the end of processGroups. The history writing just above that can also probably be delayed untill the end of processGroups.
+</p>
+<p>
+This algorithm will still need to work for non-group cases, so best to refactor to methods where possible.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10187.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T16%3A09%3A23%2B01%3A00&amp;precision=second" title="2014-08-28T16:09:23+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10187.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T12%3A03%3A14%2B01%3A00&amp;precision=second" title="2014-09-30T12:03:14+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Start refactoring processing logic
+</p>
+<p>
+Make the same methods available for group processing as well as individual workspace processing.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6a87f37dfd31b3eaf9b1c6b83b4ef84695a0143a" title="6a87f37dfd31b3eaf9b1c6b83b4ef84695a0143a">6a87f37dfd31b3eaf9b1c6b83b4ef84695a0143a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10187.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T12%3A03%3A14%2B01%3A00&amp;precision=second" title="2014-09-30T12:03:14+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Start modifying for processgroup overload.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/193339bde58418cbdeec9c859413c67d30d01a3f" title="193339bde58418cbdeec9c859413c67d30d01a3f">193339bde58418cbdeec9c859413c67d30d01a3f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10187.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T12%3A03%3A14%2B01%3A00&amp;precision=second" title="2014-09-30T12:03:14+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Not fixed yet.
+</p>
+<p>
+Looks like there's an issue with the m_filehandler not being initialized properly for some reason!
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/803b3dc67dc6706f8bc8722ef27e705647776484" title="803b3dc67dc6706f8bc8722ef27e705647776484">803b3dc67dc6706f8bc8722ef27e705647776484</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10187.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T13%3A56%3A09%2B01%3A00&amp;precision=second" title="2014-09-30T13:56:09+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Need to open the group first.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cb0fc9d792904be2d5f1cb188fad9e9f87390faf" title="cb0fc9d792904be2d5f1cb188fad9e9f87390faf">cb0fc9d792904be2d5f1cb188fad9e9f87390faf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10187.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T14%3A49%3A53%2B01%3A00&amp;precision=second" title="2014-09-30T14:49:53+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <div class="code"><pre>x <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+names <span class="o">=</span> <span class="nb">str</span><span class="p">()</span>
+<span class="k">for</span> i <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+        name <span class="o">=</span> <span class="s">'ws_'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span>i<span class="p">)</span>
+        CreateWorkspace<span class="p">(</span>DataX<span class="o">=</span>x<span class="p">,</span> DataY<span class="o">=</span><span class="p">[</span>i<span class="p">,</span>i<span class="p">,</span>i<span class="p">],</span> OutputWorkspace<span class="o">=</span>name<span class="p">)</span>
+        names <span class="o">+=</span> name <span class="o">+</span> <span class="s">", "</span>
+p <span class="o">=</span> GroupWorkspaces<span class="p">(</span>InputWorkspaces<span class="o">=</span>names<span class="p">)</span>
+</pre></div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10187.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T15%3A41%3A32%2B01%3A00&amp;precision=second" title="2014-09-30T15:41:32+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Fix SaveNexus.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3f8ab82017f3df36e1b185f2b67e75a4ffbc39b9" title="3f8ab82017f3df36e1b185f2b67e75a4ffbc39b9">3f8ab82017f3df36e1b185f2b67e75a4ffbc39b9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10187.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T17%3A10%3A28%2B01%3A00&amp;precision=second" title="2014-09-30T17:10:28+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Bug in test code.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3348bfb264168dbeb620b1fd1845d08b00d1fdad" title="3348bfb264168dbeb620b1fd1845d08b00d1fdad">3348bfb264168dbeb620b1fd1845d08b00d1fdad</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10187.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T17%3A30%3A14%2B01%3A00&amp;precision=second" title="2014-09-30T17:30:14+01:00 in Timeline">6 years</a> ago by OwenArnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/37"><span class="icon">​</span>pull request #37</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10187.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T09%3A15%3A15%2B01%3A00&amp;precision=second" title="2014-10-01T09:15:15+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. History tracking fix.
+</p>
+<p>
+The history tracking object must be initialized whether we are processing
+groups or not.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/432d6f1652125c76fda275ffa6e3cf9ee8d23dc7" title="432d6f1652125c76fda275ffa6e3cf9ee8d23dc7">432d6f1652125c76fda275ffa6e3cf9ee8d23dc7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10187.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T10%3A13%3A19%2B01%3A00&amp;precision=second" title="2014-10-01T10:13:19+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Old gcc compiler complains about init order.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b00c39a33ab01967149b3ba73f9c286544378e73" title="b00c39a33ab01967149b3ba73f9c286544378e73">b00c39a33ab01967149b3ba73f9c286544378e73</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10187.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T11%3A16%3A18%2B01%3A00&amp;precision=second" title="2014-10-01T11:16:18+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Old gcc compiler complains about init order."
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b00c39a33ab01967149b3ba73f9c286544378e73" title="b00c39a33ab01967149b3ba73f9c286544378e73">b00c39a33ab01967149b3ba73f9c286544378e73</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46e4eefd80c42659d67ae51b8e48f9ba40201717" title="46e4eefd80c42659d67ae51b8e48f9ba40201717">46e4eefd80c42659d67ae51b8e48f9ba40201717</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10187.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T11%3A55%3A11%2B01%3A00&amp;precision=second" title="2014-10-01T11:55:11+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Compiler complains about init order.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dec7b803a53342964e1c094a09a47a77f5e2236f" title="dec7b803a53342964e1c094a09a47a77f5e2236f">dec7b803a53342964e1c094a09a47a77f5e2236f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10187.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T12%3A37%3A54%2B01%3A00&amp;precision=second" title="2014-10-01T12:37:54+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. More init order warning fixes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ad5c5e5d89bf36e2f3453cd51f4c32dd15ca49e0" title="ad5c5e5d89bf36e2f3453cd51f4c32dd15ca49e0">ad5c5e5d89bf36e2f3453cd51f4c32dd15ca49e0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10187.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T13%3A30%3A49%2B01%3A00&amp;precision=second" title="2014-10-01T13:30:49+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Sort out all ordering.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b675a8faa8bc1f81a1349079348756777905b88a" title="b675a8faa8bc1f81a1349079348756777905b88a">b675a8faa8bc1f81a1349079348756777905b88a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10187.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T16%3A35%3A45%2B01%3A00&amp;precision=second" title="2014-10-01T16:35:45+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Always close group.
+</p>
+<p>
+A few issues fixed here. Firstly. I found that the algorithm was failing
+when thrown a very large group workspace. This turned out to be because we
+needed to close the group within the doExec call. A group i always opened,
+so it is necessary to close it.
+</p>
+<p>
+The second thing done is to fix SaveNexus so that it will pass through
+group workspaces intact to SaveNexusProcessed. Under the previous
+mechanism, this would not have happened, because the generic Algorithm
+group processing code would have exploded out the individual workspaces.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/98f24b5007ce725ed0b03f87d787063a9f5cd86b" title="98f24b5007ce725ed0b03f87d787063a9f5cd86b">98f24b5007ce725ed0b03f87d787063a9f5cd86b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10187.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T09%3A37%3A49%2B01%3A00&amp;precision=second" title="2014-10-02T09:37:49+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I did some rough timings of the new code vs the old code, and they are roughly similar. The noticeable affect is that as more entries are written, and the file gets larger the processing time per group entry gets significantly larger.
+</p>
+<p>
+I decided to profile the code to find the exact bottle neck. 94% of the processing time (for a moderate sized group workspace of 50 entries) is tied up in findMantidWSEntries. This is called from openNexusWrite, which is called by doExec, which is itself called for every group entry via processGroup. Therefore findMantidWSEntries is called the same number of times in the old code and the new code. This explains why the runtimes are the same.
+</p>
+<p>
+The next area of attack is to reduce the number of calls to findMantidWSEntries. We know that if we are not appending, that we can formulate the group names ourselves. Since all that findMantidWSEntries is being used for is to determine the <strong>current number</strong> of workspace entries. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10187.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T09%3A51%3A50%2B01%3A00&amp;precision=second" title="2014-10-02T09:51:50+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Delete existing file if no append.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/41200f2e8e4d74a76f2b87001c9e913790b21b98" title="41200f2e8e4d74a76f2b87001c9e913790b21b98">41200f2e8e4d74a76f2b87001c9e913790b21b98</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10187.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T10%3A18%3A09%2B01%3A00&amp;precision=second" title="2014-10-02T10:18:09+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. File var not initialized fix.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7bbec526b659b0291e37cddf0ace1d83037df4be" title="7bbec526b659b0291e37cddf0ace1d83037df4be">7bbec526b659b0291e37cddf0ace1d83037df4be</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10187.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T11%3A30%3A50%2B01%3A00&amp;precision=second" title="2014-10-02T11:30:50+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. stop calling searching for groups following POGO.
+</p>
+<p>
+Use an optional entry number parameter instead of counting workspace group entries in the file. This was the main bottleneck acording to the previous
+POGO report. Seems to have generated a massive speedup. Can save as WG of size 512 in &lt; 8 seconds rather than 138 seconds as previously.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9157ac1315bf77a002f7faf94ae983481c250209" title="9157ac1315bf77a002f7faf94ae983481c250209">9157ac1315bf77a002f7faf94ae983481c250209</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10187.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T11%3A43%3A34%2B01%3A00&amp;precision=second" title="2014-10-02T11:43:34+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tester:
+</p>
+<p>
+The most important things are that the unit tests and system tests are still running OK. I haven't been able to refactor the existing code as much as I would have liked given time constraints, but the changes should be robust.
+</p>
+<ol><li>Obtain the zip file here with test data <a class="ext-link" href="../attachment/ticket/9848/multiperiod_crash.zip.html"><span class="icon">​</span>http://trac.mantidproject.org/mantid/attachment/ticket/9848/multiperiod_crash.zip</a>
+</li><li>Take the file INTER00027731.raw. Load it into Mantid, and save it both using SaveNexus and SaveNexusProcessed. It should complete in less than 1 second in both cases. Load the nexus files back in, and check that they are the same as the original workspaces saved out.
+</li></ol><p>
+For stress testing:
+</p>
+<ol><li>Take the file INTER00027729.raw and load it. It contains 512 periods. If you have the last release of Mantid handy, running SaveNexus on this took well over two minutes (138 seconds on my machine). With the new changes it should save out in less than 10 seconds.
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10187.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-03T11%3A32%3A26%2B01%3A00&amp;precision=second" title="2014-10-03T11:32:26+01:00 in Timeline">6 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Karl Palmen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10187.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-03T11%3A37%3A29%2B01%3A00&amp;precision=second" title="2014-10-03T11:37:29+01:00 in Timeline">6 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I cannot download the zip file. Can you please E-mail it to me?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10187.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-03T13%3A28%3A21%2B01%3A00&amp;precision=second" title="2014-10-03T13:28:21+01:00 in Timeline">6 years</a> ago by mareuter
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Tester</strong>
+        changed from <em>Karl Palmen</em> to <em>mareuter</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10187.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-03T17%3A12%3A24%2B01%3A00&amp;precision=second" title="2014-10-03T17:12:24+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Report of group processing success.
+</p>
+<p>
+Group workspaces don't indicate via the logs that they have finished
+processing. Normal execution does. I've fixed that here. I've also added a
+message about the fact that group processing completion has been done so
+that timings can be seen to relate to the overall processing. This will
+help where the native processGroups is used, and algorithm execution logs
+are reported in addition.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0a8b9e304f332dc907a2aeb9781ebfb69f6dee2f" title="0a8b9e304f332dc907a2aeb9781ebfb69f6dee2f">0a8b9e304f332dc907a2aeb9781ebfb69f6dee2f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10187.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T08%3A33%3A06%2B01%3A00&amp;precision=second" title="2014-10-08T08:33:06+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Report of group processing success."
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0a8b9e304f332dc907a2aeb9781ebfb69f6dee2f" title="0a8b9e304f332dc907a2aeb9781ebfb69f6dee2f">0a8b9e304f332dc907a2aeb9781ebfb69f6dee2f</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6952dc644a43e2a23200bf20cc96d7115f553a4" title="a6952dc644a43e2a23200bf20cc96d7115f553a4">a6952dc644a43e2a23200bf20cc96d7115f553a4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10187.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T09%3A57%3A32%2B01%3A00&amp;precision=second" title="2014-10-08T09:57:32+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "Revert "refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Report of group processing success.""
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a6952dc644a43e2a23200bf20cc96d7115f553a4" title="a6952dc644a43e2a23200bf20cc96d7115f553a4">a6952dc644a43e2a23200bf20cc96d7115f553a4</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/754634edca8eed142da46aa2a862a276428319b1" title="754634edca8eed142da46aa2a862a276428319b1">754634edca8eed142da46aa2a862a276428319b1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10187.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T09%3A57%3A32%2B01%3A00&amp;precision=second" title="2014-10-08T09:57:32+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10187.html" title="Proper group processing behaviour in SaveNexus and SaveProcessedNexus (closed: fixed)">#10187</a>. Return result.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1517a7579a7a7869e60d2f926187b500d815620a" title="1517a7579a7a7869e60d2f926187b500d815620a">1517a7579a7a7869e60d2f926187b500d815620a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10187.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-09T18%3A26%3A27%2B01%3A00&amp;precision=second" title="2014-10-09T18:26:27+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10187_process_groups
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/565381eabfc9a0fc19da59b120c2d5364f37ece0"><span class="icon">​</span>565381eabfc9a0fc19da59b120c2d5364f37ece0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10187.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-09T18%3A26%3A28%2B01%3A00&amp;precision=second" title="2014-10-09T18:26:28+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/10187_process_groups' of github.com:mantidproject/mantid into feature/10187_process_groups
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/045c1b30c5660ae39bc804a3fd3bf439602067c9"><span class="icon">​</span>045c1b30c5660ae39bc804a3fd3bf439602067c9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="10187.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-09T18%3A26%3A28%2B01%3A00&amp;precision=second" title="2014-10-09T18:26:28+01:00 in Timeline">6 years</a> ago by Michael Reuter
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="37.html" title="enhancement: Add and maintain History for workspaces (closed: duplicate)">#37</a> from mantidproject/feature/10187_process_groups
+</p>
+<p>
+Feature/10187 process groups
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/023e4e5a312aeaf58b1a04ad4593200da24eea8f"><span class="icon">​</span>023e4e5a312aeaf58b1a04ad4593200da24eea8f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="10187.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A49%3A02%2B01%3A00&amp;precision=second" title="2015-06-04T03:49:02+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11029"><span class="icon">​</span>11029</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10187?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10187?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10187?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

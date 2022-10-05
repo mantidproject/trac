@@ -1,0 +1,3758 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #6667 (Move ISIS indirect reduction into Mantid and write proper system tests for it)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="6666.html" title="Ticket #6666" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6667?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6667?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6667?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="6668.html" title="Ticket #6668" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 6667, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="6666.html" title="Ticket #6666">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="6668.html" title="Ticket #6668">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="6667.html">Ticket #6667</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-05T15%3A58%3A42Z&amp;precision=second" title="2013-03-05T15:58:42Z in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A23%3A20%2B01%3A00&amp;precision=second" title="2015-06-04T01:23:20+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Move ISIS indirect reduction into Mantid and write proper system tests for it</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Alex+Buts">Alex Buts</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Alex+Buts">Alex Buts</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.6.html">Release 2.6</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Direct+Inelastic">Direct Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              martyn.gigg@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-07-18 08:04:24.291850+00:00">
+        (last modified by Martyn Gigg)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/6667?action=diff&amp;version=126">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Mantid currently uses DirectInelastic reduction algorithms which is used for converting data to energy transfer. The integrity of these is verified by the system tests. 
+</p>
+<p>
+These algorithms are the basis for customized reduction, actually used in ISIS excitation group to process the experimental results. 
+</p>
+<p>
+The custom algorithms mainly rely on Mantid algorithm but override different settings from different places and have some parts of the algorithm implemented differently. 
+</p>
+<p>
+1) The custom algorithm are not covered by system tests and can be easily broken  by the changes in Mantid core
+</p>
+<p>
+2) Two (actually three) sets of default parameters plus possibility to set up parameters from the script itself make it difficult to understand what parameter is actually used. 
+</p>
+<p>
+The purpose of this ticket is to bring all ISIS inelastic reduction script into Mantid and verify its integrity by proper system tests. 
+</p>
+<p>
+Isis reduction script should be very thin layer over verified Mantid reduction scripts. 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="6667.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-22T16%3A27%3A21%2B01%3A00&amp;precision=second" title="2013-04-22T16:27:21+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.5</em> to <em>Release 2.6</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="6667.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-30T14%3A58%3A44%2B01%3A00&amp;precision=second" title="2013-05-30T14:58:44+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="6667.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-04T19%3A54%3A58%2B01%3A00&amp;precision=second" title="2013-06-04T19:54:58+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Instrument parameters modified to take some properties
+</p>
+<p>
+from dgreduce
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7054b8b689062ba1e9a63ded7b93f83c01eb541d" title="7054b8b689062ba1e9a63ded7b93f83c01eb541d">7054b8b689062ba1e9a63ded7b93f83c01eb541d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="6667.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-04T19%3A54%3A58%2B01%3A00&amp;precision=second" title="2013-06-04T19:54:58+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> first steps in taking all parameters from dgreduce
+</p>
+<p>
+and moving them into IDF_Parameters.xml
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d3ead08640467109bf7d2dfd8b0763ba92a6743" title="1d3ead08640467109bf7d2dfd8b0763ba92a6743">1d3ead08640467109bf7d2dfd8b0763ba92a6743</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="6667.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-05T19%3A16%3A27%2B01%3A00&amp;precision=second" title="2013-06-05T19:16:27+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Changed ExperimentInfo::populateInstrumentParameters
+</p>
+<p>
+to understand booleans, though no unit tests found for populateInstrumentParameters to check this stuff works properly
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a3ad11252080a8c09bfc31d54a756d4dcc071b31" title="a3ad11252080a8c09bfc31d54a756d4dcc071b31">a3ad11252080a8c09bfc31d54a756d4dcc071b31</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="6667.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-05T19%3A16%3A27%2B01%3A00&amp;precision=second" title="2013-06-05T19:16:27+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Exported parameter type from the parameter map
+</p>
+<p>
+Very ugly done, as python should be able to retrieve the value and type together. But can not find better way at the moment.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6fa81f435d321d7321ad49a03eb8d4581cfb3f67" title="6fa81f435d321d7321ad49a03eb8d4581cfb3f67">6fa81f435d321d7321ad49a03eb8d4581cfb3f67</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="6667.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-05T19%3A16%3A27%2B01%3A00&amp;precision=second" title="2013-06-05T19:16:27+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor changes to export parameter type
+</p>
+<p>
+and substitution dictionary in DirectEnergyConversion
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7cc4636d2a76931ca3b300c525e30d826d29589e" title="7cc4636d2a76931ca3b300c525e30d826d29589e">7cc4636d2a76931ca3b300c525e30d826d29589e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="6667.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-06T20%3A21%3A06%2B01%3A00&amp;precision=second" title="2013-06-06T20:21:06+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Failed attempt to build getParameterType test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be8737adb1cb6e8d4dcb3bead11faeaef4cbbe2a" title="be8737adb1cb6e8d4dcb3bead11faeaef4cbbe2a">be8737adb1cb6e8d4dcb3bead11faeaef4cbbe2a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="6667.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-06T20%3A21%3A06%2B01%3A00&amp;precision=second" title="2013-06-06T20:21:06+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> finally correct test verifying the component type name
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ea809f14f70cfdb57f9513f58346ce107aaef727" title="ea809f14f70cfdb57f9513f58346ce107aaef727">ea809f14f70cfdb57f9513f58346ce107aaef727</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="6667.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-06T20%3A21%3A06%2B01%3A00&amp;precision=second" title="2013-06-06T20:21:06+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Hopefully working solution with Parameter-based file
+</p>
+<p>
+where all default keys are obtained from Par.xml.
++ int parameter is added to xml parcer.
+</p>
+<p>
+Need tests and routines, accepting parameters from the arguments.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fd1045910f9e6cce0b5b025440581f1b42d8ebfb" title="fd1045910f9e6cce0b5b025440581f1b42d8ebfb">fd1045910f9e6cce0b5b025440581f1b42d8ebfb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="6667.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-12T18%3A45%3A28%2B01%3A00&amp;precision=second" title="2013-06-12T18:45:28+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> more changes to parameters and some unit tests attempts
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/22d5bcf8e8e26b6cdbd92235b972dc53afc30052" title="22d5bcf8e8e26b6cdbd92235b972dc53afc30052">22d5bcf8e8e26b6cdbd92235b972dc53afc30052</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="6667.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-14T13%3A31%3A01%2B01%3A00&amp;precision=second" title="2013-06-14T13:31:01+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> DirectEnergyConversion accepts external parameters
+</p>
+<p>
+and have number of unit tests enabled testing this functionality. DAE name property imported from Mantid Facility (for qtiGenie to work)
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8e016fb1c6c43027470d44a26f26082f7d9bc5e2" title="8e016fb1c6c43027470d44a26f26082f7d9bc5e2">8e016fb1c6c43027470d44a26f26082f7d9bc5e2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="6667.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-14T13%3A31%3A02%2B01%3A00&amp;precision=second" title="2013-06-14T13:31:02+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> intermediate checkout
+</p>
+<p>
+some unit tests run and ready to run system tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/568b5c837ac8767a259ef23248aa35971802f503" title="568b5c837ac8767a259ef23248aa35971802f503">568b5c837ac8767a259ef23248aa35971802f503</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="6667.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-14T13%3A31%3A02%2B01%3A00&amp;precision=second" title="2013-06-14T13:31:02+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> diagnose seems work
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3af63f712d6fb3986bb3aeef2f9203d188f64fcd" title="3af63f712d6fb3986bb3aeef2f9203d188f64fcd">3af63f712d6fb3986bb3aeef2f9203d188f64fcd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="6667.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-14T13%3A31%3A02%2B01%3A00&amp;precision=second" title="2013-06-14T13:31:02+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Intermediate checkout
+</p>
+<p>
+Old system test for MAPS runs with modified DirectEnergyConversion
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4fe78d10f0085fdf597acfe9ef0a830d9b6af779" title="4fe78d10f0085fdf597acfe9ef0a830d9b6af779">4fe78d10f0085fdf597acfe9ef0a830d9b6af779</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="6667.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-14T13%3A32%3A55%2B01%3A00&amp;precision=second" title="2013-06-14T13:32:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> modifying system tests to work with new dgreduce
+</p>
+<p>
+in ISIS
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6553bd5dafdd41ad095d090c54699aedb8396f6b" title="6553bd5dafdd41ad095d090c54699aedb8396f6b">6553bd5dafdd41ad095d090c54699aedb8396f6b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="6667.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-17T18%3A45%3A37%2B01%3A00&amp;precision=second" title="2013-06-17T18:45:37+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Maps system tests run but do not pass
+</p>
+<p>
+Both old and new tests failing, which is probably due to different defaults
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0e66a5e324bac4801fc10da207f3ff7b035a8aa" title="c0e66a5e324bac4801fc10da207f3ff7b035a8aa">c0e66a5e324bac4801fc10da207f3ff7b035a8aa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="6667.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-17T18%3A55%3A40%2B01%3A00&amp;precision=second" title="2013-06-17T18:55:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added dgreducer based system test for MAPS
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a57029385e6dd3a676d8b642e8b043a1ef3b0ea6" title="a57029385e6dd3a676d8b642e8b043a1ef3b0ea6">a57029385e6dd3a676d8b642e8b043a1ef3b0ea6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="6667.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-19T15%3A56%3A49%2B01%3A00&amp;precision=second" title="2013-06-19T15:56:49+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> All generally works but constants are missing.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c6a8e0e7416b9ed452f40a167fc3e0a99ef10835" title="c6a8e0e7416b9ed452f40a167fc3e0a99ef10835">c6a8e0e7416b9ed452f40a167fc3e0a99ef10835</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="6667.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-19T18%3A51%3A07%2B01%3A00&amp;precision=second" title="2013-06-19T18:51:07+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> The run data look very close to each other (MAPS)
+</p>
+<p>
+but not yet identical -- diag seems a bit different
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/99a8f64f858ef44bf984d95acdd78af3bfb2e74b" title="99a8f64f858ef44bf984d95acdd78af3bfb2e74b">99a8f64f858ef44bf984d95acdd78af3bfb2e74b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="6667.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-19T18%3A55%3A06%2B01%3A00&amp;precision=second" title="2013-06-19T18:55:06+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> minor changes
+</p>
+<p>
+mainly related to ongoing work on other branches
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b20d8cc966ec528dd550cc2db74e2fae013b6815" title="b20d8cc966ec528dd550cc2db74e2fae013b6815">b20d8cc966ec528dd550cc2db74e2fae013b6815</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="6667.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-20T13%3A51%3A12%2B01%3A00&amp;precision=second" title="2013-06-20T13:51:12+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Maps reduction works
+</p>
+<p>
+But there is subtle difference in reduction results
+</p>
+<p>
+the difference does not have big physical sense, as the relative values of differences are small, but still unclear why it is present at all.
+</p>
+<p>
+The CheckWorkspacesMatch got possibility to analyze relative error together with the absolute error to understand the difference better
+LoadMask.cpp in the ISIS part has been changed to report loaded masks on debug level rather then notice as the messages in the log complicate understanding of what is going on.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d4cbed63b7fc690844d623c9a6ecb920e3983c88" title="d4cbed63b7fc690844d623c9a6ecb920e3983c88">d4cbed63b7fc690844d623c9a6ecb920e3983c88</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="6667.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-21T13%3A57%3A39%2B01%3A00&amp;precision=second" title="2013-06-21T13:57:39+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor changes for niceness
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a3a3ba23f03582c28abbb04e30064882c8e61783" title="a3a3ba23f03582c28abbb04e30064882c8e61783">a3a3ba23f03582c28abbb04e30064882c8e61783</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="6667.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-21T13%3A57%3A40%2B01%3A00&amp;precision=second" title="2013-06-21T13:57:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Modified parameters in accordance with MAPS
+</p>
+<p>
+mean real data which MAPS uses -- not the one it has in MAPS parameters file
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f0e7a7f96c4ed4b10a1878de0af0d82bc47d4eef" title="f0e7a7f96c4ed4b10a1878de0af0d82bc47d4eef">f0e7a7f96c4ed4b10a1878de0af0d82bc47d4eef</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="6667.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-21T13%3A57%3A40%2B01%3A00&amp;precision=second" title="2013-06-21T13:57:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> minor changes
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/58e44c54245486abd8b81722e48b22a0a0b5a9f0" title="58e44c54245486abd8b81722e48b22a0a0b5a9f0">58e44c54245486abd8b81722e48b22a0a0b5a9f0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="6667.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-21T13%3A57%3A40%2B01%3A00&amp;precision=second" title="2013-06-21T13:57:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Intermediate commit -- debug statements
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd79a0f926ec6d56aa056e57e866e5cd3534b64e" title="bd79a0f926ec6d56aa056e57e866e5cd3534b64e">bd79a0f926ec6d56aa056e57e866e5cd3534b64e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="6667.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-21T13%3A57%3A40%2B01%3A00&amp;precision=second" title="2013-06-21T13:57:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Small improvements and attempt to use hardmask only
+</p>
+<p>
+unsuccessful attempts
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8394503dda2351f22edb473afdf6be865a2ef4d" title="b8394503dda2351f22edb473afdf6be865a2ef4d">b8394503dda2351f22edb473afdf6be865a2ef4d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="6667.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-21T13%3A57%3A40%2B01%3A00&amp;precision=second" title="2013-06-21T13:57:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> minor changes
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ae375bed30bccf83ce6f328c145fb3c38da9e43e" title="ae375bed30bccf83ce6f328c145fb3c38da9e43e">ae375bed30bccf83ce6f328c145fb3c38da9e43e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="6667.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-24T10%3A53%3A34%2B01%3A00&amp;precision=second" title="2013-06-24T10:53:34+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Modified Save procedure in DirectEnergyConversion
+</p>
+<p>
+to use different save routines as lambda functions
+</p>
+<p>
+plus some small debugging statements which will probably be reverted
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee8b3ada5f305d9a70415f75835c823dfa269ce1" title="ee8b3ada5f305d9a70415f75835c823dfa269ce1">ee8b3ada5f305d9a70415f75835c823dfa269ce1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="6667.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-26T08%3A56%3A52%2B01%3A00&amp;precision=second" title="2013-06-26T08:56:52+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Modified getNeutronAtom without exceptions to be really
+</p>
+<p>
+without exceptions
+</p>
+<p>
+As it is impossible to start Mantid in Debug mode as it throws thousand exceptions which are then catched, analyzed, reported and one has to wait for 1 min to start trivial program
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc6ef632982584d0254bae99d316da082a671f26" title="dc6ef632982584d0254bae99d316da082a671f26">dc6ef632982584d0254bae99d316da082a671f26</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="6667.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-26T08%3A56%3A53%2B01%3A00&amp;precision=second" title="2013-06-26T08:56:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Presumably created hardMaskOnly mode in diagnose
+</p>
+<p>
+removed couple of small test clauses.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d981f12f335e45371eae00ab4d4a3c128602f718" title="d981f12f335e45371eae00ab4d4a3c128602f718">d981f12f335e45371eae00ab4d4a3c128602f718</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="6667.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-26T08%3A56%3A53%2B01%3A00&amp;precision=second" title="2013-06-26T08:56:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Better defined overloaded properties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c28e762e188775b9bae95b73c0b7d331617425f" title="4c28e762e188775b9bae95b73c0b7d331617425f">4c28e762e188775b9bae95b73c0b7d331617425f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="6667.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-26T08%3A56%3A54%2B01%3A00&amp;precision=second" title="2013-06-26T08:56:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Checkpoint.
+</p>
+<p>
+Trying to reduce monovanadium and it does not work.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96416491a7cf259b4b4035f10a4cd66c341fa02a" title="96416491a7cf259b4b4035f10a4cd66c341fa02a">96416491a7cf259b4b4035f10a4cd66c341fa02a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="6667.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-26T08%3A56%3A54%2B01%3A00&amp;precision=second" title="2013-06-26T08:56:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Hard Mask only works
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/197697037a468856345391d3cc8fa37a36e8647b" title="197697037a468856345391d3cc8fa37a36e8647b">197697037a468856345391d3cc8fa37a36e8647b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="6667.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-26T08%3A56%3A54%2B01%3A00&amp;precision=second" title="2013-06-26T08:56:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Implemented default relative mono-vanadium integration
+</p>
+<p>
+range. There are doubts on if it is correct implementation as seems it was used for different energy ranges. But let's do something and see.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c2ba791dd1509323c6b92d18fae8b850fb5f4703" title="c2ba791dd1509323c6b92d18fae8b850fb5f4703">c2ba791dd1509323c6b92d18fae8b850fb5f4703</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="6667.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-27T14%3A03%3A34%2B01%3A00&amp;precision=second" title="2013-06-27T14:03:34+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Attempted to implement masks reuse.
+</p>
+<p>
+Which does not work because of the way xml mask interacts with workspace. left for the time being.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e8972f3a51c44f92f175748debb42843ed297569" title="e8972f3a51c44f92f175748debb42843ed297569">e8972f3a51c44f92f175748debb42843ed297569</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="6667.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-27T14%3A03%3A34%2B01%3A00&amp;precision=second" title="2013-06-27T14:03:34+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Intensities of old and new dgreduce coincide in arb units
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5c2c5acf182527ef874aeea5493a485ab618f55d" title="5c2c5acf182527ef874aeea5493a485ab618f55d">5c2c5acf182527ef874aeea5493a485ab618f55d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="6667.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-27T14%3A03%3A35%2B01%3A00&amp;precision=second" title="2013-06-27T14:03:35+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Some comments
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc00e5a9f099854567ce64f48b164cc19a66f613" title="dc00e5a9f099854567ce64f48b164cc19a66f613">dc00e5a9f099854567ce64f48b164cc19a66f613</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="6667.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-27T14%3A03%3A35%2B01%3A00&amp;precision=second" title="2013-06-27T14:03:35+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor comments and enhancements
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f081441e33266ba9952fa04455d30eb5cb3b3e88" title="f081441e33266ba9952fa04455d30eb5cb3b3e88">f081441e33266ba9952fa04455d30eb5cb3b3e88</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="6667.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-27T14%3A03%3A35%2B01%3A00&amp;precision=second" title="2013-06-27T14:03:35+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added option to request comparing all data to
+</p>
+<p>
+CheckWorkspacesMatch
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0168f2ef7f9c8cdce8c9aca8e63afcf72db076b9" title="0168f2ef7f9c8cdce8c9aca8e63afcf72db076b9">0168f2ef7f9c8cdce8c9aca8e63afcf72db076b9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="6667.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-27T17%3A37%3A58%2B01%3A00&amp;precision=second" title="2013-06-27T17:37:58+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Comments and code niceness.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d8342668c12453ea87c5f5d864696faed44577d8" title="d8342668c12453ea87c5f5d864696faed44577d8">d8342668c12453ea87c5f5d864696faed44577d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="6667.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-27T17%3A44%3A49%2B01%3A00&amp;precision=second" title="2013-06-27T17:44:49+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> MAPS system test modified to work hopefully right
+</p>
+<p>
+and produce correct WB cross-section if set up this way (currently it is not and runs against some run data)
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6d2de5721e5f066160971a452a5d48241a7d8c5a" title="6d2de5721e5f066160971a452a5d48241a7d8c5a">6d2de5721e5f066160971a452a5d48241a7d8c5a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="6667.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T14%3A31%3A36%2B01%3A00&amp;precision=second" title="2013-06-28T14:31:36+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> LET parameters file has been created and tried with LET
+</p>
+<p>
+reduction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6cd4f86f82d9e2a47d1d06011f11788d18f8eb78" title="6cd4f86f82d9e2a47d1d06011f11788d18f8eb78">6cd4f86f82d9e2a47d1d06011f11788d18f8eb78</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="6667.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T15%3A22%3A56%2B01%3A00&amp;precision=second" title="2013-06-28T15:22:56+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> checkpoint Changed set_instrument_name property
+</p>
+<p>
+working together with calibration file workspace
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a4012635c12279d8f478e4592b9328984460bb7" title="7a4012635c12279d8f478e4592b9328984460bb7">7a4012635c12279d8f478e4592b9328984460bb7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="6667.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-28T19%3A46%3A32%2B01%3A00&amp;precision=second" title="2013-06-28T19:46:32+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor checkpoint
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa9cc2ee8fcc7f3a87e6e98e4102343647874650" title="fa9cc2ee8fcc7f3a87e6e98e4102343647874650">fa9cc2ee8fcc7f3a87e6e98e4102343647874650</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="6667.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-01T13%3A15%3A36%2B01%3A00&amp;precision=second" title="2013-07-01T13:15:36+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Small changes allowing to run DirectEnergyConversion for
+</p>
+<p>
+LET
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/10064f82ad0eea0329453dc37dc1fc63891d54b1" title="10064f82ad0eea0329453dc37dc1fc63891d54b1">10064f82ad0eea0329453dc37dc1fc63891d54b1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="6667.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A49%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T17:49:18+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added provisional parameters for LET MERLIN and MARI
+</p>
+<p>
+the old remaining as back-up
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a9ff4638ae5b7e4b8a3d58e441a86cb433bd16ba" title="a9ff4638ae5b7e4b8a3d58e441a86cb433bd16ba">a9ff4638ae5b7e4b8a3d58e441a86cb433bd16ba</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="6667.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-03T17%3A49%3A18%2B01%3A00&amp;precision=second" title="2013-07-03T17:49:18+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Something like working for MARI
+</p>
+<p>
+but further investigations pending if it is exactly right
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2aaf1e64ffcfc46ddfae7f2c93692443b302036b" title="2aaf1e64ffcfc46ddfae7f2c93692443b302036b">2aaf1e64ffcfc46ddfae7f2c93692443b302036b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="6667.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-04T17%3A31%3A37%2B01%3A00&amp;precision=second" title="2013-07-04T17:31:37+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Modified MAPS and MARI System tests pass
+</p>
+<p>
+one more workflow test has been added for MARI
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/82196cf97d5770f90c2d4b16b599995495eb5b6c" title="82196cf97d5770f90c2d4b16b599995495eb5b6c">82196cf97d5770f90c2d4b16b599995495eb5b6c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="6667.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T13%3A10%3A56%2B01%3A00&amp;precision=second" title="2013-07-05T13:10:56+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Changes to MARI reduction to produce previous results
+</p>
+<p>
+MARI generates the results which are similar to the one, produced by old reducer. Reasons for difference are generally clear.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ce4293e1934fa9278d842e128643ace1500f78c" title="7ce4293e1934fa9278d842e128643ace1500f78c">7ce4293e1934fa9278d842e128643ace1500f78c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="6667.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T13%3A10%3A56%2B01%3A00&amp;precision=second" title="2013-07-05T13:10:56+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> MARI and MAPS system tests pass
+</p>
+<p>
+modified system tests, compared against vanadium
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c177bb10e0cc7d3cb07ebae64b18c682a1662f28" title="c177bb10e0cc7d3cb07ebae64b18c682a1662f28">c177bb10e0cc7d3cb07ebae64b18c682a1662f28</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="6667.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T13%3A10%3A57%2B01%3A00&amp;precision=second" title="2013-07-05T13:10:57+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Extracted unit tests for the interfaces
+</p>
+<p>
+and added them to CMakeLists.txt
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5513e3000e67fddeba82a35c759d735e2e76c581" title="5513e3000e67fddeba82a35c759d735e2e76c581">5513e3000e67fddeba82a35c759d735e2e76c581</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="6667.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T13%3A49%3A52%2B01%3A00&amp;precision=second" title="2013-07-05T13:49:52+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> System tests modified to work for dgreduce.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6d09eeac5ef01b4a3d7a38990d9492e6da350adb" title="6d09eeac5ef01b4a3d7a38990d9492e6da350adb">6d09eeac5ef01b4a3d7a38990d9492e6da350adb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="6667.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T13%3A51%3A59%2B01%3A00&amp;precision=second" title="2013-07-05T13:51:59+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Correct test if workspace provided to reducer
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9b4ab8bdd9b8e662b2cf554d2b164b703dc78d2a" title="9b4ab8bdd9b8e662b2cf554d2b164b703dc78d2a">9b4ab8bdd9b8e662b2cf554d2b164b703dc78d2a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="6667.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T16%3A27%3A53%2B01%3A00&amp;precision=second" title="2013-07-05T16:27:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Modified getNeutronAtom without exceptions to be really
+</p>
+<p>
+without exceptions
+</p>
+<p>
+As it is impossible to start Mantid in Debug mode as it throws thousand exceptions which are then catched, analyzed, reported and one has to wait for 1 min to start trivial program
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0df38d27c4d410c0320cb96774a08ca3818b16d0" title="0df38d27c4d410c0320cb96774a08ca3818b16d0">0df38d27c4d410c0320cb96774a08ca3818b16d0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="6667.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A53%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Presumably created hardMaskOnly mode in diagnose
+</p>
+<p>
+removed couple of small test clauses.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/596aa803ab64cdbe20b274c861f0511efe3c2d11" title="596aa803ab64cdbe20b274c861f0511efe3c2d11">596aa803ab64cdbe20b274c861f0511efe3c2d11</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="6667.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A53%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Better defined overloaded properties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3711e07c27c001021b4df979b76cbc57e9fb28ab" title="3711e07c27c001021b4df979b76cbc57e9fb28ab">3711e07c27c001021b4df979b76cbc57e9fb28ab</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="6667.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A53%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Checkpoint.
+</p>
+<p>
+Trying to reduce monovanadium and it does not work.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ad59da8b56ed48fe39cb01d760ba1048c2e5170b" title="ad59da8b56ed48fe39cb01d760ba1048c2e5170b">ad59da8b56ed48fe39cb01d760ba1048c2e5170b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="6667.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A53%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Hard Mask only works
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2ac4bc0c9d3395edd2ed374d21a9cbaaf1fac280" title="2ac4bc0c9d3395edd2ed374d21a9cbaaf1fac280">2ac4bc0c9d3395edd2ed374d21a9cbaaf1fac280</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="6667.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A53%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Implemented default relative mono-vanadium integration
+</p>
+<p>
+range. There are doubts on if it is correct implementation as seems it was used for different energy ranges. But let's do something and see.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0aa884c9d76a7b9be3ac8bf0edf310eb0bcf318a" title="0aa884c9d76a7b9be3ac8bf0edf310eb0bcf318a">0aa884c9d76a7b9be3ac8bf0edf310eb0bcf318a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="6667.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A53%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Attempted to implement masks reuse.
+</p>
+<p>
+Which does not work because of the way xml mask interacts with workspace. left for the time being.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5dc8cbb42a0666239d367b34552a7e5dc850ccfa" title="5dc8cbb42a0666239d367b34552a7e5dc850ccfa">5dc8cbb42a0666239d367b34552a7e5dc850ccfa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="6667.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A53%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Intensities of old and new dgreduce coincide in arb units
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/48d23a944b71168accf16470bbf2b24753f80c57" title="48d23a944b71168accf16470bbf2b24753f80c57">48d23a944b71168accf16470bbf2b24753f80c57</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="6667.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A54%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Some comments
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0279359f44107cd3f66ded6b38f379a27f2e0fdd" title="0279359f44107cd3f66ded6b38f379a27f2e0fdd">0279359f44107cd3f66ded6b38f379a27f2e0fdd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="6667.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A54%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor comments and enhancements
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8fd0ed42de26ea9b93f3416abc243590b4203cb6" title="8fd0ed42de26ea9b93f3416abc243590b4203cb6">8fd0ed42de26ea9b93f3416abc243590b4203cb6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="6667.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A54%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added option to request comparing all data to
+</p>
+<p>
+CheckWorkspacesMatch
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fb1964e487a39ecddf3ea83cc4b8c2754098aaee" title="fb1964e487a39ecddf3ea83cc4b8c2754098aaee">fb1964e487a39ecddf3ea83cc4b8c2754098aaee</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="6667.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A54%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Comments and code niceness.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee45d2074357cab6ba9a9816a90445944903d966" title="ee45d2074357cab6ba9a9816a90445944903d966">ee45d2074357cab6ba9a9816a90445944903d966</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="6667.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A54%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> LET parameters file has been created and tried with LET
+</p>
+<p>
+reduction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19aa4f9d4dd8f1eeb779fbb9b12404800a085206" title="19aa4f9d4dd8f1eeb779fbb9b12404800a085206">19aa4f9d4dd8f1eeb779fbb9b12404800a085206</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="6667.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A54%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:54+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> checkpoint Changed set_instrument_name property
+</p>
+<p>
+working together with calibration file workspace
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cb45ffeda2308a46bbca75ab1ff4fb7bbed8cb31" title="cb45ffeda2308a46bbca75ab1ff4fb7bbed8cb31">cb45ffeda2308a46bbca75ab1ff4fb7bbed8cb31</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="6667.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A55%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor checkpoint
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eb5063c9234c143a4c0e6bd5a296c162ba48e21a" title="eb5063c9234c143a4c0e6bd5a296c162ba48e21a">eb5063c9234c143a4c0e6bd5a296c162ba48e21a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="6667.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A55%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Small changes allowing to run DirectEnergyConversion for
+</p>
+<p>
+LET
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/34a2a5c15118b143d874c59f8bad534df79a2193" title="34a2a5c15118b143d874c59f8bad534df79a2193">34a2a5c15118b143d874c59f8bad534df79a2193</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="6667.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A55%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added provisional parameters for LET MERLIN and MARI
+</p>
+<p>
+the old remaining as back-up
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4359af7f11cfa632bc15b44ba643191da50c5089" title="4359af7f11cfa632bc15b44ba643191da50c5089">4359af7f11cfa632bc15b44ba643191da50c5089</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="6667.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A55%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Something like working for MARI
+</p>
+<p>
+but further investigations pending if it is exactly right
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a80b20b51594f6aa7c0a4d075a95da74fdcc3a46" title="a80b20b51594f6aa7c0a4d075a95da74fdcc3a46">a80b20b51594f6aa7c0a4d075a95da74fdcc3a46</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="6667.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A55%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Changes to MARI reduction to produce previous results
+</p>
+<p>
+MARI generates the results which are similar to the one, produced by old reducer. Reasons for difference are generally clear.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/884e2ba501aec758fc7fd1d9e392526f79910dff" title="884e2ba501aec758fc7fd1d9e392526f79910dff">884e2ba501aec758fc7fd1d9e392526f79910dff</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="6667.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A55%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> MARI and MAPS system tests pass
+</p>
+<p>
+modified system tests, compared against vanadium
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1933b51647408634ceb45ce875e505a05e85cacc" title="1933b51647408634ceb45ce875e505a05e85cacc">1933b51647408634ceb45ce875e505a05e85cacc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="6667.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A55%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Extracted unit tests for the interfaces
+</p>
+<p>
+and added them to CMakeLists.txt
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/49544007feaaac826c11665dcfbab4ed0d395d34" title="49544007feaaac826c11665dcfbab4ed0d395d34">49544007feaaac826c11665dcfbab4ed0d395d34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="6667.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A40%3A56%2B01%3A00&amp;precision=second" title="2013-07-05T17:40:56+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Correct test if workspace provided to reducer
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/032aae03cf3c2c25f91776981fcdd62a56e67c49" title="032aae03cf3c2c25f91776981fcdd62a56e67c49">032aae03cf3c2c25f91776981fcdd62a56e67c49</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="6667.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A21%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:21+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Modified getNeutronAtom without exceptions to be really
+</p>
+<p>
+without exceptions
+</p>
+<p>
+As it is impossible to start Mantid in Debug mode as it throws thousand exceptions which are then catched, analyzed, reported and one has to wait for 1 min to start trivial program
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc6ef632982584d0254bae99d316da082a671f26" title="dc6ef632982584d0254bae99d316da082a671f26">dc6ef632982584d0254bae99d316da082a671f26</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="6667.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A21%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:21+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Presumably created hardMaskOnly mode in diagnose
+</p>
+<p>
+removed couple of small test clauses.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d981f12f335e45371eae00ab4d4a3c128602f718" title="d981f12f335e45371eae00ab4d4a3c128602f718">d981f12f335e45371eae00ab4d4a3c128602f718</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="6667.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A21%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:21+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Better defined overloaded properties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c28e762e188775b9bae95b73c0b7d331617425f" title="4c28e762e188775b9bae95b73c0b7d331617425f">4c28e762e188775b9bae95b73c0b7d331617425f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="6667.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A21%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:21+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Checkpoint.
+</p>
+<p>
+Trying to reduce monovanadium and it does not work.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96416491a7cf259b4b4035f10a4cd66c341fa02a" title="96416491a7cf259b4b4035f10a4cd66c341fa02a">96416491a7cf259b4b4035f10a4cd66c341fa02a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="6667.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A21%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:21+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Hard Mask only works
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/197697037a468856345391d3cc8fa37a36e8647b" title="197697037a468856345391d3cc8fa37a36e8647b">197697037a468856345391d3cc8fa37a36e8647b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-82">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:82" class="cnum">
+      <a href="6667.html#comment:82">comment:82</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A21%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:21+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Implemented default relative mono-vanadium integration
+</p>
+<p>
+range. There are doubts on if it is correct implementation as seems it was used for different energy ranges. But let's do something and see.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c2ba791dd1509323c6b92d18fae8b850fb5f4703" title="c2ba791dd1509323c6b92d18fae8b850fb5f4703">c2ba791dd1509323c6b92d18fae8b850fb5f4703</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-83">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:83" class="cnum">
+      <a href="6667.html#comment:83">comment:83</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A22%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:22+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Attempted to implement masks reuse.
+</p>
+<p>
+Which does not work because of the way xml mask interacts with workspace. left for the time being.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e8972f3a51c44f92f175748debb42843ed297569" title="e8972f3a51c44f92f175748debb42843ed297569">e8972f3a51c44f92f175748debb42843ed297569</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-84">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:84" class="cnum">
+      <a href="6667.html#comment:84">comment:84</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A22%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:22+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Intensities of old and new dgreduce coincide in arb units
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5c2c5acf182527ef874aeea5493a485ab618f55d" title="5c2c5acf182527ef874aeea5493a485ab618f55d">5c2c5acf182527ef874aeea5493a485ab618f55d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-85">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:85" class="cnum">
+      <a href="6667.html#comment:85">comment:85</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A22%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:22+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Some comments
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc00e5a9f099854567ce64f48b164cc19a66f613" title="dc00e5a9f099854567ce64f48b164cc19a66f613">dc00e5a9f099854567ce64f48b164cc19a66f613</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-86">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:86" class="cnum">
+      <a href="6667.html#comment:86">comment:86</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A22%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:22+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor comments and enhancements
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f081441e33266ba9952fa04455d30eb5cb3b3e88" title="f081441e33266ba9952fa04455d30eb5cb3b3e88">f081441e33266ba9952fa04455d30eb5cb3b3e88</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-87">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:87" class="cnum">
+      <a href="6667.html#comment:87">comment:87</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A22%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:22+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added option to request comparing all data to
+</p>
+<p>
+CheckWorkspacesMatch
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0168f2ef7f9c8cdce8c9aca8e63afcf72db076b9" title="0168f2ef7f9c8cdce8c9aca8e63afcf72db076b9">0168f2ef7f9c8cdce8c9aca8e63afcf72db076b9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-88">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:88" class="cnum">
+      <a href="6667.html#comment:88">comment:88</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A22%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:22+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Comments and code niceness.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d8342668c12453ea87c5f5d864696faed44577d8" title="d8342668c12453ea87c5f5d864696faed44577d8">d8342668c12453ea87c5f5d864696faed44577d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-89">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:89" class="cnum">
+      <a href="6667.html#comment:89">comment:89</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A23%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:23+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> LET parameters file has been created and tried with LET
+</p>
+<p>
+reduction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6cd4f86f82d9e2a47d1d06011f11788d18f8eb78" title="6cd4f86f82d9e2a47d1d06011f11788d18f8eb78">6cd4f86f82d9e2a47d1d06011f11788d18f8eb78</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-90">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:90" class="cnum">
+      <a href="6667.html#comment:90">comment:90</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A23%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:23+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> checkpoint Changed set_instrument_name property
+</p>
+<p>
+working together with calibration file workspace
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a4012635c12279d8f478e4592b9328984460bb7" title="7a4012635c12279d8f478e4592b9328984460bb7">7a4012635c12279d8f478e4592b9328984460bb7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-91">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:91" class="cnum">
+      <a href="6667.html#comment:91">comment:91</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A23%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:23+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor checkpoint
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa9cc2ee8fcc7f3a87e6e98e4102343647874650" title="fa9cc2ee8fcc7f3a87e6e98e4102343647874650">fa9cc2ee8fcc7f3a87e6e98e4102343647874650</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-92">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:92" class="cnum">
+      <a href="6667.html#comment:92">comment:92</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A23%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:23+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Small changes allowing to run DirectEnergyConversion for
+</p>
+<p>
+LET
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/10064f82ad0eea0329453dc37dc1fc63891d54b1" title="10064f82ad0eea0329453dc37dc1fc63891d54b1">10064f82ad0eea0329453dc37dc1fc63891d54b1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-93">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:93" class="cnum">
+      <a href="6667.html#comment:93">comment:93</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A23%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:23+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added provisional parameters for LET MERLIN and MARI
+</p>
+<p>
+the old remaining as back-up
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a9ff4638ae5b7e4b8a3d58e441a86cb433bd16ba" title="a9ff4638ae5b7e4b8a3d58e441a86cb433bd16ba">a9ff4638ae5b7e4b8a3d58e441a86cb433bd16ba</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-94">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:94" class="cnum">
+      <a href="6667.html#comment:94">comment:94</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A23%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:23+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Something like working for MARI
+</p>
+<p>
+but further investigations pending if it is exactly right
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2aaf1e64ffcfc46ddfae7f2c93692443b302036b" title="2aaf1e64ffcfc46ddfae7f2c93692443b302036b">2aaf1e64ffcfc46ddfae7f2c93692443b302036b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-95">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:95" class="cnum">
+      <a href="6667.html#comment:95">comment:95</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A23%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:23+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Changes to MARI reduction to produce previous results
+</p>
+<p>
+MARI generates the results which are similar to the one, produced by old reducer. Reasons for difference are generally clear.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ce4293e1934fa9278d842e128643ace1500f78c" title="7ce4293e1934fa9278d842e128643ace1500f78c">7ce4293e1934fa9278d842e128643ace1500f78c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-96">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:96" class="cnum">
+      <a href="6667.html#comment:96">comment:96</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A24%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:24+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> MARI and MAPS system tests pass
+</p>
+<p>
+modified system tests, compared against vanadium
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c177bb10e0cc7d3cb07ebae64b18c682a1662f28" title="c177bb10e0cc7d3cb07ebae64b18c682a1662f28">c177bb10e0cc7d3cb07ebae64b18c682a1662f28</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-97">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:97" class="cnum">
+      <a href="6667.html#comment:97">comment:97</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A24%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:24+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Extracted unit tests for the interfaces
+</p>
+<p>
+and added them to CMakeLists.txt
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5513e3000e67fddeba82a35c759d735e2e76c581" title="5513e3000e67fddeba82a35c759d735e2e76c581">5513e3000e67fddeba82a35c759d735e2e76c581</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-98">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:98" class="cnum">
+      <a href="6667.html#comment:98">comment:98</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T17%3A54%3A24%2B01%3A00&amp;precision=second" title="2013-07-05T17:54:24+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Correct test if workspace provided to reducer
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9b4ab8bdd9b8e662b2cf554d2b164b703dc78d2a" title="9b4ab8bdd9b8e662b2cf554d2b164b703dc78d2a">9b4ab8bdd9b8e662b2cf554d2b164b703dc78d2a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-99">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:99" class="cnum">
+      <a href="6667.html#comment:99">comment:99</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T18%3A21%3A11%2B01%3A00&amp;precision=second" title="2013-07-05T18:21:11+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added missing imports to unit tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/77ec783d59f37ba144ec5099496d340fad0f6d50" title="77ec783d59f37ba144ec5099496d340fad0f6d50">77ec783d59f37ba144ec5099496d340fad0f6d50</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-100">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:100" class="cnum">
+      <a href="6667.html#comment:100">comment:100</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T18%3A37%3A47%2B01%3A00&amp;precision=second" title="2013-07-05T18:37:47+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Fixing previous error
+</p>
+<p>
+and trying to guess correct CMakeList  for python tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cc70258be3534f8685b521a25b3f54b2de0d1e04" title="cc70258be3534f8685b521a25b3f54b2de0d1e04">cc70258be3534f8685b521a25b3f54b2de0d1e04</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-101">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:101" class="cnum">
+      <a href="6667.html#comment:101">comment:101</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T18%3A43%3A51%2B01%3A00&amp;precision=second" title="2013-07-05T18:43:51+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> temporary disabling failing test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/92be120d826aaceb78671f723819fd89df2387dd" title="92be120d826aaceb78671f723819fd89df2387dd">92be120d826aaceb78671f723819fd89df2387dd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-102">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:102" class="cnum">
+      <a href="6667.html#comment:102">comment:102</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T19%3A16%3A55%2B01%3A00&amp;precision=second" title="2013-07-05T19:16:55+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Trying to add python library to test to python search path
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6257183e3d28c39df8015d53bacc6153ffbaa085" title="6257183e3d28c39df8015d53bacc6153ffbaa085">6257183e3d28c39df8015d53bacc6153ffbaa085</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-103">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:103" class="cnum">
+      <a href="6667.html#comment:103">comment:103</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T19%3A34%3A26%2B01%3A00&amp;precision=second" title="2013-07-05T19:34:26+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Another attempt to set search path for python test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/da8b25469e97f434ca99bf58f21f9b4fc2bb7eb2" title="da8b25469e97f434ca99bf58f21f9b4fc2bb7eb2">da8b25469e97f434ca99bf58f21f9b4fc2bb7eb2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-104">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:104" class="cnum">
+      <a href="6667.html#comment:104">comment:104</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T19%3A42%3A24%2B01%3A00&amp;precision=second" title="2013-07-05T19:42:24+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Playing with python search path in CMakeLists.txt
+</p>
+<p>
+No luck
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dbeb44a269a58f73876ebfafe34ab08275365454" title="dbeb44a269a58f73876ebfafe34ab08275365454">dbeb44a269a58f73876ebfafe34ab08275365454</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-105">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:105" class="cnum">
+      <a href="6667.html#comment:105">comment:105</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T20%3A03%3A57%2B01%3A00&amp;precision=second" title="2013-07-05T20:03:57+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> last attempt to give proper path to test modules
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/80903791551cf4a0b546a6d229159dbd5f2c7b39" title="80903791551cf4a0b546a6d229159dbd5f2c7b39">80903791551cf4a0b546a6d229159dbd5f2c7b39</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-106">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:106" class="cnum">
+      <a href="6667.html#comment:106">comment:106</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-05T20%3A06%3A22%2B01%3A00&amp;precision=second" title="2013-07-05T20:06:22+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> All back, does not work
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/055920832d8ee320a78c904968b6901cbb52088d" title="055920832d8ee320a78c904968b6901cbb52088d">055920832d8ee320a78c904968b6901cbb52088d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-107">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:107" class="cnum">
+      <a href="6667.html#comment:107">comment:107</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-07T13%3A56%3A41%2B01%3A00&amp;precision=second" title="2013-07-07T13:56:41+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added missing file needed for MAPS reduction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/11ed88d8f68145863b04070a9084a7a2c91c4930" title="11ed88d8f68145863b04070a9084a7a2c91c4930">11ed88d8f68145863b04070a9084a7a2c91c4930</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-108">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:108" class="cnum">
+      <a href="6667.html#comment:108">comment:108</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-07T16%3A28%3A24%2B01%3A00&amp;precision=second" title="2013-07-07T16:28:24+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Fixed DirectInelasticDiagnostic and LoadLotsOfFiles
+</p>
+<p>
+hopefully
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96fb4dc5943268a8b7489454bfa1cd622b032348" title="96fb4dc5943268a8b7489454bfa1cd622b032348">96fb4dc5943268a8b7489454bfa1cd622b032348</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-109">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:109" class="cnum">
+      <a href="6667.html#comment:109">comment:109</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-07T18%3A33%3A52%2B01%3A00&amp;precision=second" title="2013-07-07T18:33:52+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Modified WFA helper to understand bool property
+</p>
+<p>
+this should fix DGSReduction algorithm
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2d4a9344e112b573c80ae7c1af56f92d79a9432b" title="2d4a9344e112b573c80ae7c1af56f92d79a9432b">2d4a9344e112b573c80ae7c1af56f92d79a9432b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-110">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:110" class="cnum">
+      <a href="6667.html#comment:110">comment:110</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-07T20%3A32%3A40%2B01%3A00&amp;precision=second" title="2013-07-07T20:32:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Should fix mysterious error in MARI sum test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/151c11e017ee3b31777e6e05cdbe9bd88f3a3019" title="151c11e017ee3b31777e6e05cdbe9bd88f3a3019">151c11e017ee3b31777e6e05cdbe9bd88f3a3019</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-111">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:111" class="cnum">
+      <a href="6667.html#comment:111">comment:111</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-07T20%3A32%3A41%2B01%3A00&amp;precision=second" title="2013-07-07T20:32:41+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Some key-words corresponding to Parameters file
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/763fe727b31e58027dfc48e16e6262c472239615" title="763fe727b31e58027dfc48e16e6262c472239615">763fe727b31e58027dfc48e16e6262c472239615</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-112">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:112" class="cnum">
+      <a href="6667.html#comment:112">comment:112</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-07T21%3A20%3A50%2B01%3A00&amp;precision=second" title="2013-07-07T21:20:50+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> guessed last parameters providing difference
+</p>
+<p>
+in DirectInelasticDiagnostic2
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d60da64f7f8e132db9ea304044e51ce67cc574d8" title="d60da64f7f8e132db9ea304044e51ce67cc574d8">d60da64f7f8e132db9ea304044e51ce67cc574d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-113">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:113" class="cnum">
+      <a href="6667.html#comment:113">comment:113</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-08T17%3A48%3A51%2B01%3A00&amp;precision=second" title="2013-07-08T17:48:51+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor changes
+</p>
+<p>
+use correct procedure to find non-run type file path
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d02604fcbbc45ffc37bc9991ff15797d295cb72b" title="d02604fcbbc45ffc37bc9991ff15797d295cb72b">d02604fcbbc45ffc37bc9991ff15797d295cb72b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-114">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:114" class="cnum">
+      <a href="6667.html#comment:114">comment:114</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T15%3A32%3A57%2B01%3A00&amp;precision=second" title="2013-07-09T15:32:57+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> works correctly with necessary file as run number
+</p>
+<p>
+also tries to modify SNS reduction to understand new properties.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ce9456e354ead12ca0c23cf86b953553909e0fbf" title="ce9456e354ead12ca0c23cf86b953553909e0fbf">ce9456e354ead12ca0c23cf86b953553909e0fbf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-115">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:115" class="cnum">
+      <a href="6667.html#comment:115">comment:115</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T15%3A47%3A04%2B01%3A00&amp;precision=second" title="2013-07-09T15:47:04+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> fixed dgreduce test run separately
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9bcd9527ea2c3a60b0157029794fa2cea0f2aafe" title="9bcd9527ea2c3a60b0157029794fa2cea0f2aafe">9bcd9527ea2c3a60b0157029794fa2cea0f2aafe</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-116">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:116" class="cnum">
+      <a href="6667.html#comment:116">comment:116</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T17%3A00%3A31%2B01%3A00&amp;precision=second" title="2013-07-09T17:00:31+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> The change should fix python unit tests
+</p>
+<p>
+hopefully. And the tests were enabled.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9457c592f32ea8a41f3806dd24dc2bfa18032901" title="9457c592f32ea8a41f3806dd24dc2bfa18032901">9457c592f32ea8a41f3806dd24dc2bfa18032901</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-117">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:117" class="cnum">
+      <a href="6667.html#comment:117">comment:117</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T17%3A14%3A18%2B01%3A00&amp;precision=second" title="2013-07-09T17:14:18+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Made unit test comparison almost equal for floating point
+</p>
+<p>
+As the test fails on Unix otherwise.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a01b0cb1f8ae31f09e63bdf81945cda12510c23d" title="a01b0cb1f8ae31f09e63bdf81945cda12510c23d">a01b0cb1f8ae31f09e63bdf81945cda12510c23d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-118">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:118" class="cnum">
+      <a href="6667.html#comment:118">comment:118</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-09T17%3A27%3A53%2B01%3A00&amp;precision=second" title="2013-07-09T17:27:53+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Apparently more places where almost equal does not work on
+</p>
+<p>
+Unix
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb183539afd3139857ceb4ea634e56c42c3e4a79" title="bb183539afd3139857ceb4ea634e56c42c3e4a79">bb183539afd3139857ceb4ea634e56c42c3e4a79</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-119">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:119" class="cnum">
+      <a href="6667.html#comment:119">comment:119</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T15%3A06%3A23%2B01%3A00&amp;precision=second" title="2013-07-10T15:06:23+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Added new parameter types to API-1
+</p>
+<p>
+for old DGS reduction to work
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19705bdb3a7d48c59b6fe182b46b8087eafc6803" title="19705bdb3a7d48c59b6fe182b46b8087eafc6803">19705bdb3a7d48c59b6fe182b46b8087eafc6803</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-120">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:120" class="cnum">
+      <a href="6667.html#comment:120">comment:120</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T15%3A54%3A29%2B01%3A00&amp;precision=second" title="2013-07-10T15:54:29+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>martyn.gigg@…</em> added
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The ticket branch exists and need merging both in Mantid and SystemTests repositories.
+</p>
+<p>
+The main task of this ticket is hardly testable. 
+</p>
+<p>
+I took the â€œtrustedâ€ reduction scripts used on ISIS inelastic instruments, extracted the parameters, embedded into these scripts into InstrumentName_Parameters.xml files and put new xml files and remaining shell of the scripts into Mantid.  The scripts are built around old DirectEnergyConversion (dgreduce) Mantid script, so I have changed the interface of this script to understand parameters provided in the new way. 
+</p>
+<p>
+Then Iâ€™ve verified if the modified Mantid reduction produces almost exactly the same results and the trusted scripts and where it produces different results (MARI the example) me and the instrument scientist understand the reason for the difference and agree about the changes. 
+</p>
+<p>
+System tests run in Mantid were modified to understand new parameters and produce the results on the basis of these parameters. The DirectEnergyConversion scripts were slightly modified to fix some errors but full modification was not event tired from point of view of switching to DGSReduction workflow, developed in SNS. 
+</p>
+<p>
+As all this works, produces reasonable results have been extensively used during last tree weeks, tested and agreed with ISIS instrument scientists, a tester can accept it without big worries. 
+</p>
+<p>
+There are two areas related to the changes in C++/python code where careful tester can try to verify things:
+1)        The instrument parameter file can now have Boolean and Int parameters in addition to old double and string parameters. The example of changes is in the ticketâ€™s xml files and unit tests are in Python, in DirectEnergyConversionTest.py file. Tester can look on how this code works and if anything can be broken/ improved there. 
+2)        While testing the changes I have added new parameter to CheckWorkspaceMatch algorithm, which allows testing difference in workspaces as relative error. The changes are trivial and I used modified algorithm extensively, but tester can think about ways of verifying this. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-121">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:121" class="cnum">
+      <a href="6667.html#comment:121">comment:121</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T17%3A20%3A10%2B01%3A00&amp;precision=second" title="2013-07-10T17:20:10+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+There are failing system tests that need to be looked at first. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-122">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:122" class="cnum">
+      <a href="6667.html#comment:122">comment:122</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T17%3A59%3A19%2B01%3A00&amp;precision=second" title="2013-07-10T17:59:19+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Should fix issue when arb units requested files
+</p>
+<p>
+necessary for abs units only
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8cecf234d2187c1da936c7530386a78fe7a537d" title="b8cecf234d2187c1da936c7530386a78fe7a537d">b8cecf234d2187c1da936c7530386a78fe7a537d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-123">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:123" class="cnum">
+      <a href="6667.html#comment:123">comment:123</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-10T18%3A33%3A20%2B01%3A00&amp;precision=second" title="2013-07-10T18:33:20+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Should fix the issue when abs units files are requested
+</p>
+<p>
+for arb units run
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6d3e1ed171464711d46de21466e1e036a558c232" title="6d3e1ed171464711d46de21466e1e036a558c232">6d3e1ed171464711d46de21466e1e036a558c232</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-124">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:124" class="cnum">
+      <a href="6667.html#comment:124">comment:124</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-11T09%3A44%3A05%2B01%3A00&amp;precision=second" title="2013-07-11T09:44:05+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-125">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:125" class="cnum">
+      <a href="6667.html#comment:125">comment:125</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-11T09%3A44%3A28%2B01%3A00&amp;precision=second" title="2013-07-11T09:44:28+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-126">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:126" class="cnum">
+      <a href="6667.html#comment:126">comment:126</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T09%3A04%3A24%2B01%3A00&amp;precision=second" title="2013-07-18T09:04:24+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/6667?action=diff&amp;version=126">diff</a>)
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-127">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:127" class="cnum">
+      <a href="6667.html#comment:127">comment:127</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T10%3A17%3A07%2B01%3A00&amp;precision=second" title="2013-07-18T10:17:07+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+There are a few things with the changes to CheckWorkspacesMatch algorithm that we need to change slightly. Adding the new properties will change the order that they are called in Python so I think we need to move:
+</p>
+<ul><li>declareProperty("ToleranceRelerr",false, "Treat tolerance as relative error rather then the absolute error");
+</li><li>declareProperty("CheckAllData",false, "Usually checking data ends wnen first mismatch occurs. This will force algorithm to check all data and print mismatch to debug log");
+</li></ul><p>
+to the end after 
+</p>
+<ul><li>declareProperty("Result","",Direction::Output);
+</li></ul><p>
+That way the order will stay the same in Python. 
+</p>
+<p>
+Could you also change the name ToleranceRelerr to ToleranceRelErr, so it is more consistent with normal property style. While you are there could you fix the spelling of wnen-&gt;when.
+</p>
+<p>
+Be aware that ticket <a class="closed ticket" href="7403.html" title="enhancement: supported.facilities property looks unnecessary (closed: fixed)">#7403</a> removed the "supported.facilties" key from the properties file. I've merged master to the branch feature/6667_ISISReductionInMantid and updated the code in DirectEnergyConversion to use the new features. <strong>Make sure you do</strong> 
+</p>
+<ul><li>git checkout feature/6667_ISISReductionInMantid
+</li><li>git pull origin feature/6667_ISISReductionInMantid
+</li></ul><p>
+before continuing with any work
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-128">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:128" class="cnum">
+      <a href="6667.html#comment:128">comment:128</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T10%3A39%3A36%2B01%3A00&amp;precision=second" title="2013-07-18T10:39:36+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-129">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:129" class="cnum">
+      <a href="6667.html#comment:129">comment:129</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T10%3A48%3A03%2B01%3A00&amp;precision=second" title="2013-07-18T10:48:03+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add export of Facility* to python.
+</p>
+<p>
+Needed for using those returned from config.getFacilities. Refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dfc89c4153951e50bd8360b06dca726de748c174" title="dfc89c4153951e50bd8360b06dca726de748c174">dfc89c4153951e50bd8360b06dca726de748c174</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-130">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:130" class="cnum">
+      <a href="6667.html#comment:130">comment:130</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T12%3A06%3A34%2B01%3A00&amp;precision=second" title="2013-07-18T12:06:34+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-131">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:131" class="cnum">
+      <a href="6667.html#comment:131">comment:131</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T14%3A47%3A21%2B01%3A00&amp;precision=second" title="2013-07-18T14:47:21+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Minor modifications to CheckWorkspacesMatch
+</p>
+<p>
+to address tester's comments.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/39e22fdbc0a5ff1c7a2790312d3077b50e42de83" title="39e22fdbc0a5ff1c7a2790312d3077b50e42de83">39e22fdbc0a5ff1c7a2790312d3077b50e42de83</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-132">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:132" class="cnum">
+      <a href="6667.html#comment:132">comment:132</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A27%3A11%2B01%3A00&amp;precision=second" title="2013-07-18T16:27:11+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>new</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-133">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:133" class="cnum">
+      <a href="6667.html#comment:133">comment:133</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A32%3A38%2B01%3A00&amp;precision=second" title="2013-07-18T16:32:38+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> enabled check_background property
+</p>
+<p>
+It is apparently used by new SNS reduction, in the meaning similar to background property. It is easy to modify DirectEnergyConversion to enable it for current isis reduction to simplify move
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0c3a72f8c2817e3bff73dc884b24f838de26de2c" title="0c3a72f8c2817e3bff73dc884b24f838de26de2c">0c3a72f8c2817e3bff73dc884b24f838de26de2c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-134">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:134" class="cnum">
+      <a href="6667.html#comment:134">comment:134</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A41%3A58%2B01%3A00&amp;precision=second" title="2013-07-18T16:41:58+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a> Fixed unit test affected by check_background changed
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9741bfb341668b93202015a94bd2b60c4eb330d2" title="9741bfb341668b93202015a94bd2b60c4eb330d2">9741bfb341668b93202015a94bd2b60c4eb330d2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-135">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:135" class="cnum">
+      <a href="6667.html#comment:135">comment:135</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A59%3A06%2B01%3A00&amp;precision=second" title="2013-07-18T16:59:06+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-136">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:136" class="cnum">
+      <a href="6667.html#comment:136">comment:136</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A10%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:10+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-137">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:137" class="cnum">
+      <a href="6667.html#comment:137">comment:137</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-25T11%3A12%3A03%2B01%3A00&amp;precision=second" title="2013-07-25T11:12:03+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Direct Inelastic</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-138">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:138" class="cnum">
+      <a href="6667.html#comment:138">comment:138</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T15%3A12%3A13%2B01%3A00&amp;precision=second" title="2013-07-26T15:12:13+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>type</strong>
+        changed from <em>task</em> to <em>enhancement</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-139">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:139" class="cnum">
+      <a href="6667.html#comment:139">comment:139</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T15%3A13%3A48%2B01%3A00&amp;precision=second" title="2013-07-26T15:13:48+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-140">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:140" class="cnum">
+      <a href="6667.html#comment:140">comment:140</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T16%3A50%3A53%2B01%3A00&amp;precision=second" title="2013-07-26T16:50:53+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The component stuff is not ideal but the parameter extraction is in a bit of a mess anyway and this hasn't really made it much worse.
+</p>
+<p>
+The changes to CheckWorkspacesMatch &amp; Component/ParameterMap should really have been done in another ticket that could have been tested in isolation but they look okay.
+</p>
+<p>
+The systemtests are passing and the new reference files seem to make sense (visually) anyway and are required because of the changes to default parameters.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-141">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:141" class="cnum">
+      <a href="6667.html#comment:141">comment:141</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T17%3A35%3A14%2B01%3A00&amp;precision=second" title="2013-07-26T17:35:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'feature/6667_ISISReductionInMantid'
+</p>
+<p>
+Refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/scripts/CMakeLists.txt
+Code/Mantid/scripts/Inelastic/DirectEnergyConversion.py
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c3362412c6241d9929095408b11737fae087cbf0" title="c3362412c6241d9929095408b11737fae087cbf0">c3362412c6241d9929095408b11737fae087cbf0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-142">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:142" class="cnum">
+      <a href="6667.html#comment:142">comment:142</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T17%3A35%3A14%2B01%3A00&amp;precision=second" title="2013-07-26T17:35:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'feature/6667_ISISReductionInMantid'
+</p>
+<p>
+Refs <a class="closed ticket" href="6667.html" title="enhancement: Move ISIS indirect reduction into Mantid and write proper system tests for ... (closed: fixed)">#6667</a>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/scripts/CMakeLists.txt
+Code/Mantid/scripts/Inelastic/DirectEnergyConversion.py
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-143">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:143" class="cnum">
+      <a href="6667.html#comment:143">comment:143</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T17%3A35%3A25%2B01%3A00&amp;precision=second" title="2013-07-26T17:35:25+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/6667_ISISReductionInMantid'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-144">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:144" class="cnum">
+      <a href="6667.html#comment:144">comment:144</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A23%3A20%2B01%3A00&amp;precision=second" title="2015-06-04T01:23:20+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/7513"><span class="icon">​</span>7513</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6667?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6667?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6667?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

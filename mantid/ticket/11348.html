@@ -1,0 +1,698 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11348 (Potential problems with error bars during BinMD/SliceMD)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11347.html" title="Ticket #11347" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11348?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11348?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11348?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11349.html" title="Ticket #11349" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11348, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11347.html" title="Ticket #11347">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="11349.html" title="Ticket #11349">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11348.html">Ticket #11348</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T17%3A18%3A32Z&amp;precision=second" title="2015-03-12T17:18:32Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A33%3A15%2B01%3A00&amp;precision=second" title="2015-06-04T04:33:15+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Potential problems with error bars during BinMD/SliceMD</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Owen+Arnold">Owen Arnold</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Owen+Arnold">Owen Arnold</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="milestone" href="../milestone/Release&#32;3.5.html">Release 3.5</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~VATES-bug">VATES-bug</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <ul><li>Need instrument scientist test cases, Some idea of how much off the error bars are would be useful.
+</li><li>Will need to drill down into the code and find the offending parts
+</li><li>Will need to fix, and test
+</li><li>May need to update system tests
+</li></ul><p>
+Could be 1-2 dedicated and uninterrupted man weeks as I have no idea how deep the problem goes.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/11348/MantidVSHorace.png.html" title="View attachment">MantidVSHorace.png</a><a href="../raw-attachment/ticket/11348/MantidVSHorace.png" class="trac-rawlink" title="Download">​</a>
+       (<span title="28567 bytes">27.9 KB</span>) -
+      added by <em>Alex Buts</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T17%3A13%3A52%2B01%3A00&amp;precision=second" title="2015-04-07T17:13:52+01:00 in Timeline">6 years</a> ago.
+  </dt>
+              <dd>
+                errors_dirrerence
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/11348/loadsqw_esq_not_e.png.html" title="View attachment">loadsqw_esq_not_e.png</a><a href="../raw-attachment/ticket/11348/loadsqw_esq_not_e.png" class="trac-rawlink" title="Download">​</a>
+       (<span title="107550 bytes">105.0 KB</span>) -
+      added by <em>Owen Arnold</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T14%3A34%3A23%2B01%3A00&amp;precision=second" title="2015-04-30T14:34:23+01:00 in Timeline">5 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11348.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-16T11%3A52%3A06Z&amp;precision=second" title="2015-03-16T11:52:06Z in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Owner</strong>
+        changed from <em>Anyone</em> to <em>Alex Buts</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Alex,
+</p>
+<p>
+Can you create a Horace/vates comparison for an available dataset and specific slices that show the error bar discrepancy.
+</p>
+<p>
+Than hand this on to Owen or Andre
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11348.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-27T10%3A56%3A36Z&amp;precision=second" title="2015-03-27T10:56:36Z in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Keywords</strong>
+        <em>VATES-bug</em> added; <em>VATES</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11348.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T15%3A14%3A28%2B01%3A00&amp;precision=second" title="2015-04-07T15:14:28+01:00 in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Let's run the Mantid script
+</p>
+<pre class="wiki">Load(Filename=r'D:\Data\Mantid_Training\sqw\fe_E200_8K.nxs', OutputWorkspace='fe_E200_8K', FileBackEnd=True)
+BinMD(InputWorkspace='fe_E200_8K', AlignedDim0=r'Q_\zeta,2.5,6,35', AlignedDim1=r'Q_\xi,-0.05,0.05,1', AlignedDim2=r'Q_\eta,-0.05,0.05,1', AlignedDim3='E,56,64,1', OutputWorkspace='Slice1D_HorEq')
+ConvertMDHistoToMatrixWorkspace(InputWorkspace='Slice1D_HorEq', OutputWorkspace='Slice1D_HorEqMW', Normalization='NumEventsNormalization')
+
+</pre><p>
+and Horace Script:
+</p>
+<pre class="wiki">cd d:\Data\Fe\Jan2015\sqw
+data='Fe_ei200.sqw'
+
+proj.u=[1,0,0];
+proj.v=[0,1,0];
+proj.w=[0,0,1];
+proj.type='aaa'
+w1 = cut_sqw(data,proj,[2.5,0.1,6],[-0.05,0.05],[-0.05,0.05],[56,64]);
+plot(w1)
+</pre><p>
+Which should in theory produce equivalent 1D cuts.
+</p>
+<p>
+The cuts in fact have different signal intensity and error bars. 
+</p>
+<p>
+The differences in the signal intensity can be remedied by disabling division by bin width.
+</p>
+<p>
+It is the question if settings for division by bin width should be set up separately for VATES and other Mantid graphics. 
+</p>
+<p>
+The job is ongoing to produce simple interface returning the same X-axis for the same Matlab(Horace) and Mantid settings. (At the moment it is slightly different)
+</p>
+<p>
+The "Raw" non-normalized data, for HORACE calculated by formula:
+</p>
+<pre class="wiki">&gt;&gt; senn=[wss.data.s.*wss.data.npix,sqrt(wss.data.e.*wss.data.npix.*wss.data.npix),wss.data.npix,xx]
+</pre><p>
+and for Mantid (printed by "MDworkspace-&gt;ShowData)
+</p>
+<p>
+are provided in the table below. Despite the difference is not that big (though significant) taking square root of each errors and dividing by number of pixels yields the errors which are substantially different (see the picture, provided).
+</p>
+<p>
+Horace uses in its signal calculations the formula Error = sqrt(Sum_i(Error_i<sup>2</sup>)/Npix<sup>2</sup>), 
+where Mantid uses the formula Error=sqrt(Sum_i(Error_i<sup>2</sup>))/Npix where Npix is the number of pixels or MDEvents correspondingly, contributing into a bin(box in MD Case), and i runs over all contributing pixels(MDEvents). This should produce equivalent results. 
+</p>
+<p>
+It is certainly something wrong in deriving boxes or errors within them and combining these errors together. 
+</p>
+<p>
+The source data used in comparison can be found in local ISIS network, on Windows share (read-only):
+</p>
+<pre class="wiki">\\ndw932\Data
+
+at:
+/Mantid_Training/sqw/fe_E200_8K.nxs 
+and:
+/Fe/Jan2015/sqw/Fe_ei200.sqw 
+</pre><pre class="wiki">              MANTID                                                 HORACE
+Signal/none, Error/none, Number of Events, Q_\zeta/A^(-1)   S         ERR      Npix         X
+34.367,      87.8992,   353,                2.55,         41.5840   15.6798  387.0000    2.5000
+25.8617,     98.2287,   276,                2.65,         53.4698   18.1446  396.0000    2.6000
+51.2623,     123.872,   295,                2.75,         54.2098   19.3196  349.0000    2.7000
+22.0102,     61.1029,   242,                2.85,         39.8240   15.1565  301.0000    2.8000
+32.7581,    103.796,    208,                2.95,         23.3670   10.9993  251.0000    2.9000
+46.3524,    108.549,    226,                3.05,         73.9370   21.6282  246.0000    3.0000
+41.7758,    90.119,     174,                3.15,         35.8560   14.9035  202.0000    3.1000
+14.5093,    28.2076,    162,                3.25,         34.4770   12.3020  203.0000    3.2000
+93.6789,    166.658,    176,                3.35,         67.7810   20.7722  186.0000    3.3000
+27.1168,    81.1124,    145,                3.45,         48.9164   17.0641  183.0000    3.4000
+0,          0,          12,                 3.55,         19.1870   11.2196   90.0000    3.5000
+8.08198,    65.3184,    76,                 3.65,               0         0   16.0000    3.6000
+71.8032,    155.054,    139,                3.75,         36.4220   14.4774  133.0000    3.7000
+74.3665,    150.923,    124,                3.85,        119.5766   28.0023  180.0000    3.8000
+76.3163,    154.117,    135,                3.95,         96.9460   24.5746  167.0000    3.9000
+12.7918,    38.1311,    124,                4.05,         54.0310   17.8980  164.0000    4.0000
+28.164,     90.4263,    116,                4.15,         26.6180   12.6205  147.0000    4.1000
+14.6473,    75.853,     128,                4.25,         15.0150   10.6202  147.0000    4.2000
+25.6522,    150.796,    123,                4.35,         14.4070   10.1887  154.0000    4.3000
+20.666,     143.573,    112,                4.45,         19.6580   13.5619  136.0000    4.4000
+8.20426,    67.3099,    126,                4.55,         15.3190    9.6809  127.0000    4.5000
+14.3736,    73.2492,    97,                 4.65,          6.9690    6.9690  116.0000    4.6000
+21.32,      71.4531,    118,                4.75,         29.1350   13.0996  155.0000    4.7000
+26.1621,    90.8816,    125,                4.85,         13.7520    9.7243  115.0000    4.8000
+0,          0,          0,                  4.95,         14.3530   10.1559   76.0000    4.9000
+0,          0,          0,                  5.05,               0         0         0    5.0000
+23.2047,    73.4144,    112,                5.15,         15.3650   10.0536   36.0000    5.1000
+13.9652,    69.0381,    68,                 5.25,          7.3400    5.1941  125.0000    5.2000
+6.8496,     46.9171,    114,                5.35,         34.7720   15.5538  140.0000    5.3000
+20.1854,    67.5384,    104,                5.45,         20.2640   10.6116   87.0000    5.4000
+14.4746,    74.097,     64,                 5.55,         21.9690   12.6859  112.0000    5.5000
+11.891,     54.9741,    104,                5.65,         18.9900   10.0134  104.0000    5.6000
+0,          0,          94,                 5.75,               0         0   76.0000    5.7000
+14.4482,    56.6009,    70,                 5.85,          7.1240    5.0888  122.0000    5.8000
+16.4749,    27.5568,    109,                5.95,         13.0280    8.6826  103.0000    5.9000
+                                                          14.7320    7.5089   96.0000    6.0000
+
+</pre>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T18%3A38%3A23%2B01%3A00&amp;precision=second" title="2015-04-07T18:38:23+01:00 in Timeline">6 years</a> ago
+                      by Alex Buts
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/11348?cversion=11&amp;cnum_hist=3#comment:3">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/11348?action=comment-diff&amp;cnum=3&amp;version=12">diff</a>)
+                </div>
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T17%3A13%3A52%2B01%3A00&amp;precision=second" title="2015-04-07T17:13:52+01:00 in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/11348/MantidVSHorace.png.html"><em>MantidVSHorace.png</em></a><a href="../raw-attachment/ticket/11348/MantidVSHorace.png" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+errors_dirrerence
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11348.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T18%3A38%3A41%2B01%3A00&amp;precision=second" title="2015-04-07T18:38:41+01:00 in Timeline">6 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Alex Buts</em> to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="11348.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-27T09%3A10%3A35%2B01%3A00&amp;precision=second" title="2015-04-27T09:10:35+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.4</em> to <em>Release 3.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to R3.5 at the R3.4 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="11348.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T14%3A32%3A38%2B01%3A00&amp;precision=second" title="2015-04-30T14:32:38+01:00 in Timeline">5 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+From email to Alex, Russell, Toby and Andrei 
+</p>
+<pre class="wiki">Hi All,
+
+I've been doing some digging, and went and looked at the original sqw file. I noticed that in Mantid, when we load the SQW file the errors are very large prior to rebinning or plotting. I'm wondering if the cause of this issue is because we are incorrectly reading errors out of the SQW binaries in the first place? Are the errors stored as errors^2 in the binary rather than error?
+
+Andrei and I have both re-checked the plotting normalization and the rebinning, and we can't find any problems. However, if I change https://github.com/mantidproject/mantid/blob/master/Code/Mantid/Framework/MDAlgorithms/src/LoadSQW.cpp#L279 to give errorSQ, then when I process the file in Mantid according the the script Alex provided (script attached), the errors look realistic. Below is the plot and the results from QueryMDWorkspace on the cut.
+
+I don't know the SQW format very well, so I'm not completely confident in saying that this is the fix we need. Advice would be appreciated.
+
+Regards,
+Owen.
+
+</pre><p>
+Results generated using this script:
+</p>
+<div class="code"><pre><span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> MDNormalization
+data <span class="o">=</span> Load<span class="p">(</span><span class="s">"Fe_ei200.sqw"</span><span class="p">)</span>
+cut <span class="o">=</span> CutMD<span class="p">(</span>data<span class="p">,</span>NoPix<span class="o">=</span><span class="bp">True</span><span class="p">,</span>PBins<span class="o">=</span><span class="p">[[</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">6</span><span class="p">],[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">],[</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.05</span><span class="p">],[</span><span class="mi">56</span><span class="p">,</span><span class="mi">64</span><span class="p">]])</span>
+plotMD<span class="p">(</span>cut<span class="p">,</span> normalization<span class="o">=</span>MDNormalization<span class="o">.</span>NumEventsNormalization<span class="p">)</span>
+</pre></div><p>
+See attached output
+</p>
+<p>
+Response From T. Perring:
+</p>
+<pre class="wiki">The data in the sqw file contains the variance i.e. error squared.
+</pre><p>
+This looks to be the fix needed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T14%3A34%3A23%2B01%3A00&amp;precision=second" title="2015-04-30T14:34:23+01:00 in Timeline">5 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/11348/loadsqw_esq_not_e.png.html"><em>loadsqw_esq_not_e.png</em></a><a href="../raw-attachment/ticket/11348/loadsqw_esq_not_e.png" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="11348.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T15%3A26%3A38%2B01%3A00&amp;precision=second" title="2015-04-30T15:26:38+01:00 in Timeline">5 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="11348.html" title="Potential problems with error bars during BinMD/SliceMD (closed: fixed)">#11348</a>. Apply the fix.
+</p>
+<p>
+The algorithm documentation for this algorithm is actually up-to-date
+correctly pointing out that the file stores the variance. The fix
+brings the implementation in-line.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ef19a200f3f703562e393f13049cadd39c822158" title="ef19a200f3f703562e393f13049cadd39c822158">ef19a200f3f703562e393f13049cadd39c822158</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="11348.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T15%3A33%3A47%2B01%3A00&amp;precision=second" title="2015-04-30T15:33:47+01:00 in Timeline">5 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/691"><span class="icon">​</span>pull request #691</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="11348.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-30T15%3A45%3A57%2B01%3A00&amp;precision=second" title="2015-04-30T15:45:57+01:00 in Timeline">5 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="11348.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-01T14%3A03%3A08%2B01%3A00&amp;precision=second" title="2015-05-01T14:03:08+01:00 in Timeline">5 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="691.html" title="enhancement: Update WISS_definition.xml (closed: fixed)">#691</a> from mantidproject/11348_error_bars
+</p>
+<p>
+Problems with Error Bars
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/b036f5cdc459b5ed995f1736d0a895be1c511a67"><span class="icon">​</span>b036f5cdc459b5ed995f1736d0a895be1c511a67</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="11348.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A33%3A15%2B01%3A00&amp;precision=second" title="2015-06-04T04:33:15+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/12187"><span class="icon">​</span>12187</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11348?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11348?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11348?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,801 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7228 (ConvertToDiffractionMDWorkspace v2 performance)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7227.html" title="Ticket #7227" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7228?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7228?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7228?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7229.html" title="Ticket #7229" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7228, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7227.html" title="Ticket #7227">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="7229.html" title="Ticket #7229">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7228.html">Ticket #7228</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-31T22%3A02%3A49%2B01%3A00&amp;precision=second" title="2013-05-31T22:02:49+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A46%3A39%2B01%3A00&amp;precision=second" title="2015-06-04T01:46:39+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">ConvertToDiffractionMDWorkspace v2 performance</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Russell+Taylor">Russell Taylor</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Alex+Buts">Alex Buts</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.0.html">Release 3.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Diffraction">Diffraction</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Russell Taylor
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-09-10 13:39:50.411771+00:00">
+        (last modified by Alex Buts)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/7228?action=diff&amp;version=3">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+The new version of ConvertToDiffractionMDWorkspace created under <a class="closed ticket" href="6856.html" title="enhancement: Rewire ConvertToDiffractionMDWorkspace (closed: fixed)">#6856</a> has been shown to be substantially slower by a couple of system tests (SXDAnalysis &amp; TOPAZPeakFinding). Plots of the timing changes are attached. The performance of SXDAnalysis was recovered by switching it back to using version 1 of ConvertToDiffractionMDWorkspace, but obviously this is not a solution to the fundamental problem.
+</p>
+<p>
+Investigate and improve the performance where possible.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/7228/SystemTests.SXDAnalysis.SXDAnalysis.runtime.v.revision.png.html" title="View attachment">SystemTests.SXDAnalysis.SXDAnalysis.runtime.v.revision.png</a><a href="../raw-attachment/ticket/7228/SystemTests.SXDAnalysis.SXDAnalysis.runtime.v.revision.png" class="trac-rawlink" title="Download">​</a>
+       (<span title="39262 bytes">38.3 KB</span>) -
+      added by <em>Russell Taylor</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-31T22%3A03%3A05%2B01%3A00&amp;precision=second" title="2013-05-31T22:03:05+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/7228/SystemTests.TOPAZPeakFinding.TOPAZPeakFinding.runtime.v.revision.png.html" title="View attachment">SystemTests.TOPAZPeakFinding.TOPAZPeakFinding.runtime.v.revision.png</a><a href="../raw-attachment/ticket/7228/SystemTests.TOPAZPeakFinding.TOPAZPeakFinding.runtime.v.revision.png" class="trac-rawlink" title="Download">​</a>
+       (<span title="48931 bytes">47.8 KB</span>) -
+      added by <em>Russell Taylor</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-31T22%3A03%3A11%2B01%3A00&amp;precision=second" title="2013-05-31T22:03:11+01:00 in Timeline">7 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-31T22%3A03%3A05%2B01%3A00&amp;precision=second" title="2013-05-31T22:03:05+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7228/SystemTests.SXDAnalysis.SXDAnalysis.runtime.v.revision.png.html"><em>SystemTests.SXDAnalysis.SXDAnalysis.runtime.v.revision.png</em></a><a href="../raw-attachment/ticket/7228/SystemTests.SXDAnalysis.SXDAnalysis.runtime.v.revision.png" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-31T22%3A03%3A11%2B01%3A00&amp;precision=second" title="2013-05-31T22:03:11+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7228/SystemTests.TOPAZPeakFinding.TOPAZPeakFinding.runtime.v.revision.png.html"><em>SystemTests.TOPAZPeakFinding.TOPAZPeakFinding.runtime.v.revision.png</em></a><a href="../raw-attachment/ticket/7228/SystemTests.TOPAZPeakFinding.TOPAZPeakFinding.runtime.v.revision.png" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7228.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A42%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:42+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7228.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T14%3A55%3A01%2B01%3A00&amp;precision=second" title="2013-07-26T14:55:01+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.6</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to backlog at the code freeze for R2.6
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="7228.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-10T14%3A39%3A50%2B01%3A00&amp;precision=second" title="2013-09-10T14:39:50+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/7228?action=diff&amp;version=3">diff</a>)
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.0</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="7228.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-12T16%3A10%3A09%2B01%3A00&amp;precision=second" title="2013-09-12T16:10:09+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> Initial rumbling around
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/95328a4821f867378ae0c6b64aa487cd5ef00071" title="95328a4821f867378ae0c6b64aa487cd5ef00071">95328a4821f867378ae0c6b64aa487cd5ef00071</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="7228.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-12T16%3A10%3A09%2B01%3A00&amp;precision=second" title="2013-09-12T16:10:09+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> different multithreading options exploration
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a00629055d6b03252b30babe04d986560c60e49" title="7a00629055d6b03252b30babe04d986560c60e49">7a00629055d6b03252b30babe04d986560c60e49</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="7228.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T11%3A34%3A43%2B01%3A00&amp;precision=second" title="2013-09-13T11:34:43+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> Ugly working multithreadede solution
+</p>
+<p>
+Does not produce any significant acceleration as main performance drug is memory allocation, but otherwise working and bashing threads.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd502b291af1d67887caeb3e006af5533bb6bc11" title="bd502b291af1d67887caeb3e006af5533bb6bc11">bd502b291af1d67887caeb3e006af5533bb6bc11</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="7228.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T11%3A34%3A43%2B01%3A00&amp;precision=second" title="2013-09-13T11:34:43+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> removing threading stuff
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/585ae381054d083e0ec0853ad0a7509bb69fee30" title="585ae381054d083e0ec0853ad0a7509bb69fee30">585ae381054d083e0ec0853ad0a7509bb69fee30</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="7228.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T11%3A34%3A43%2B01%3A00&amp;precision=second" title="2013-09-13T11:34:43+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> enabled "Drop 0" option in convertToMD
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d7a381c9b86e6dc1fc374c37ddbbd7305db47e8f" title="d7a381c9b86e6dc1fc374c37ddbbd7305db47e8f">d7a381c9b86e6dc1fc374c37ddbbd7305db47e8f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="7228.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T11%3A59%3A40%2B01%3A00&amp;precision=second" title="2013-09-13T11:59:40+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> Modified to reflect the changes to performance analysis
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/98d1e8c529799f6dc257659ac776fa91bc848361" title="98d1e8c529799f6dc257659ac776fa91bc848361">98d1e8c529799f6dc257659ac776fa91bc848361</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7228.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T12%3A59%3A38%2B01%3A00&amp;precision=second" title="2013-09-13T12:59:38+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> fixed error in unit tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/64d6018c57740bbaecd3a34276ffd2e3695fbfaf" title="64d6018c57740bbaecd3a34276ffd2e3695fbfaf">64d6018c57740bbaecd3a34276ffd2e3695fbfaf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7228.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T13%3A04%3A15%2B01%3A00&amp;precision=second" title="2013-09-13T13:04:15+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> fixed strange error with kernel header
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/beb8aee7ea94624212ec1cf5ff6ccbb93a6b672e" title="beb8aee7ea94624212ec1cf5ff6ccbb93a6b672e">beb8aee7ea94624212ec1cf5ff6ccbb93a6b672e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7228.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T17%3A57%3A06%2B01%3A00&amp;precision=second" title="2013-09-13T17:57:06+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> fixing unit tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/48afec1d0bd18cb138e9f726c4c9d731a5237eb5" title="48afec1d0bd18cb138e9f726c4c9d731a5237eb5">48afec1d0bd18cb138e9f726c4c9d731a5237eb5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="7228.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T18%3A19%3A06%2B01%3A00&amp;precision=second" title="2013-09-13T18:19:06+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> Changed default "SingleEventPerBin" to true
+</p>
+<p>
+to sustain existing unit tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f3ee0f0c12dc8f1bbea95fa5fb0150ea2902b31f" title="f3ee0f0c12dc8f1bbea95fa5fb0150ea2902b31f">f3ee0f0c12dc8f1bbea95fa5fb0150ea2902b31f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="7228.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-13T18%3A23%3A50%2B01%3A00&amp;precision=second" title="2013-09-13T18:23:50+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a> System tests: correct options in peak finding
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3589e44f24e92ba5854ac371bf2bc1c677f68395" title="3589e44f24e92ba5854ac371bf2bc1c677f68395">3589e44f24e92ba5854ac371bf2bc1c677f68395</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="7228.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-16T13%3A19%3A42%2B01%3A00&amp;precision=second" title="2013-09-16T13:19:42+01:00 in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The main reason in such difference in the performance was different treatment of "0" by convertToMD (ConvertToDiffractionMDWorkspace V2) against ConvertToDiffractionMDWorkspace V1.
+</p>
+<p>
+It is not entirely clear how to analyse these results, but I interpret the changes in the system tests at url:
+</p>
+<p>
+<a class="ext-link" href="https://builds.sns.gov/job/ornl_test_rhel6_develop/System_tests_performance/SystemTests.SXDAnalysis.SXDAnalysis.htm"><span class="icon">​</span>https://builds.sns.gov/job/ornl_test_rhel6_develop/System_tests_performance/SystemTests.SXDAnalysis.SXDAnalysis.htm</a>
+</p>
+<p>
+as the substantial performance improvement due to the ticket's changes. It corresponds to the improvements I am seeing using local profiler.
+</p>
+<p>
+Further improvement is possible but relates to thread scheduler and MDWorkspace basic operations so should be addressed by another tickets. 
+</p>
+<p>
+Tester should look at the performance changes according to the link supplied and may or may not test his own examples (it is not trivial as for some tasks performance changes are not obvious) and approve the ticket if he agrees that these changes improve performance.
+</p>
+<p>
+The ticket code is both in Mantid and SystemTests branches -- both should be merged to master. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="7228.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-17T20%3A08%3A08%2B01%3A00&amp;precision=second" title="2013-09-17T20:08:08+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Russell Taylor</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="7228.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-25T18%3A02%3A02%2B01%3A00&amp;precision=second" title="2013-09-25T18:02:02+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="7228.html" title="task: ConvertToDiffractionMDWorkspace v2 performance (closed: fixed)">#7228</a>. Small tidy-ups (formatting, spelling).
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d4b8f200d327bc47e24d6e0f2516862a60986bd0" title="d4b8f200d327bc47e24d6e0f2516862a60986bd0">d4b8f200d327bc47e24d6e0f2516862a60986bd0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="7228.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-25T19%3A26%3A01%2B01%3A00&amp;precision=second" title="2013-09-25T19:26:01+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/feature/7228_ConverToMDPerformance'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="7228.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-25T19%3A26%3A03%2B01%3A00&amp;precision=second" title="2013-09-25T19:26:03+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/feature/7228_ConverToMDPerformance'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="7228.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-25T19%3A27%3A40%2B01%3A00&amp;precision=second" title="2013-09-25T19:27:40+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Both the system tests highlighted above have recovered their previous performance (though the TOPAZ one did so some time ago so perhaps that was something slightly different).
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="7228.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-23T11%3A36%3A51%2B01%3A00&amp;precision=second" title="2013-10-23T11:36:51+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Diffraction</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="7228.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A46%3A39%2B01%3A00&amp;precision=second" title="2015-06-04T01:46:39+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/8074"><span class="icon">​</span>8074</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7228?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7228?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7228?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

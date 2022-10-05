@@ -1,0 +1,808 @@
+c===============================================================================
+c     COLETTE - LOQ data analysis development program - R.Osborn  Nov. 1985
+c                                                     
+c     Produce data in the Special form in workspace i_graph for subsequent
+c     plotting  
+c
+      integer*4 function get_special (n)
+
+      external cli$_absent
+      character*80 text
+      integer*4 option, type_of_plot, subtract_wkspc
+      logical*1 first_time /.TRUE./, hist
+
+      include 'COLETTE_SOURCES:COMSMG.INC' 
+      include 'COLETTE_COMLOQ:'
+      COMMON/DSPECIAL/SP_E,SP_F,SP_G,SP_H,SP_CX,
+     >                SP_A,SP_B,SP_C,SP_D,SP_CY
+      data SP_E,SP_F,SP_G,SP_H,SP_CX/0.,0.,1.,0.,1./,
+     >     SP_A,SP_B,SP_C,SP_D,SP_CY/0.,0.,4.,1.,1./
+c
+c==== RKH 29/10/92
+C==== pull in something to tell whether we are in POINT mode or not !
+c==== will program this for all basic plotting options - should not
+c==== be relevant for histogram mode !
+c==== note COLETTE generates binned data with histogram x boundaries,
+c==== but these do not behave as proper histograms as the Y values are strictly 
+c==== funtions NOT histograms !
+c==== on writing out to file we take mid-points, so OLD'ed data really are
+C==== point mode !  OLD by default takes mid-points again to generate more 
+C==== histogram x bins, this is OK for dq=constant, but not for log or 
+c==== irregular bins.  Hence you can use OLD/POINT, then TOG MODE in GENIE
+c==== after which D/S ought mow to work properly.
+c
+c==== include 'OGENIE_SOURCES:GKSPLOT.CMN'
+c==== this has equivalent of:
+      common/drtype/type_of_plot, hist
+
+c===============================================================================
+c     Output help screen for special plots
+
+      if (first_time) then
+         status = smg$create_virtual_display (12, 70, vdid8, smg$m_border)
+         status = smg$put_chars 
+     >   (vdid8, 'Option nos. of Special Plots of IvQ', 1, 4,, smg$m_underline)
+         status = smg$put_chars 
+     >   (vdid8, '0: EXIT THIS MENU                          ', 2, 4)
+         status = smg$put_chars 
+     >   (vdid8, '1: Guinier (spheres) - Ln(I)     v     Q**2', 3, 4)
+         status = smg$put_chars 
+     >   (vdid8, '2: Guinier (rods)    - Ln(IQ)    v     Q**2', 4, 4)
+         status = smg$put_chars 
+     >   (vdid8, '3: Guinier (sheets)  - Ln(IQ**2) v     Q**2', 5, 4)
+         status = smg$put_chars 
+     >   (vdid8, '4: Zimm              - 1/I       v     Q**2', 6, 4)
+         status = smg$put_chars 
+     >   (vdid8, '5: Kratky            - IQ**2     v        Q', 7, 4)
+         status = smg$put_chars 
+     >   (vdid8, '6: Debye-Bueche      - 1/SqrtI   v     Q**2', 8, 4) 
+         status = smg$put_chars 
+     >   (vdid8, '7: Log - Log           Ln(I)     v    Ln(Q)', 9, 4) 
+         status = smg$put_chars 
+     >   (vdid8, '8: Porod               IQ**4     v        Q',10, 4) 
+         status = smg$put_chars 
+     >(vdid8,'9: General (Q**A)(I**B)xLn(Q**CxI**D) v similar',11, 4) 
+         status = smg$put_chars 
+     >(vdid8,'add 100 for true histogram;  91 re-uses last 9 ', 12, 4) 
+         first_time = .FALSE.
+      end if                              
+
+      status = cli$get_value ('SPECIAL', text, len)
+
+      if (status .eq. %loc(cli$_absent)) then
+         status = smg$paste_virtual_display (vdid8, pbid, 7, 6)
+         call prompt ('Give option no ==>', text, len)
+         status = smg$unpaste_virtual_display (vdid8,pbid)
+      end if
+
+      if (len .eq. 0) then
+         get_special = status_not_ok                                       
+	 call replace_prompt
+         return
+      end if
+
+      read (text(1:len), '(i)', err=100) option
+      if (option.eq.0) then
+	 get_special=status_not_ok
+	 call replace_prompt
+	 return
+      endif
+c===============================================================================
+c     Subtract background level if required
+*     Modified to allow background to be given in a workspace, SMK, 02-11-92
+*     Modified to allow background to be given as command line qualifier, SMK
+
+      status = cli$get_value ('BACKGROUND', text, len)
+      if (status .eq. %loc(cli$_absent)) then
+         call prompt ('Background level ==> ', text, len)
+      end if
+
+      subtract_wkspc=0
+*     IF NOTHING GIVEN THEN ASSUME BACKGROUND IS ZERO
+      if (len.eq.0) then
+         bkgd=0.0
+*     OTHERWISE, CHECK TO SEE IF BACKGROUND IS CONTAINED IN A WORKSPACE
+      else if (text(1:1).eq.'W') then
+	 if (len.eq.1) goto 100
+         read (text(2:len),fmt=*,err=100) j_graph
+         if ( (j_graph.le.0).or.
+     &   ((j_graph.ge.15.).and.(j_graph.le.24)).or.
+     &   ((j_graph.ge.61.).and.(j_graph.le.69)).or.
+     &   (j_graph.gt.used_streams) ) then
+	    call error('ERROR:  That is a reserved workspace!')
+            goto 102
+         end if
+         if (npt(j_graph).le.0) then
+            call error('ERROR:  That workspace is empty!')
+            goto 102
+         end if
+         offset_j_graph=len_streams*(j_graph-1)
+         subtract_wkspc=1
+*     IF BACKGROUND VALUE GIVEN
+      else
+         read (text(1:len),fmt=*,err=100) bkgd
+      end if
+
+      npt(i_graph) = npt(n)
+      offset_i_graph = len_streams * (i_graph-1)
+      offset_n = len_streams * (n - 1)
+      n1=offset_i_graph+1
+      n2=offset_i_graph+npt(i_graph)
+
+c===============================================================================
+c     Perform workspace transformation according to option no.
+c
+c     I(Q) is a function, and we need to treat the data as if we had plotted
+c     it on a graph as points ( i.e it is a ratio not a histogram) so:
+c     1. determine the values of Q, the midpoints of the X bin boundaries. 
+c     2. transform Y and E to Y' = F(Y) and E' = E*(dF(Y)/dY).
+c           this error calc. assumes the errors are uncorrelated, which is not
+c           actually true    e.g. if F(Y)=Y**2   E'= 2.E.F(Y)
+c                    wheras one usually takes    E'= SQRT(2).E.F(Y)
+c     3. transform X to X' = f(X).
+c     (do not multiply Y by dX !)   
+c      
+c      the rules for histograms are :
+c     1. multiply Y and E by the Jacobian J(x,x') = dx/dx' which converts 
+c        the data from bins in x to bins in x'.
+c     2. transform Y and E to Y' = F(Y) and E' = E*(dF(Y)/dY).
+c     3. transform X to X' = f(X).
+c     (do not multiply Y by dX !)   
+c
+c      if(option.eq.4.or.option.eq.104.or.option.eq.6.or.option.eq.106)then
+cc====  REVERSE the order of the data first
+c      do i = 1,npt(n)
+c         x(n2 + 2 - i) = x(offset_n + i)
+c      y(n2 + 1 - i)=(y(offset_n+i) - bkgd)
+c         e(n2 + 1 - i) = e(offset_n+i)
+c      end do
+c      x(offset_i_graph) = x(offset_n+npt(n)+1)
+c      else
+
+*	FIRST TAKE OFF THE BACKGROUND
+	if (subtract_wkspc.eq.0) then
+*	FOR SINGLE VALUE
+           do i = 1,npt(n)
+              x(offset_i_graph+i)=x(offset_n+i)
+              y(offset_i_graph+i)=y(offset_n+i) - bkgd
+              e(offset_i_graph+i)=e(offset_n+i)
+           end do
+           x(offset_i_graph+npt(n)+1) = x(offset_n+npt(n)+1)
+	else if (subtract_wkspc.eq.1) then
+*	FOR BACKGROUND IN WORKSPACE
+	   if (npt(n).ne.npt(j_graph)) then
+	      call error('ERROR:  Data & Background workspaces have
+     & different numbers of points.  Rebin. ')
+	      goto 102
+	   end if
+           do i = 1,npt(n)
+	      if (x(offset_n+i).ne.x(offset_j_graph+i)) then
+	         call error('ERROR:  Data & Background workspaces have
+     & different X scales.  Rebin.           ')
+	         goto 102
+	      end if
+              x(offset_i_graph+i)=x(offset_n+i)
+              y(offset_i_graph+i)=y(offset_n+i) - y(offset_j_graph+i)
+              e(offset_i_graph+i)=e(offset_n+i)
+           end do
+           x(offset_i_graph+npt(n)+1) = x(offset_n+npt(n)+1)
+	end if
+
+c      end if
+c
+c==== Guinier Plot    ln(I) vs Q**2
+      if ( option .eq. 1 ) then
+         do i = n1,n2
+            if (y(i) .gt. 0.0) then
+               e(i) = e(i)/y(i)
+               y(i) = log( y(i))
+            else
+               y(i) = 0.0
+               e(i) = 0.0
+            end if
+               x(i) = x(i)**2
+         end do
+               x(n2+1)=x(n2+1)**2
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'log\de\u(I)'
+
+c==== Guinier Plot (rods)  ln(IQ) vs Q**2
+
+      else if (option .eq. 2) then
+c
+	do i=n1,n2
+            if (y(i) .gt. 0.0) then
+
+               if(hist)then
+                Q    = (x(i)+x(i+1))*0.5
+               else
+                Q = x(i)
+               end if
+
+               e(i) = e(i)/y(i)
+               y(i) = log( y(i)*Q)
+            else
+               y(i) = 0.0
+               e(i) = 0.0
+            end if
+               x(i) = x(i)**2
+         end do
+               x(n2+1)=x(n2+1)**2
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'log\de\u(IQ)'
+
+c==== Guinier Plot (sheets)  ln(I.Q**2) vs Q**2
+
+      else if (option .eq. 3) then
+c
+	do i=n1,n2
+            if (y(i) .gt. 0.0) then
+
+               if(hist)then
+                Q    = (x(i)+x(i+1))*0.5
+               else
+                Q = x(i)
+               end if
+
+               e(i) = e(i)/y(i)
+               y(i) = log( y(i)*Q**2)
+            else
+               y(i) = 0.0
+               e(i) = 0.0
+            end if
+               x(i) = x(i)**2
+         end do
+               x(n2+1)=x(n2+1)**2
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'log\de\u(I.Q\u2\d)'                   
+
+c==== Zimm Plot   1/I vs Q**2  
+
+      else if (option .eq. 4) then   
+c
+	do i=n1,n2
+		if(y(i).gt.0.0)then
+		    y(i) = 1.0 / y(i)
+		    e(i) = e(i) * y(i)**2
+		else
+		    e(i)=0.0
+		    y(i)=0.0
+		end if
+               x(i) = x(i)**2
+         end do
+               x(n2+1)=x(n2+1)**2
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'I\u-1\d'
+
+c==== Kratky Plot         I.Q**2 vs Q  (changed from Q**2, RKH 15/4/92)
+
+      else if (option .eq. 5) then
+c
+	do i=n1,n2		!  multiply y by Q**2
+
+               if(hist)then
+                Q    = (x(i)+x(i+1))*0.5
+               else
+                Q = x(i)
+               end if
+
+            y(i) = y(i)*Q**2
+            e(i) = e(i)*Q**2
+         end do
+         xcaption(i_graph) = 'Q (\A\u-1\d)'
+         ycaption(i_graph) = 'I.Q\u2\d'
+c                          
+c==== Debye-Bueche Plot   1/sqrt(I) vs Q**2 
+c
+      else if (option .eq. 6) then
+c
+         do i = n1,n2
+            if (y(i) .gt. 0.0) then
+               y(i) = 1 / sqrt (y(i))
+               e(i) = e(i)*0.5* y(i)**3
+            else
+               y(i) = 0.0
+               e(i) = 0.0
+            end if
+               x(i) = x(i)**2
+         end do
+               x(n2+1)=x(n2+1)**2
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'I\u-\(261)\d'
+c
+c==== LOG - LOG plot
+	else if (option .eq. 7)then
+           ii=n2
+           if(hist)ii=n2+1
+	   do i=n1,ii
+	      if (x(i) .gt. 0) then
+	         x(i)= log(x(i))
+	      else
+	         call error('ERROR: log of negative or zero in x array')
+	         get_special = status_not_ok
+	         call replace_prompt
+	         return
+	      end if
+	   end do
+c
+	   do i= n1,n2
+	   if (y(i) .gt. 0) then
+	      e(i) = e(i) / y(i)
+	      y(i) = log( y(i))
+	   else
+	      y(i) = 0
+	      e(i) = 0
+	   endif
+	end do
+         xcaption(i_graph) = 'log\de\u(Q)'
+         ycaption(i_graph) = 'log\de\u(I)'
+c	
+c==== Porod Plot   I.Q**4 vs Q
+c
+      else if (option .eq. 8) then
+c
+         do i = n1,n2
+
+               if(hist)then
+                Q    = (x(i)+x(i+1))*0.5
+               else
+                Q = x(i)
+               end if
+
+               y(i) = y(i)*Q**4
+               e(i) = e(i)*Q**4
+         end do
+c
+         xcaption(i_graph) = 'Q (\A\u-1\d)'
+         ycaption(i_graph) = 'I.Q\u4\d'
+c
+c=== general function   (Q**A)(I**B)xLn(Q**CxI**D) v similar', 
+	else if( option .eq. 9 .or. option .eq. 91) then
+        if (option.eq. 9)then
+	status=smg$save_physical_screen(pbid,save_vdid,4)
+	write(6,1001)
+1001	format(1x,'Special function plots',/,
+     *  ' Q and I are transformed by equations of the type:',/,
+     *  '   Q = Q^A * I^B * LOGe( Q^C * I^D * E)',/,
+     *  '   I = Q^F * I^G * LOGe( Q^H * I^I * J)',/,
+     *  '   (Note: LOGe(0.0) is taken as 1.0 )',/,
+     *  ' Please enter A, B, C, D & E  >>> ',$)
+	read(5,*)SP_E,SP_F,SP_G,SP_H,SP_CX
+	write(6,1002)
+1002  format(/,' Please enter F, G, H, I & J  >>> ',$)
+      read(5,*)SP_A,SP_B,SP_C,SP_D,SP_CY
+c23456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+      write(6,1003)SP_E,SP_F,SP_G,SP_H,SP_CX,SP_A,SP_B,SP_C,SP_D,SP_CY
+1003	format(1x,' CHECK:  Q =  Q**',f6.3,' * I**',f6.3,
+     &            ' * LOGe{ Q**',f6.3,' * I**',f6.3,' * ',f6.3,' }',/,
+     &         1x,'         I =  Q**',f6.3,' * I**',f6.3,
+     &            ' * LOGe{ Q**',f6.3,' * I**',f6.3,' * ',f6.3,' }',/,
+     &         2x,' OK [Answer 1=YES, 0=NO]? ')
+	read(5,*)i
+	if(i.ne.1)then
+	get_special = status_not_ok
+	status=smg$restore_physical_screen(pbid,save_vdid)
+	call replace_prompt
+	return
+	end if
+c
+      else
+      call remark(' using previous special function')
+      end if
+c==== store the original mid point x values and transform the old ones
+c==== function PW(a,b) does a**b, function Slog does LOG( ) both
+c==== checking for errors where possible.
+	offset = len_streams * (used_streams - (i_graph-1))
+c==== new x(i) values are transform of old x(i) and old y(i)
+c==== except last point of histogram where use last old x(n2+1), y(n2)
+c==== sorted out a muddle in the offsets here RKH 29/10/92
+	do i = n1 , n2
+        Q=x(i)
+        x(i) = PW(y(i),SP_F) * PW(Q,SP_E) * 
+     >            Slog( PW(y(i),SP_H) * PW(Q,SP_G) * SP_CX )
+	end do
+	if(hist)x(n2+1) = PW(y(n2),SP_F) * PW( x(n2+1),SP_E ) * 
+     >  Slog( PW(y(n2),SP_H) * PW( x(n2+1),SP_G )* SP_CX )  ! fix up the last point
+c
+c==== new y(i) values are transform of old midpoint ( x(i), x(i+1) )
+c==== if histogram,[ or just x(i) if not ] with old y(i)
+        ii=0
+	do i= n1,n2
+        ii=ii+1
+c==== care to point at the OLD x values !
+          if(hist)then
+            Q    = (x(offset_n + ii)+x(offset_n + ii+1))*0.5
+           else
+            Q = x(offset_n +ii)
+           end if
+
+	XCYD = PW( y(i),SP_D ) * PW( Q,SP_C ) * SP_CY
+        RLG = Slog( XCYD )
+	e(i) = e(i)* PW(Q,SP_A) * ( DERV(y(i),SP_B) * RLG +
+     >        PW(y(i),SP_B) * PW(XCYD,-1.0) * PW( Q,SP_C ) *
+     >           SP_CY * DERV(y(i),SP_D) )
+
+	y(i) = PW( y(i),SP_B ) * PW( Q,SP_A ) * RLG
+	end do
+
+	status=smg$restore_physical_screen(pbid,save_vdid)
+         xcaption(i_graph) = 'Special'
+         ycaption(i_graph) = 'Special'
+
+c======================= SECTION FOR HISTOGRAM DATA  ===========
+c=====do not multiply by dX first!
+c   note Q is given by Q(i) = (x(i)+x(i+1))/2. 
+c   QJ is the Jacobian = dx/dx'.  For x=Q and x'=Q**2, QJ=1/2Q.
+c==== Guinier Plot
+      else if (option .eq. 101) then
+c
+         do i = n1,n2
+               QJ = 1/(x(i) + x(i+1))
+               y(i) = y(i)*QJ
+               e(i) = e(i)*QJ
+             if (y(i) .gt. 0.0) then
+               e(i) = e(i)/y(i)
+               y(i) = log( y(i))
+            else
+               y(i) = 0.0
+               e(i) = 0.0
+            end if
+         end do
+c
+	do i=n1,n2+1		! convert x to Q**2
+            x(i) = x(i) ** 2  
+         end do
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'log\de\u(I)'
+
+c==== Guinier Plot (rods)
+
+      else if (option .eq.102) then
+c
+         do i = n1,n2
+               QJ = 1/(x(i) + x(i+1))
+               y(i) = y(i)*QJ
+               e(i) = e(i)*QJ
+            if (y(i) .gt. 0.0) then
+               e(i) = e(i)/y(i)	
+               y(i) = log( y(i)/(2*QJ))
+            else
+               y(i) = 0.0
+               e(i) = 0.0
+            end if
+         end do
+c
+	do i=n1,n2+1		! convert x to Q**2 
+            x(i) = x(i) ** 2  
+         end do
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'log\de\u(I.Q)'
+
+c==== Guinier Plot (sheets)
+
+      else if (option .eq. 103) then
+c
+         do i = n1,n2
+               QJ = 1/(x(i) + x(i+1))
+               y(i) = y(i)*QJ
+               e(i) = e(i)*QJ
+            if (y(i) .gt. 0.0) then
+               e(i) = e(i)/y(i)	
+               y(i) = log( y(i)/(4*QJ*QJ))
+            else
+               y(i) = 0.0
+               e(i) = 0.0
+            end if
+         end do
+c
+	do i=n1,n2+1		! convert x to Q**2 
+            x(i) = x(i) ** 2  
+         end do
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'log\de\u(I.Q\u2\d)'                   
+
+c==== Zimm Plot   1/I vs Q**2  
+
+      else if (option .eq. 104) then   
+c
+	do i=n1,n2
+		if(y(i).gt.0.0)then
+               QJ = 1/(x(i) + x(i+1))
+               y(i) = y(i)*QJ
+               e(i) = e(i)*QJ
+		    y(i) = 1/y(i)
+		    e(i) = e(i)*y(i)**2
+		else
+		    e(i)=0.0
+		    y(i)=0.0
+		end if
+         end do
+c
+	do i=n1,n2+1
+	x(i)=x(i)**2
+	end do
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'I\u-1\d'
+
+c==== Kratky Plot         I.Q**2 vs Q  (changed from Q**2 RKH 15/4/92)
+
+      else if (option .eq. 105) then
+c
+	do i=n1,n2		!  multiply y by Q**2
+c               QJ = 1/(x(i) + x(i+1))
+c               y(i) = y(i)*QJ
+c               e(i) = e(i)*QJ
+c            y(i) = y(i)/(4*QJ*QJ)
+c            e(i) = e(i)/(4*QJ*QJ)
+               QJ = 0.5*(x(i) + x(i+1))
+            y(i) = y(i)*QJ*QJ
+            e(i) = e(i)*QJ*QJ
+         end do
+c
+c	do i=n1,n2+1
+c	x(i)=x(i)**2
+c	end do
+         xcaption(i_graph) = 'Q (\A\u-1\d)'
+         ycaption(i_graph) = 'I.Q\u2\d'
+c                          
+c==== Debye-Bueche Plot  1/sqrt(I) vs Q**2  
+c
+      else if (option .eq. 106) then
+c
+	do i=n1,n2	
+               QJ = 1/(x(i) + x(i+1))
+               y(i) = y(i)*QJ
+               e(i) = e(i)*QJ
+		if(y(i).gt.0.0)then
+            y(i) = 1/sqrt(y(i))
+            e(i) = e(i)*0.5*y(i)**3
+		else
+		    e(i)=0.0
+		    y(i)=0.0
+		end if
+         end do
+c
+	do i=n1,n2+1
+	x(i)=x(i)**2
+	end do
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'I.Q\u2\d'
+c                          
+c==== LOG - LOG plot
+	else if (option .eq. 107)then
+c
+	do i= n1,n2
+               Q = (x(i) + x(i+1))/2
+               y(i) = y(i)/Q
+               e(i) = e(i)/Q
+	if(y(i).gt.0)then
+	e(i) = e(i)/y(i)	
+	y(i) = log( y(i))
+	else
+	y(i)=0
+	e(i)=0
+	endif
+	end do
+c
+	do i=n1,n2+1
+	if(x(i).gt.0)then
+	x(i)= log(x(i))
+	else
+	call error('ERROR: log of negative or zero in x array')
+	get_special = status_not_ok
+	call replace_prompt
+	return
+	end if
+	end do
+         xcaption(i_graph) = 'log\de\u(Q)'
+         ycaption(i_graph) = 'log\de\u(I)'
+	
+c==== Porod Plot   I.Q**4 vs Q**2
+c
+      else if (option .eq. 108) then
+c
+         do i = n1,n2
+               Q = (x(i) + x(i+1))/2
+               y(i) = y(i)*Q**4
+               e(i) = e(i)*Q**4
+         end do
+c
+	do i=n1,n2+1
+	x(i)=x(i)**2
+	end do
+         xcaption(i_graph) = 'Q\u2\d (\A\u-2\d)'
+         ycaption(i_graph) = 'I.Q\u4\d'
+c
+c=== general function   (Q**A)(I**B)xLn(Q**CxI**D) v similar', 
+	else if( option .eq. 109) then
+	status=smg$save_physical_screen(pbid,save_vdid,4)
+	write(6,1001)
+	read(5,*)A,B,C,D,CY
+	write(6,1002)
+	read(5,*)EE,F,G,H,CX
+	write(6,1003)A,B,C,D,CY,EE,F,G,H,CX
+	read(5,*)I
+	if(I.ne.1)then
+	get_special = status_not_ok
+	call replace_prompt
+	return
+	end if
+c==== store the original x values and transform the old ones
+c==== function PW(a,b) does a**b, function Slog does LOG( ) both
+c==== checking for errors where possible.
+ 	offset = len_streams * (used_streams - (i_graph-1))
+	do i = n1 , n2
+	x(i+offset) =0.5*( x(i+1) + x(i))
+	yy= 0.5*(y(i+1)+y(i))
+        x(i) = PW(yy,F) * PW(x(i),EE) * 
+     >            Slog( PW(yy,H) * PW(x(i),G) * CX )
+	end do
+	x(n2+1) = PW(yy,F) * PW(x(n2+1),EE) * Slog( PW(yy,H)
+     >         * PW(x(n2+1),G)* CX )  ! fix up the last point
+c
+c==== now rescale the old Y and E before transforming them
+	do i=n1,n2
+	y(i) = y(i) / (x(i+1)-x(i))
+	e(i) = e(i) / (x(i+1)-x(i))
+	XCYD = PW(y(i),D) * PW(x(i+offset),C) * CY
+        RLG = Slog( XCYD )
+	e(i) = e(i)* PW(x(i+offset),A) * ( DERV(y(i),B) * RLG +
+     >        PW(y(i),B) * PW(XCYD,-1.0) * PW( x(i+offset),C ) *
+     >           CY * DERV(y(i),D) )
+
+	y(i) = PW(y(i),B) * PW(x(i+offset),A) * RLG
+	end do
+
+	status=smg$restore_physical_screen(pbid,save_vdid)
+         xcaption(i_graph) = 'Special'
+         ycaption(i_graph) = 'Special'
+
+      end if
+
+      xmn(i_graph) = x(n1)
+      xmx(i_graph) = x(n2)
+      if(hist)xmx(i_graph) = x(n2+1)
+      ymn(i_graph) = y(n1)
+      ymx(i_graph) = y(n1)
+      do i = n1,n2
+         ymn(i_graph) = min (ymn(i_graph), y(i))
+         ymx(i_graph) = max (ymx(i_graph), y(i))
+      end do
+
+c===============================================================================
+c     copy header into workspace i_graph
+c
+      long_title(i_graph) = long_title(n) 
+      run_number(i_graph) = run_number(n)
+      dat_file(i_graph) = dat_file(n)
+      run_user(i_graph) = run_user(n)
+      start_time(i_graph) = start_time(n)
+      bin_parameter(i_graph) = bin_parameter(n)
+      len_pdfn(i_graph) = len_pdfn(n)
+
+c===============================================================================
+c     Fill workspace
+
+      write (text, '(i5)') n
+      work(i_graph).label_1 = 'WORKSPACE : '//text
+      if (work(n).lambda_max .gt. 0) then
+         write (text, '(f5.2, a, f5.2, a)') 
+     >         lambda_min, ' > ', lambda_max, ' Ang'
+         work(i_graph).label_2 = 'LAMBDAS   : '//text
+      else
+         work(i_graph).label_2 = 'All wavelengths'                  
+      end if
+      write (text, '(f5.0, a, f5.0, a)') phi_min,' > ',phi_max, ' deg'
+      work(i_graph).label_3 = 'PHI       : '//text
+      xcode(i_graph) = 7
+      ycode(i_graph) = xcode(i_graph)
+
+      work(i_graph).nsp_first = work(n).nsp_first
+      work(i_graph).nsp_last = work(n).nsp_last
+      work(i_graph).lambda_min = work(n).lambda_min
+      work(i_graph).lambda_max = work(n).lambda_max
+      work(i_graph).t_min = work(n).t_min
+      work(i_graph).t_max = work(n).t_max
+      work(i_graph).r_min = work(n).r_min                                       
+      work(i_graph).r_max = work(n).r_max
+      work(i_graph).sample_file = work(n).sample_file
+      work(i_graph).can_file = work(n).can_file
+      work(i_graph).norm_file = work(n).norm_file
+      work(i_graph).back_file = work(n).back_file
+
+      get_special = status_ok
+
+      goto 101
+
+100   call error ('ERROR: Invalid entry')
+
+102   get_special = status_not_ok
+
+101   call replace_prompt
+
+      return
+
+      end
+c
+c===============================================================================
+c     COLETTE - LOQ data analysis development program - R.Heenan 3/9/87
+c    
+c=== this function does A**B, trying to avoid error returns
+c=== it doe NOT try to anticipate overflows however.
+c
+	function pw(a,b)
+c
+	if(abs(a).lt.1.0e-30)then   ! 0**n or 0**-n are set zero
+	pw=0.0
+c
+	else if (abs(b).lt.1.0e-08)then  ! a**0 is set to 1.0
+	pw=1.0
+c
+	else if(a.lt.0.0)then		! test for (-a)**b
+c
+		if( abs( b - nint(b) ).lt.1.e-08 ) then
+		  if(nint(b).eq.1)then
+		    pw = a			! (-a)**1
+		  else if(nint(b).eq.-1)then
+		    pw = 1./a		! (-a)**(-1)
+		  else
+		      if(mod(nint(b),2).eq.0)then
+			  pw=(-a)**b
+		      else
+			  pw=-(-a)**b
+		      end if
+		  end if
+		  return
+		else
+                write(6,1005)
+1005	format(1x,'ERROR: negative number to non-integral power')
+		  pw=0.0
+		 return
+		end if
+		return
+c
+	else
+	pw=a**b				! the "normal" route
+c
+	end if
+	return
+c
+	end
+c
+c
+c===============================================================================
+c     COLETTE - LOQ data analysis development program - R.Heenan 3/9/87
+c    
+c=== this function does the derivative of A**B, with respect to A
+c===  trying to avoid error returns
+c=== it doe NOT try to anticipate overflows however.
+c
+	function derv(a,b)
+c
+	if( abs(a).lt.1.0e-30 ) then 
+	derv = 0.0
+c
+	else if ( abs(b) .lt.1.0e-08 ) then  
+	derv = 0.0
+c
+	else 
+	derv = b* PW( a, b-1.0 )
+	end if
+c
+	return
+	end
+c
+c===============================================================================
+c     COLETTE - LOQ data analysis development program - R.Heenan 3/9/87
+c    
+c=== this function does LOGe(a), trying to avoid error returns
+c
+	function Slog(a)
+	if(a.gt.0.0)then
+	slog = log(a)
+	else
+	slog = 1.0
+	end if
+	return
+	end
+c

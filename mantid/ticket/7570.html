@@ -1,0 +1,782 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7570 (SplineSmoothing infinite loops when error is zero)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7569.html" title="Ticket #7569" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7570?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7570?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7570?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7571.html" title="Ticket #7571" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7570, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7569.html" title="Ticket #7569">Previous Ticket</a></span></li><li><span><a class="next" href="7571.html" title="Ticket #7571">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/7570.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7570.html">Ticket #7570</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-29T16%3A07%3A34%2B01%3A00&amp;precision=second" title="2013-07-29T16:07:34+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A00%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T02:00:45+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">SplineSmoothing infinite loops when error is zero</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Dan+Nixon">Dan Nixon</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="7714.html" title="Create a unit test for BSpline function">#7714</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="7842.html" title="[C2E] Add smoothing option to resolution generation.">#7842</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+SplineSmoothing algorithm gets trapped in an infinite loop when the error is set to zero. Ideally it should use all the points available and make an exact copy of the curve.
+</p>
+<p>
+This appears to be working on Ubuntu 12.04, but fails on Mac. This could well be down to a mismatch in GSL library versions.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/7570/ZnCl2_Stheta.nxs.html" title="View attachment">ZnCl2_Stheta.nxs</a><a href="../raw-attachment/ticket/7570/ZnCl2_Stheta.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="131824 bytes">128.7 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-15T15%3A45%3A53%2B01%3A00&amp;precision=second" title="2014-08-15T15:45:53+01:00 in Timeline">6 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7570.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-01T16%3A02%3A32%2B01%3A00&amp;precision=second" title="2013-08-01T16:02:32+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Indirect Inelastic</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7570.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-07T11%3A20%3A15%2B01%3A00&amp;precision=second" title="2013-08-07T11:20:15+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.0</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="7570.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-09T14%3A49%3A36%2B01%3A00&amp;precision=second" title="2013-10-09T14:49:36+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>7714</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>Update</strong>
+</p>
+<p>
+After discussing the problem with Roman this ticket would probably best be solved by swapping out the CubicSpline function for BSpline due to efficiency issues. Therefore we should wait until either me or Roman write a unit test to verify BSpline works properly before changing SplineSmoothing. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="7570.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-16T10%3A48%3A48%2B01%3A00&amp;precision=second" title="2013-10-16T10:48:48+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.0</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="7570.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-15T11%3A25%3A48Z&amp;precision=second" title="2013-11-15T11:25:48Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>7842</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="7570.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T11%3A05%3A00Z&amp;precision=second" title="2014-02-14T11:05:00Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move to assigned at the introduction of the triage step
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="7570.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-16T16%3A38%3A10%2B01%3A00&amp;precision=second" title="2014-07-16T16:38:10+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="7570.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T08%3A33%3A54%2B01%3A00&amp;precision=second" title="2014-08-08T08:33:54+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Swapped CubicSpline for BSpline.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac8329ecaf589c5134c00252a51599d34a389ace" title="ac8329ecaf589c5134c00252a51599d34a389ace">ac8329ecaf589c5134c00252a51599d34a389ace</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="7570.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T08%3A33%3A54%2B01%3A00&amp;precision=second" title="2014-08-08T08:33:54+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Fix issue with the BSpline swap.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5b5b0a24814ce6ec863c6a2eaaffbdc8fa26869b" title="5b5b0a24814ce6ec863c6a2eaaffbdc8fa26869b">5b5b0a24814ce6ec863c6a2eaaffbdc8fa26869b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7570.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T08%3A33%3A54%2B01%3A00&amp;precision=second" title="2014-08-08T08:33:54+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Swap to using ConvertToPointData algorithm.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3d7b4862b94d63093c32333e37c0159f021dea21" title="3d7b4862b94d63093c32333e37c0159f021dea21">3d7b4862b94d63093c32333e37c0159f021dea21</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7570.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T08%3A33%3A55%2B01%3A00&amp;precision=second" title="2014-08-08T08:33:55+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Refactor smoothing algorithm code.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/15a102151b23fd4b842ec7dc84442ce18e299d75" title="15a102151b23fd4b842ec7dc84442ce18e299d75">15a102151b23fd4b842ec7dc84442ce18e299d75</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7570.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T08%3A33%3A55%2B01%3A00&amp;precision=second" title="2014-08-08T08:33:55+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Refactor unit test code.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1057287a38a33afffc8532d83d21078c84c9a9e1" title="1057287a38a33afffc8532d83d21078c84c9a9e1">1057287a38a33afffc8532d83d21078c84c9a9e1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="7570.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T08%3A40%3A41%2B01%3A00&amp;precision=second" title="2014-08-08T08:40:41+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Add missing doxygen comments for new methods.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a1e7fa669e78b8b53c1fa25b3965c4f8999ffb42" title="a1e7fa669e78b8b53c1fa25b3965c4f8999ffb42">a1e7fa669e78b8b53c1fa25b3965c4f8999ffb42</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="7570.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T08%3A54%3A51%2B01%3A00&amp;precision=second" title="2014-08-08T08:54:51+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Fix usage example.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/09c239592dadc9032b5e0315b55f05d21a9fe6a2" title="09c239592dadc9032b5e0315b55f05d21a9fe6a2">09c239592dadc9032b5e0315b55f05d21a9fe6a2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="7570.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T09%3A40%3A51%2B01%3A00&amp;precision=second" title="2014-08-08T09:40:51+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Remove variable.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d4f57128bea5b6fc7527dd275c7bc36ddad4fb1b" title="d4f57128bea5b6fc7527dd275c7bc36ddad4fb1b">d4f57128bea5b6fc7527dd275c7bc36ddad4fb1b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="7570.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-15T15%3A36%3A37%2B01%3A00&amp;precision=second" title="2014-08-15T15:36:37+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7570.html" title="defect: SplineSmoothing infinite loops when error is zero (closed: fixed)">#7570</a> Limit the max number of executions further.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bfb529606a031fe2a435a13dfc48e1e64262371e" title="bfb529606a031fe2a435a13dfc48e1e64262371e">bfb529606a031fe2a435a13dfc48e1e64262371e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="7570.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-15T15%3A45%3A33%2B01%3A00&amp;precision=second" title="2014-08-15T15:45:33+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I believe the zero error issue is caused by the fact that the spline takes a large number of parameters and minimizing all of them to be so close to the original data naturally causes it to be slow.
+</p>
+<p>
+The changes here have refactored the code and limited the max iterations so that even if you specify zero error, the algorithm should finish more quickly (albeit slowly).
+</p>
+<p>
+<strong>To Test</strong>
+</p>
+<p>
+I've supplied a file to check the algorithm with. You can use the following python script to check it works (but may take a sec):
+</p>
+<div class="code"><pre>theta <span class="o">=</span> Load<span class="p">(</span>Filename<span class="o">=</span><span class="s">'ZnCl2_Stheta.nxs'</span><span class="p">)</span>
+ws <span class="o">=</span> SplineSmoothing<span class="p">(</span>theta<span class="p">,</span> Error<span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div><p>
+Unit tests and a code review should cover the rest. 
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-15T15%3A46%3A22%2B01%3A00&amp;precision=second" title="2014-08-15T15:46:22+01:00 in Timeline">6 years</a> ago
+                      by Samuel Jackson
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/7570?cversion=0&amp;cnum_hist=17#comment:17">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/7570?action=comment-diff&amp;cnum=17&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-15T15%3A45%3A53%2B01%3A00&amp;precision=second" title="2014-08-15T15:45:53+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7570/ZnCl2_Stheta.nxs.html"><em>ZnCl2_Stheta.nxs</em></a><a href="../raw-attachment/ticket/7570/ZnCl2_Stheta.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="7570.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-15T16%3A03%3A43%2B01%3A00&amp;precision=second" title="2014-08-15T16:03:43+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="7570.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-20T15%3A12%3A35%2B01%3A00&amp;precision=second" title="2014-08-20T15:12:35+01:00 in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Samuel Jackson</em> to <em>Dan Nixon</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="7570.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T13%3A27%3A29%2B01%3A00&amp;precision=second" title="2014-08-22T13:27:29+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="7570.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T14%3A12%3A52%2B01%3A00&amp;precision=second" title="2014-08-22T14:12:52+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/bugfix/7570_spline_smooting_error'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/34de655e1584f0ab1cf0b1f0e7a78b4fce316c36"><span class="icon">​</span>34de655e1584f0ab1cf0b1f0e7a78b4fce316c36</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="7570.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A00%3A45%2B01%3A00&amp;precision=second" title="2015-06-04T02:00:45+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/8415"><span class="icon">​</span>8415</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7570?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7570?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7570?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

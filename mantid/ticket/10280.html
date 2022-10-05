@@ -1,0 +1,989 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10280 (Extend SymmetryOperation to handle translational components)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10279.html" title="Ticket #10279" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10280?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10280?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10280?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10281.html" title="Ticket #10281" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10280, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10279.html" title="Ticket #10279">Previous Ticket</a></span></li><li><span><a class="next" href="10281.html" title="Ticket #10281">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10280.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10280.html">Ticket #10280</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T08%3A19%3A58%2B01%3A00&amp;precision=second" title="2014-09-26T08:19:58+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A52%3A40%2B01%3A00&amp;precision=second" title="2015-06-04T03:52:40+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Extend SymmetryOperation to handle translational components</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Michael+Wedel">Michael Wedel</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Michael+Wedel">Michael Wedel</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              anders.markvardsen@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="10262.html" title="Space group reflection conditions">#10262</a>, <a class="closed ticket" href="10281.html" title="Create SpaceGroup class and factory">#10281</a>, <a class="closed ticket" href="10305.html" title="Determine symmetry element from SymmetryOperation">#10305</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Anders Markvardsen
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+As a first step for <a class="closed ticket" href="10262.html" title="Space group reflection conditions (closed: fixed)">#10262</a>, SymmetryOperation needs to be changed to be able to handle translational components. In that context, the factory will also be adapted, so that symmetry operations may be constructed from coordinate triplets in the form of [x, y, z] (I found the term "Jones faithful representation" for that notation). As in the International Tables, shifts should be given as fractions, "1/4", "2/3", etc.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10280.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T08%3A27%3A04%2B01%3A00&amp;precision=second" title="2014-09-26T08:27:04+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10281</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10280.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T10%3A28%3A17%2B01%3A00&amp;precision=second" title="2014-09-26T10:28:17+01:00 in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10280.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T16%3A53%3A02%2B01%3A00&amp;precision=second" title="2014-09-26T16:53:02+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Added class for rational number vector
+</p>
+<p>
+It will be useful for implementing the translational part of SymmetryOperation, because values like 2/3 etc. occur and floating point math just makes comparisons etc. harder.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/148a11d85da16636154da72d1fcf4fa921244ab1" title="148a11d85da16636154da72d1fcf4fa921244ab1">148a11d85da16636154da72d1fcf4fa921244ab1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10280.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-29T06%3A23%3A56%2B01%3A00&amp;precision=second" title="2014-09-29T06:23:56+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Started writing unit tests for V3R
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e37aa458e8fca86b59d7168ada5c8f468cf60c02" title="e37aa458e8fca86b59d7168ada5c8f468cf60c02">e37aa458e8fca86b59d7168ada5c8f468cf60c02</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10280.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-29T06%3A24%3A40%2B01%3A00&amp;precision=second" title="2014-09-29T06:24:40+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Changed default constructor
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/29bc755d4980e9a1613428d45cbe6ebc8061ece9" title="29bc755d4980e9a1613428d45cbe6ebc8061ece9">29bc755d4980e9a1613428d45cbe6ebc8061ece9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10280.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-29T10%3A45%3A28%2B01%3A00&amp;precision=second" title="2014-09-29T10:45:28+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Finished unit tests, added documentation for V3R.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1a908bc0512d3611729514aa726bab2f911484df" title="1a908bc0512d3611729514aa726bab2f911484df">1a908bc0512d3611729514aa726bab2f911484df</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10280.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-29T16%3A28%3A32%2B01%3A00&amp;precision=second" title="2014-09-29T16:28:32+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Added parser for SymmetryOperation from [x,y,z] format.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/79bd522fce3458e88863bc239c0ab0f2c2223b7c" title="79bd522fce3458e88863bc239c0ab0f2c2223b7c">79bd522fce3458e88863bc239c0ab0f2c2223b7c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10280.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-29T16%3A33%3A37%2B01%3A00&amp;precision=second" title="2014-09-29T16:33:37+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Added V3R constructor from integer vector
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/71c37e66df9e86c1c1eb08ce1b0486a713d8b51a" title="71c37e66df9e86c1c1eb08ce1b0486a713d8b51a">71c37e66df9e86c1c1eb08ce1b0486a713d8b51a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10280.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-29T22%3A00%3A27%2B01%3A00&amp;precision=second" title="2014-09-29T22:00:27+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. SymmetryOperation identifier is derived from components
+</p>
+<p>
+Internal matrix and vector are used to construct the identifier. This way it will be easier to store unique SymmetryOperation objects in the factory.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0bb0f665823e9d490bc452843a707352051b06c8" title="0bb0f665823e9d490bc452843a707352051b06c8">0bb0f665823e9d490bc452843a707352051b06c8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10280.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T16%3A35%3A14%2B01%3A00&amp;precision=second" title="2014-09-30T16:35:14+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Changed order of generated identifier.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6007415f237148f0c56c275c1655ee9c0f8eb29f" title="6007415f237148f0c56c275c1655ee9c0f8eb29f">6007415f237148f0c56c275c1655ee9c0f8eb29f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10280.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T16%3A35%3A14%2B01%3A00&amp;precision=second" title="2014-09-30T16:35:14+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Added symbol parser into own class.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fd73dd29d388e842596be9d760e6f6598ccd11ed" title="fd73dd29d388e842596be9d760e6f6598ccd11ed">fd73dd29d388e842596be9d760e6f6598ccd11ed</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10280.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T16%3A35%3A14%2B01%3A00&amp;precision=second" title="2014-09-30T16:35:14+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Refactored SymmetryOperation and factory
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/55af992bc77256630949d5b7f43948f1efb7fd70" title="55af992bc77256630949d5b7f43948f1efb7fd70">55af992bc77256630949d5b7f43948f1efb7fd70</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10280.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T20%3A45%3A10%2B01%3A00&amp;precision=second" title="2014-09-30T20:45:10+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Changed python exports
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0bb4520f77114e8e4a4676a73ef189788a607510" title="0bb4520f77114e8e4a4676a73ef189788a607510">0bb4520f77114e8e4a4676a73ef189788a607510</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10280.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-30T21%3A23%3A56%2B01%3A00&amp;precision=second" title="2014-09-30T21:23:56+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Updated documentation comments.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d0c46d61266c66ad4c6c76f4b3aaa1dc218971ac" title="d0c46d61266c66ad4c6c76f4b3aaa1dc218971ac">d0c46d61266c66ad4c6c76f4b3aaa1dc218971ac</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10280.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T12%3A14%3A52%2B01%3A00&amp;precision=second" title="2014-10-01T12:14:52+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Added query method to SymmetryOperationFactory
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/396826380b7d278b809d1be9bcc7243bff428691" title="396826380b7d278b809d1be9bcc7243bff428691">396826380b7d278b809d1be9bcc7243bff428691</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10280.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T12%3A14%3A52%2B01%3A00&amp;precision=second" title="2014-10-01T12:14:52+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Cleaned up SymmetryOperation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c6964888a22dff2b7141527c240a7bdc7fab3323" title="c6964888a22dff2b7141527c240a7bdc7fab3323">c6964888a22dff2b7141527c240a7bdc7fab3323</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10280.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T12%3A14%3A52%2B01%3A00&amp;precision=second" title="2014-10-01T12:14:52+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Updated documentation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/204fbaac91980ff06d2e0e246cf60678d9e43629" title="204fbaac91980ff06d2e0e246cf60678d9e43629">204fbaac91980ff06d2e0e246cf60678d9e43629</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10280.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T12%3A33%3A57%2B01%3A00&amp;precision=second" title="2014-10-01T12:33:57+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Removed constructor-chaining from SymmetryOperation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/160a9a1a38d8aee222a97f37b15eb0dc3035fb70" title="160a9a1a38d8aee222a97f37b15eb0dc3035fb70">160a9a1a38d8aee222a97f37b15eb0dc3035fb70</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10280.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T12%3A57%3A58%2B01%3A00&amp;precision=second" title="2014-10-01T12:57:58+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Catching exceptions by reference.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/330ee9c1b67b626b01ca5f78cc6f03420c9a6787" title="330ee9c1b67b626b01ca5f78cc6f03420c9a6787">330ee9c1b67b626b01ca5f78cc6f03420c9a6787</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10280.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T14%3A11%3A35%2B01%3A00&amp;precision=second" title="2014-10-01T14:11:35+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Cc</strong>
+        <em>anders.markvardsen@…</em> added
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>Overview</strong>
+</p>
+<ul><li>SymmetryOperation has been changed to handle translational symmetry (using a matrix/vector pair).
+</li><li>Instead of having one class for each symmetry operation I wrote a parser that parses the Jones faithful symbol and constructs a matrix/vector pair.
+</li><li>To be able to carry out operations exactly (will be important in <a class="closed ticket" href="10281.html" title="Create SpaceGroup class and factory (closed: fixed)">#10281</a> for space group generation), I added a new vector class V3R (similar to Kernel::V3D), which is a vector of three rational numbers (using boost::rational).
+</li><li>The factory is still there, because once an operation has been constructed, that SymmetryOperation object is stored as a prototype. Subsequent constructions are then only copies of that prototype, which is much faster than parsing the symbol each time (constructing the same operation 1 million times was 0.2 vs. 7.75 seconds on my computer - the parser is probably way too slow, but nothing depends on its specifics, so it is replacable).
+</li><li>As a consequence, the notation for symmetry operations I chose previously is gone now.
+</li><li>This change also affects PointGroup, which now directly stores symmetry operation objects instead of Kernel::IntMatrix, preparing for later changes.
+</li></ul><ul><li>The "Point groups" concept page has been adapted to these changes.
+</li></ul><p>
+<strong>Testing</strong>
+</p>
+<ul><li>Code review
+</li><li>Make sure all tests pass (checkbuild passed, so that should be okay).
+</li></ul>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-01T14%3A15%3A32%2B01%3A00&amp;precision=second" title="2014-10-01T14:15:32+01:00 in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10280?cversion=0&amp;cnum_hist=20#comment:20">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10280?action=comment-diff&amp;cnum=20&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10280.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T08%3A16%3A07%2B01%3A00&amp;precision=second" title="2014-10-02T08:16:07+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Fixing uninitialized value error.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1f5352c3a5f784eac19a92732fc6e8e032c53668" title="1f5352c3a5f784eac19a92732fc6e8e032c53668">1f5352c3a5f784eac19a92732fc6e8e032c53668</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10280.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T15%3A39%3A22%2B01%3A00&amp;precision=second" title="2014-10-02T15:39:22+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10280.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-03T16%3A06%3A31%2B01%3A00&amp;precision=second" title="2014-10-03T16:06:31+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10280.html" title="Extend SymmetryOperation to handle translational components (closed: fixed)">#10280</a>. Added inverse() and less than operator.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6f7873cbfb4d4882a4f36cf4c8fc33142711fd0c" title="6f7873cbfb4d4882a4f36cf4c8fc33142711fd0c">6f7873cbfb4d4882a4f36cf4c8fc33142711fd0c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10280.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-06T07%3A54%3A34%2B01%3A00&amp;precision=second" title="2014-10-06T07:54:34+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10305</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10280.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-06T08%3A07%3A24%2B01%3A00&amp;precision=second" title="2014-10-06T08:07:24+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Ticket <a class="closed ticket" href="10305.html" title="Determine symmetry element from SymmetryOperation (closed: fixed)">#10305</a> will deal with determining symmetry elements from SymmetryOperation, so I'm marking this ticket fixed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10280.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-07T16%3A05%3A53%2B01%3A00&amp;precision=second" title="2014-10-07T16:05:53+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Accidentally put this ticket number into a commit for <a class="closed ticket" href="10281.html" title="Create SpaceGroup class and factory (closed: fixed)">#10281</a>, sorry.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-07T21%3A21%3A32%2B01%3A00&amp;precision=second" title="2014-10-07T21:21:32+01:00 in Timeline">6 years</a> ago
+                      by Michael Wedel
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10280?cversion=0&amp;cnum_hist=26#comment:26">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10280?action=comment-diff&amp;cnum=26&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10280.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T09%3A51%3A59%2B01%3A00&amp;precision=second" title="2014-10-08T09:51:59+01:00 in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Anders Markvardsen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10280.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T16%3A03%3A46%2B01%3A00&amp;precision=second" title="2014-10-08T16:03:46+01:00 in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/10280_introduce_translational_symmetry_operations'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/1c9879fc626b2847c1a067de30336df17a3ecc02"><span class="icon">​</span>1c9879fc626b2847c1a067de30336df17a3ecc02</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10280.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T16%3A32%3A34%2B01%3A00&amp;precision=second" title="2014-10-08T16:32:34+01:00 in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Considered name V3R which I think goes well with V3D for in this case storing rational numbers. 
+</p>
+<p>
+Well documented.
+</p>
+<p>
+One comment. When running
+</p>
+<p>
+{
+from mantid.geometry import SymmetryOperation, SymmetryOperationFactoryImpl
+symOp = SymmetryOperationFactoryImpl.Instance().createSymOp("x,y,-z+1/2")
+hkl = [1, -1, 3]
+hklPrime = symOp.apply(hkl)
+}
+</p>
+<p>
+hklPrime is returned as V3D. One optional think to consider at some point is if hkl is inputted as a V3R (or V3R like) a V3R is returned. Discussed this with Martyn, and if done should consider how to make this transparent to python user
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10280.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-09T10%3A26%3A36%2B01%3A00&amp;precision=second" title="2014-10-09T10:26:36+01:00 in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Thanks for your comments. I finally figured out that I had to configure an e-mail address in order to receive notifications - better late than never :)
+</p>
+<p>
+I interpreted "V3D" as "vector of three doubles", so "V3R" seemed like a logical choice. Also, it's short, which is convenient.
+</p>
+<p>
+Better python integration is a good point, but I'm not sure about the best way to go here. I think it's somehow a small conceptional problem, because there are actually two things here: Applying symmetry operations to a <em>vector</em>, which only uses the matrix-part and applying symmetry operations to a <em>point</em>, which also add the translation vector.
+</p>
+<p>
+HKLs are vectors, so adding translational parts makes no sense. I guess if these two things were conceptually divided (along the lines of having V3D as a <em>vector</em> and P3D as a <em>point</em>), it could be easier to express this in code as well. The same would apply for V3R (and V3I, which would be okay to use as HKL in most cases except modulated structures as far as I know).
+</p>
+<p>
+The differences are small, but there's no way the operator can now whether it's processing a vector or a point when both are represented by the same data structure.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10280.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A52%3A40%2B01%3A00&amp;precision=second" title="2015-06-04T03:52:40+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11122"><span class="icon">​</span>11122</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10280?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10280?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10280?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

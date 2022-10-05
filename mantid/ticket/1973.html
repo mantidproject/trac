@@ -1,0 +1,556 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #1973 (Memory leak in convert units for EventWorkspaces?)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="1972.html" title="Ticket #1972" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/1973?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/1973?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/1973?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="1974.html" title="Ticket #1974" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 1973, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="1972.html" title="Ticket #1972">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="1974.html" title="Ticket #1974">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="1973.html">Ticket #1973</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-11-19T16%3A20%3A15Z&amp;precision=second" title="2010-11-19T16:20:15Z in Timeline">10 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A46%3A59%2B01%3A00&amp;precision=second" title="2015-06-03T22:46:59+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Memory leak in convert units for EventWorkspaces?</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Iteration&#32;26.html">Iteration 26</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              vel@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Peter Peterson
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <br style="clear: both" />
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="1973.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-11-19T19%3A25%3A38Z&amp;precision=second" title="2010-11-19T19:25:38Z in Timeline">10 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Vickie's Valgrind run finds it in 
+AlgorithmFactory::create()
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="1973.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-11-19T19%3A29%3A08Z&amp;precision=second" title="2010-11-19T19:29:08Z in Timeline">10 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I meant WorkspaceFactory::create
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="1973.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-11-22T17%3A52%3A06Z&amp;precision=second" title="2010-11-22T17:52:06Z in Timeline">10 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(from Vickie)
+</p>
+<p>
+Janik-
+</p>
+<p>
+This memory link looks like it is the event list.  Maybe the destructor is not working.
+</p>
+<p>
+ 
+</p>
+<p>
+==8638== 207,570,656 (150,978,944 direct, 56,591,712 indirect) bytes in 1,179,523 blocks are definitely lost in loss record 27,312 of 27,314
+</p>
+<p>
+==8638==    at 0x4C27CC1: operator new(unsigned long) (vg_replace_malloc.c:261)
+</p>
+<p>
+==8638==    by 0x2288C339: Mantid::DataObjects::EventWorkspace::init(int const&amp;, int const&amp;, int const&amp;) (EventWorkspace.cpp:85)
+</p>
+<p>
+==8638==    by 0x62BB85B: Mantid::API::MatrixWorkspace::initialize(int const&amp;, int const&amp;, int const&amp;) (MatrixWorkspace.cpp:65)
+</p>
+<p>
+==8638==    by 0x629FBD2: Mantid::API::WorkspaceFactoryImpl::create(std::string const&amp;, int const&amp;, int const&amp;, int const&amp;) const (WorkspaceFactory.cpp:191)
+</p>
+<p>
+==8638==    by 0x22FD94B1: Mantid::Algorithms::AlignDetectors::execEvent() (AlignDetectors.cpp:336)
+</p>
+<p>
+==8638==    by 0x22FDA829: Mantid::Algorithms::AlignDetectors::exec() (AlignDetectors.cpp:261)
+</p>
+<p>
+==8638==    by 0x62541EA: Mantid::API::Algorithm::execute() (Algorithm.cpp:253)
+</p>
+<p>
+==8638==    by 0x22FF9D13: Mantid::Algorithms::DiffractionEventCalibrateDetectors::intensity(double, double, double, double, double, double, std::string, std::string, std::string, std::string) (DiffractionEventCalibrateDetectors.cpp:176)
+</p>
+<p>
+==8638==    by 0x22FFD78F: Mantid::Algorithms::gsl_costFunction(gsl_vector const*, void*) (DiffractionEventCalibrateDetectors.cpp:68)
+</p>
+<p>
+==8638==    by 0x5CAA7A2: ??? (in /home/vel/lib/libgsl.so.0)
+</p>
+<p>
+==8638==    by 0x22FF80F5: Mantid::Algorithms::DiffractionEventCalibrateDetectors::exec() (DiffractionEventCalibrateDetectors.cpp:384)
+</p>
+<p>
+ 
+</p>
+<p>
+ 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="1973.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-07T22%3A30%3A08Z&amp;precision=second" title="2010-12-07T22:30:08Z in Timeline">10 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Look for it in getTofs() which returns a pointer!
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="1973.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-08T19%3A43%3A26Z&amp;precision=second" title="2010-12-08T19:43:26Z in Timeline">10 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[7953]</a>) Remove a memory leak in ConvertUnits for EventWorkspaces. Re <a class="closed ticket" href="1973.html" title="enhancement: Memory leak in convert units for EventWorkspaces? (closed: fixed)">#1973</a>.
+Was supposed to fix crash if no instrument (Re <a class="closed ticket" href="2002.html" title="defect: ConvertUnits crashes mantid (closed: fixed)">#2002</a>), but changes to geometry in connection with <a class="closed ticket" href="2010.html" title="enhancement: Method for Finding Nearest Neighbours of a Detector (closed: fixed)">#2010</a> mean that the fix that worked yesterday doesn't work today.
+This is also leading up to a refactor to remove duplicated code - Re <a class="closed ticket" href="1833.html" title="enhancement: Consolidate duplicated code in ConvertUnits (closed: fixed)">#1833</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="1973.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-08T20%3A21%3A16Z&amp;precision=second" title="2010-12-08T20:21:16Z in Timeline">10 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[7956]</a>) Forgot to check in modified test. Re <a class="closed ticket" href="1973.html" title="enhancement: Memory leak in convert units for EventWorkspaces? (closed: fixed)">#1973</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="1973.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-09T16%3A39%3A28Z&amp;precision=second" title="2010-12-09T16:39:28Z in Timeline">10 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[7972]</a>) Refs <a class="closed ticket" href="1973.html" title="enhancement: Memory leak in convert units for EventWorkspaces? (closed: fixed)">#1973</a> and <a class="closed ticket" href="2038.html" title="defect: MemoryLeak in LoadSNSEventNexus? (closed: fixed)">#2038</a>: Fixed memory leak due to eventWorkspace-&gt;CopyDataFrom()
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="1973.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-09T20%3A53%3A03Z&amp;precision=second" title="2010-12-09T20:53:03Z in Timeline">10 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[7985]</a>) Fixes <a class="closed ticket" href="1973.html" title="enhancement: Memory leak in convert units for EventWorkspaces? (closed: fixed)">#1973</a> and <a class="closed ticket" href="2038.html" title="defect: MemoryLeak in LoadSNSEventNexus? (closed: fixed)">#2038</a>: fairly confident that there is no actual memory leak in Linux or Windows, and that the issue is with improper memory use reporting.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="1973.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-16T09%3A49%3A20Z&amp;precision=second" title="2010-12-16T09:49:20Z in Timeline">10 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 26</em> to <em>Iteration 27</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets to iteration 27, if your ticket is essential for Iteration 26 then move it back.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="1973.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-16T09%3A55%3A18Z&amp;precision=second" title="2010-12-16T09:55:18Z in Timeline">10 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 27</em> to <em>Iteration 26</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Sorry I didn't mean to move these ones reverting back to It 26
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="1973.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-16T13%3A53%3A54Z&amp;precision=second" title="2010-12-16T13:53:54Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Peterson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="1973.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-16T13%3A54%3A07Z&amp;precision=second" title="2010-12-16T13:54:07Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This was done correctly.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="1973.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A46%3A59%2B01%3A00&amp;precision=second" title="2015-06-03T22:46:59+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/2820"><span class="icon">​</span>2820</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/1973?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/1973?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/1973?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

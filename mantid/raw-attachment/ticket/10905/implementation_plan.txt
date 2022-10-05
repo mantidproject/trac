@@ -1,0 +1,30 @@
+
+PeakRepresentation # This is not a QWidget, but may need to be a QObject?
++ draw(QPainter&)
+|
+PeakRepresentationSpherical
+	| PeakRepresentationElliptical
+		| PeakRepresentationCross
+
+PeakViewFactory (concrete type, no base)
++ createView(const Peak&) : PeakView # calls makeView with shape
+- makeView(const PeakShapeSpherical&) : PeakRepresentationSpherical
+- makeView(const PeakShapeEliptical&) : PeakRepresentationElliptical
+- makeView(const PeakShapeNone&) : PeakRepresentationCross
+
+PeakView (concrete type) : public QWidget
+- vector<PeakRepresentation*>
+PeakView(vector<PeakRepresentation>
++ paint(QPaintEvent*) # overload
+
+
+Peak
+
+PeakViewFactory - Refactored from PeakOverlayMulti{X}Factory
+
+PeakRepresentation is essentially the Physical{X}Peaks rolled into a public inherited hierarchy with an additional draw method taking a QPainter& 
+
+PeakView is essentially PeakOverlayMulti{X}, inside the paint method, we now call PeakRepresentation::draw(QPainter). Each PeakView instance 
+has a unique m_foreground color and m_background color that are applied to all drawn peaks.
+
+

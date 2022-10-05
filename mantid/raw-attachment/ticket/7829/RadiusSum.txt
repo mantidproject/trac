@@ -1,0 +1,112 @@
+<anchor url='http://download.mantidproject.org/algorithm_screenshots/ScreenShotImages/RadiusSum_dlg.png'><img width=400px src='http://download.mantidproject.org/algorithm_screenshots/ScreenShotImages/RadiusSum_dlg.png' style='position:relative; z-index:1000; padding-left:5px; float:right;'></anchor>
+
+== Summary ==
+
+Sum of all the counts inside a ring against the scattering angle for each Radius.
+
+
+
+== Usage ==
+
+ OutputWorkspace = RadiusSum(InputWorkspace,[Centre],[MinRadius],[MaxRadius],
+  [NumBins],[NormalizeByRadius],[NormalizationOrder])
+
+<br clear=all>
+
+== Properties ==
+
+{| border="1" cellpadding="5" cellspacing="0" 
+!Order
+!Name
+!Direction
+!Type
+!Default
+!Description
+|-
+|1
+|InputWorkspace
+|Input
+|[[MatrixWorkspace]]
+|Mandatory
+|An input workspace.
+|-
+|2
+|OutputWorkspace
+|Output
+|[[MatrixWorkspace]]
+|Mandatory
+|An output workspace.
+|-
+|3
+|Centre
+|Input
+|dbl list
+| 0,0,0
+|Coordinate of the centre of the ring
+|-
+|4
+|MinRadius
+|Input
+|number
+| 0
+|Lenght of the inner ring. Default=0
+|-
+|5
+|MaxRadius
+|Input
+|number
+| Optional
+|Lenght of the outer ring. Default=ImageSize.
+|-
+|6
+|NumBins
+|Input
+|number
+| 100
+|Number of slice bins for the output. Default=100
+|-
+|colspan=6 align=center|'''Normalization'''
+|-
+|7
+|NormalizeByRadius
+|Input
+|boolean
+| False
+|Divide the sum of each ring by the radius powered by Normalization Order
+|-
+|8
+|NormalizationOrder
+|Input
+|number
+| 1
+|If 2, the normalization will be divided by the quadratic value of the ring for each radius.
+|-
+|}
+
+== Description ==
+
+RadiusSum sums the counts in rings against radius.
+
+Below, there is an example of the execution of the RadiusSum to a Workspace2D where the position of the pixels are not associated to detector positions, but it is derived from the Axes.
+
+[[File:ExecuteRadiusSum.png | 800px]]
+
+The image below shows a visual interpretation for the inputs of the algorithm
+
+[[File:RadiusSumInputs.png | 300px]]
+
+
+The Algorithm create '''NumBins''' rings around the '''Centre''' point each one with <math> width = BinSize </math> for <math>BinSize=\frac{MaxRadius-MinRadius}{NumBins}</math>. 
+
+The algorithm applies a rudimentary calculation to define the bin for each that each pixel or detector in the [[Workspace2D]], but taking its center point. If the center point belongs to one bin, it is considered that the whole pixel belongs to the bin. The picture below, shows what does this means. An ideal solution for RadiusSum is the left image, while the right image is what is current implemented.
+
+[[File:RadiusSumSolutions.png | 300px]]
+
+Although the images were applied to an image [[Workspace2D]], the image below shows that it is possible to apply this algorithm to Workspaces attached to instruments. 
+
+[[File:RadiusSumInstrument.png | 800 px]]
+
+
+[[Category:Algorithms]]
+[[Category:Transforms]]
+{{AlgorithmLinks|RadiusSum}}

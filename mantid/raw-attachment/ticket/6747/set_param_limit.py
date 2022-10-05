@@ -1,0 +1,1 @@
+UpdatePeakParameterTableValue(InputWorkspace="Bank4InstrumentParameterTable1_Step2", Column='Max', ParameterNames=['Zerot'], NewFloatValue=100.)

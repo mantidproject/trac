@@ -1,0 +1,1596 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #6863 (Refactor LeBailFit)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="6862.html" title="Ticket #6862" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6863?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6863?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6863?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="6864.html" title="Ticket #6864" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 6863, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="6862.html" title="Ticket #6862">Previous Ticket</a></span></li><li><span><a class="next" href="6864.html" title="Ticket #6864">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/6863.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="6863.html">Ticket #6863</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-16T19%3A40%3A37%2B01%3A00&amp;precision=second" title="2013-04-16T19:40:37+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A31%3A31%2B01%3A00&amp;precision=second" title="2015-06-04T01:31:31+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Refactor LeBailFit</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.0.html">Release 3.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Diffraction">Diffraction</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              petersonpf@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="inprogress ticket" href="6867.html" title="LeBailFit cannot take background parameters in vector format in RefineBackground mode">#6867</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Peter Peterson
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-07-27 00:37:16.768025+00:00">
+        (last modified by Wenduo Zhou)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/6863?action=diff&amp;version=37">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+LeBailFit.cpp has more than 3000 lines.  And it supports 3 different functions, all of which are based on an algorithm to calculate peaks' height by Le Bail's method.  So it is better to separate the algorithm out, and divide LeBailFit into different Mantid algorithms.  
+</p>
+<p>
+Meanwhile, the present LeBailFit only supports one peak shape, ThermalNeutronBk2BkExpConvPVoigt.  So replace the hard coded peak profile function by a general peak profile function. 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/6863/Calibration_ImportInformation.py.html" title="View attachment">Calibration_ImportInformation.py</a><a href="../raw-attachment/ticket/6863/Calibration_ImportInformation.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="2309 bytes">2.3 KB</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A41%3A18%2B01%3A00&amp;precision=second" title="2013-07-30T18:41:18+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/6863/t6863_cal.py.html" title="View attachment">t6863_cal.py</a><a href="../raw-attachment/ticket/6863/t6863_cal.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="9311 bytes">9.1 KB</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A41%3A33%2B01%3A00&amp;precision=second" title="2013-07-30T18:41:33+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/6863/t6863_refine.py.html" title="View attachment">t6863_refine.py</a><a href="../raw-attachment/ticket/6863/t6863_refine.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="10053 bytes">9.8 KB</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A41%3A44%2B01%3A00&amp;precision=second" title="2013-07-30T18:41:44+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/6863/t6863_setup.py.html" title="View attachment">t6863_setup.py</a><a href="../raw-attachment/ticket/6863/t6863_setup.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="329 bytes">329 bytes</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A41%3A53%2B01%3A00&amp;precision=second" title="2013-07-30T18:41:53+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/6863/Calibration_Information.config.html" title="View attachment">Calibration_Information.config</a><a href="../raw-attachment/ticket/6863/Calibration_Information.config" class="trac-rawlink" title="Download">​</a>
+       (<span title="5723 bytes">5.6 KB</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A42%3A01%2B01%3A00&amp;precision=second" title="2013-07-30T18:42:01+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/6863/bank1instrument.nxs.html" title="View attachment">bank1instrument.nxs</a><a href="../raw-attachment/ticket/6863/bank1instrument.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="73630 bytes">71.9 KB</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A42%3A08%2B01%3A00&amp;precision=second" title="2013-07-30T18:42:08+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/6863/Lab6BraggPeaks.nxs.html" title="View attachment">Lab6BraggPeaks.nxs</a><a href="../raw-attachment/ticket/6863/Lab6BraggPeaks.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="36484 bytes">35.6 KB</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A42%3A17%2B01%3A00&amp;precision=second" title="2013-07-30T18:42:17+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/6863/PG3_11485-1.dat.html" title="View attachment">PG3_11485-1.dat</a><a href="../raw-attachment/ticket/6863/PG3_11485-1.dat" class="trac-rawlink" title="Download">​</a>
+       (<span title="492177 bytes">480.6 KB</span>) -
+      added by <em>Wenduo Zhou</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A42%3A41%2B01%3A00&amp;precision=second" title="2013-07-30T18:42:41+01:00 in Timeline">7 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="6863.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-16T19%3A41%3A40%2B01%3A00&amp;precision=second" title="2013-04-16T19:41:40+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="6863.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T15%3A56%3A07%2B01%3A00&amp;precision=second" title="2013-04-29T15:56:07+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor is started.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a805f8421a2d4d7c1b8abc84100f77847f119dbc" title="a805f8421a2d4d7c1b8abc84100f77847f119dbc">a805f8421a2d4d7c1b8abc84100f77847f119dbc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="6863.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-30T15%3A47%3A40%2B01%3A00&amp;precision=second" title="2013-04-30T15:47:40+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Check pointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f971f4fe3b5dff260e90991223df731f272f0d34" title="f971f4fe3b5dff260e90991223df731f272f0d34">f971f4fe3b5dff260e90991223df731f272f0d34</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="6863.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-30T15%3A48%3A34%2B01%3A00&amp;precision=second" title="2013-04-30T15:48:34+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Check pointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/deb50e2f634525147e715b4c6f61687e0ccdafea" title="deb50e2f634525147e715b4c6f61687e0ccdafea">deb50e2f634525147e715b4c6f61687e0ccdafea</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="6863.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-30T21%3A35%3A50%2B01%3A00&amp;precision=second" title="2013-04-30T21:35:50+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3696e63f7ed6295d4cccd334448c547384eeacc5" title="3696e63f7ed6295d4cccd334448c547384eeacc5">3696e63f7ed6295d4cccd334448c547384eeacc5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="6863.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-30T21%3A36%3A20%2B01%3A00&amp;precision=second" title="2013-04-30T21:36:20+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4aaf548146b197e05d3faa36f30ef229456d5845" title="4aaf548146b197e05d3faa36f30ef229456d5845">4aaf548146b197e05d3faa36f30ef229456d5845</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="6863.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-01T16%3A21%3A39%2B01%3A00&amp;precision=second" title="2013-05-01T16:21:39+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5484299b86738b7c0f8de3067711889cca2e7fdd" title="5484299b86738b7c0f8de3067711889cca2e7fdd">5484299b86738b7c0f8de3067711889cca2e7fdd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="6863.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-02T18%3A46%3A44%2B01%3A00&amp;precision=second" title="2013-05-02T18:46:44+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/04f470253cfd470fc23d7301ab1785fbbc268d56" title="04f470253cfd470fc23d7301ab1785fbbc268d56">04f470253cfd470fc23d7301ab1785fbbc268d56</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="6863.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-04T00%3A16%3A39%2B01%3A00&amp;precision=second" title="2013-05-04T00:16:39+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1a46f5db064ebb044d97657ed6929b7da66a0f8d" title="1a46f5db064ebb044d97657ed6929b7da66a0f8d">1a46f5db064ebb044d97657ed6929b7da66a0f8d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="6863.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-06T15%3A17%3A23%2B01%3A00&amp;precision=second" title="2013-05-06T15:17:23+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0fa1a047aa5a3282d7cefbb5a9dd075cf15115d6" title="0fa1a047aa5a3282d7cefbb5a9dd075cf15115d6">0fa1a047aa5a3282d7cefbb5a9dd075cf15115d6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="6863.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-06T20%3A02%3A32%2B01%3A00&amp;precision=second" title="2013-05-06T20:02:32+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f5ab6eef886d5e9ae08b6a1041f16483bf2f0bc5" title="f5ab6eef886d5e9ae08b6a1041f16483bf2f0bc5">f5ab6eef886d5e9ae08b6a1041f16483bf2f0bc5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="6863.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-06T21%3A07%3A55%2B01%3A00&amp;precision=second" title="2013-05-06T21:07:55+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1a43edf2c37fe592bc1286a7d146046ef6cb71b2" title="1a43edf2c37fe592bc1286a7d146046ef6cb71b2">1a43edf2c37fe592bc1286a7d146046ef6cb71b2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="6863.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T15%3A35%3A58%2B01%3A00&amp;precision=second" title="2013-05-07T15:35:58+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7f3ccc811da99468409852a6ebd917b11ef0c405" title="7f3ccc811da99468409852a6ebd917b11ef0c405">7f3ccc811da99468409852a6ebd917b11ef0c405</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="6863.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T18%3A56%3A04%2B01%3A00&amp;precision=second" title="2013-05-07T18:56:04+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/337ed8a20238169fbb98faa8cc5656af675067c4" title="337ed8a20238169fbb98faa8cc5656af675067c4">337ed8a20238169fbb98faa8cc5656af675067c4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="6863.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T20%3A32%3A22%2B01%3A00&amp;precision=second" title="2013-05-16T20:32:22+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Made ThermalNeutronBk2BkExpConvPVoigt inherit from
+IPowderDiffPeakFunction. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5e36007f9d9ea5fe6d580560053b10418454d015" title="5e36007f9d9ea5fe6d580560053b10418454d015">5e36007f9d9ea5fe6d580560053b10418454d015</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="6863.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-17T19%3A27%3A02%2B01%3A00&amp;precision=second" title="2013-05-17T19:27:02+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ae65cb8b70d3b50513d7369960b66e3cad991e34" title="ae65cb8b70d3b50513d7369960b66e3cad991e34">ae65cb8b70d3b50513d7369960b66e3cad991e34</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="6863.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-20T21%3A56%3A57%2B01%3A00&amp;precision=second" title="2013-05-20T21:56:57+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e31a6c8891bdaa18b997879fd960498324cac3d0" title="e31a6c8891bdaa18b997879fd960498324cac3d0">e31a6c8891bdaa18b997879fd960498324cac3d0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="6863.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-22T15%3A43%3A18%2B01%3A00&amp;precision=second" title="2013-05-22T15:43:18+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/691a75e3d4df232bc00ae96f5474b976e2c33ce0" title="691a75e3d4df232bc00ae96f5474b976e2c33ce0">691a75e3d4df232bc00ae96f5474b976e2c33ce0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="6863.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-06T20%3A55%3A31%2B01%3A00&amp;precision=second" title="2013-06-06T20:55:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<ol><li>Moved some status flags to interface class IPowderDiffPeakFunction.
+</li><li>Fixed some error
+</li></ol><p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/107431f49be8f703a457a46d41f85b0933ab93b5" title="107431f49be8f703a457a46d41f85b0933ab93b5">107431f49be8f703a457a46d41f85b0933ab93b5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="6863.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-07T20%3A54%3A52%2B01%3A00&amp;precision=second" title="2013-06-07T20:54:52+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Enable LeBailFunction to pass unit test.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa92677805ab4550b753381131f183b81d000232" title="fa92677805ab4550b753381131f183b81d000232">fa92677805ab4550b753381131f183b81d000232</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="6863.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-12T18%3A23%3A31%2B01%3A00&amp;precision=second" title="2013-06-12T18:23:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5752fe15367404d3b4454651869324600edca2b8" title="5752fe15367404d3b4454651869324600edca2b8">5752fe15367404d3b4454651869324600edca2b8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="6863.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-12T18%3A23%3A31%2B01%3A00&amp;precision=second" title="2013-06-12T18:23:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a constructor to Rfactor.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6de3eb2fd761b06897de7b337e33becd805df12b" title="6de3eb2fd761b06897de7b337e33becd805df12b">6de3eb2fd761b06897de7b337e33becd805df12b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="6863.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-19T18%3A10%3A27%2B01%3A00&amp;precision=second" title="2013-06-19T18:10:27+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cleaned comment inside.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bea11cfe4f0926645038a11f07f7a383e0ebfbdb" title="bea11cfe4f0926645038a11f07f7a383e0ebfbdb">bea11cfe4f0926645038a11f07f7a383e0ebfbdb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="6863.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-06-19T18%3A10%3A27%2B01%3A00&amp;precision=second" title="2013-06-19T18:10:27+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c83b35bf7448c8fb8a02f62d3cb4642f9e937fa" title="4c83b35bf7448c8fb8a02f62d3cb4642f9e937fa">4c83b35bf7448c8fb8a02f62d3cb4642f9e937fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="6863.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T12%3A06%3A34%2B01%3A00&amp;precision=second" title="2013-07-18T12:06:34+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="6863.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-18T16%3A27%3A11%2B01%3A00&amp;precision=second" title="2013-07-18T16:27:11+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>new</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="6863.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A11%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:11+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="6863.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T19%3A19%3A36%2B01%3A00&amp;precision=second" title="2013-07-24T19:19:36+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Enable some unit tests.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/28d933766381e546b57137322d0d4ea34c6d7c3b" title="28d933766381e546b57137322d0d4ea34c6d7c3b">28d933766381e546b57137322d0d4ea34c6d7c3b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="6863.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T19%3A19%3A36%2B01%3A00&amp;precision=second" title="2013-07-24T19:19:36+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2ff02137d6cfb8e42785a93710ee67ffb856feee" title="2ff02137d6cfb8e42785a93710ee67ffb856feee">2ff02137d6cfb8e42785a93710ee67ffb856feee</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="6863.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T19%3A19%3A36%2B01%3A00&amp;precision=second" title="2013-07-24T19:19:36+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed some unused block.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f9a7dbb07727fa7799e172ac02c19afdaea47862" title="f9a7dbb07727fa7799e172ac02c19afdaea47862">f9a7dbb07727fa7799e172ac02c19afdaea47862</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="6863.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T19%3A19%3A36%2B01%3A00&amp;precision=second" title="2013-07-24T19:19:36+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Limited the peak by range.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/972a49a5dc8a145013499b20b5bac82536f7a5f9" title="972a49a5dc8a145013499b20b5bac82536f7a5f9">972a49a5dc8a145013499b20b5bac82536f7a5f9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="6863.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T19%3A38%3A34%2B01%3A00&amp;precision=second" title="2013-07-24T19:38:34+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed some unit test.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/684c0cdde5f56f63b85316052d859f5e80052826" title="684c0cdde5f56f63b85316052d859f5e80052826">684c0cdde5f56f63b85316052d859f5e80052826</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="6863.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T19%3A42%3A05%2B01%3A00&amp;precision=second" title="2013-07-24T19:42:05+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved the conflict.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a2c6e867e6d202ef1e43faf231104ff13ca36946" title="a2c6e867e6d202ef1e43faf231104ff13ca36946">a2c6e867e6d202ef1e43faf231104ff13ca36946</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="6863.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T20%3A11%3A22%2B01%3A00&amp;precision=second" title="2013-07-24T20:11:22+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed some unused code.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f69faf7736cc8b8f10a320b3d3c45e16c65c193c" title="f69faf7736cc8b8f10a320b3d3c45e16c65c193c">f69faf7736cc8b8f10a320b3d3c45e16c65c193c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="6863.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T21%3A26%3A22%2B01%3A00&amp;precision=second" title="2013-07-24T21:26:22+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed an error.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b23e2c07bd5988d8d44103970f14fa5fb21a35be" title="b23e2c07bd5988d8d44103970f14fa5fb21a35be">b23e2c07bd5988d8d44103970f14fa5fb21a35be</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="6863.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T14%3A54%3A57%2B01%3A00&amp;precision=second" title="2013-07-26T14:54:57+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.6</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to backlog at the code freeze for R2.6
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="6863.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-27T01%3A37%3A16%2B01%3A00&amp;precision=second" title="2013-07-27T01:37:16+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/6863?action=diff&amp;version=37">diff</a>)
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.0</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="6863.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-27T01%3A38%3A49%2B01%3A00&amp;precision=second" title="2013-07-27T01:38:49+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>6867</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="6863.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T01%3A53%3A11%2B01%3A00&amp;precision=second" title="2013-07-30T01:53:11+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <h2 id="Howtoverify">How to verify</h2>
+<ol><li>Download all the attached python script and Nexus file;
+</li><li>Run script t6863_setup.py to load all the required files to workspaces in Mantid;
+</li><li>Run script t6863_cal.py to calculate the diffraction pattern by Le Bail method.  Plot spectra 1 to 3 in the output MatrixWorkspace to see the result of calculation.  The calculated pattern does not match the original data perfectly, but it is not far away either. 
+</li><li>Run script t6863_refine.py to refine (Monte Carlo simulation) several profile parameters by Le Bail method.   Plot specta 1 to 3 in the output MatrixWorkspace to see the result of refinement.  It should be better than that in step 3. There should be 2 output matrix workspaces.  They are PG3_11485_MC_2002 and PG3_11485_MC_20000.  The first one shows the result of first step refinement.  The second one shows that from the second step refinement.  
+</li></ol>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A45%3A29%2B01%3A00&amp;precision=second" title="2013-07-30T18:45:29+01:00 in Timeline">7 years</a> ago
+                      by Wenduo Zhou
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/6863?cversion=1&amp;cnum_hist=39#comment:39">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/6863?action=comment-diff&amp;cnum=39&amp;version=2">diff</a>)
+                </div>
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A41%3A18%2B01%3A00&amp;precision=second" title="2013-07-30T18:41:18+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6863/Calibration_ImportInformation.py.html"><em>Calibration_ImportInformation.py</em></a><a href="../raw-attachment/ticket/6863/Calibration_ImportInformation.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A41%3A33%2B01%3A00&amp;precision=second" title="2013-07-30T18:41:33+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6863/t6863_cal.py.html"><em>t6863_cal.py</em></a><a href="../raw-attachment/ticket/6863/t6863_cal.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A41%3A44%2B01%3A00&amp;precision=second" title="2013-07-30T18:41:44+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6863/t6863_refine.py.html"><em>t6863_refine.py</em></a><a href="../raw-attachment/ticket/6863/t6863_refine.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A41%3A53%2B01%3A00&amp;precision=second" title="2013-07-30T18:41:53+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6863/t6863_setup.py.html"><em>t6863_setup.py</em></a><a href="../raw-attachment/ticket/6863/t6863_setup.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A42%3A01%2B01%3A00&amp;precision=second" title="2013-07-30T18:42:01+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6863/Calibration_Information.config.html"><em>Calibration_Information.config</em></a><a href="../raw-attachment/ticket/6863/Calibration_Information.config" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A42%3A08%2B01%3A00&amp;precision=second" title="2013-07-30T18:42:08+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6863/bank1instrument.nxs.html"><em>bank1instrument.nxs</em></a><a href="../raw-attachment/ticket/6863/bank1instrument.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A42%3A17%2B01%3A00&amp;precision=second" title="2013-07-30T18:42:17+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6863/Lab6BraggPeaks.nxs.html"><em>Lab6BraggPeaks.nxs</em></a><a href="../raw-attachment/ticket/6863/Lab6BraggPeaks.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A42%3A41%2B01%3A00&amp;precision=second" title="2013-07-30T18:42:41+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/6863/PG3_11485-1.dat.html"><em>PG3_11485-1.dat</em></a><a href="../raw-attachment/ticket/6863/PG3_11485-1.dat" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="6863.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A47%3A31%2B01%3A00&amp;precision=second" title="2013-07-30T18:47:31+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make it more robust to read string from table workspace. Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+String in table workspace may have unexpected extra spaces if the
+workspace is loaded from Nexus file.  Enable the algorithm to trim the
+while spaces such that the parameter names read from workspace can match
+to those defined in peak functions.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/30f290c609bbc2ff3a95a9afbaa20c09de2127ef" title="30f290c609bbc2ff3a95a9afbaa20c09de2127ef">30f290c609bbc2ff3a95a9afbaa20c09de2127ef</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="6863.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A47%3A32%2B01%3A00&amp;precision=second" title="2013-07-30T18:47:32+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cleaned the code.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8c05210fb4abba8ab003de7ab8109d423c94c852" title="8c05210fb4abba8ab003de7ab8109d423c94c852">8c05210fb4abba8ab003de7ab8109d423c94c852</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="6863.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A47%3A32%2B01%3A00&amp;precision=second" title="2013-07-30T18:47:32+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Enable to trim spaces in parameter name.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/490c43062306b688017fbea0726c5bb12b675625" title="490c43062306b688017fbea0726c5bb12b675625">490c43062306b688017fbea0726c5bb12b675625</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="6863.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-30T18%3A47%3A56%2B01%3A00&amp;precision=second" title="2013-07-30T18:47:56+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="6863.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-06T15%3A51%3A20%2B01%3A00&amp;precision=second" title="2013-08-06T15:51:20+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Peterson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="6863.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-06T16%3A05%3A04%2B01%3A00&amp;precision=second" title="2013-08-06T16:05:04+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved conflict.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/015ef5b6e1b4e14b22e55046c031b73f375cf7b2" title="015ef5b6e1b4e14b22e55046c031b73f375cf7b2">015ef5b6e1b4e14b22e55046c031b73f375cf7b2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="6863.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-07T18%3A44%3A08%2B01%3A00&amp;precision=second" title="2013-08-07T18:44:08+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/feature/6863_refactor_lebailfit'
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/CurveFitting/src/LeBailFit.cpp
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fec15bd6baafa44a5d704713ceecf9ae9968d0ce" title="fec15bd6baafa44a5d704713ceecf9ae9968d0ce">fec15bd6baafa44a5d704713ceecf9ae9968d0ce</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="6863.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-07T19%3A11%3A37%2B01%3A00&amp;precision=second" title="2013-08-07T19:11:37+01:00 in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The code is split out, but it is still quite hard to follow.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="6863.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-05T09%3A43%3A16%2B01%3A00&amp;precision=second" title="2013-09-05T09:43:16+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved conflict.  Refs <a class="closed ticket" href="6863.html" title="enhancement: Refactor LeBailFit (closed: fixed)">#6863</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/015ef5b6e1b4e14b22e55046c031b73f375cf7b2" title="015ef5b6e1b4e14b22e55046c031b73f375cf7b2">015ef5b6e1b4e14b22e55046c031b73f375cf7b2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="6863.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-23T11%3A23%3A37%2B01%3A00&amp;precision=second" title="2013-10-23T11:23:37+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Diffraction</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="6863.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A31%3A31%2B01%3A00&amp;precision=second" title="2015-06-04T01:31:31+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/7709"><span class="icon">​</span>7709</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6863?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6863?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6863?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

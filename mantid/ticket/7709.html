@@ -1,0 +1,615 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7709 (Make Stitch1D easier to use and more robust)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7708.html" title="Ticket #7708" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7709?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7709?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7709?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7710.html" title="Ticket #7710" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7709, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7708.html" title="Ticket #7708">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="7710.html" title="Ticket #7710">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7709.html">Ticket #7709</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-09T09%3A30%3A55%2B01%3A00&amp;precision=second" title="2013-08-09T09:30:55+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A06%3A31%2B01%3A00&amp;precision=second" title="2015-06-04T02:06:31+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Make Stitch1D easier to use and more robust</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Nick+Draper">Nick Draper</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Owen+Arnold">Owen Arnold</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.0.html">Release 3.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Reflectometry">Reflectometry</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Peter Parker
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <ol><li>I'd like to see this move so it can perform a sensible default rebinning across both if they are not binned in advance
+</li><li>If the region of overlap is not defined we should guess based on the (pre-rebinning) overlap of the x axes.
+</li><li>The handling of zero errors needs to be improved.
+</li></ol><pre class="wiki">#Creating a couple of fake workspaces for this test
+CreateWorkspace(OutputWorkspace='bob',DataX='10,20,30',DataY='10,20,30',UnitX='Counts')
+CreateWorkspace(OutputWorkspace='bob2',DataX='25,35,45,55,65',DataY='20,30,40,50,60',DataE='5,10,15,20,25',UnitX='Counts')
+#You need to rebin both to a common X axis
+Rebin(InputWorkspace='bob',OutputWorkspace='rbob1',Params='0,10,100',PreserveEvents='0')
+Rebin(InputWorkspace='bob2',OutputWorkspace='rbob2',Params='0,10,100',PreserveEvents='0')
+#Then stitch will do its job
+Stitch1D(LHSWorkspace='rbob1',RHSWorkspace='rbob2',OutputWorkspace='result',StartOverlap='0.2',EndOverlap='0.4')
+</pre>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7709.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T14%3A51%3A24%2B01%3A00&amp;precision=second" title="2013-09-19T14:51:24+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I'm going to use combineMulti.py as a basis for how to do the processing here, and gut the existing Stitch1D to implement these changes. I can then eventually replace processing of combineMulti to use Stitch1D. The stages I'm going to follow are:
+</p>
+<ul><li>Gut Stitch1D, decouple it from Stitch1DMD.
+</li><li>Create a test dataset that works with combineMulti, and use that as a benchmark
+</li><li>Implement Stitch1D so that it meets the criteria determined by the benchmark
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7709.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T08%3A49%3A01%2B01%3A00&amp;precision=second" title="2013-09-23T08:49:01+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7709.html" title="enhancement: Make Stitch1D easier to use and more robust (closed: fixed)">#7709</a>. Gut Stitch1D and change API slightly.
+</p>
+<p>
+This should bring the API to be more in line with combine2 from combineMulti. These changes will break the unit tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c3ebc452dee2fdb7aab8b78abb28fc30e9c40eac" title="c3ebc452dee2fdb7aab8b78abb28fc30e9c40eac">c3ebc452dee2fdb7aab8b78abb28fc30e9c40eac</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="7709.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T08%3A49%3A02%2B01%3A00&amp;precision=second" title="2013-09-23T08:49:02+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7709.html" title="enhancement: Make Stitch1D easier to use and more robust (closed: fixed)">#7709</a>. Stitching seems to be working ok.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9ef471367613700f8f5ff56a94f5a627caf3e9b5" title="9ef471367613700f8f5ff56a94f5a627caf3e9b5">9ef471367613700f8f5ff56a94f5a627caf3e9b5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="7709.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T08%3A49%3A02%2B01%3A00&amp;precision=second" title="2013-09-23T08:49:02+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7709.html" title="enhancement: Make Stitch1D easier to use and more robust (closed: fixed)">#7709</a>. Sort out masking ranges.
+</p>
+<p>
+This is stitching very nicely now with the test data. The most important change here is that I've limited the zero-masking range for the rhs and lhs rebinned workspace, so that the boundaries can be handled properly.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4eed2761616411a39660a4eed2a2e5e2fb5ddd06" title="4eed2761616411a39660a4eed2a2e5e2fb5ddd06">4eed2761616411a39660a4eed2a2e5e2fb5ddd06</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="7709.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T12%3A00%3A40%2B01%3A00&amp;precision=second" title="2013-09-23T12:00:40+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7709.html" title="enhancement: Make Stitch1D easier to use and more robust (closed: fixed)">#7709</a>. Update tests, and fix algorithm.
+</p>
+<p>
+Tests updated. Minor changes required to algorithm as a result of problems found during testing. More tests to come.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81b2ac77b7ff8afefb1bfad4a58a259be82a1a93" title="81b2ac77b7ff8afefb1bfad4a58a259be82a1a93">81b2ac77b7ff8afefb1bfad4a58a259be82a1a93</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="7709.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T12%3A00%3A40%2B01%3A00&amp;precision=second" title="2013-09-23T12:00:40+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7709.html" title="enhancement: Make Stitch1D easier to use and more robust (closed: fixed)">#7709</a>. Tests and fixes for manual scaling.
+</p>
+<p>
+Get manual scaling factor aspects of the algorithm working.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6eab90d14fa302929fa3d565784942a84b4bc921" title="6eab90d14fa302929fa3d565784942a84b4bc921">6eab90d14fa302929fa3d565784942a84b4bc921</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="7709.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T12%3A00%3A40%2B01%3A00&amp;precision=second" title="2013-09-23T12:00:40+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7709.html" title="enhancement: Make Stitch1D easier to use and more robust (closed: fixed)">#7709</a> sanity check inputs.
+</p>
+<p>
+Unit tests have been added for this too.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7ff02b26c1e1051dc9aff451b8300b3f4461a2a1" title="7ff02b26c1e1051dc9aff451b8300b3f4461a2a1">7ff02b26c1e1051dc9aff451b8300b3f4461a2a1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="7709.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T12%3A29%3A50%2B01%3A00&amp;precision=second" title="2013-09-23T12:29:50+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tester: Obtain the zip file from <a class="closed ticket" href="7982.html" title="defect: Saw Tooth Stitching (closed: fixed)">#7982</a>. Then run the following script. Stitch1D should produce the same results as combine multi, except that the outstanding bug in <a class="closed ticket" href="7982.html" title="defect: Saw Tooth Stitching (closed: fixed)">#7982</a> (the saw-tooth behaviour) requires aspects of this fix. Otherwise the two generated plots should line-up quite nicely. Also see new unit tests.
+</p>
+<div class="code"><pre><span class="kn">from</span> <span class="nn">isis_reflgui</span> <span class="kn">import</span> combineMulti
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+DataDir<span class="o">=</span> os<span class="o">.</span>path<span class="o">.</span>expanduser<span class="p">(</span><span class="s">'~/Desktop/Tims'</span><span class="p">)</span>
+<span class="k">print</span> os<span class="o">.</span>path<span class="o">.</span>join<span class="p">(</span>DataDir<span class="p">,</span> <span class="s">'polref8481.dat'</span><span class="p">)</span>
+r8481 <span class="o">=</span> Load<span class="p">(</span>Filename<span class="o">=</span> os<span class="o">.</span>path<span class="o">.</span>join<span class="p">(</span>DataDir<span class="p">,</span> <span class="s">'polref8481.dat'</span><span class="p">),</span>Unit<span class="o">=</span><span class="s">'MomentumTransfer'</span><span class="p">)</span> 
+r8482 <span class="o">=</span> Load<span class="p">(</span>Filename<span class="o">=</span> os<span class="o">.</span>path<span class="o">.</span>join<span class="p">(</span>DataDir<span class="p">,</span> <span class="s">'polref8482.dat'</span><span class="p">),</span>Unit<span class="o">=</span><span class="s">'MomentumTransfer'</span><span class="p">)</span>
+r8483 <span class="o">=</span> Load<span class="p">(</span>Filename<span class="o">=</span> os<span class="o">.</span>path<span class="o">.</span>join<span class="p">(</span>DataDir<span class="p">,</span> <span class="s">'polref8483.dat'</span><span class="p">),</span>Unit<span class="o">=</span><span class="s">'MomentumTransfer'</span><span class="p">)</span>
+r8481 <span class="o">=</span> SortXAxis<span class="p">(</span>r8481<span class="p">)</span>
+r8482 <span class="o">=</span> SortXAxis<span class="p">(</span>r8482<span class="p">)</span>
+r8483 <span class="o">=</span> SortXAxis<span class="p">(</span>r8483<span class="p">)</span>
+
+Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'r8481'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'r8481'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.009,-0.02,0.034'</span><span class="p">,</span>PreserveEvents<span class="o">=</span><span class="s">'0'</span><span class="p">)</span> 
+Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'r8482'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'r8482'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.017,-0.02,0.06'</span><span class="p">,</span>PreserveEvents<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'r8483'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'r8483'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.027,-0.02,0.100'</span><span class="p">,</span>PreserveEvents<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+
+ConvertToHistogram<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'r8481'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'r8481h'</span><span class="p">)</span>
+ConvertToHistogram<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'r8482'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'r8482h'</span><span class="p">)</span>
+ConvertToHistogram<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'r8483'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'r8483h'</span><span class="p">)</span>
+
+wcomb <span class="o">=</span> combineMulti<span class="o">.</span>combineDataMulti<span class="p">([</span><span class="s">'r8481h'</span> <span class="p">,</span> <span class="s">'r8482h'</span><span class="p">],</span><span class="s">'viaCombineMulti'</span><span class="p">,[</span><span class="mf">0.009</span><span class="p">,</span> <span class="mf">0.018</span><span class="p">],[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.046</span><span class="p">],</span><span class="mf">0.009</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span>binning<span class="o">=-</span><span class="mf">0.02</span><span class="p">,</span>keep<span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+viaStitch1D <span class="o">=</span> Stitch1D<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'r8481h'</span><span class="p">,</span> RHSWorkspace<span class="o">=</span><span class="s">'r8482h'</span><span class="p">,</span> StartOverlap<span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> EndOverlap<span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> Params<span class="o">=</span><span class="s">'0.009, -0.02, 0.1'</span><span class="p">)</span>
+plotSpectrum<span class="p">([</span><span class="s">'viaCombineMulti'</span><span class="p">,</span> <span class="s">'viaStitch1D'</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="7709.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T15%3A01%3A34%2B01%3A00&amp;precision=second" title="2013-09-23T15:01:34+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7709.html" title="enhancement: Make Stitch1D easier to use and more robust (closed: fixed)">#7709</a>. count_nonzero not portable.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0f41b2732f2cba50b70a85079b1e74e261aab964" title="0f41b2732f2cba50b70a85079b1e74e261aab964">0f41b2732f2cba50b70a85079b1e74e261aab964</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7709.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T15%3A22%3A15%2B01%3A00&amp;precision=second" title="2013-09-23T15:22:15+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="7709.html" title="enhancement: Make Stitch1D easier to use and more robust (closed: fixed)">#7709</a>. Remove non-portable zero count from stitch1d.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/847cf8b6e4b615ebf716cb115a73ee5dca1b092a" title="847cf8b6e4b615ebf716cb115a73ee5dca1b092a">847cf8b6e4b615ebf716cb115a73ee5dca1b092a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7709.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T15%3A44%3A32%2B01%3A00&amp;precision=second" title="2013-09-23T15:44:32+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7709.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-26T12%3A06%3A02%2B01%3A00&amp;precision=second" title="2013-09-26T12:06:02+01:00 in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Parker</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="7709.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-26T14%3A20%3A29%2B01%3A00&amp;precision=second" title="2013-09-26T14:20:29+01:00 in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/7709_stitch1D_improvements'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="7709.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-26T14%3A21%3A45%2B01%3A00&amp;precision=second" title="2013-09-26T14:21:45+01:00 in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Passing.</strong>
+</p>
+<p>
+The given script does indeed show the <tt>combineMulti</tt> approach and the new <tt>Stitch1D</tt> approach lining up nicely, except of course for the saw-tooth behaviour.
+</p>
+<p>
+The algorithm looks good to me.  The code seems to do what I would expect.  The arguments passed to it are validated, and it cleans up after itself.  The Wiki could do with updating to show the <tt>Params</tt> property, though I imagine you've just not gotten around to that.
+</p>
+<p>
+The unit tests seem to offer good coverage, and run on my machine fine.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="7709.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A06%3A31%2B01%3A00&amp;precision=second" title="2015-06-04T02:06:31+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/8554"><span class="icon">​</span>8554</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7709?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7709?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7709?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

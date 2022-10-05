@@ -1,0 +1,772 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #4197 (SANS: intepolation bug)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="4196.html" title="Ticket #4196" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4197?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4197?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/4197?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="4198.html" title="Ticket #4198" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 4197, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="4196.html" title="Ticket #4196">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="4198.html" title="Ticket #4198">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="4197.html">Ticket #4197</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T11%3A25%3A43Z&amp;precision=second" title="2011-11-25T11:25:43Z in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A40%3A59%2B01%3A00&amp;precision=second" title="2015-06-03T23:40:59+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">SANS: intepolation bug</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Anders+Markvardsen">Anders Markvardsen</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Anders+Markvardsen">Anders Markvardsen</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.0.html">Release 2.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Karl Palmen
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+1) Put attached files in the same directory
+1) Open ISIS SANS GUI
+2) select mask file from directory
+</p>
+<p>
+From <br />isis\inst$\NDXSANS2D\Instrument\data\cycle_11_2
+</p>
+<p>
+select runs from GUI: 
+Scattering sample=9694
+Transmission sample=9694
+Direct sample=9694
+</p>
+<p>
+3) Hit load button
+4) hit Reduce 1D button
+</p>
+<p>
+After a little while you get the error:
+</p>
+<p>
+Error in rebin function: At least one x-value to intepolate to is outside the range of the original data
+Error in execution of algorithm InterpolatingRebin:
+At least one x-value to intepolate to is outside the range of the original data
+</p>
+<p>
+You can get around this error by in the Analysis Detail tab un-select for transmission intepolate.
+</p>
+<p>
+Understand this bug and fix it
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/4197/MASKSANS2D_112ii_6m_commissioning_M1_M4.txt.html" title="View attachment">MASKSANS2D_112ii_6m_commissioning_M1_M4.txt</a><a href="../raw-attachment/ticket/4197/MASKSANS2D_112ii_6m_commissioning_M1_M4.txt" class="trac-rawlink" title="Download">​</a>
+       (<span title="1900 bytes">1.9 KB</span>) -
+      added by <em>Anders Markvardsen</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T11%3A26%3A38Z&amp;precision=second" title="2011-11-25T11:26:38Z in Timeline">9 years</a> ago.
+  </dt>
+              <dd>
+                mask file
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/4197/directM1_9672_6m_08Aug11.DAT.html" title="View attachment">directM1_9672_6m_08Aug11.DAT</a><a href="../raw-attachment/ticket/4197/directM1_9672_6m_08Aug11.DAT" class="trac-rawlink" title="Download">​</a>
+       (<span title="8207 bytes">8.0 KB</span>) -
+      added by <em>Anders Markvardsen</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T11%3A27%3A06Z&amp;precision=second" title="2011-11-25T11:27:06Z in Timeline">9 years</a> ago.
+  </dt>
+              <dd>
+                file required by mask file
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T11%3A26%3A38Z&amp;precision=second" title="2011-11-25T11:26:38Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/4197/MASKSANS2D_112ii_6m_commissioning_M1_M4.txt.html"><em>MASKSANS2D_112ii_6m_commissioning_M1_M4.txt</em></a><a href="../raw-attachment/ticket/4197/MASKSANS2D_112ii_6m_commissioning_M1_M4.txt" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+mask file
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T11%3A27%3A06Z&amp;precision=second" title="2011-11-25T11:27:06Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/4197/directM1_9672_6m_08Aug11.DAT.html"><em>directM1_9672_6m_08Aug11.DAT</em></a><a href="../raw-attachment/ticket/4197/directM1_9672_6m_08Aug11.DAT" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+file required by mask file
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="4197.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T15%3A27%3A33Z&amp;precision=second" title="2011-11-25T15:27:33Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The error is associated with a maximum wavelength picked in user interface of 15.75 AA which is bigger than the maximum wavelength of monitor 1 equal 15.6555 AA. Sarah will come back to me with some more data about this.
+</p>
+<p>
+Meanwhile tried to cutoff interpolation if the above is the case with
+</p>
+<blockquote>
+<p>
+if self.interpolate:
+</p>
+<blockquote>
+<p>
+inX = tmpWS.readX()
+outX = tmpWS.readX()
+if outX<a class="missing changeset" title="No default repository defined">[0]</a> &lt; inX<a class="missing changeset" title="No default repository defined">[0]</a> or outX[len(outX)-1] &gt; inX[len(inX)-1]: 
+</p>
+<blockquote>
+<p>
+InterpolatingRebin(tmpWS, tmpWS, wavbining)
+</p>
+</blockquote>
+<p>
+else:
+</p>
+<blockquote>
+<p>
+_printMessage('\n\nKKKKKKKKKKKKKKKKKKKKKKKKKK\n\n')                
+Rebin(tmpWS, tmpWS, wavbining)  
+</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>
+although with this do Rebin now some other python exception is thrown somewhere else...
+</p>
+<p>
+Question to be put forward to scientists is 
+1) can I truncate analysis to shorter wavelength full stop?
+2) or should InterporationRebin algorithm be extended to interpolate outside data range?
+</p>
+<p>
+For now put this ticket to medium priority
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="4197.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T15%3A29%3A30Z&amp;precision=second" title="2011-11-25T15:29:30Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Priority</strong>
+        changed from <em>critical</em> to <em>major</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="4197.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-07T14%3A58%3A37Z&amp;precision=second" title="2011-12-07T14:58:37Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Improve error message when interpolation fails. Re <a class="closed ticket" href="4197.html" title="defect: SANS: intepolation bug (closed: fixed)">#4197</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7075e290a93415c247c5c65c9f405ae8b91647d2" title="7075e290a93415c247c5c65c9f405ae8b91647d2">7075e290a93415c247c5c65c9f405ae8b91647d2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="4197.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-07T15%3A05%3A34Z&amp;precision=second" title="2011-12-07T15:05:34Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+From discussion with Sarah decision for now was let InterpolateRebin keep throwing an exception of range to interpolate to larger than original data range, but with an improved error message to user. So if ran
+</p>
+<p>
+1) Put attached files in the same directory 
+</p>
+<p>
+1) Open ISIS SANS GUI 
+</p>
+<p>
+2) select mask file from directory 
+</p>
+<p>
+3) From isis\inst$\NDXSANS2D\Instrument\data\cycle_11_2 select runs from GUI: Scattering sample=9694 Transmission sample=9694 Direct sample=9694 
+</p>
+<p>
+3) Hit load button 
+</p>
+<p>
+4) hit Reduce 1D button
+</p>
+<p>
+Still get an error message but now explains why this is in results log.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="4197.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-07T15%3A10%3A16Z&amp;precision=second" title="2011-12-07T15:10:16Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="4197.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-12T16%3A53%3A42Z&amp;precision=second" title="2012-01-12T16:53:42Z in Timeline">9 years</a> ago by Robert Whitley
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Robert Whitley</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="4197.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T09%3A50%3A01Z&amp;precision=second" title="2012-01-13T09:50:01Z in Timeline">9 years</a> ago by Robert Whitley
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>verify</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Robert Whitley</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="4197.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T10%3A40%3A19Z&amp;precision=second" title="2012-01-13T10:40:19Z in Timeline">9 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Karl Palmen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="4197.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T14%3A12%3A35Z&amp;precision=second" title="2012-01-13T14:12:35Z in Timeline">9 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>verify</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Karl Palmen</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+When I attempt to do what is described at the start of the ticket, I get script error. The result log also has error messages some of which suggest that (one of) the attached files has been corrupted by trac (reference to this ticket found).
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="4197.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T15%3A24%3A15Z&amp;precision=second" title="2012-01-13T15:24:15Z in Timeline">9 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Karl Palmen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="4197.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T16%3A18%3A49Z&amp;precision=second" title="2012-01-13T16:18:49Z in Timeline">9 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Test worked when run numbers were changed to 9649, 9649, 9648. Reported bug occurred
+</p>
+<p>
+Error in rebin function: At least one x-value to interpolate to is outside the range of the original data.
+original data range: 0.00078277511540932238 to 15.655502308186447
+range to try to interpolate to 1.75 to 15.75
+Error in execution of algorithm InterpolatingRebin:
+At least one x-value to interpolate to is outside the range of the original data.
+original data range: 0.00078277511540932238 to 15.655502308186447
+range to try to interpolate to 1.75 to 15.75
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="4197.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T16%3A21%3A12Z&amp;precision=second" title="2012-01-13T16:21:12Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="4197.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T16%3A21%3A54Z&amp;precision=second" title="2012-01-13T16:21:54Z in Timeline">9 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The above is exactly what I have hoped the user would see
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="4197.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T16%3A25%3A36Z&amp;precision=second" title="2012-01-13T16:25:36Z in Timeline">9 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This error massage was what was required and not the bug.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="4197.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-13T16%3A25%3A52Z&amp;precision=second" title="2012-01-13T16:25:52Z in Timeline">9 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="4197.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A40%3A59%2B01%3A00&amp;precision=second" title="2015-06-03T23:40:59+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/5044"><span class="icon">​</span>5044</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4197?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4197?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/4197?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

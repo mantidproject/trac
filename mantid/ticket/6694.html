@@ -1,0 +1,1821 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #6694 (Refactor GenerateEventsFilter())
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="6693.html" title="Ticket #6693" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6694?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6694?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/6694?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="6695.html" title="Ticket #6695" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 6694, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="6693.html" title="Ticket #6693">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="6695.html" title="Ticket #6695">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="6694.html">Ticket #6694</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-11T15%3A01%3A33Z&amp;precision=second" title="2013-03-11T15:01:33Z in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A24%3A27%2B01%3A00&amp;precision=second" title="2015-06-04T01:24:27+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Refactor GenerateEventsFilter()</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.5.html">Release 2.5</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              saviciat@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Andrei Savici
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+The default values of StartTime and StopTime should be set to Empty Double. 
+</p>
+<p>
+The codes to process single value filter and multiple value filter can be merged. 
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="6694.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-11T15%3A01%3A39Z&amp;precision=second" title="2013-03-11T15:01:39Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="6694.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-11T18%3A47%3A03Z&amp;precision=second" title="2013-03-11T18:47:03Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change the default values of StartTime/StopTime.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a52eab73c99d9be7caed2c20338d36acc81a7b81" title="a52eab73c99d9be7caed2c20338d36acc81a7b81">a52eab73c99d9be7caed2c20338d36acc81a7b81</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="6694.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-11T18%3A47%3A44Z&amp;precision=second" title="2013-03-11T18:47:44Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change the default values of StartTime/StopTime.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a52eab73c99d9be7caed2c20338d36acc81a7b81" title="a52eab73c99d9be7caed2c20338d36acc81a7b81">a52eab73c99d9be7caed2c20338d36acc81a7b81</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="6694.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-11T19%3A12%3A16Z&amp;precision=second" title="2013-03-11T19:12:16Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix some error.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca284c0c81a0e40f22947d1737926f7e558191e4" title="ca284c0c81a0e40f22947d1737926f7e558191e4">ca284c0c81a0e40f22947d1737926f7e558191e4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="6694.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-11T19%3A12%3A51Z&amp;precision=second" title="2013-03-11T19:12:51Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix some error.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca284c0c81a0e40f22947d1737926f7e558191e4" title="ca284c0c81a0e40f22947d1737926f7e558191e4">ca284c0c81a0e40f22947d1737926f7e558191e4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="6694.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-12T15%3A29%3A09Z&amp;precision=second" title="2013-03-12T15:29:09Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge filter single value and multiple value functions.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf7f3fc2b9143af8b4216d944d996842ec4bfb08" title="cf7f3fc2b9143af8b4216d944d996842ec4bfb08">cf7f3fc2b9143af8b4216d944d996842ec4bfb08</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="6694.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-12T15%3A29%3A10Z&amp;precision=second" title="2013-03-12T15:29:10Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove used methods. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3" title="2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3">2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="6694.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-12T15%3A29%3A10Z&amp;precision=second" title="2013-03-12T15:29:10Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add visibility property to some properties. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/77354aa382e3d0a89ce1ac986cdf81e094cae478" title="77354aa382e3d0a89ce1ac986cdf81e094cae478">77354aa382e3d0a89ce1ac986cdf81e094cae478</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="6694.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-12T15%3A29%3A48Z&amp;precision=second" title="2013-03-12T15:29:48Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge filter single value and multiple value functions.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf7f3fc2b9143af8b4216d944d996842ec4bfb08" title="cf7f3fc2b9143af8b4216d944d996842ec4bfb08">cf7f3fc2b9143af8b4216d944d996842ec4bfb08</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="6694.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-12T15%3A29%3A48Z&amp;precision=second" title="2013-03-12T15:29:48Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove used methods. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3" title="2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3">2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="6694.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-12T15%3A29%3A48Z&amp;precision=second" title="2013-03-12T15:29:48Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add visibility property to some properties. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/77354aa382e3d0a89ce1ac986cdf81e094cae478" title="77354aa382e3d0a89ce1ac986cdf81e094cae478">77354aa382e3d0a89ce1ac986cdf81e094cae478</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="6694.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-13T14%3A21%3A13Z&amp;precision=second" title="2013-03-13T14:21:13Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix the system test due to mod of property.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/196fabeea9ff9e40a5e1a68aceeed60dd708aa29" title="196fabeea9ff9e40a5e1a68aceeed60dd708aa29">196fabeea9ff9e40a5e1a68aceeed60dd708aa29</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="6694.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-13T14%3A21%3A42Z&amp;precision=second" title="2013-03-13T14:21:42Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix the system test due to mod of property.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/196fabeea9ff9e40a5e1a68aceeed60dd708aa29" title="196fabeea9ff9e40a5e1a68aceeed60dd708aa29">196fabeea9ff9e40a5e1a68aceeed60dd708aa29</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="6694.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-13T20%3A03%3A22Z&amp;precision=second" title="2013-03-13T20:03:22Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify the reference file.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>.
+</p>
+<p>
+The boundary of the splitters are changed due to a bug fixed in
+GenerateEventsFilter().
+Thus the reference file is replaced by a corrected one. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c6c39f11292671adc7982ce645b751d2389e580" title="4c6c39f11292671adc7982ce645b751d2389e580">4c6c39f11292671adc7982ce645b751d2389e580</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="6694.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-13T20%3A04%3A10Z&amp;precision=second" title="2013-03-13T20:04:10Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify the reference file.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>.
+</p>
+<p>
+The boundary of the splitters are changed due to a bug fixed in
+GenerateEventsFilter().
+Thus the reference file is replaced by a corrected one. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c6c39f11292671adc7982ce645b751d2389e580" title="4c6c39f11292671adc7982ce645b751d2389e580">4c6c39f11292671adc7982ce645b751d2389e580</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="6694.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T01%3A38%3A38Z&amp;precision=second" title="2013-03-14T01:38:38Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a bug in creating splitter.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c983befb1401a0bfd907da30252cc3ffe8939755" title="c983befb1401a0bfd907da30252cc3ffe8939755">c983befb1401a0bfd907da30252cc3ffe8939755</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="6694.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T01%3A39%3A10Z&amp;precision=second" title="2013-03-14T01:39:10Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a bug in creating splitter.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c983befb1401a0bfd907da30252cc3ffe8939755" title="c983befb1401a0bfd907da30252cc3ffe8939755">c983befb1401a0bfd907da30252cc3ffe8939755</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="6694.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T01%3A52%3A02Z&amp;precision=second" title="2013-03-14T01:52:02Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a warning of type conversion.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/add41aa3c7a3b92ec9756233800557646f466cd2" title="add41aa3c7a3b92ec9756233800557646f466cd2">add41aa3c7a3b92ec9756233800557646f466cd2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="6694.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T01%3A52%3A36Z&amp;precision=second" title="2013-03-14T01:52:36Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a warning of type conversion.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/add41aa3c7a3b92ec9756233800557646f466cd2" title="add41aa3c7a3b92ec9756233800557646f466cd2">add41aa3c7a3b92ec9756233800557646f466cd2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="6694.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T14%3A42%3A21Z&amp;precision=second" title="2013-03-14T14:42:21Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+How to test: As the purpose of this ticket is to modify the input properties and refactor some redundant codes, there is no new feature to show.  By passing the unit test and system test (HYSPEC), the ticket can be seen as 'fixed'. 
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T14%3A45%3A08Z&amp;precision=second" title="2013-03-14T14:45:08Z in Timeline">8 years</a> ago
+                      by Wenduo Zhou
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/6694?cversion=0&amp;cnum_hist=20#comment:20">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/6694?action=comment-diff&amp;cnum=20&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="6694.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A21%3A06Z&amp;precision=second" title="2013-03-14T21:21:06Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change the default values of StartTime/StopTime.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c50d8a7f51bac67ffd9f32b0bd38e32dc72693ff" title="c50d8a7f51bac67ffd9f32b0bd38e32dc72693ff">c50d8a7f51bac67ffd9f32b0bd38e32dc72693ff</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="6694.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A28%3A26Z&amp;precision=second" title="2013-03-14T21:28:26Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change the default values of StartTime/StopTime.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c50d8a7f51bac67ffd9f32b0bd38e32dc72693ff" title="c50d8a7f51bac67ffd9f32b0bd38e32dc72693ff">c50d8a7f51bac67ffd9f32b0bd38e32dc72693ff</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="6694.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A03Z&amp;precision=second" title="2013-03-14T21:48:03Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix some error.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e4af961a80dc89db5cc7b40d1aecd2383fa922cf" title="e4af961a80dc89db5cc7b40d1aecd2383fa922cf">e4af961a80dc89db5cc7b40d1aecd2383fa922cf</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="6694.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A03Z&amp;precision=second" title="2013-03-14T21:48:03Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge filter single value and multiple value functions.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f57cc4652ddb6604b5f2fc21993e17ef1b42cfc8" title="f57cc4652ddb6604b5f2fc21993e17ef1b42cfc8">f57cc4652ddb6604b5f2fc21993e17ef1b42cfc8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="6694.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A03Z&amp;precision=second" title="2013-03-14T21:48:03Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove used methods. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12ae93a8bc2d87b0c1280a2f6030f7ead0b3de66" title="12ae93a8bc2d87b0c1280a2f6030f7ead0b3de66">12ae93a8bc2d87b0c1280a2f6030f7ead0b3de66</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="6694.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A03Z&amp;precision=second" title="2013-03-14T21:48:03Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add visibility property to some properties. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e46badfc4bbda9f886f249820681851b1e445af9" title="e46badfc4bbda9f886f249820681851b1e445af9">e46badfc4bbda9f886f249820681851b1e445af9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="6694.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A04Z&amp;precision=second" title="2013-03-14T21:48:04Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a bug in creating splitter.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/10fffea78da25c21c0e70cb8fb9f18e794a0e0f0" title="10fffea78da25c21c0e70cb8fb9f18e794a0e0f0">10fffea78da25c21c0e70cb8fb9f18e794a0e0f0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="6694.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A04Z&amp;precision=second" title="2013-03-14T21:48:04Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a warning of type conversion.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d6f6e925f58b1356e08b365a24149ed7a0560b3b" title="d6f6e925f58b1356e08b365a24149ed7a0560b3b">d6f6e925f58b1356e08b365a24149ed7a0560b3b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="6694.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A04Z&amp;precision=second" title="2013-03-14T21:48:04Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a warning.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee61737e37d1fb9108591a438ca9acbfa4b3577d" title="ee61737e37d1fb9108591a438ca9acbfa4b3577d">ee61737e37d1fb9108591a438ca9acbfa4b3577d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="6694.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A08Z&amp;precision=second" title="2013-03-14T21:48:08Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix some error.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e4af961a80dc89db5cc7b40d1aecd2383fa922cf" title="e4af961a80dc89db5cc7b40d1aecd2383fa922cf">e4af961a80dc89db5cc7b40d1aecd2383fa922cf</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="6694.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A08Z&amp;precision=second" title="2013-03-14T21:48:08Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge filter single value and multiple value functions.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f57cc4652ddb6604b5f2fc21993e17ef1b42cfc8" title="f57cc4652ddb6604b5f2fc21993e17ef1b42cfc8">f57cc4652ddb6604b5f2fc21993e17ef1b42cfc8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="6694.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A08Z&amp;precision=second" title="2013-03-14T21:48:08Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove used methods. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12ae93a8bc2d87b0c1280a2f6030f7ead0b3de66" title="12ae93a8bc2d87b0c1280a2f6030f7ead0b3de66">12ae93a8bc2d87b0c1280a2f6030f7ead0b3de66</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="6694.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A08Z&amp;precision=second" title="2013-03-14T21:48:08Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add visibility property to some properties. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e46badfc4bbda9f886f249820681851b1e445af9" title="e46badfc4bbda9f886f249820681851b1e445af9">e46badfc4bbda9f886f249820681851b1e445af9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="6694.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A09Z&amp;precision=second" title="2013-03-14T21:48:09Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a bug in creating splitter.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/10fffea78da25c21c0e70cb8fb9f18e794a0e0f0" title="10fffea78da25c21c0e70cb8fb9f18e794a0e0f0">10fffea78da25c21c0e70cb8fb9f18e794a0e0f0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="6694.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A09Z&amp;precision=second" title="2013-03-14T21:48:09Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a warning of type conversion.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d6f6e925f58b1356e08b365a24149ed7a0560b3b" title="d6f6e925f58b1356e08b365a24149ed7a0560b3b">d6f6e925f58b1356e08b365a24149ed7a0560b3b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="6694.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A48%3A09Z&amp;precision=second" title="2013-03-14T21:48:09Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a warning.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee61737e37d1fb9108591a438ca9acbfa4b3577d" title="ee61737e37d1fb9108591a438ca9acbfa4b3577d">ee61737e37d1fb9108591a438ca9acbfa4b3577d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="6694.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-14T21%3A54%3A55Z&amp;precision=second" title="2013-03-14T21:54:55Z in Timeline">8 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The branch for this is feature/6694_genfilter <strong>NOT</strong> wzhou/6694_genfilter (which was created off of develop by mistake and needs to be deleted).
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="6694.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T00%3A57%3A48Z&amp;precision=second" title="2013-03-15T00:57:48Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix the system test due to mod of property.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3e579afd199cea265b00530171fb2c25b036e396" title="3e579afd199cea265b00530171fb2c25b036e396">3e579afd199cea265b00530171fb2c25b036e396</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="6694.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T00%3A57%3A51Z&amp;precision=second" title="2013-03-15T00:57:51Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify the reference file.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>.
+</p>
+<p>
+The boundary of the splitters are changed due to a bug fixed in
+GenerateEventsFilter().
+Thus the reference file is replaced by a corrected one. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e9505b0fadf0737dfa092bd1052e02a327ae2fc5" title="e9505b0fadf0737dfa092bd1052e02a327ae2fc5">e9505b0fadf0737dfa092bd1052e02a327ae2fc5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="6694.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T00%3A58%3A27Z&amp;precision=second" title="2013-03-15T00:58:27Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix the system test due to mod of property.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3e579afd199cea265b00530171fb2c25b036e396" title="3e579afd199cea265b00530171fb2c25b036e396">3e579afd199cea265b00530171fb2c25b036e396</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="6694.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T00%3A58%3A27Z&amp;precision=second" title="2013-03-15T00:58:27Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify the reference file.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>.
+</p>
+<p>
+The boundary of the splitters are changed due to a bug fixed in
+GenerateEventsFilter().
+Thus the reference file is replaced by a corrected one. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e9505b0fadf0737dfa092bd1052e02a327ae2fc5" title="e9505b0fadf0737dfa092bd1052e02a327ae2fc5">e9505b0fadf0737dfa092bd1052e02a327ae2fc5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="6694.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T13%3A32%3A00Z&amp;precision=second" title="2013-03-15T13:32:00Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Andrei Savici</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="6694.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T16%3A17%3A07Z&amp;precision=second" title="2013-03-15T16:17:07Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The filtering works, but it has errors. Load HYS_13656 from systemtests data as workspace sum1, then just run lines 26 and 27 in the HYSPEC system test. The generated events filter info file goes with s1 values to ~24.7 instead of 24.5 for workspace 8. Then the filetered workspace 8 contains logs of s1 up to ~90 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="6694.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T18%3A36%3A09Z&amp;precision=second" title="2013-03-15T18:36:09Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed debug output.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5250cfba70c02ba1450ed56e699c2645ec3f03f3" title="5250cfba70c02ba1450ed56e699c2645ec3f03f3">5250cfba70c02ba1450ed56e699c2645ec3f03f3</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="6694.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T18%3A36%3A35Z&amp;precision=second" title="2013-03-15T18:36:35Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed debug output.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5250cfba70c02ba1450ed56e699c2645ec3f03f3" title="5250cfba70c02ba1450ed56e699c2645ec3f03f3">5250cfba70c02ba1450ed56e699c2645ec3f03f3</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="6694.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T18%3A40%3A03Z&amp;precision=second" title="2013-03-15T18:40:03Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="6694.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T18%3A40%3A15Z&amp;precision=second" title="2013-03-15T18:40:15Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="6694.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T18%3A44%3A18Z&amp;precision=second" title="2013-03-15T18:44:18Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="6694.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T19%3A04%3A37Z&amp;precision=second" title="2013-03-15T19:04:37Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The unfiltered event workspace contain all logs instead of just those above my maximum value. See <a class="assigned ticket" href="6720.html" title="defect: Filter events log value problem (assigned)">#6720</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="6694.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-15T19%3A04%3A51Z&amp;precision=second" title="2013-03-15T19:04:51Z in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="6694.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-21T14%3A40%3A44Z&amp;precision=second" title="2013-03-21T14:40:44Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change the default values of StartTime/StopTime.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a646e62fab30257303427e68bb75cdf744d72e22" title="a646e62fab30257303427e68bb75cdf744d72e22">a646e62fab30257303427e68bb75cdf744d72e22</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="6694.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-21T14%3A40%3A44Z&amp;precision=second" title="2013-03-21T14:40:44Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix some error.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2c79c11e39dac59d11f74170e0614c5a84755a35" title="2c79c11e39dac59d11f74170e0614c5a84755a35">2c79c11e39dac59d11f74170e0614c5a84755a35</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="6694.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-21T14%3A40%3A44Z&amp;precision=second" title="2013-03-21T14:40:44Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge filter single value and multiple value functions.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3a99092ed66f98cd01bc56d4b4cd7a4011be180c" title="3a99092ed66f98cd01bc56d4b4cd7a4011be180c">3a99092ed66f98cd01bc56d4b4cd7a4011be180c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="6694.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-21T14%3A40%3A44Z&amp;precision=second" title="2013-03-21T14:40:44Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove used methods. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/42e3081fd0c5aa178ed6dc5162e74f6e78d2cd0e" title="42e3081fd0c5aa178ed6dc5162e74f6e78d2cd0e">42e3081fd0c5aa178ed6dc5162e74f6e78d2cd0e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="6694.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-21T14%3A40%3A45Z&amp;precision=second" title="2013-03-21T14:40:45Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add visibility property to some properties. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/550e22a30d4c45615617a1fa8a329c3ff1659d9d" title="550e22a30d4c45615617a1fa8a329c3ff1659d9d">550e22a30d4c45615617a1fa8a329c3ff1659d9d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="6694.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-21T14%3A40%3A45Z&amp;precision=second" title="2013-03-21T14:40:45Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a bug in creating splitter.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/69903549f5a8bde223242dba770333b29fa98a69" title="69903549f5a8bde223242dba770333b29fa98a69">69903549f5a8bde223242dba770333b29fa98a69</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="6694.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-21T14%3A40%3A45Z&amp;precision=second" title="2013-03-21T14:40:45Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a warning of type conversion.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f97753697141138c88c7bedf9109d636f171c178" title="f97753697141138c88c7bedf9109d636f171c178">f97753697141138c88c7bedf9109d636f171c178</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="6694.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-03-21T14%3A40%3A45Z&amp;precision=second" title="2013-03-21T14:40:45Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a warning.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e89cded90e3c243b884d336ae58d2e6c53d62460" title="e89cded90e3c243b884d336ae58d2e6c53d62460">e89cded90e3c243b884d336ae58d2e6c53d62460</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="6694.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A26%3A18%2B01%3A00&amp;precision=second" title="2013-04-18T15:26:18+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change the default values of StartTime/StopTime.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a52eab73c99d9be7caed2c20338d36acc81a7b81" title="a52eab73c99d9be7caed2c20338d36acc81a7b81">a52eab73c99d9be7caed2c20338d36acc81a7b81</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="6694.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A26%3A18%2B01%3A00&amp;precision=second" title="2013-04-18T15:26:18+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix some error.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca284c0c81a0e40f22947d1737926f7e558191e4" title="ca284c0c81a0e40f22947d1737926f7e558191e4">ca284c0c81a0e40f22947d1737926f7e558191e4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="6694.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A26%3A21%2B01%3A00&amp;precision=second" title="2013-04-18T15:26:21+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge filter single value and multiple value functions.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf7f3fc2b9143af8b4216d944d996842ec4bfb08" title="cf7f3fc2b9143af8b4216d944d996842ec4bfb08">cf7f3fc2b9143af8b4216d944d996842ec4bfb08</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="6694.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A26%3A21%2B01%3A00&amp;precision=second" title="2013-04-18T15:26:21+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove used methods. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3" title="2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3">2cdbc4b35e5ff619b8963d555ac4ff6a01c2b9c3</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="6694.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A26%3A22%2B01%3A00&amp;precision=second" title="2013-04-18T15:26:22+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add visibility property to some properties. Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/77354aa382e3d0a89ce1ac986cdf81e094cae478" title="77354aa382e3d0a89ce1ac986cdf81e094cae478">77354aa382e3d0a89ce1ac986cdf81e094cae478</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="6694.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A26%3A24%2B01%3A00&amp;precision=second" title="2013-04-18T15:26:24+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a bug in creating splitter.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c983befb1401a0bfd907da30252cc3ffe8939755" title="c983befb1401a0bfd907da30252cc3ffe8939755">c983befb1401a0bfd907da30252cc3ffe8939755</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="6694.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-18T15%3A26%3A24%2B01%3A00&amp;precision=second" title="2013-04-18T15:26:24+01:00 in Timeline">7 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix a warning of type conversion.  Refs <a class="closed ticket" href="6694.html" title="enhancement: Refactor GenerateEventsFilter() (closed: fixed)">#6694</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/add41aa3c7a3b92ec9756233800557646f466cd2" title="add41aa3c7a3b92ec9756233800557646f466cd2">add41aa3c7a3b92ec9756233800557646f466cd2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="6694.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A24%3A27%2B01%3A00&amp;precision=second" title="2015-06-04T01:24:27+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/7540"><span class="icon">​</span>7540</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6694?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6694?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/6694?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

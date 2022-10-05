@@ -1,0 +1,1905 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #2320 (Make Rietveld reduction work with NOMAD)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="2319.html" title="Ticket #2319" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/2320?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/2320?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/2320?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="2321.html" title="Ticket #2321" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 2320, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="2319.html" title="Ticket #2319">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="2321.html" title="Ticket #2321">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="2320.html">Ticket #2320</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-01-28T15%3A16%3A47Z&amp;precision=second" title="2011-01-28T15:16:47Z in Timeline">10 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A49%3A48%2B01%3A00&amp;precision=second" title="2015-06-03T22:49:48+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Make Rietveld reduction work with NOMAD</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Peter+Peterson">Peter Peterson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Peter+Peterson">Peter Peterson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.1.html">Release 2.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Stuart Campbell
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Do what needs to be done to get NOMAD up and running doing Rietveld reduction.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="2320.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-01-28T15%3A16%3A54Z&amp;precision=second" title="2011-01-28T15:16:54Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li><li>
+      <strong>Owner</strong>
+        set to <em>Peter Peterson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="2320.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-01-28T15%3A17%3A49Z&amp;precision=second" title="2011-01-28T15:17:49Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9003]</a>) Adding NOMAD to the ugly hack. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="2320.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-01-28T15%3A18%3A39Z&amp;precision=second" title="2011-01-28T15:18:39Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9004]</a>) Adding parameter to force the output workspace to be a histogram. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="2320.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-02T17%3A07%3A03Z&amp;precision=second" title="2011-02-02T17:07:03Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9119]</a>) Moved a static member to be an instance member which fixes some new problems in SNSPowderReduction. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="2320.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-14T21%3A33%3A07Z&amp;precision=second" title="2011-02-14T21:33:07Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9488]</a>) Added more to the list on introspection. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="2320.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-14T21%3A34%3A16Z&amp;precision=second" title="2011-02-14T21:34:16Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9489]</a>) Checkpointing for the night so this will get into the build. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="2320.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-15T09%3A09%3A24Z&amp;precision=second" title="2011-02-15T09:09:24Z in Timeline">10 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 27</em> to <em>Iteration 28</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets at the end of iteration 27
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="2320.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-15T14%3A00%3A09Z&amp;precision=second" title="2011-02-15T14:00:09Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9499]</a>) Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="2320.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-15T20%3A10%3A33Z&amp;precision=second" title="2011-02-15T20:10:33Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9513]</a>) Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="2320.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-15T22%3A13%3A25Z&amp;precision=second" title="2011-02-15T22:13:25Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9515]</a>) Try just using the data paths beforetrying findnexus. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="2320.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-16T13%3A53%3A44Z&amp;precision=second" title="2011-02-16T13:53:44Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9520]</a>) Fixing small bug. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="2320.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-17T16%3A26%3A01Z&amp;precision=second" title="2011-02-17T16:26:01Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9549]</a>) Adding another compressevents call after subtraction to shrink the data. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="2320.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-25T20%3A00%3A44Z&amp;precision=second" title="2011-02-25T20:00:44Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9696]</a>) Added wallclock filtering. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="2320.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-25T20%3A42%3A07Z&amp;precision=second" title="2011-02-25T20:42:07Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9703]</a>) Adding ability to sum runs. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="2320.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-04T20%3A04%3A17Z&amp;precision=second" title="2011-03-04T20:04:17Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9823]</a>) More generic fixes for NOMAD. Added ability to call load with compression on. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="2320.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-05T15%3A42%3A15Z&amp;precision=second" title="2011-03-05T15:42:15Z in Timeline">10 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9829]</a>) Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a> Add masking to MultipleScattering and SaveGSS
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="2320.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-05T18%3A42%3A33Z&amp;precision=second" title="2011-03-05T18:42:33Z in Timeline">10 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9830]</a>) Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a> Removed my changes for masking
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="2320.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-06T14%3A54%3A15Z&amp;precision=second" title="2011-03-06T14:54:15Z in Timeline">10 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9831]</a>) Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a> Add masking to MultipleScattering and SaveGSS.  Test of dataset without instrument OK now.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="2320.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-06T21%3A56%3A59Z&amp;precision=second" title="2011-03-06T21:56:59Z in Timeline">10 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9832]</a>) Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a> Moved some instrument function calls outside spectra loop in SaveGSS
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="2320.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-07T14%3A31%3A50Z&amp;precision=second" title="2011-03-07T14:31:50Z in Timeline">10 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9837]</a>) Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a> Added masking to execEvent in DiffractionFocussing in same way as spectra not in a group
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="2320.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-07T17%3A11%3A37Z&amp;precision=second" title="2011-03-07T17:11:37Z in Timeline">10 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9841]</a>) Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a> Fixed the flips for NOMAD instrument definition; added groups
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="2320.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-09T14%3A16%3A20Z&amp;precision=second" title="2011-03-09T14:16:20Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[9884]</a>) Put compression tolerance in head of file. Added an additional compression after DiffractionFocussing to make later steps faster. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="2320.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-22T13%3A53%3A59Z&amp;precision=second" title="2011-03-22T13:53:59Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10200]</a>) Release memory during the algorithm so you don't fall into swap. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="2320.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-22T13%3A55%3A12Z&amp;precision=second" title="2011-03-22T13:55:12Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10201]</a>) Change minimum bank number if the user did not supply a characterizations file. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="2320.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-23T15%3A50%3A29Z&amp;precision=second" title="2011-03-23T15:50:29Z in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10258]</a>) Put operations in the proper order. Refs <a class="closed ticket" href="2502.html" title="enhancement: Convert Hodges python code to mantid algorithm (closed: fixed)">#2502</a> and <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="2320.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-01T19%3A59%3A47%2B01%3A00&amp;precision=second" title="2011-04-01T19:59:47+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10544]</a>) For some reason a couple of nomad files are missing a log. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="2320.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-01T21%3A34%3A06%2B01%3A00&amp;precision=second" title="2011-04-01T21:34:06+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10548]</a>) Added error checking on min/max tof. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="2320.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-01T21%3A37%3A23%2B01%3A00&amp;precision=second" title="2011-04-01T21:37:23+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10549]</a>) More black magic with tmin/tmax. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="2320.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-04T18%3A59%3A30%2B01%3A00&amp;precision=second" title="2011-04-04T18:59:30+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10579]</a>) Moving code to get minimum TOF of an EventWorkspace into the class itself. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="2320.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-04T19%3A00%3A33%2B01%3A00&amp;precision=second" title="2011-04-04T19:00:33+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10580]</a>) The result of converting TOF-&gt;d-spacing should not be a negative number. Adding check for event workspaces. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="2320.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-04T19%3A27%3A31%2B01%3A00&amp;precision=second" title="2011-04-04T19:27:31+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10582]</a>) Error check the offsets when reading in. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="2320.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-04T19%3A29%3A17%2B01%3A00&amp;precision=second" title="2011-04-04T19:29:17+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10583]</a>) Made the bin masking stuff a bit smarter. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="2320.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-05T19%3A29%3A34%2B01%3A00&amp;precision=second" title="2011-04-05T19:29:34+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10604]</a>) Added some additional sanity checks that will boost performance in edge cases. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="2320.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-05T19%3A30%3A31%2B01%3A00&amp;precision=second" title="2011-04-05T19:30:31+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10605]</a>) More error checking. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="2320.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-06T13%3A30%3A16%2B01%3A00&amp;precision=second" title="2011-04-06T13:30:16+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10617]</a>) Fixed broken header (again). Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a> and <a class="closed ticket" href="2647.html" title="enhancement: GSAS format cannot be read by GSAS (closed: fixed)">#2647</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="2320.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-08T21%3A10%3A39%2B01%3A00&amp;precision=second" title="2011-04-08T21:10:39+01:00 in Timeline">10 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10700]</a>) Initialized value so it doesn't randomly fail. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="2320.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-27T08%3A35%3A44%2B01%3A00&amp;precision=second" title="2011-04-27T08:35:44+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 28</em> to <em>Iteration 29</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets at the end of iteration 28
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="2320.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-06-27T09%3A23%3A25%2B01%3A00&amp;precision=second" title="2011-06-27T09:23:25+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 29</em> to <em>Iteration 30</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Accepted and assigned tickets moved at iteration 29 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="2320.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-19T10%3A30%3A20%2B01%3A00&amp;precision=second" title="2011-09-19T10:30:20+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 30</em> to <em>Iteration 31</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets to iteration 31 at the iteration 30 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="2320.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-10-14T21%3A37%3A19%2B01%3A00&amp;precision=second" title="2011-10-14T21:37:19+01:00 in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[15356]</a>:
+</p>
+<div class="message"><p>
+Fixing up the code so it can run NOMAD to produce GSAS from a single run. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="2320.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-14T15%3A51%3A02Z&amp;precision=second" title="2011-11-14T15:51:02Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Do not need to rebin in TOF once conversion is done. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3661aa2671c5bccae03a80842bad839f0a7d8549" title="3661aa2671c5bccae03a80842bad839f0a7d8549">3661aa2671c5bccae03a80842bad839f0a7d8549</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="2320.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-14T19%3A16%3A29Z&amp;precision=second" title="2011-11-14T19:16:29Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Do not need to rebin in TOF once conversion is done. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3661aa2671c5bccae03a80842bad839f0a7d8549" title="3661aa2671c5bccae03a80842bad839f0a7d8549">3661aa2671c5bccae03a80842bad839f0a7d8549</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="2320.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-17T14%3A53%3A29Z&amp;precision=second" title="2011-11-17T14:53:29Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Clearing out the MRU at the end of AlignDetectors. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c5e1e79b0ece9e96c96d78a7c7ffbc6ac9cf7c33" title="c5e1e79b0ece9e96c96d78a7c7ffbc6ac9cf7c33">c5e1e79b0ece9e96c96d78a7c7ffbc6ac9cf7c33</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="2320.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-17T14%3A53%3A29Z&amp;precision=second" title="2011-11-17T14:53:29Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+learing out the MRU at the end of ConvertUnits. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f72c913e10e37eaef1d69df6682b22fef1c3571" title="5f72c913e10e37eaef1d69df6682b22fef1c3571">5f72c913e10e37eaef1d69df6682b22fef1c3571</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="2320.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-17T14%3A53%3A29Z&amp;precision=second" title="2011-11-17T14:53:29Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Restoring old version of SNSPowderReduction (mostly). Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/761a8d892126d781321b70e6768bb1d22fba3cdd" title="761a8d892126d781321b70e6768bb1d22fba3cdd">761a8d892126d781321b70e6768bb1d22fba3cdd</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="2320.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-17T14%3A53%3A30Z&amp;precision=second" title="2011-11-17T14:53:30Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Made a minor mistake in the logic. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3cba9cf7b0d6708ecfcf02d5998c4b4c062dab69" title="3cba9cf7b0d6708ecfcf02d5998c4b4c062dab69">3cba9cf7b0d6708ecfcf02d5998c4b4c062dab69</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="2320.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-23T15%3A14%3A08Z&amp;precision=second" title="2011-11-23T15:14:08Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Adding additional requirements to ISpectrum. Refs <a class="closed ticket" href="4178.html" title="enhancement: Add getxmin and getxmax to MatrixWorkspace (closed: fixed)">#4178</a> and <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+<p>
+Also with default implementations. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a5cb768144dc3a8abe8cc6887c04779a5d7c50f4" title="a5cb768144dc3a8abe8cc6887c04779a5d7c50f4">a5cb768144dc3a8abe8cc6887c04779a5d7c50f4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="2320.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-23T20%3A18%3A26Z&amp;precision=second" title="2011-11-23T20:18:26Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Changing default FWHM value. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+<p>
+Turns out that for powgen the peaks have a lot more points on them. Also
+adding a couple more tooltips for people to see the defaults. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/48db66f290d34ce900866cec4025d82bc13b4462" title="48db66f290d34ce900866cec4025d82bc13b4462">48db66f290d34ce900866cec4025d82bc13b4462</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="2320.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T17%3A12%3A10Z&amp;precision=second" title="2011-11-28T17:12:10Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Hard coded focus position for NOMAD. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+<p>
+Make it work, then make it correct. Next is to read the information from
+a file. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/91624c10b8e69d9ab437fc7fe9011f35d2f151d7" title="91624c10b8e69d9ab437fc7fe9011f35d2f151d7">91624c10b8e69d9ab437fc7fe9011f35d2f151d7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="2320.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T17%3A12%3A11Z&amp;precision=second" title="2011-11-28T17:12:11Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Folded in a proper version of the focus position information. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0a585245d9b36506a4501a91879684c7ea8982ae" title="0a585245d9b36506a4501a91879684c7ea8982ae">0a585245d9b36506a4501a91879684c7ea8982ae</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="2320.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T18%3A23%3A29Z&amp;precision=second" title="2011-11-28T18:23:29Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Things have changed slightly. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f30f354539ebf072c474deacaa22f7f34c4e7539" title="f30f354539ebf072c474deacaa22f7f34c4e7539">f30f354539ebf072c474deacaa22f7f34c4e7539</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="2320.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T21%3A32%3A48Z&amp;precision=second" title="2011-11-28T21:32:48Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Getting the iparm filename into the workspace. Refs <a class="closed ticket" href="4209.html" title="enhancement: Additional lines in GSAS file (closed: fixed)">#4209</a> and <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2fccc098b675b0b49e48b536bc1334e2a095ff63" title="2fccc098b675b0b49e48b536bc1334e2a095ff63">2fccc098b675b0b49e48b536bc1334e2a095ff63</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="2320.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-14T15%3A28%3A48Z&amp;precision=second" title="2011-12-14T15:28:48Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Using HighBackground option in StripVanadiumPeaks. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f0a080f0ba04f0095fff785720333d2de05e58d" title="4f0a080f0ba04f0095fff785720333d2de05e58d">4f0a080f0ba04f0095fff785720333d2de05e58d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="2320.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-04T19%3A38%3A25Z&amp;precision=second" title="2012-01-04T19:38:25Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Dealing with spectra that have negative counts. Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>.
+</p>
+<p>
+Since background subtraction goes awry due to absorption effects, push all
+of the spectra to be above zero. Also added in a checkbox to only read in
+a partial event file for characterization runs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a08f27d197af3ab9f83c010e70f2da47b707c837" title="a08f27d197af3ab9f83c010e70f2da47b707c837">a08f27d197af3ab9f83c010e70f2da47b707c837</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="2320.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-09T09%3A42%3A27Z&amp;precision=second" title="2012-01-09T09:42:27Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 32</em> to <em>Iteration 33</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to iteration 33 at iteration 32 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="2320.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-25T18%3A38%3A45Z&amp;precision=second" title="2012-01-25T18:38:45Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Added vanadium peak tolerance. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6a99312119901e307dd6ba6d0d46769841cf9b17" title="6a99312119901e307dd6ba6d0d46769841cf9b17">6a99312119901e307dd6ba6d0d46769841cf9b17</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="2320.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-25T18%3A38%3A46Z&amp;precision=second" title="2012-01-25T18:38:46Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Improper passing of usews parameter. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9d696c82767af2543283afa01e1df0328ab6b7f9" title="9d696c82767af2543283afa01e1df0328ab6b7f9">9d696c82767af2543283afa01e1df0328ab6b7f9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="2320.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-25T18%3A38%3A46Z&amp;precision=second" title="2012-01-25T18:38:46Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Made loadPreNeXus a bit more rhobust. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c34eae8b5d665af98215136c9eb967228f71c3b" title="4c34eae8b5d665af98215136c9eb967228f71c3b">4c34eae8b5d665af98215136c9eb967228f71c3b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="2320.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-25T18%3A38%3A46Z&amp;precision=second" title="2012-01-25T18:38:46Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Adding prenexus file to run files. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f5fce1d3441c34bec372adb1f7bbf640f2ec6a05" title="f5fce1d3441c34bec372adb1f7bbf640f2ec6a05">f5fce1d3441c34bec372adb1f7bbf640f2ec6a05</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="2320.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-25T18%3A38%3A46Z&amp;precision=second" title="2012-01-25T18:38:46Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Fixed file extensions for prenexus. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c044fe43e1c9025dca28ff867700c9c89dab74e0" title="c044fe43e1c9025dca28ff867700c9c89dab74e0">c044fe43e1c9025dca28ff867700c9c89dab74e0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="2320.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-31T20%3A31%3A53Z&amp;precision=second" title="2012-01-31T20:31:53Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Adding check to turn off making data positive. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a994d0d1bc3a6edb42c1fb7e29bba4adb36107f1" title="a994d0d1bc3a6edb42c1fb7e29bba4adb36107f1">a994d0d1bc3a6edb42c1fb7e29bba4adb36107f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="2320.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-31T21%3A09%3A09Z&amp;precision=second" title="2012-01-31T21:09:09Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Adding check to turn off making data positive. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a994d0d1bc3a6edb42c1fb7e29bba4adb36107f1" title="a994d0d1bc3a6edb42c1fb7e29bba4adb36107f1">a994d0d1bc3a6edb42c1fb7e29bba4adb36107f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="2320.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-03T15%3A02%3A52Z&amp;precision=second" title="2012-02-03T15:02:52Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Using new LoadPreNexus algorithm. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f64a8ed0e6ec8b4aacaa62b6540dff2fc534f883" title="f64a8ed0e6ec8b4aacaa62b6540dff2fc534f883">f64a8ed0e6ec8b4aacaa62b6540dff2fc534f883</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="2320.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-03T15%3A03%3A03Z&amp;precision=second" title="2012-02-03T15:03:03Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Got rid of -0. in uncertainties. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/95ad9a8a571be3386b379484231a0ee3c1f27920" title="95ad9a8a571be3386b379484231a0ee3c1f27920">95ad9a8a571be3386b379484231a0ee3c1f27920</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="2320.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-08T17%3A03%3A33Z&amp;precision=second" title="2012-02-08T17:03:33Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Fuller usage of ResetNegatives. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/53b04ae6d62817bd0207ba308c8739370942d67a" title="53b04ae6d62817bd0207ba308c8739370942d67a">53b04ae6d62817bd0207ba308c8739370942d67a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="2320.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T19%3A14%3A52Z&amp;precision=second" title="2012-02-14T19:14:52Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Adding ability to use in memory van background. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/acee0944b07da1b64981d4691af9639543539c4b" title="acee0944b07da1b64981d4691af9639543539c4b">acee0944b07da1b64981d4691af9639543539c4b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="2320.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T19%3A14%3A53Z&amp;precision=second" title="2012-02-14T19:14:53Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Fixing bug in which characterizations to load. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0d6563974a267a2781d9a33776df89ad9037543" title="c0d6563974a267a2781d9a33776df89ad9037543">c0d6563974a267a2781d9a33776df89ad9037543</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="2320.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T19%3A14%3A53Z&amp;precision=second" title="2012-02-14T19:14:53Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Reworked all of the grouping information. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c8696950e614490ccb418f6e70d48fa31821d79c" title="c8696950e614490ccb418f6e70d48fa31821d79c">c8696950e614490ccb418f6e70d48fa31821d79c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="2320.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A36Z&amp;precision=second" title="2012-02-17T19:16:36Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Adding ability to use in memory van background. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/acee0944b07da1b64981d4691af9639543539c4b" title="acee0944b07da1b64981d4691af9639543539c4b">acee0944b07da1b64981d4691af9639543539c4b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="2320.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A37Z&amp;precision=second" title="2012-02-17T19:16:37Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Fixing bug in which characterizations to load. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0d6563974a267a2781d9a33776df89ad9037543" title="c0d6563974a267a2781d9a33776df89ad9037543">c0d6563974a267a2781d9a33776df89ad9037543</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="2320.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A37Z&amp;precision=second" title="2012-02-17T19:16:37Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Reworked all of the grouping information. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c8696950e614490ccb418f6e70d48fa31821d79c" title="c8696950e614490ccb418f6e70d48fa31821d79c">c8696950e614490ccb418f6e70d48fa31821d79c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="2320.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-12T15%3A46%3A47Z&amp;precision=second" title="2012-03-12T15:46:47Z in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Backported NOMAD IDF updates.
+</p>
+<p>
+Refs <a class="closed ticket" href="4938.html" title="task: CreateGroupingWorkspace for NOMAD (closed: fixed)">#4938</a>. Fixed nomad grouping spectra again.
+</p>
+<p>
+Refs <a class="closed ticket" href="4398.html" title="enhancement: LineViewer: expose to python (closed: fixed)">#4398</a>. Changed the group numbers for NOMAD.
+</p>
+<p>
+Refs <a class="closed ticket" href="2320.html" title="enhancement: Make Rietveld reduction work with NOMAD (closed: fixed)">#2320</a>. Reworked all of the grouping information.
+(cherry-picked from <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c8696950e614490ccb418f6e70d48fa31821d79c" title="c8696950e614490ccb418f6e70d48fa31821d79c">c8696950e614490ccb418f6e70d48fa31821d79c</a>, <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fcbbc89fb1e97ba7aa3bd93609f5b3740b02ed33" title="fcbbc89fb1e97ba7aa3bd93609f5b3740b02ed33">fcbbc89fb1e97ba7aa3bd93609f5b3740b02ed33</a> and <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2acf3b928c78e63e75da6819a69f2b601fad4f0a" title="2acf3b928c78e63e75da6819a69f2b601fad4f0a">2acf3b928c78e63e75da6819a69f2b601fad4f0a</a>) 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7502ee8ecf0e1e3084bef5706409e5767521f771" title="7502ee8ecf0e1e3084bef5706409e5767521f771">7502ee8ecf0e1e3084bef5706409e5767521f771</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="2320.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-15T14%3A45%3A23Z&amp;precision=second" title="2012-03-15T14:45:23Z in Timeline">9 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This ticket is being closed on the principle that it is just a dumping ground for changes. The person who "verifies" it should probably close it without asking too many questions.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="2320.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-30T20%3A31%3A06%2B01%3A00&amp;precision=second" title="2012-04-30T20:31:06+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Stuart Campbell</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="2320.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-30T20%3A31%3A59%2B01%3A00&amp;precision=second" title="2012-04-30T20:31:59+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Closed without asking too many questions!
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="2320.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A49%3A48%2B01%3A00&amp;precision=second" title="2015-06-03T22:49:48+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/3167"><span class="icon">​</span>3167</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/2320?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/2320?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/2320?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

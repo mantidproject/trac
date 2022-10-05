@@ -1,0 +1,609 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8860 (Handle the case where loading same inst. data with diff number hist)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8859.html" title="Ticket #8859" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8860?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8860?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8860?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8861.html" title="Ticket #8861" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8860, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8859.html" title="Ticket #8859">Previous Ticket</a></span></li><li><span><a class="next" href="8861.html" title="Ticket #8861">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8860.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8860.html">Ticket #8860</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T09%3A18%3A47Z&amp;precision=second" title="2014-02-04T09:18:47Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A54%3A12%2B01%3A00&amp;precision=second" title="2015-06-04T02:54:12+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Handle the case where loading same inst. data with diff number hist</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Anders+Markvardsen">Anders Markvardsen</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Arturs+Bekasovs">Arturs Bekasovs</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Muon">Muon</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              stephen.cottrell@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="8020.html" title="The original data is corrupted when we get a loading error">#8020</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Karl Palmen
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Steve have come across a case that we may not have tested/considered before that is loading: same instrument data in succession where the number of histogram varies.  
+</p>
+<p>
+Make muon interface handle this according to Steve's email below:
+</p>
+<p>
+There seems to be a new problem with the grouping in the Muon Analysis interface. When loading a run with x histograms and then a run with y histograms, the group table is not updated correctly when the second run is loaded if x&lt;&gt;y and the interface becomes unusable. Try this with the attached files … 30604 has 192 histograms and 34997 has 96 histograms. Load 30604 and create four groups, 1: 1-48, 2: 49-96, 3: 97-144, 4: 145-192, and a two pairs (1-2) and (3-4). All works fine. Now try and load the second file and there’s an error ‘Unable to group loaded workspace’ … if the number of histograms has changed the previous grouping should be abandoned. In fact, you still end up with all the groups showing, so I’m not sure what’s going on inside at this stage (which probably explains why it seems to stop working). I got into trouble with this bug earlier today going the other way, i.e. I loaded a run with 32 detectors and then a run with 96 detectors … it carried over the grouping from the first run to the second which made the data look very strange.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/8860/emu00030604.nxs.html" title="View attachment">emu00030604.nxs</a><a href="../raw-attachment/ticket/8860/emu00030604.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="2098269 bytes">2.0 MB</span>) -
+      added by <em>Anders Markvardsen</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T09%3A19%3A18Z&amp;precision=second" title="2014-02-04T09:19:18Z in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/8860/emu00034997.nxs.html" title="View attachment">emu00034997.nxs</a><a href="../raw-attachment/ticket/8860/emu00034997.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="1070789 bytes">1.0 MB</span>) -
+      added by <em>Anders Markvardsen</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T09%3A19%3A34Z&amp;precision=second" title="2014-02-04T09:19:34Z in Timeline">7 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/8860/emu_192_grouping.xml.html" title="View attachment">emu_192_grouping.xml</a><a href="../raw-attachment/ticket/8860/emu_192_grouping.xml" class="trac-rawlink" title="Download">​</a>
+       (<span title="559 bytes">559 bytes</span>) -
+      added by <em>Arturs Bekasovs</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T11%3A24%3A15Z&amp;precision=second" title="2014-02-28T11:24:15Z in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Grouping for EMU data with 192 histograms
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T09%3A19%3A18Z&amp;precision=second" title="2014-02-04T09:19:18Z in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8860/emu00030604.nxs.html"><em>emu00030604.nxs</em></a><a href="../raw-attachment/ticket/8860/emu00030604.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T09%3A19%3A34Z&amp;precision=second" title="2014-02-04T09:19:34Z in Timeline">7 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8860/emu00034997.nxs.html"><em>emu00034997.nxs</em></a><a href="../raw-attachment/ticket/8860/emu00034997.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8860.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T09%3A24%3A59Z&amp;precision=second" title="2014-02-04T09:24:59Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Muon</em>
+    </li><li>
+      <strong>type</strong>
+        changed from <em>enhancement</em> to <em>defect</em>
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>Muon: Handle the case where loading same inst. data with diff number hist.</em> to <em>Handle the case where loading same inst. data with diff number hist.</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8860.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T09%3A25%3A19Z&amp;precision=second" title="2014-02-04T09:25:19Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>Handle the case where loading same inst. data with diff number hist.</em> to <em>Handle the case where loading same inst. data with diff number hist</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8860.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T10%3A59%3A49Z&amp;precision=second" title="2014-02-14T10:59:49Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets out of triage (new) to assigned at the introduction of the triage state
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8860.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-18T12%3A14%3A29Z&amp;precision=second" title="2014-02-18T12:14:29Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>8020</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The interface currently loads the new data to the used workspace directly. It should be much easier when I load it to a tmp workspace. I will then just compare the number of detectors of the loaded one and the current one.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8860.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T11%3A10%3A25Z&amp;precision=second" title="2014-02-28T11:10:25Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8860.html" title="defect: Handle the case where loading same inst. data with diff number hist (closed: fixed)">#8860</a>. Re-load grouping if no. spectra changes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/92aaa279288a9a5d3c9501a4284b77085f431875" title="92aaa279288a9a5d3c9501a4284b77085f431875">92aaa279288a9a5d3c9501a4284b77085f431875</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8860.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T11%3A23%3A52Z&amp;precision=second" title="2014-02-28T11:23:52Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Tester:</strong>
+</p>
+<p>
+Check that what Steve talks about in the description is not happening any more:
+</p>
+<ol><li>Save all attached files to the disk.
+</li></ol><ol start="2"><li>Launch MuonAnalysis interface.
+</li></ol><ol start="3"><li>Load 30604 (with 192 histograms).
+</li></ol><ol start="4"><li>Go to Grouping Options and load emu_192_grouping.xml grouping. Try to plot the group4 to make sure everything was grouped correctly.
+</li></ol><ol start="5"><li>Go back to Home and try to load 34997 (with 96 histograms). It should be loaded fine and the grouping should be replaced with the one with 96 detectors. Try to plot something to make sure it was grouped correctly.
+</li></ol><ol start="6"><li>Load emu0006473 from <em>AutoTestData</em>. It should be loaded fine, 96 detector grouping should be abandoned, 32 detector one should be loaded.
+</li></ol><ol start="7"><li>Load downloaded 34997 again. 32 detector grouping should be abandoned for 96 detector one.
+</li></ol><ol start="8"><li>Load MUSR00015189 from <em>AutoTestData</em>. MUSR grouping should loaded (check the description on the Grouping Options).
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T11%3A24%3A15Z&amp;precision=second" title="2014-02-28T11:24:15Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/8860/emu_192_grouping.xml.html"><em>emu_192_grouping.xml</em></a><a href="../raw-attachment/ticket/8860/emu_192_grouping.xml" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Grouping for EMU data with 192 histograms
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8860.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T13%3A44%3A36Z&amp;precision=second" title="2014-02-28T13:44:36Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Purely interface stuff, so system tests couldn't possible be broken.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8860.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T13%3A55%3A22Z&amp;precision=second" title="2014-02-28T13:55:22Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Karl Palmen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8860.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T14%3A16%3A42Z&amp;precision=second" title="2014-02-28T14:16:42Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Grouping appears to behave sensibly and there are no 'Unable to group loaded workspace' errors.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8860.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T14%3A17%3A41Z&amp;precision=second" title="2014-02-28T14:17:41Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8860.html" title="defect: Handle the case where loading same inst. data with diff number hist (closed: fixed)">#8860</a>. Re-load grouping if no. spectra changes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6542373d6cdf6e1856363f0eb2a06c1fcdf40680" title="6542373d6cdf6e1856363f0eb2a06c1fcdf40680">6542373d6cdf6e1856363f0eb2a06c1fcdf40680</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8860.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-28T14%3A17%3A42Z&amp;precision=second" title="2014-02-28T14:17:42Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/bugfix/8860_muon_same_inst_diff_no_spectra'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/c6ff3b3e9efb45df34d1c657a635a069b5ae6514"><span class="icon">​</span>c6ff3b3e9efb45df34d1c657a635a069b5ae6514</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8860.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A54%3A12%2B01%3A00&amp;precision=second" title="2015-06-04T02:54:12+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9704"><span class="icon">​</span>9704</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8860?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8860?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8860?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

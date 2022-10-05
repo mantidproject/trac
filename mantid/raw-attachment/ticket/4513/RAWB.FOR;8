@@ -1,0 +1,491 @@
+      PROGRAM DIFF
+      CHARACTER*80 runid
+      character runo*4,run1*5,fname*80,fname1*80
+      PARAMETER(NM=5,ND=200)
+
+      REAL T(10000),CT(10000),err(10000),SUM1(9),SUM2(9),SUM3(9)
+      REAL COUT(10000),CTHIN(10000),CTHICK(10000),NFR(9),sum4(9)
+      REAL ERROUT(10000),ERRTHIN(10000),ERRTHICK(10000)
+      REAL OUT(2000),THIN(2000),THICK(2000)
+      REAL MOUT(10000),MTHIN(10000),MTHICK(10000)
+      real xout(10000),yout(10000),eout(10000)
+      INTEGER IARRAY(100),ERRCODE,LOUT,NCHAN,NDET,IFSN,NOS
+      INTEGER rpb1(32),ICT(10000),ICTA(9,10000),MICTA(9,10000),NI(9)
+
+      write(6,*) ' first and last run numbers?'
+      read(5,*) irun1,irun2
+*      write(6,*) ' first and last spectrum numbers?'
+      ispectmin=3
+      ispectmax=134
+*      read(5,*) ispectmin,ispectmax
+*      write(6,*) ' for single difference type 1' 
+*      write(6,*) ' for double difference type 2' 
+*      read(5,*) iopt
+      iopt=2
+      beta=0.28
+*      write(6,*) ' enter file name for output' 
+*      read(5,'(a)') fname
+      fname='tempb.dat'
+      fname1=fname
+*      write(6,'(80a)')fname1
+      open(unit=4,file=fname1,status='new')
+
+      do ISPECT=ispectmin,ispectmax    ! start of do loop over detectors
+      DO I=1,9
+      DO J=1,10000
+       ICTA(I,J)=0
+       MICTA(I,J)=0
+      END DO
+      END DO 
+      NGOOD_FRAMES=0    
+      sum1=0.0
+      sum2=0.0
+
+      write(6,*) ' Spectrum; ',ispect
+      IF(IOPT.EQ.1) THEN
+*       WRITE(6,*) ' SINGLE DIFFERENCE'
+      ELSE IF(IOPT.EQ.2) THEN
+*       WRITE(6,*) ' DOUBLE DIFFERENCE'
+*       WRITE(6,*) ' BETA=',BETA
+      ELSE IF(IOPT.EQ.3) THEN
+       WRITE(6,*) ' THICK DIFFERENCE'
+      END IF
+
+
+      DO 101 IRUN=IRUN1,IRUN2
+* Define name of data file.
+*      write(6,*) ' irun=',irun
+      if(irun.lt.10000) then
+       write(runo(1:4),'(I4.4)')irun
+       runid='evs_data:evs0'//runo//'.raw'
+      else
+       write(run1(1:5),'(I5.5)')irun
+       runid='evs_data:evs'//run1//'.raw'
+      end if
+*      write(6,5) runid
+    5 Format(' ',' data file is;',50a)
+
+* Get relevant run information.
+      CALL GETPARI(runid,'RPB',rpb1,32,length_out,errcode)
+      ngood_frames =ngood_frames+rpb1(10)
+      CALL GETPARI(runid,'NPER',NPD,100,LOUT,ERRCODE)
+      CALL GETPARI(RUNID,'NSP1',IARRAY,100,LOUT,ERRCODE)
+      NDET=IARRAY(1)
+
+      CALL GETPARR(RUNID,'TCB1',T,10000,LOUT,ERRCODE)
+      CALL GETPARI(RUNID,'NTC1',IARRAY,100,LOUT,ERRCODE)
+      NCHAN=IARRAY(1)
+      NMON=MON(RUNID)  
+      DT=T(3)-T(2)
+      DO I=1,NCHAN
+       T(I)=T(I)-DT
+      END DO
+
+      DO IP=1,NPD
+       IS=ISPECT+(IP-1)*(NDET+1)
+       CALL GETDAT(RUNID,IS,1,ICT,10000,ERRCODE)
+       DO IT=2,NCHAN
+        ICTA(IP,IT)=ICTA(IP,IT)+ICT(IT)
+       END DO
+       IS=NMON+(IP-1)*(NDET+1)
+       CALL GETDAT(RUNID,IS,1,ICT,10000,ERRCODE)
+       DO IT=2,NCHAN
+        MICTA(IP,IT)=MICTA(IP,IT)+ICT(IT)
+       END DO
+      END DO
+
+       DO I=2,NCHAN,50
+        IF(I.LT.500.0) THEN
+*        write(6,*) i, i,icta(3,i),icta(4,i),icta(5,i),icta(6,i)
+        END IF
+       END DO
+
+
+  101 CONTINUE
+
+*      write(6,*) ' Total number of good frames=',ngood_frames
+*      WRITE(6,*) ' NUMBER OF PERIODS=',NPD
+*      WRITE(6,*) ' NUMBER OF SPECTRA=',NDET
+*      WRITE(6,*) ' Spectrum number=',ISPECT
+*      WRITE(6,*) ' Number of monitor spectrum=',nmon 
+* DETERMINE WHICH SPECTRA IS OUT,THIN,THICK
+      IOUT=1
+      ITHIN=2
+      ITHICK=3
+
+       DO IP=1,NPD
+        DO IT=2,NCHAN
+         IF(T(IT).GT.300.0.AND.T(IT).LT.400.0) THEN 
+          SUM1(IP)=SUM1(IP)+ICTA(IP,IT)
+         ELSE IF(T(IT).GT.550.0.AND.T(IT).LT.600.0) THEN
+          SUM2(IP)=SUM2(IP)+ICTA(IP,IT)
+         END IF
+        END DO
+*        write(6,*) ' sum1=',sum1(ip),' sum2=',sum2(ip)
+       END DO 
+       
+       DO IP=1,NPD
+        NI(IP)=IP
+        IF(SUM2(IP).NE.0.0) THEN
+         SUM1(IP)=SUM1(IP)/SUM2(IP)
+         SUM4(IP)=SUM1(IP)
+        END IF
+       END DO
+
+*       do i=1,6
+*       write(6,*)i, ni(i),sum1(i)
+*       end do
+*       write(6,*)'2'
+
+       CALL ORDER(SUM1,NI,NPD)
+
+*       do i=1,6
+*       write(6,*)i, ni(i),sum1(i)
+*       end do
+
+       CALL WRITESP(NI,ISPECT,NDET,NPD) ! Write, out,thin,thick spectra.
+
+*      WRITE(6,*) ' 1'
+* Calculate total foil out, thin, thick and convert to Cts/micro-sec        
+      IF(NPD.EQ.2) THEN
+       DO I=2,NCHAN
+        COUT(I)=FLOAT(ICTA(NI(2),I))/(T(I)-T(I-1))
+        ERROUT(I)=SQRT(FLOAT(ICTA(NI(2),I)))/(T(I)-T(I-1))
+        CTHIN(I)=FLOAT(ICTA(NI(1),I))/(T(I)-T(I-1))
+        ERRTHIN(I)=SQRT(FLOAT(ICTA(NI(1),I)))/(T(I)-T(I-1))
+       END DO
+       SUM3(IOUT)=SUM2(NI(2))
+       SUM3(ITHIN)=SUM2(NI(1))
+       SUM3(ITHICK)=0.0
+      ELSE IF(NPD.EQ.3) THEN
+       DO I=2,NCHAN
+        COUT(I)=FLOAT(ICTA(NI(3),I))/(T(I)-T(I-1))
+        ERROUT(I)=SQRT(FLOAT(ICTA(NI(3),I)))/(T(I)-T(I-1))
+        CTHIN(I)=FLOAT(ICTA(NI(2),I))/(T(I)-T(I-1))
+        ERRTHIN(I)=SQRT(FLOAT(ICTA(NI(2),I)))/(T(I)-T(I-1))
+        CTHICK(I)=FLOAT(ICTA(NI(1),I))/(T(I)-T(I-1))
+        ERRTHICK(I)=SQRT(FLOAT(ICTA(NI(1),I)))/(T(I)-T(I-1))
+       END DO
+      SUM3(IOUT)=SUM2(NI(3))
+      SUM3(ITHIN)=SUM2(NI(2))
+      SUM3(ITHICK)=SUM2(NI(1)) 
+
+      ELSE IF(NPD.EQ.6) THEN
+       DO I=2,NCHAN
+        COUT(I)=FLOAT(ICTA(NI(5),I)+ICTA(NI(6),I))
+     $/(T(I)-T(I-1))
+        ERROUT(I)=SQRT(FLOAT(ICTA(NI(5),I)+ICTA(NI(6),I)))
+     $/(T(I)-T(I-1))
+        CTHIN(I)=FLOAT(ICTA(NI(3),I)+ICTA(NI(4),I)
+     $)/(T(I)-T(I-1))
+        ERRTHIN(I)=SQRT(FLOAT(ICTA(NI(3),I)+ICTA(NI(4),I)
+     $))/(T(I)-T(I-1))
+        CTHICK(I)=FLOAT(ICTA(NI(1),I)+ICTA(NI(2),I)
+     $)/(T(I)-T(I-1))
+        ERRTHICK(I)=SQRT(FLOAT(ICTA(NI(1),I)+ICTA(NI(2),I)
+     $))/(T(I)-T(I-1))
+       END DO
+      SUM3(IOUT)=SUM2(NI(5))+SUM2(NI(6))
+      SUM3(ITHIN)=SUM2(NI(3))+SUM2(NI(4))
+      SUM3(ITHICK)=SUM2(NI(1))+SUM2(NI(2))
+
+
+      ELSE IF(NPD.EQ.9) THEN
+       DO I=2,NCHAN
+        COUT(I)=FLOAT(ICTA(NI(7),I)+ICTA(NI(8),I)+
+     $ICTA(NI(9),I))/(T(I)-T(I-1))
+        ERROUT(I)=SQRT(FLOAT(ICTA(NI(7),I)+ICTA(NI(8),I)
+     $+ICTA(NI(9),I)))/(T(I)-T(I-1))
+        CTHIN(I)=FLOAT(ICTA(NI(4),I)+ICTA(NI(5),I)
+     $+ICTA(NI(6),I))/(T(I)-T(I-1))
+        ERRTHIN(I)=SQRT(FLOAT(ICTA(NI(4),I)+ICTA(NI(5),I)
+     $+ICTA(NI(6),I)))/(T(I)-T(I-1))
+        CTHICK(I)=FLOAT(ICTA(NI(1),I)+ICTA(NI(2),I)
+     $+ICTA(NI(3),I))/(T(I)-T(I-1))
+        ERRTHICK(I)=SQRT(FLOAT(ICTA(NI(1),I)+ICTA(NI(2),I)
+     $+ICTA(NI(3),I)))/(T(I)-T(I-1))
+       END DO
+      SUM3(IOUT)=SUM2(NI(7))+SUM2(NI(8))+SUM2(NI(9))
+      SUM3(ITHIN)=SUM2(NI(4))+SUM2(NI(5))+SUM2(NI(6))
+      SUM3(ITHICK)=SUM2(NI(1))+SUM2(NI(2))+SUM2(NI(3))
+      END IF
+
+       
+* Calculate total foil out, thin, thick monitor cts         
+      IF(NPD.EQ.2) THEN
+       DO I=2,NCHAN
+        MOUT(I)=FLOAT(MICTA(NI(2),I))/(T(I)-T(I-1))
+        MTHIN(I)=FLOAT(MICTA(NI(1),I))/(T(I)-T(I-1))
+       END DO
+      ELSE IF(NPD.EQ.3) THEN
+       DO I=2,NCHAN
+        MOUT(I)=FLOAT(MICTA(NI(3),I))/(T(I)-T(I-1))
+        MTHIN(I)=FLOAT(MICTA(NI(2),I))/(T(I)-T(I-1))
+        MTHICK(I)=FLOAT(MICTA(NI(1),I))/(T(I)-T(I-1))
+       END DO
+      ELSE IF(NPD.EQ.6) THEN
+       DO I=2,NCHAN
+        MOUT(I)=FLOAT(MICTA(NI(5),I)+MICTA(NI(6),I)
+     $)/(T(I)-T(I-1))
+        MTHIN(I)=FLOAT(MICTA(NI(3),I)+MICTA(NI(4),I)
+     $)/(T(I)-T(I-1))
+        MTHICK(I)=FLOAT(MICTA(NI(1),I)+MICTA(NI(2),I)
+     $)/(T(I)-T(I-1))
+       END DO
+      ELSE IF(NPD.EQ.9) THEN
+       DO I=2,NCHAN
+        MOUT(I)=FLOAT(MICTA(NI(7),I)+MICTA(NI(8),I)
+     $   +MICTA(NI(9),I))/(T(I)-T(I-1))
+        MTHIN(I)=FLOAT(MICTA(NI(4),I)+MICTA(NI(5),I)
+     $   +MICTA(NI(6),I))/(T(I)-T(I-1))
+        MTHICK(I)=FLOAT(MICTA(NI(1),I)+MICTA(NI(2),I)
+     $   +MICTA(NI(3),I))/(T(I)-T(I-1))
+       END DO
+      END IF     
+
+
+* Calculate number of frames in each period.
+      SUM3T=0.0
+      DO I=1,3
+       SUM3T=SUM3T+SUM3(I)
+      END DO
+      DO I=1,3
+       if(sum3t.ne.0.0)NFR(I)=NGOOD_FRAMES*SUM3(I)/SUM3T
+       IF(NFR(I).EQ.0.0) THEN
+         write(6,*) ' nframes=0 in period',i
+         nfr(i)=1
+       end if
+      END DO
+      
+
+* Start of routines for dead-time correction
+* CONVERT TO COUNTS/FRAME
+*      DO I=2,NCHAN
+*       COUT(I)=COUT(I)/NFR(IOUT)
+*       ERROUT(I)=ERROUT(I)/NFR(IOUT)
+*       CTHIN(I)=CTHIN(I)/NFR(ITHIN)
+*       ERRTHIN(I)=ERRTHIN(I)/NFR(ITHIN)
+*       IF(NPD.NE.2) THEN
+*        CTHICK(I)=CTHICK(I)/NFR(ITHICK)
+*        ERRTHICK(I)=ERRTHICK(I)/NFR(ITHICK)
+*       END IF
+*      END DO
+*
+* Correct for dead times in detector
+*      TAU=1.0
+*      DO I=2,NCHAN
+*       COUT(I)=COUT(I)/(1.0-TAU*COUT(I))
+*       ERROUT(I)=ERROUT(I)/(1.0-TAU*ERROUT(I))
+*       CTHIN(I)=CTHIN(I)/(1.0-TAU*CTHIN(I))
+*       ERRTHIN(I)=ERRTHIN(I)/(1.0-TAU*ERRTHIN(I))
+*       IF(NPD.NE.2) THEN
+*        ERRTHICK(I)=ERRTHICK(I)/(1.0-TAU*ERRTHICK(I))
+*       END IF
+*      END DO
+*
+* CONVERT BACK TO TOTAL COUNTS.
+*     DO I=2,NCHAN
+*       COUT(I)=COUT(I)*NFR(IOUT)
+*       ERROUT(I)=ERROUT(I)*NFR(IOUT)
+*       CTHIN(I)=CTHIN(I)*NFR(ITHIN)
+*       ERRTHIN(I)=ERRTHIN(I)*NFR(ITHIN)
+*       IF(NPD.NE.2) THEN
+*        CTHICK(I)=CTHICK(I)*NFR(ITHICK)
+*        ERRTHICK(I)=ERRTHICK(I)*NFR(ITHICK)
+*       END IF
+*      END DO
+
+
+
+* Calculate monitor cts between 600 and 700 usec.       
+      RMOUT=0.0
+      RMTHIN=0.0
+      RMTHICK=0.0
+      DO I=2,NCHAN
+       IF(T(I).GE.600.0.AND.T(I).LT.700.0) THEN
+        RMOUT=RMOUT+MOUT(I)
+        RMTHIN=RMTHIN+MTHIN(I)
+        RMTHICK=RMTHICK+MTHICK(I)
+       END IF
+      END DO
+      if(rmthick.eq.0.0)rmthick=1e-6
+* Normalise spectra to monitor counter.
+      const=1000.0 ! Constant to give suitable scale in tof spectra.
+      DO I=2,NCHAN
+       COUT(I)=COUT(I)*const/RMOUT
+       CTHIN(I)=CTHIN(I)*CONST/RMTHIN
+       CTHICK(I)=CTHICK(I)*CONST/RMTHICK
+       ERROUT(I)=ERROUT(I)*CONST/RMOUT
+       ERRTHIN(I)=ERRTHIN(I)*CONST/RMTHIN
+       ERRTHICK(I)=ERRTHICK(I)*CONST/RMTHICK
+      END DO
+
+
+* Calculate cts between 500 and 600 usec.       
+      SUMOUT=0.0
+      SUMTHIN=0.0
+      SUMTHICK=0.0
+      DO I=2,NCHAN
+       IF(T(I).GE.410.0.AND.T(I).LT.430.0) THEN
+        SUMOUT=SUMOUT+COUT(I)
+        SUMTHIN=SUMTHIN+CTHIN(I)
+        SUMTHICK=SUMTHICK+CTHICK(I)
+       END IF
+      END DO
+
+
+      if(sumthin.eq.0.0) then
+        write(6,*) ' no cts in thin foil spectra'
+        sumthin=1.0
+      end if
+      if(sumout.eq.0.0) then
+        write(6,*) ' no cts in foil out spectra'
+        sumout=1.0
+      end if
+      if(sumthick.eq.0.0) then
+        write(6,*) ' no cts in thick foil spectra'
+        sumthick=1.0
+      end if
+ 
+* Normalise spectra to same area as foil out between 430 and 460 usec.
+      DO I=2,NCHAN
+       CTHIN(I)=CTHIN(I)*SUMOUT/SUMTHIN
+       ERRTHIN(I)=ERRTHIN(I)*SUMOUT/SUMTHIN
+       CTHICK(I)=CTHICK(I)*SUMOUT/SUMTHICK
+       ERRTHICK(I)=ERRTHICK(I)*SUMOUT/SUMTHICK
+      END DO
+
+      IT=0.0
+      IF(IOPT.EQ.1)THEN ! THIN DIFFERENCE
+       DT=T(3)-T(2)
+       DO I=2,NCHAN
+        IF(T(I).LT.600.0) THEN
+         IT=IT+1
+         XOUT(IT)=T(I)
+         YOUT(IT)=COUT(I)-CTHIN(I)
+         EOUT(IT)=SQRT(ERROUT(I)**2+ERRTHIN(I)**2)
+        END IF
+       END DO
+      ELSE IF(IOPT.EQ.2) THEN ! DOUBLE DIFFERENCE
+       DO I=2,NCHAN
+        IF(T(I).LT.600.0) THEN
+         IT=IT+1
+         XOUT(IT)=T(I)
+         YOUT(IT)=COUT(I)*(1-BETA)-CTHIN(I)+BETA*CTHICK(I)
+         EOUT(I)=SQRT((1-BETA)**2*ERROUT(I)**2+ERRTHIN(I)**2
+     $           +BETA**2*ERRTHICK(I)**2)
+        END IF
+       END DO
+      ELSE IF(IOPT.EQ.3) THEN ! THICK DIFFERENCE
+       DO I=2,NCHAN
+        IF(T(I).LT.600.0) THEN
+         IT=IT+1
+         XOUT(IT)=T(I)
+         YOUT(IT)=COUT(I)-CTHICK(I)
+         EOUT(IT)=SQRT(ERROUT(I)**2+ERRTHICK(I)**2)
+       END IF
+       END DO
+      END IF    
+
+*       DO I=2,NCHAN,50
+*        IF(T(I).LT.600.0) THEN
+*        write(6,*) t(i),cout(i),cthin(i),cthick(i)
+*        END IF
+*       END DO
+
+
+
+      LPTOUT=IT-1
+      write(4,*) ispect,lptout      
+      do i=1,lptout
+      write(4,*) xout(i),yout(i),eout(i)
+      end do
+
+      do i=1,lptout,20
+*      write(6,*) xout(i),yout(i),eout(i)
+      end do
+
+      end do ! end of do loop over detectors
+      write(4,*) irun1,irun2
+      close(4) 
+      write(6,*) ' Data is in TEMPB.DAT'
+      END
+
+c Sort in order of increasing x values.
+      SUBROUTINE ORDER(X,Y,N)
+      REAL X(N)
+      INTEGER Y(N)
+
+      DO IS=1,N
+       IMIN=IS
+       XMIN=X(IS)
+       DO I=IS,N 
+        IF(X(I).LE.XMIN) THEN
+        IMIN=I
+        XMIN=X(I)
+        END IF
+       END DO
+* Put smallest x value and corresponding y value in X(IS) and Y(IS).
+       XTEMP=X(IMIN)
+       YTEMP=Y(IMIN)
+       X(IMIN)=X(IS)
+       Y(IMIN)=Y(IS)
+       X(IS)=XTEMP
+       Y(IS)=YTEMP
+      END DO
+
+      END
+
+      SUBROUTINE WRITESP(NI,ISPECT,NDET,NPD)
+      INTEGER NI(9)
+       If(npd.eq.9) then
+       write(6,*) ' Foil out Spectra are:'
+       do i=7,9
+         IV=ISPECT+(ni(i)-1)*(NDET+1)
+         write(6,*) iv
+       end do
+
+       write(6,*) ' Thin Foil Spectra are:'
+       do i=4,6
+         IV=ISPECT+(ni(i)-1)*(NDET+1)
+         write(6,*) iv
+       end do
+
+       write(6,*) ' Thick foil Spectra are:'
+       do i=1,3
+         IV=ISPECT+(ni(i)-1)*(NDET+1)
+         write(6,*) iv
+       end do
+      end if
+
+       If(npd.eq.3) then
+       write(6,*) ' Foil out Spectrum is:'
+         IV=ISPECT+(ni(3)-1)*(NDET+1)
+         write(6,*) iv
+       write(6,*) ' Thin foil Spectrum is:'
+         IV=ISPECT+(ni(2)-1)*(NDET+1)
+         write(6,*) iv
+       write(6,*) ' Thick foil Spectrum is:'
+         IV=ISPECT+(ni(1)-1)*(NDET+1)
+         write(6,*) iv
+       end if
+
+       If(npd.eq.2) then
+       write(6,*) ' Foil out Spectrum is:'
+         IV=ISPECT+(ni(2)-1)*(NDET+1)
+         write(6,*) iv
+       write(6,*) ' Thin foil Spectrum is:'
+         IV=ISPECT+(ni(1)-1)*(NDET+1)
+         write(6,*) iv
+       end if
+       RETURN
+       END
+
+*  FUNCTION TO READ NUMBER OF MONITOR COUNTER
+      function mon(runid)
+      integer nmon*4,nrun*4
+      CHARACTER runid*80
+
+      CALL GETPARI(runid,'MDET',NMON,100,LOUT,ERRCODE)
+      MON=NMON
+      END

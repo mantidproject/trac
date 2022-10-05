@@ -1,0 +1,990 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9319 (Avoid creating matrix for color fill plots of workspaces)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9318.html" title="Ticket #9318" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9319?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9319?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9319?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9320.html" title="Ticket #9320" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9319, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9318.html" title="Ticket #9318">Previous Ticket</a></span></li><li><span><a class="next" href="9320.html" title="Ticket #9320">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/9319.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9319.html">Ticket #9319</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T15%3A37%3A02%2B01%3A00&amp;precision=second" title="2014-04-10T15:37:02+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A13%3A17%2B01%3A00&amp;precision=second" title="2015-06-04T03:13:17+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Avoid creating matrix for color fill plots of workspaces</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=GUI">GUI</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="8923.html" title="Plotting improvements">#8923</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Jay Rainey
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-04-15 09:51:00.643267+00:00">
+        (last modified by Martyn Gigg)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/9319?action=diff&amp;version=2">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Creating a colour fill plot from a workspace currently requires a MantidMatrix to be created first.
+</p>
+<p>
+We have already successfully avoided this for the spectrum plots and the SliceViewer has a custom QwtRasterData source that understands workspace sources. We should use the same source or share as much code as possible with the <tt>QwtRasterDataMD</tt>.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9319.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T15%3A41%3A07%2B01%3A00&amp;precision=second" title="2014-04-10T15:41:07+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9319.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-15T10%3A51%3A00%2B01%3A00&amp;precision=second" title="2014-04-15T10:51:00+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/9319?action=diff&amp;version=2">diff</a>)
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>Avoid creating tables/matrices for color fill &amp; bin plots</em> to <em>Avoid creating matrix for color fill plots of workspaces</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9319.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A06%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:06+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move QwtRasterDataMD to QtAPI so it can be reused elsewhere.
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d260dbb029b2e628d36898ed888120940262b041" title="d260dbb029b2e628d36898ed888120940262b041">d260dbb029b2e628d36898ed888120940262b041</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9319.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A06%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:06+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add SignalRange class for determining IMDWorkspace signal ranges.
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e3c38e03ffc8634c3688c05049a160fb41853c1f" title="e3c38e03ffc8634c3688c05049a160fb41853c1f">e3c38e03ffc8634c3688c05049a160fb41853c1f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9319.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A07%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:07+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Allow SignalRange to work with MDImplicitFunction
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9f4e8bfc6b2628d01b9fa5ca5fa56d846b105c86" title="9f4e8bfc6b2628d01b9fa5ca5fa56d846b105c86">9f4e8bfc6b2628d01b9fa5ca5fa56d846b105c86</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9319.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A07%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:07+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use SignalRange class in SliceViewer.
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e2bfea4664bcfa52cc22225944fb27d9e6c57d82" title="e2bfea4664bcfa52cc22225944fb27d9e6c57d82">e2bfea4664bcfa52cc22225944fb27d9e6c57d82</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9319.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A07%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:07+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+First cut at re-using QwtRasterData for standard colour-fill plots
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/140790ba8fc67925df1497516720ef5e8870487c" title="140790ba8fc67925df1497516720ef5e8870487c">140790ba8fc67925df1497516720ef5e8870487c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9319.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A07%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:07+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add methods to axis classes to find the index of a given value.
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7f8d0a0b1dd8f8e6efbc406565e2229bf55d5d19" title="7f8d0a0b1dd8f8e6efbc406565e2229bf55d5d19">7f8d0a0b1dd8f8e6efbc406565e2229bf55d5d19</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="9319.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A07%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:07+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use Axis::indexOfValue methods in MatrixWorkspace.
+</p>
+<p>
+Removes the requirement for ugly casts. It also fixes a bug
+with looking up the index from a spectrum axis where it was assuming
+that the spectrum number mapped directly to the index.
+This fixes the SliceViewer so that it now displays ragged workspaces
+correctly.
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3e57ec1a043a920877f8069503e72813719337c3" title="3e57ec1a043a920877f8069503e72813719337c3">3e57ec1a043a920877f8069503e72813719337c3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="9319.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A08%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:08+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a specialised QwtRasterData for views with only 2 dimensions
+</p>
+<p>
+It also doesn't use any overlays.
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf192e7b77decf69fa80fb9a363fb4be8542a3a6" title="cf192e7b77decf69fa80fb9a363fb4be8542a3a6">cf192e7b77decf69fa80fb9a363fb4be8542a3a6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="9319.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A08%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:08+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Observe ADS delete &amp; clear notifications in Spectrogram objects.
+</p>
+<p>
+This only applies to those created directly from a workspace.
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b407ebb354f5a3c026b26a1a005f7438898e09dc" title="b407ebb354f5a3c026b26a1a005f7438898e09dc">b407ebb354f5a3c026b26a1a005f7438898e09dc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="9319.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A08%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:08+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Observe replace notifications for the spectrogram objects.
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f098ede08daa57bd570ed5132b9367269a2ae013" title="f098ede08daa57bd570ed5132b9367269a2ae013">f098ede08daa57bd570ed5132b9367269a2ae013</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="9319.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A08%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:08+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+A couple of performance tweaks for graphing in general.
+</p>
+<p>
+Graph::updateScale was calling replot then QwtPlotZoomer::setZoomBase,
+which also calls replot so we turn of the replot in setZoomBase.
+The ScaleEngine was creating the helper classes on the heap for no good
+reason so removing that removes many calls to new/delete.
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ff21f099a2012f2ea20f970d034ce9a3a3ee7123" title="ff21f099a2012f2ea20f970d034ce9a3a3ee7123">ff21f099a2012f2ea20f970d034ce9a3a3ee7123</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="9319.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A08%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:08+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Be smarter about finding the index from a value on a SpectraAxis
+</p>
+<p>
+We know that the values tend to be quite close so start searching close
+to the given value and then loop over everything if necessary.
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/183c75835e1c3fdc64db3fa65bde808f452bd1cc" title="183c75835e1c3fdc64db3fa65bde808f452bd1cc">183c75835e1c3fdc64db3fa65bde808f452bd1cc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="9319.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A08%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:08+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use cached spectrum map lookup for MatrixWorkspace raster
+</p>
+<p>
+This restores reasonable performance during initial drawing and resizing.
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c02166eed1c8ef2ae73c4ce7fa8169bedc316b5a" title="c02166eed1c8ef2ae73c4ce7fa8169bedc316b5a">c02166eed1c8ef2ae73c4ce7fa8169bedc316b5a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="9319.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A09%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:09+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use workspace directly when creating colorfill plot from matrix.
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81cd0926d4c3bb0ff8b7cd4fd1f7db232654b530" title="81cd0926d4c3bb0ff8b7cd4fd1f7db232654b530">81cd0926d4c3bb0ff8b7cd4fd1f7db232654b530</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="9319.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A09%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:09+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement a Python plot2D command for colourfill-type plots
+</p>
+<p>
+This avoids having to create a matrix first.
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b96f7d8374043f9b5e66d2f16d6af8ece7fe0d64" title="b96f7d8374043f9b5e66d2f16d6af8ece7fe0d64">b96f7d8374043f9b5e66d2f16d6af8ece7fe0d64</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="9319.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A09%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:09+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use the correct plot2D default in python.
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3f2ecc866d793e95c1c9a0340b719ded8216bf34" title="3f2ecc866d793e95c1c9a0340b719ded8216bf34">3f2ecc866d793e95c1c9a0340b719ded8216bf34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="9319.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A09%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:09+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use PlotAxis classes for formatting new spectrogram
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/73f922a032391e3588977f9549a8259d16eecafa" title="73f922a032391e3588977f9549a8259d16eecafa">73f922a032391e3588977f9549a8259d16eecafa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="9319.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A46%3A10%2B01%3A00&amp;precision=second" title="2014-04-23T14:46:10+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Update mock MDIterator due to recent additions
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/01572c5f89f81a26ffe35e8f5a6ff02d39b3c514" title="01572c5f89f81a26ffe35e8f5a6ff02d39b3c514">01572c5f89f81a26ffe35e8f5a6ff02d39b3c514</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="9319.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A47%3A13%2B01%3A00&amp;precision=second" title="2014-04-23T14:47:13+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/9319_no_table_colorfill_plots' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/API/test/SignalRangeTest.h
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3064c843a9dcd76ab6e8cdc1076245d9076caaa9" title="3064c843a9dcd76ab6e8cdc1076245d9076caaa9">3064c843a9dcd76ab6e8cdc1076245d9076caaa9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9319.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T15%3A02%3A06%2B01%3A00&amp;precision=second" title="2014-04-23T15:02:06+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Fix DLL export declarations.
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/28474abd227c0eb8bcf637bb4d9282652ee037d8" title="28474abd227c0eb8bcf637bb4d9282652ee037d8">28474abd227c0eb8bcf637bb4d9282652ee037d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9319.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T16%3A17%3A55%2B01%3A00&amp;precision=second" title="2014-04-23T16:17:55+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix SignalRangeTest on MSVC
+</p>
+<p>
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3d159da3308ed433810f53b7483d7b98a1fdee10" title="3d159da3308ed433810f53b7483d7b98a1fdee10">3d159da3308ed433810f53b7483d7b98a1fdee10</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9319.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T16%3A46%3A57%2B01%3A00&amp;precision=second" title="2014-04-23T16:46:57+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix MantidPlot2DTest on windows.
+</p>
+<p>
+Avoids confirmation dialog.
+Refs <a class="closed ticket" href="9319.html" title="enhancement: Avoid creating matrix for color fill plots of workspaces (closed: fixed)">#9319</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bf4bd55ce836580c72f3be00296ace628d08fb74" title="bf4bd55ce836580c72f3be00296ace628d08fb74">bf4bd55ce836580c72f3be00296ace628d08fb74</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9319.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-29T08%3A08%3A41%2B01%3A00&amp;precision=second" title="2014-04-29T08:08:41+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Branch: feature/9319_no_table_colorfill_plots
+</p>
+<p>
+Tester: This will require a 2D workspace to test. A good example is one of the direct geometry reduced files in the system tests reference directory, e.g. MARIReduction.nxs. Load the file and check that creating a colorfill plot works and does not create an intermediate matrix anymore. Check that
+</p>
+<ul><li>deleting the workspace closes the plot
+</li><li>replacing the workspace updates the contents of the plot
+</li><li>type <tt>mtd.clear()</tt> in the ipython console and the plot should close
+</li></ul><p>
+A new command, <tt>plot2D</tt> has been introduced for plotting from python. It is described here: <a href="http://www.mantidproject.org/MantidPlot:_Image_and_Contour_Line_Plots_(Spectrograms">http://www.mantidproject.org/MantidPlot:_Image_and_Contour_Line_Plots_(Spectrograms</a>), in the section <strong>Creating Colour Map or Contour Plots from Workspaces</strong>. Try out the commands and make sure they work as intended.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="9319.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-29T13%3A40%3A43%2B01%3A00&amp;precision=second" title="2014-04-29T13:40:43+01:00 in Timeline">6 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Jay Rainey</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="9319.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-29T15%3A37%3A09%2B01%3A00&amp;precision=second" title="2014-04-29T15:37:09+01:00 in Timeline">6 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I opened <tt>Mantid 3.2</tt> to verify the issues prior to testing. I built the branch locally to verify the changes made address the issues noted in <a href="9319.html#comment:25" title="Comment 25 for Ticket #9319">comment:25</a> &amp; the <a href="9319.html#comment:description" title="Comment description for Ticket #9319">description</a>, which they do.
+</p>
+<p>
+I ran the new commands added to the <a href="http://www.mantidproject.org/MantidPlot:_Image_and_Contour_Line_Plots_%28Spectrograms%29">wiki</a> and the <tt>Customisation</tt> section to verify they work as intended. They do.
+</p>
+<p>
+No issues with build servers. Code changes and tests written are good.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="9319.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-29T15%3A38%3A01%2B01%3A00&amp;precision=second" title="2014-04-29T15:38:01+01:00 in Timeline">6 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9319_no_table_colorfill_plots'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/f7f3dacf82fa5940ba1cd81cc8c4f4f694a0b430"><span class="icon">​</span>f7f3dacf82fa5940ba1cd81cc8c4f4f694a0b430</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="9319.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A13%3A17%2B01%3A00&amp;precision=second" title="2015-06-04T03:13:17+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10162"><span class="icon">​</span>10162</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9319?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9319?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9319?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

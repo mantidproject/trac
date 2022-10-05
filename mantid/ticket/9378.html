@@ -1,0 +1,781 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9378 (Fast Log Filtering for inelastic case)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9377.html" title="Ticket #9377" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9378?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9378?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9378?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9379.html" title="Ticket #9379" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9378, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9377.html" title="Ticket #9377">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="9379.html" title="Ticket #9379">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9378.html">Ticket #9378</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-25T15%3A28%3A45%2B01%3A00&amp;precision=second" title="2014-04-25T15:28:45+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A15%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T03:15:43+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Fast Log Filtering for inelastic case</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Andrei+Savici">Andrei Savici</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=blocker">blocker</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              owen.arnold@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Vickie Lynch
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-04-25 14:30:51.128066+00:00">
+        (last modified by Andrei Savici)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/9378?action=diff&amp;version=1">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+In general case T_sample-T_pulse = L_1/v_i, where L_1 is the sample to moderator distance, and v_i is the incident velocity. L_2 is the sample to detector distance. TOF is the time of flight from moderator to detector.
+</p>
+<p>
+For elastic case, the velocity of the neutron is constant, v_i=v=(L_1+L_2)/TOF, so 
+</p>
+<pre class="wiki">T_sample=T_pulse+(L_1*TOF)/(L_1+L_2)
+</pre><p>
+For direct geometry inelastic, the incident energy is fixed ( stored as Ei in the workspace )
+v_i=sqrt(Ei)*sqrt(2.*PhysicalConstants::meV/PhysicalConstants::NeutronMass)
+</p>
+<pre class="wiki">T_sample=T_pulse+L_1/sqrt(Ei)/sqrt(2.*PhysicalConstants::meV/PhysicalConstants::NeutronMass)
+</pre><p>
+For indirect, TOF=L_1/v_i+L_2/v_f, where v_f is the final velocity. For indirect geometry spectrometers, the final energy is constant (but different from one detector to the next), and stored on the parameter map for each detector as Efixed. v_f=sqrt(Efixed)*sqrt(2.*PhysicalConstants::meV/PhysicalConstants::NeutronMass)
+</p>
+<pre class="wiki">T_sample=T_pulse+TOF-L_2/sqrt(Efixed)/sqrt(2.*PhysicalConstants::meV/PhysicalConstants::NeutronMass)
+</pre>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9378.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-25T15%3A30%3A51%2B01%3A00&amp;precision=second" title="2014-04-25T15:30:51+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/9378?action=diff&amp;version=1">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9378.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-25T15%3A38%3A27%2B01%3A00&amp;precision=second" title="2014-04-25T15:38:27+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Priority</strong>
+        changed from <em>major</em> to <em>blocker</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I'm raising the priority of this because the filtering calculation is incorrect at the moment. It should be corrected prior to the release.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9378.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-28T21%3A14%3A32%2B01%3A00&amp;precision=second" title="2014-05-28T21:14:32+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.  Changed input properties.
+</p>
+<ol><li>Added input properties to support inelastic TOF correction;
+</li><li>Added contents in wiki for new feature;
+</li><li>Modified unit test because of change in properties.
+</li></ol><p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3f2c8ac7b750bd07bf9ee973671529eb68389f30" title="3f2c8ac7b750bd07bf9ee973671529eb68389f30">3f2c8ac7b750bd07bf9ee973671529eb68389f30</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9378.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T16%3A15%3A09%2B01%3A00&amp;precision=second" title="2014-05-30T16:15:09+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.  Modified event time correction for splitting.
+</p>
+<p>
+The correction formula for splitting is generalized to
+T_pulse + toffactor * TOF + tofshift
+</p>
+<p>
+The printdetail option is removed because the code is well tested.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a06ec5bae75359bcd4ff126ef624000f6b72b586" title="a06ec5bae75359bcd4ff126ef624000f6b72b586">a06ec5bae75359bcd4ff126ef624000f6b72b586</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9378.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T16%3A15%3A10%2B01%3A00&amp;precision=second" title="2014-05-30T16:15:10+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added event time correction for inelastic instrument. Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/da4f9ee63de496228397a6c6a23093418d4a2c6a" title="da4f9ee63de496228397a6c6a23093418d4a2c6a">da4f9ee63de496228397a6c6a23093418d4a2c6a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9378.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T16%3A15%3A10%2B01%3A00&amp;precision=second" title="2014-05-30T16:15:10+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Made error message more detailed. Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a61c96885fe64fe6dfbbd27d3d51c0d8bc7ce0b5" title="a61c96885fe64fe6dfbbd27d3d51c0d8bc7ce0b5">a61c96885fe64fe6dfbbd27d3d51c0d8bc7ce0b5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9378.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-30T21%3A13%3A02%2B01%3A00&amp;precision=second" title="2014-05-30T21:13:02+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added 2 unit tests to EventListTest for new methods. Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/597f4feffffd0022a6121b371c365be8acdfec3d" title="597f4feffffd0022a6121b371c365be8acdfec3d">597f4feffffd0022a6121b371c365be8acdfec3d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9378.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-06T16%3A36%3A10%2B01%3A00&amp;precision=second" title="2014-06-06T16:36:10+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added more unit tests. Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5b3360e3ffcfa04add18d9c72e3406a52188916b" title="5b3360e3ffcfa04add18d9c72e3406a52188916b">5b3360e3ffcfa04add18d9c72e3406a52188916b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9378.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-16T18%3A21%3A45%2B01%3A00&amp;precision=second" title="2014-06-16T18:21:45+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.  Added property to output splitted workspace names.
+</p>
+<p>
+And make unit tests to use this to clean all the output workspaces.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/db131032f9593ec425c3cc1859988509c181dfdb" title="db131032f9593ec425c3cc1859988509c181dfdb">db131032f9593ec425c3cc1859988509c181dfdb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9378.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-16T21%3A48%3A03%2B01%3A00&amp;precision=second" title="2014-06-16T21:48:03+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved conflicts. Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3dc499e3fa92442d110e93b6e86e1cf890858d49" title="3dc499e3fa92442d110e93b6e86e1cf890858d49">3dc499e3fa92442d110e93b6e86e1cf890858d49</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9378.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-16T22%3A03%3A16%2B01%3A00&amp;precision=second" title="2014-06-16T22:03:16+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed doxygen and cppcheck errors. Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1640422ed7a095e9d68802b06b645c33351954d3" title="1640422ed7a095e9d68802b06b645c33351954d3">1640422ed7a095e9d68802b06b645c33351954d3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9378.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-16T22%3A43%3A22%2B01%3A00&amp;precision=second" title="2014-06-16T22:43:22+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.  Avoided a unit test error on Mac only.
+</p>
+<p>
+It might come from the different pseudo random number sequence from
+different C++ compiler.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/df50fbb2a4acbbc811a68d8589b084185b3e9577" title="df50fbb2a4acbbc811a68d8589b084185b3e9577">df50fbb2a4acbbc811a68d8589b084185b3e9577</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9378.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-17T10%3A02%3A53%2B01%3A00&amp;precision=second" title="2014-06-17T10:02:53+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Slightly better workaround for unknown Python workspace types.
+</p>
+<p>
+It's still a sticking-plaster fix as it's a little late in the cycle to
+implement the plugin exposure to Python.
+Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5c949d7fc9893cfc371424ac64a3642f47ad4ff7" title="5c949d7fc9893cfc371424ac64a3642f47ad4ff7">5c949d7fc9893cfc371424ac64a3642f47ad4ff7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9378.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-17T11%3A06%3A01%2B01%3A00&amp;precision=second" title="2014-06-17T11:06:01+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>. Attempted to fix a valgrid error.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9781bbed0775abcfb770c8ff6313062a100b2299" title="9781bbed0775abcfb770c8ff6313062a100b2299">9781bbed0775abcfb770c8ff6313062a100b2299</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9378.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-18T02%3A01%3A28%2B01%3A00&amp;precision=second" title="2014-06-18T02:01:28+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <h2 id="Fortester">For tester</h2>
+<p>
+Find some data from direct and indirect inelastic scattering instrument.  Use GenerateEventsFilter to create splitter workspace in format of MatrixWorkspace (i.e., using option 'FastLog').  Then run FilterEvents by choosing appropriate TOFCorrection option. 
+</p>
+<p>
+Check the unit tests of FilterEvents and EventList, too. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9378.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T13%3A22%3A07%2B01%3A00&amp;precision=second" title="2014-06-23T13:22:07+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Vickie Lynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9378.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T13%3A27%3A35%2B01%3A00&amp;precision=second" title="2014-06-23T13:27:35+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>verify</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Vickie Lynch</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+git merge conflicts
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9378.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T14%3A32%3A39%2B01%3A00&amp;precision=second" title="2014-06-23T14:32:39+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Vickie Lynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9378.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T15%3A22%3A36%2B01%3A00&amp;precision=second" title="2014-06-23T15:22:36+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a> fix merge conflicts
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c959d9ac531ddaebec90a3f12a167dfcb16f3cfc" title="c959d9ac531ddaebec90a3f12a167dfcb16f3cfc">c959d9ac531ddaebec90a3f12a167dfcb16f3cfc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9378.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T15%3A26%3A52%2B01%3A00&amp;precision=second" title="2014-06-23T15:26:52+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+When I sum the split workspaces, they look the same as the original but a few events are lost.  Please make new ticket to see if these events are on the boundaries.  Also the log workspace in GenerateEventsFilter should have the word Optional removed from description.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9378.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-03T17%3A05%3A20%2B01%3A00&amp;precision=second" title="2014-07-03T17:05:20+01:00 in Timeline">6 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolved conflicts. Refs <a class="closed ticket" href="9378.html" title="enhancement: Fast Log Filtering for inelastic case (closed: fixed)">#9378</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3dc499e3fa92442d110e93b6e86e1cf890858d49" title="3dc499e3fa92442d110e93b6e86e1cf890858d49">3dc499e3fa92442d110e93b6e86e1cf890858d49</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9378.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A15%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T03:15:43+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10221"><span class="icon">​</span>10221</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9378?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9378?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9378?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

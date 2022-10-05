@@ -1,0 +1,1029 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8910 (Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8909.html" title="Ticket #8909" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8910?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8910?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8910?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8911.html" title="Ticket #8911" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8910, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8909.html" title="Ticket #8909">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="8911.html" title="Ticket #8911">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8910.html">Ticket #8910</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-07T09%3A53%3A48Z&amp;precision=second" title="2014-02-07T09:53:48Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A56%3A15%2B01%3A00&amp;precision=second" title="2015-06-04T02:56:15+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Peter+Parker">Peter Parker</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Peter+Parker">Peter Parker</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Muon">Muon</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Roman Tolchenov
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-02-20 10:06:14.252063+00:00">
+        (last modified by Peter Parker)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=diff&amp;version=9">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Adrian has supplied me with a Fortran routine called MaxEnt that he currently runs from OpenGENIE.  He would like it to be wrapped using F2Py so that it may be called from within Mantid in the form of an algorithm.
+</p>
+<p>
+I want to get a working copy to Adrian very early on in this release cycle so that he has plenty of time to test and make comments before it makes it into version 3.2.
+</p>
+<p>
+I will handle the Fortran in a similar way to how it is used in Inelastic Indirect; i.e. keep a copy of the source in the 3rdpartysources repo and keep the compiled .pyd files in the repo.  We'll be using the Script Repository to prove this functionality, however, to keep F2Py out of the main repo.
+</p>
+<p>
+I will make sure that the resulting algorithm is only available on Windows -- the only currently supported F2Py platform on Mantid.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8910.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T10%3A59%3A49Z&amp;precision=second" title="2014-02-14T10:59:49Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets out of triage (new) to assigned at the introduction of the triage state
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8910.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T12%3A01%3A15Z&amp;precision=second" title="2014-02-14T12:01:15Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8910.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T12%3A09%3A47Z&amp;precision=second" title="2014-02-14T12:09:47Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Original code from Adrian.
+</p>
+<p>
+Adrian has confirmed that this code is not copyrighted.
+</p>
+<p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/0cf0e053b26f95588d1acfd23cb035d3a611644a"><span class="icon">​</span>0cf0e053b26f95588d1acfd23cb035d3a611644a</a> (<strong>3rd Party Sources Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T13%3A59%3A29%2B01%3A00&amp;precision=second" title="2014-04-10T13:59:29+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=0&amp;cnum_hist=3#comment:3">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=3&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8910.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T12%3A09%3A48Z&amp;precision=second" title="2014-02-14T12:09:48Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Comment out OpenGENIE print calls.
+</p>
+<p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/fd1c71ef5c8e4125a617430ca7fc34e951b1839f"><span class="icon">​</span>fd1c71ef5c8e4125a617430ca7fc34e951b1839f</a> (<strong>3rd Party Sources Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A00%3A17%2B01%3A00&amp;precision=second" title="2014-04-10T14:00:17+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=0&amp;cnum_hist=4#comment:4">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=4&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8910.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T12%3A09%3A48Z&amp;precision=second" title="2014-02-14T12:09:48Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Implement our own top-layer, callable from Mantid.
+</p>
+<p>
+Basically a replacement for <tt>opengenie_maxent</tt> in Read.for.
+</p>
+<p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/1b9d546f664b0a27e5326c0e5e8d581efe868c77"><span class="icon">​</span>1b9d546f664b0a27e5326c0e5e8d581efe868c77</a> (<strong>3rd Party Source Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A00%3A56%2B01%3A00&amp;precision=second" title="2014-04-10T14:00:56+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=0&amp;cnum_hist=5#comment:5">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=5&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8910.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T12%3A09%3A48Z&amp;precision=second" title="2014-02-14T12:09:48Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Files to enable compilation via F2Py.
+</p>
+<p>
+These files need to be added to
+Code/Third_Party/lib/win64/Python27/Lib/distutils/ to make sure F2Py knows
+about VS2012.
+</p>
+<p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/5f27d923b5b4e2792217328cad289d9e0080b09d"><span class="icon">​</span>5f27d923b5b4e2792217328cad289d9e0080b09d</a> (<strong>3rd Party Source Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A01%3A26%2B01%3A00&amp;precision=second" title="2014-04-10T14:01:26+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=0&amp;cnum_hist=6#comment:6">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=6&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8910.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T12%3A09%3A48Z&amp;precision=second" title="2014-02-14T12:09:48Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Batch file for compilation.
+</p>
+<p>
+IMPORTANT:  This script requires two things to run properly:
+</p>
+<p>
+1 - The dir of the python installation you want to use.  This will have to
+be the installation you've modified with the msvccompiler.py files.
+</p>
+<p>
+2 - It needs to be run using the "Intel Composer XE 2013 SP1 Intel(R) 64
+Visual Studio 2012" command prompt, which, as you might imagine, needs
+both Visual Studio 2012 and the Intel Fortran compiler.
+</p>
+<p>
+32-bit compilations should be possible, as long as 32-bit versions of
+Mantid's Python and the command prompt are used.
+</p>
+<p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/b68a400212c84a77ba74038dd9a5dc4758fc0d93"><span class="icon">​</span>b68a400212c84a77ba74038dd9a5dc4758fc0d93</a> (<strong>3rd Party Source Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A02%3A18%2B01%3A00&amp;precision=second" title="2014-04-10T14:02:18+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=0&amp;cnum_hist=7#comment:7">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=7&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8910.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-20T10%3A00%3A39Z&amp;precision=second" title="2014-02-20T10:00:39Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Add callback for sending messages to Mantid Results Log.
+</p>
+<ul><li>Replace all previous instances of the OpenGENIE command, <tt>module_print</tt>.
+</li><li>Remove all writes (to 69 and 99).
+</li><li>Expose callbacks to all the Fortran code, by using <tt>intent(callback)</tt> and removing the corresponding parameters from the entry-point subroutine.
+</li></ul><p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/3e8433c3e8b07767733ef3b52c985829d7d848a7"><span class="icon">​</span>3e8433c3e8b07767733ef3b52c985829d7d848a7</a> (<strong>3rd Party Source Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A03%3A11%2B01%3A00&amp;precision=second" title="2014-04-10T14:03:11+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=2&amp;cnum_hist=8#comment:8">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=8&amp;version=3">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8910.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-20T10%3A06%3A14Z&amp;precision=second" title="2014-02-20T10:06:14Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=diff&amp;version=9">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8910.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-09T12%3A27%3A38Z&amp;precision=second" title="2014-03-09T12:27:38Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Adrian has requested that the defaults used by the algorithm be displayed.  <a class="closed ticket" href="2480.html" title="enhancement: Display Default Values and Required Properties in Algorithm Dialogs (closed: fixed)">#2480</a> will handle this functionality, but generically for all algorithms.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8910.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T14%3A20%3A57%2B01%3A00&amp;precision=second" title="2014-04-07T14:20:57+01:00 in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Simplify and clean up use of fit/fix phase/dead within the
+Fortran.
+</p>
+<p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/7e0c8527ce38893c9fca5446733710526758d712"><span class="icon">​</span>7e0c8527ce38893c9fca5446733710526758d712</a> (<strong>3rd Party Source Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A03%3A54%2B01%3A00&amp;precision=second" title="2014-04-10T14:03:54+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=0&amp;cnum_hist=11#comment:11">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=11&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8910.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T09%3A54%3A13%2B01%3A00&amp;precision=second" title="2014-04-10T09:54:13+01:00 in Timeline">6 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Change Fortran to support EMU.
+</p>
+<p>
+Note that this only involved a straight swap of any occurances of
+"64" in the code with "96".  This was never meant to be a future-
+proof method of supporting more than the previously-supported 64
+detectors.
+</p>
+<p>
+This change will require testing from the scientists to verify that
+things are still working as expected.
+</p>
+<p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/cc8191c0ecfefa7241427191d1418ec02a0a25b5"><span class="icon">​</span>cc8191c0ecfefa7241427191d1418ec02a0a25b5</a> (<strong>3rd Party Source Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A04%3A49%2B01%3A00&amp;precision=second" title="2014-04-10T14:04:49+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=1&amp;cnum_hist=12#comment:12">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=12&amp;version=2">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8910.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T11%3A57%3A26%2B01%3A00&amp;precision=second" title="2014-04-10T11:57:26+01:00 in Timeline">6 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8910.html" title="enhancement: Wrap the MaxEnt Fortran routine in F2Py and expose to Mantid (closed: fixed)">#8910</a> - Return chi-squared data from the Fortran.
+</p>
+<p>
+So that it may be output as a TableWorkspace in Mantid.
+</p>
+<p>
+Changeset: <a class="ext-link" href="https://github.com/mantidproject/3rdpartysources/commit/43dd05bd2534afb764a519a369ccbecb788255d7"><span class="icon">​</span>43dd05bd2534afb764a519a369ccbecb788255d7</a> (<strong>3rd Party Source Repo</strong>)
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A05%3A16%2B01%3A00&amp;precision=second" title="2014-04-10T14:05:16+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=0&amp;cnum_hist=13#comment:13">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=13&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8910.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A11%3A16%2B01%3A00&amp;precision=second" title="2014-04-10T14:11:16+01:00 in Timeline">6 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Uploaded some items to the <strong>Script Repo</strong>:
+</p>
+<ul><li><a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/6dd7dc353065f1a9c557475777c04866dba72d84"><span class="icon">​</span>6dd7dc353065f1a9c557475777c04866dba72d84</a> - The actual <tt>MaxEnt</tt> Python algorithm.
+</li><li><a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/19d1ba5b0f760e9443edc2ebc2fccf43f2ed739f"><span class="icon">​</span>19d1ba5b0f760e9443edc2ebc2fccf43f2ed739f</a> - Default grouping file for MUSR.
+</li><li><a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/8dddb0dfc9f5c037d25025b1a0a638be9d00f2a7"><span class="icon">​</span>8dddb0dfc9f5c037d25025b1a0a638be9d00f2a7</a> - Conversion script.
+</li><li><a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/6095e338d1c1787040eb9339bef16b80b92623b6"><span class="icon">​</span>6095e338d1c1787040eb9339bef16b80b92623b6</a> - The compiled-from-Fortran Python module.
+</li><li><a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/e3074682dbfa6ed4a3f04cd162a1ffe71d493ae3"><span class="icon">​</span>e3074682dbfa6ed4a3f04cd162a1ffe71d493ae3</a> - File containing phase information.
+</li><li><a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/fffaaffccf35d312cab34584307e8534f590a5cd"><span class="icon">​</span>fffaaffccf35d312cab34584307e8534f590a5cd</a> - File containing deadtime information.
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8910.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-02T08%3A39%3A46%2B01%3A00&amp;precision=second" title="2014-06-02T08:39:46+01:00 in Timeline">6 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Script Repo</strong>:
+</p>
+<p>
+Changed float column types to double so that saving and loading of the tables would be possible - <a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/58268d0a8070a250e6f78856264598b80fe8d2d3"><span class="icon">​</span>58268d0a8070a250e6f78856264598b80fe8d2d3</a>.
+</p>
+<p>
+Also added some <a class="ext-link" href="https://github.com/mantidproject/scriptrepository/tree/master/muon/MaxEnt/Tests"><span class="icon">​</span>unit tests</a>, which unfortunately have to be run manually.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8910.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-02T09%3A14%3A37%2B01%3A00&amp;precision=second" title="2014-06-02T09:14:37+01:00 in Timeline">6 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Adrian would like to see an easier way to reset the .dat files to "default", and I have opened <a class="assigned ticket" href="9558.html" title="enhancement: Allow Easy Resetting of MaxEnt Dat Files (assigned)">#9558</a> for this.  Apart from that, MaxEnt appears to be working as intended (it was used during the recent Muon Training School), so I'm closing.
+</p>
+<h2 id="Testing">Testing</h2>
+<p>
+<strong>Windows only.  ISIS only.</strong>
+</p>
+<h3 id="Merging">Merging</h3>
+<p>
+All the changes were made to the master branch of the 3rd Party Source and Script Repos, so no git commands are necessary.
+</p>
+<h3 id="InstallationInstructions">Installation Instructions</h3>
+<p>
+We are providing MaxEnt using the Script Repository rather than as part of Mantid.  The steps to get it working are as follows:
+</p>
+<ul><li>Start an installed or built version Mantid.  Go to File → Script Repository and when asked, choose a location for your local copy of the repo.
+</li></ul><ul><li>Download the “muon” folder (which contains a “MaxEnt” subdirectory) using the green arrow.
+</li></ul><ul><li>Go to View → Preferences → Mantid → Directories and navigate to the recently-downloaded MaxEnt directory on your local machine.  MaxEnt will now be an available algorithm when Mantid starts up.
+</li></ul><h3 id="RunningtheUnitTests">Running the Unit Tests</h3>
+<p>
+You will have to run the unit tests manually, using the version of Python that comes with whatever version of Mantid for which you did the installation steps above.  The tests are in <tt>scriptrepository/muon/MaxEnt/Tests/TestMaxEnt.py</tt>.  Note that the tests assume you have access to MUSR run 48033 either via a managed directory or through archive searching.
+</p>
+<h3 id="GeneralTesting">General Testing</h3>
+<ul><li>Play with various inputs to the algorithm, and try to break it.  The Fortran will not cope very well with incorrect inputs, so the idea is that validation done by the Python will catch any problematic inputs and stop the algorithm gracefully before the Fortran has a chance to crash.
+</li></ul><blockquote>
+<p>
+The algorithm does need .dat and grouping files as inputs.  The default values and unit tests should help you out here, but if it is not clear then please ask.
+</p>
+</blockquote>
+<ul><li>Code review MaxEnt.py.  You are welcome to review the Fortran, but please be aware that this was only slightly modified by me from the original code provided by Adrian, and it was beyond the scope of this ticket to make changes to it (barring what was absolutely necessary).
+</li></ul>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-20T20%3A17%3A12%2B01%3A00&amp;precision=second" title="2014-06-20T20:17:12+01:00 in Timeline">6 years</a> ago
+                      by Peter Parker
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?cversion=1&amp;cnum_hist=16#comment:16">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8910?action=comment-diff&amp;cnum=16&amp;version=2">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8910.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-09T11%3A13%3A01%2B01%3A00&amp;precision=second" title="2014-06-09T11:13:01+01:00 in Timeline">6 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Jay Rainey</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8910.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-11T14%3A33%3A43%2B01%3A00&amp;precision=second" title="2014-06-11T14:33:43+01:00 in Timeline">6 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>verify</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Jay Rainey</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8910.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T13%3A34%3A59%2B01%3A00&amp;precision=second" title="2014-06-23T13:34:59+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8910.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T14%3A11%3A06%2B01%3A00&amp;precision=second" title="2014-06-23T14:11:06+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Algorithm crashed with the message:
+</p>
+<pre class="wiki">AlgorithmManager:: Unable to create algorithm MaxEnt 'MaxEnt' object has no attribute 'setOptionalMessage'
+  at line 123 in '/repo/muon/MaxEnt/MaxEnt.py'
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8910.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T15%3A49%3A42%2B01%3A00&amp;precision=second" title="2014-06-23T15:49:42+01:00 in Timeline">6 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This was due to the recent change in how we document algorithms, a problem we unfortunately didn't catch since the unit tests are not run automatically.  
+</p>
+<p>
+I pushed a fix to bring this algorithm in line with the change.  (<a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/fe4c1664188443161f4680bacada870a70599363"><span class="icon">​</span>fe4c1664188443161f4680bacada870a70599363</a>.)
+</p>
+<p>
+After a discussion with Martyn I've opened <a class="assigned ticket" href="9727.html" title="enhancement: Review MaxEnt Testing Situation (assigned)">#9727</a>, to address the problem of automated testing for the script repo at a later date.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="8910.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-23T16%3A01%3A59%2B01%3A00&amp;precision=second" title="2014-06-23T16:01:59+01:00 in Timeline">6 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Just realised it would be good to make the change backward compatible for those who are still using older versions of Mantid. (<a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/c9855764d293b034abb667b6d4a9ea595e9ab008"><span class="icon">​</span>c9855764d293b034abb667b6d4a9ea595e9ab008</a>.)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="8910.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T08%3A33%3A53%2B01%3A00&amp;precision=second" title="2014-06-24T08:33:53+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="8910.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T10%3A50%3A46%2B01%3A00&amp;precision=second" title="2014-06-24T10:50:46+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Use hasattr(...) instead of getattr(...) on line 132 of MaxEnt.py
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="8910.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T11%3A22%3A13%2B01%3A00&amp;precision=second" title="2014-06-24T11:22:13+01:00 in Timeline">6 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Made the following changes:
+</p>
+<ul><li><a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/987569aac39aa3e4096d244b27dc8c8a701d1525"><span class="icon">​</span>987569aac39aa3e4096d244b27dc8c8a701d1525</a>.
+</li><li><a class="ext-link" href="https://github.com/mantidproject/scriptrepository/commit/ecb8452e67c5a8f1f74e9ead3674daf372b4ce9d"><span class="icon">​</span>ecb8452e67c5a8f1f74e9ead3674daf372b4ce9d</a>.
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="8910.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T13%3A19%3A45%2B01%3A00&amp;precision=second" title="2014-06-24T13:19:45+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="8910.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T13%3A23%3A02%2B01%3A00&amp;precision=second" title="2014-06-24T13:23:02+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="8910.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A56%3A15%2B01%3A00&amp;precision=second" title="2015-06-04T02:56:15+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9753"><span class="icon">​</span>9753</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8910?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8910?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8910?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #3555 (Plus for MDEventWorkspace: implement algo)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="3554.html" title="Ticket #3554" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3555?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3555?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3555?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="3556.html" title="Ticket #3556" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 3555, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="3554.html" title="Ticket #3554">Previous Ticket</a></span></li><li><span><a class="next" href="3556.html" title="Ticket #3556">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/3555.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="3555.html">Ticket #3555</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-12T21%3A43%3A55%2B01%3A00&amp;precision=second" title="2011-08-12T21:43:55+01:00 in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A59%3A52%2B01%3A00&amp;precision=second" title="2015-06-03T22:59:52+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Plus for MDEventWorkspace: implement algo</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Iteration&#32;30.html">Iteration 30</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="3558.html" title="CloneWorkspace: implement for MDEventWorkspace">#3558</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Peter Parker
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Maybe call it PlusMDEW?
+</p>
+<p>
+The algo will merge two MDEventWorkspaces together by adding events together. Boxes split as needed.
+</p>
+<p>
+Should handle file-backed MDEW in a reasonable way. Some work towards this has been done already.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="3555.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-12T21%3A45%3A05%2B01%3A00&amp;precision=second" title="2011-08-12T21:45:05+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="3555.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-12T21%3A58%3A28%2B01%3A00&amp;precision=second" title="2011-08-12T21:58:28+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>3558</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="3555.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-12T22%3A06%3A30%2B01%3A00&amp;precision=second" title="2011-08-12T22:06:30+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[13939]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: Stub for PlusMDEW. Fix performance test run.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="3555.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-15T19%3A46%3A55%2B01%3A00&amp;precision=second" title="2011-08-15T19:46:55+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[13968]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: Plus algorithm for MDEventWorkspaces.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="3555.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-15T22%3A09%3A59%2B01%3A00&amp;precision=second" title="2011-08-15T22:09:59+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[13971]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3564.html" title="enhancement: View MDBoxes in a table view in MantidPlot (closed: fixed)">#3564</a>: Menu to look at the boxes in a MDEventWorkpsace in MantidPlot. Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: Better thread safety for the Plus algo and DiskMRU in general.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="3555.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-16T19%3A17%3A37%2B01%3A00&amp;precision=second" title="2011-08-16T19:17:37+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[13986]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: PlusMDEW with file back end updates the file when done and releases memory.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="3555.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-16T20%3A13%3A54%2B01%3A00&amp;precision=second" title="2011-08-16T20:13:54+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[13992]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: Disable test to figure out win failure.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="3555.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-17T20%3A32%3A15%2B01%3A00&amp;precision=second" title="2011-08-17T20:32:15+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[14023]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: MDBox reworked to handle adding events without caching so that PlusMDEW works more efficiently.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="3555.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-17T20%3A42%3A46%2B01%3A00&amp;precision=second" title="2011-08-17T20:42:46+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[14024]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: Windows try<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="3555.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-17T20%3A56%3A36%2B01%3A00&amp;precision=second" title="2011-08-17T20:56:36+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[14026]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: Disable test that fail on Windows<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="3555.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-18T15%3A11%3A26%2B01%3A00&amp;precision=second" title="2011-08-18T15:11:26+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[14044]</a>:
+</p>
+<div class="message"><p>
+Refs <a class="closed ticket" href="3555.html" title="enhancement: Plus for MDEventWorkspace: implement algo (closed: fixed)">#3555</a>: Fix segfault in a particular case involving the file back end and using PlusMDEW.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="3555.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-13T20%3A22%3A35%2B01%3A00&amp;precision=second" title="2011-09-13T20:22:35+01:00 in Timeline">9 years</a> ago by Janik Zikovsky
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Note for testers: Algorithm works with both memory and file-backed workspaces. Performance should be decent for file-backed since it avoids writing out to file all the time. This means that you need to call SaveMDEW with UpdateFileBackEnd to finalize the file!
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="3555.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-20T12%3A05%3A02%2B01%3A00&amp;precision=second" title="2011-09-20T12:05:02+01:00 in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Parker</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="3555.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-21T14%3A07%3A53%2B01%3A00&amp;precision=second" title="2011-09-21T14:07:53+01:00 in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Apart from the raised defect <a class="closed ticket" href="3786.html" title="defect: PlusMD: Incorrect result for file-backed inputs that have had events added ... (closed: fixed)">#3786</a>, this seems to be working fine.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="3555.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A59%3A52%2B01%3A00&amp;precision=second" title="2015-06-03T22:59:52+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/4402"><span class="icon">​</span>4402</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3555?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3555?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3555?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

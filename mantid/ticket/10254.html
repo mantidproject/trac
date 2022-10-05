@@ -1,0 +1,962 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10254 (IntegratePeaksMD should be fixed for tube gaps)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10253.html" title="Ticket #10253" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10254?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10254?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10254?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10255.html" title="Ticket #10255" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10254, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10253.html" title="Ticket #10253">Previous Ticket</a></span></li><li><span><a class="next" href="10255.html" title="Ticket #10255">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10254.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10254.html">Ticket #10254</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-17T12%3A50%3A28%2B01%3A00&amp;precision=second" title="2014-09-17T12:50:28+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A51%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T03:51:43+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">IntegratePeaksMD should be fixed for tube gaps</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Vickie+Lynch">Vickie Lynch</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Vickie+Lynch">Vickie Lynch</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              saviciat@…, martyn.gigg@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="10339.html" title="Tube Gap Calculation Modifications">#10339</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Owen Arnold
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Tube gaps should not be counted as edges.  This is a request for CORELLI.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10254.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-23T19%3A30%3A46%2B01%3A00&amp;precision=second" title="2014-09-23T19:30:46+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> new edge integration parameter
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/15d35effff8c9ec9159ce1e10c1fa69736959303" title="15d35effff8c9ec9159ce1e10c1fa69736959303">15d35effff8c9ec9159ce1e10c1fa69736959303</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10254.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-23T19%3A37%3A18%2B01%3A00&amp;precision=second" title="2014-09-23T19:37:18+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> fix doxygen warning
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cd50bdd6f1416cdf135d1bc9f8398ddd83f465e6" title="cd50bdd6f1416cdf135d1bc9f8398ddd83f465e6">cd50bdd6f1416cdf135d1bc9f8398ddd83f465e6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10254.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-25T03%3A21%3A56%2B01%3A00&amp;precision=second" title="2014-09-25T03:21:56+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Pascal has suggested solving this problem by repeating the ray tracing around around a circle to determine if there are neighbouring tubes, or if this is really an edge of a bank. Read - a ray with thickness.
+</p>
+<p>
+The solution should work for non-rectangular detector instruments. Such as WISH.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10254.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-25T19%3A19%3A51%2B01%3A00&amp;precision=second" title="2014-09-25T19:19:51+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> IntegrateEllipsoids should work for weighted events
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3e2d956e907084661a1bc9fd36e2c96cedd6cd35" title="3e2d956e907084661a1bc9fd36e2c96cedd6cd35">3e2d956e907084661a1bc9fd36e2c96cedd6cd35</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10254.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-25T22%3A12%3A03%2B01%3A00&amp;precision=second" title="2014-09-25T22:12:03+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Here is what I propose:
+</p>
+<ol><li>Define edges for each instrument. For CORELLI, tubes 1 and 16, and pixels 0 and 255.
+</li><li>Get Q in the lab frame for every peak, call it C
+</li><li>For every point on the edge, the trajectory in reciprocal space is a straight line, going through O=V3D(0,0,0). Calculate a point at a large momentum, say k=100. Q in the lab frame E=V3D(-k*sin(tt)*cos(ph),-k*sin(tt)*sin(ph),k-k*cos(ph)). 
+</li><li>Normalize E to 1: E=E*(1./E.norm())
+</li><li>The distance from C to OE is given by dv=C-E*(C.scalar_prod(E))
+</li><li>If dv.norm&lt;integration_radius, one of the detector trajectories on the edge is too close to the peak
+</li></ol><p>
+Also, I would apply this method to all masked pixels. If there are masked pixels trajectories inside an integration volume, the peak must be rejected.
+Here is a short python script, not very efficient, takes about 10-20 seconds on my laptop.
+</p>
+<pre class="wiki">from numpy import *
+w=Load(Filename='TOPAZ_3680_10_sec_40.peaks')
+i=w.getInstrument()
+kmax=100.		
+for pind in range(w.getNumberPeaks()):
+	C=w.getPeak(pind).getQLabFrame() #peak position
+	for bank in range(3,17):
+		for p in range(256):
+			d1=i[bank][0][p] #detectors on the edge 1
+			d2=i[bank][255][p]#detectors on the edge 2
+			d3=i[bank][p][0]#detectors on the edge 3
+			d4=i[bank][p][255]#detectors on the edge 4
+			#the rest is only for edge 1, but just copy, paste, replace index for the other edges
+			tt1=d1.getTwoTheta(V3D(0,0,0),V3D(0,0,1)) #two theta
+			ph1=d1.getPhi() #phi
+			E1=V3D(-kmax*sin(tt1)*cos(ph1),-kmax*sin(tt1)*sin(ph1),kmax-kmax*cos(tt1)) #end of trajectory
+			E1=E1*(1./E1.norm()) #normalize
+			distv=C-E1*(C.scalar_prod(E1)) #distance to the trajectory as a vector
+			if distv.norm()&lt;0.1:
+				print w.getPeak(pind).getHKL()
+				break
+		else:
+			continue
+		break
+	else:
+		continue
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10254.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T03%3A14%3A51%2B01%3A00&amp;precision=second" title="2014-09-26T03:14:51+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In principle this looks good. Here are some things to consider:
+</p>
+<ul><li>Is there a better way to select kmax rather than hard-coding some large value?
+</li><li>Need to have a general way to find the edges as this should work for lots of different instrument types.
+</li><li>Missing from the above, script, but you mention it in the instructions, you should fetch out the actual peak integration radius in qlab.
+</li><li>Would be nice to have this feature coded outside of IntegratePeaksMD, so that it could be used in other places.
+</li></ul><p>
+Other than that, this looks like a much better method than the current ray-tracing routines.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10254.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T03%3A20%3A41%2B01%3A00&amp;precision=second" title="2014-09-26T03:20:41+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>saviciat@…</em>, <em>martyn.gigg@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10254.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-26T05%3A59%3A17%2B01%3A00&amp;precision=second" title="2014-09-26T05:59:17+01:00 in Timeline">6 years</a> ago by Andrei Savici
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <ol><li>In reply to the first point, I realized that any value of k!=0 is ok. Probably the best is 1, to reduce the number of multiplications 
+</li><li>Probably the best way is instrument parameter file
+</li><li>This would work equally well in q_sample, just need to multiply the E points by the goniometer matrix
+</li><li>I think that it can be implemented as a separate algorithm, acting on the peak workspace only
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10254.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T15%3A08%3A40%2B01%3A00&amp;precision=second" title="2014-10-02T15:08:40+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> mask instrument of peaks workspace
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d0a46602396829c714684237936d2acb495b9c9e" title="d0a46602396829c714684237936d2acb495b9c9e">d0a46602396829c714684237936d2acb495b9c9e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10254.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-03T17%3A14%3A11%2B01%3A00&amp;precision=second" title="2014-10-03T17:14:11+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> mask instrument of peaks workspace"
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d0a46602396829c714684237936d2acb495b9c9e" title="d0a46602396829c714684237936d2acb495b9c9e">d0a46602396829c714684237936d2acb495b9c9e</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7c23871b933f48dd5262c3a0c2d7110b685b2ec8" title="7c23871b933f48dd5262c3a0c2d7110b685b2ec8">7c23871b933f48dd5262c3a0c2d7110b685b2ec8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10254.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-05T22%3A54%3A12%2B01%3A00&amp;precision=second" title="2014-10-05T22:54:12+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> new edge integration parameter"
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/15d35effff8c9ec9159ce1e10c1fa69736959303" title="15d35effff8c9ec9159ce1e10c1fa69736959303">15d35effff8c9ec9159ce1e10c1fa69736959303</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/32338786ac52d4f86c277a2d4a34266a7d05f812" title="32338786ac52d4f86c277a2d4a34266a7d05f812">32338786ac52d4f86c277a2d4a34266a7d05f812</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10254.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-05T22%3A54%3A12%2B01%3A00&amp;precision=second" title="2014-10-05T22:54:12+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> hardcoded edges of TOPAZ working
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3946217facb1a3f38929b6cd4a05a8e449a6b0d5" title="3946217facb1a3f38929b6cd4a05a8e449a6b0d5">3946217facb1a3f38929b6cd4a05a8e449a6b0d5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10254.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-05T22%3A54%3A12%2B01%3A00&amp;precision=second" title="2014-10-05T22:54:12+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> mask edges of banks for all instruments
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8de35338a7ffd1dea0e8e902e0984109506c5938" title="8de35338a7ffd1dea0e8e902e0984109506c5938">8de35338a7ffd1dea0e8e902e0984109506c5938</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10254.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-05T22%3A54%3A12%2B01%3A00&amp;precision=second" title="2014-10-05T22:54:12+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> add WISH to MaskBTP instruments
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1b0ac109298eb9a6c1304769a5a80c1eb9bd340e" title="1b0ac109298eb9a6c1304769a5a80c1eb9bd340e">1b0ac109298eb9a6c1304769a5a80c1eb9bd340e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10254.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-06T21%3A27%3A28%2B01%3A00&amp;precision=second" title="2014-10-06T21:27:28+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> tube gap in instrument parameter files
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ff4b43d801ef1e671cae6f734d6a4010889edbc2" title="ff4b43d801ef1e671cae6f734d6a4010889edbc2">ff4b43d801ef1e671cae6f734d6a4010889edbc2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10254.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-07T13%3A30%3A46%2B01%3A00&amp;precision=second" title="2014-10-07T13:30:46+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> fix unit test
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e94fdd0b9dd734c52b6850366a860b88fb74a48c" title="e94fdd0b9dd734c52b6850366a860b88fb74a48c">e94fdd0b9dd734c52b6850366a860b88fb74a48c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10254.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-07T15%3A06%3A46%2B01%3A00&amp;precision=second" title="2014-10-07T15:06:46+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> tabs to spaces
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3ac88bda3da18ab55dfb24eedec655a97a7bc651" title="3ac88bda3da18ab55dfb24eedec655a97a7bc651">3ac88bda3da18ab55dfb24eedec655a97a7bc651</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10254.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-07T15%3A09%3A16%2B01%3A00&amp;precision=second" title="2014-10-07T15:09:16+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> fix conflict
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0e04e636499901411f93caab055657d76c2dec55" title="0e04e636499901411f93caab055657d76c2dec55">0e04e636499901411f93caab055657d76c2dec55</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10254.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-07T20%3A14%3A05%2B01%3A00&amp;precision=second" title="2014-10-07T20:14:05+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> fix WISH systemtest
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cc703651b2aaae91fd7946eabaa1e6488cc47bee" title="cc703651b2aaae91fd7946eabaa1e6488cc47bee">cc703651b2aaae91fd7946eabaa1e6488cc47bee</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10254.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T08%3A47%3A23%2B01%3A00&amp;precision=second" title="2014-10-08T08:47:23+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert "Revert "Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> mask instrument of peaks workspace""
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7c23871b933f48dd5262c3a0c2d7110b685b2ec8" title="7c23871b933f48dd5262c3a0c2d7110b685b2ec8">7c23871b933f48dd5262c3a0c2d7110b685b2ec8</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c12e71d7f57d0ed86659d33d24429101603b7974" title="c12e71d7f57d0ed86659d33d24429101603b7974">c12e71d7f57d0ed86659d33d24429101603b7974</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10254.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-08T22%3A08%3A03%2B01%3A00&amp;precision=second" title="2014-10-08T22:08:03+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> change html for docs
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d726d757ebcf060b7bb11fcd0af47adc1b8fbb09" title="d726d757ebcf060b7bb11fcd0af47adc1b8fbb09">d726d757ebcf060b7bb11fcd0af47adc1b8fbb09</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10254.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-09T14%3A17%3A47%2B01%3A00&amp;precision=second" title="2014-10-09T14:17:47+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> docs for IntegrateEllipse not specify raw events only
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/30c17e259b64d07faadd14abdd564caed16375c2" title="30c17e259b64d07faadd14abdd564caed16375c2">30c17e259b64d07faadd14abdd564caed16375c2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10254.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-09T14%3A19%3A44%2B01%3A00&amp;precision=second" title="2014-10-09T14:19:44+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10254.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-09T15%3A43%3A18%2B01%3A00&amp;precision=second" title="2014-10-09T15:43:18+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10254.html" title="IntegratePeaksMD should be fixed for tube gaps (closed: fixed)">#10254</a> should not average pixelIDs
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f13e1f941fcd23e6497182d07ce756ce7a8ef071" title="f13e1f941fcd23e6497182d07ce756ce7a8ef071">f13e1f941fcd23e6497182d07ce756ce7a8ef071</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10254.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-09T18%3A32%3A27%2B01%3A00&amp;precision=second" title="2014-10-09T18:32:27+01:00 in Timeline">6 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Test using python script attached to ticket 8369.  Mantid gives a warning that peak 8 is off the detectors before these changes.  You can see that a tube gap is inside the integration sphere of this peak.  Ticket also fixes IntegrateEllipsoids for weighted events and adds a tube-gap parameter to the instrument that can find peaks centered on a tube gap.  Documentation has been changed for all these changes.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10254.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-10T08%3A39%3A52%2B01%3A00&amp;precision=second" title="2014-10-10T08:39:52+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10254.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-10T09%3A30%3A05%2B01%3A00&amp;precision=second" title="2014-10-10T09:30:05+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+No warnings now on the WISH side. Tried the previous script, which was incorrectly marking peaks off the edge of the detector.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10254.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-10T13%3A50%3A40%2B01%3A00&amp;precision=second" title="2014-10-10T13:50:40+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/10254_integrate_tube_gaps'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/c65858707b23f5a11b3f9249a7b8e0501d487f85"><span class="icon">​</span>c65858707b23f5a11b3f9249a7b8e0501d487f85</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10254.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-10T13%3A56%3A02%2B01%3A00&amp;precision=second" title="2014-10-10T13:56:02+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10339</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10254.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-10T13%3A56%3A37%2B01%3A00&amp;precision=second" title="2014-10-10T13:56:37+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Nice piece of work. Thanks a lot for this.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10254.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A51%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T03:51:43+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11096"><span class="icon">​</span>11096</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10254?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10254?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10254?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

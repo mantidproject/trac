@@ -1,0 +1,583 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #3664 (Add algorithm to change UB and re-index peaks with a symmetry equivalent indexing.)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="3663.html" title="Ticket #3663" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3664?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3664?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3664?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="3665.html" title="Ticket #3665" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 3664, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="3663.html" title="Ticket #3663">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="3665.html" title="Ticket #3665">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="3664.html">Ticket #3664</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-02T16%3A57%3A26%2B01%3A00&amp;precision=second" title="2011-09-02T16:57:26+01:00 in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A12%3A12%2B01%3A00&amp;precision=second" title="2015-06-03T23:12:12+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Add algorithm to change UB and re-index peaks with a symmetry equivalent indexing.</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Dennis+Mikkelson">Dennis Mikkelson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Dennis+Mikkelson">Dennis Mikkelson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.1.html">Release 2.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Andrei Savici
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+The UB and corresponding indexing of peaks may not be precisely the one a user wants, even if the cell type is correct.  For example, a user may want a peak to be indexed as (1,1,1) which has currently been indexed as (1,-1,-1).  The algorithm should carry out changes to UB and the indexing of peaks in a peaks workspace, to support this type of re-indexing.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="3664.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-19T10%3A30%3A43%2B01%3A00&amp;precision=second" title="2011-09-19T10:30:43+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 30</em> to <em>Iteration 31</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets to iteration 31 at the iteration 30 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="3664.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-09T09%3A42%3A59Z&amp;precision=second" title="2012-01-09T09:42:59Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 32</em> to <em>Iteration 33</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to iteration 33 at iteration 32 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="3664.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-25T15%3A31%3A52%2B01%3A00&amp;precision=second" title="2012-04-25T15:31:52+01:00 in Timeline">8 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="3664.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-26T01%3A57%3A54%2B01%3A00&amp;precision=second" title="2012-04-26T01:57:54+01:00 in Timeline">8 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add algorithm TransformHKL and test.
+</p>
+<p>
+refs <a class="closed ticket" href="3664.html" title="enhancement: Add algorithm to change UB and re-index peaks with a symmetry equivalent ... (closed: fixed)">#3664</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/97b8115efaebef4199248fcd4bf04c28cba83cd7" title="97b8115efaebef4199248fcd4bf04c28cba83cd7">97b8115efaebef4199248fcd4bf04c28cba83cd7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="3664.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-26T02%3A08%3A41%2B01%3A00&amp;precision=second" title="2012-04-26T02:08:41+01:00 in Timeline">8 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Commenting out TransformHKL from CMakeLists
+</p>
+<p>
+This algorithm and test works, but causes problems
+with the following UNRELATED tests????
+</p>
+<blockquote>
+<p>
+522 - PythonWorkflowAlgorithmsTest_py (Failed)
+221 - VanillaPythonTest_py (Failed)
+689 - PythonReductionTest_py (Failed)
+520 - AlgorithmPythonUnitTests_py (Failed)
+</p>
+</blockquote>
+<p>
+Perhaps this is due the use of a MatrixProperty???
+refs <a class="closed ticket" href="3664.html" title="enhancement: Add algorithm to change UB and re-index peaks with a symmetry equivalent ... (closed: fixed)">#3664</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb96bf1dc731fd61ff35db58b87cd9c73eb0b93a" title="bb96bf1dc731fd61ff35db58b87cd9c73eb0b93a">bb96bf1dc731fd61ff35db58b87cd9c73eb0b93a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="3664.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-27T03%3A49%3A41%2B01%3A00&amp;precision=second" title="2012-04-27T03:49:41+01:00 in Timeline">8 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Switch to use ArrayProperty instead of MatrixProperty.
+</p>
+<p>
+Using ArrayProperty makes this consistent with the SetUB
+algorithm.  It also avoids problems with several Python
+tests.
+refs <a class="closed ticket" href="3664.html" title="enhancement: Add algorithm to change UB and re-index peaks with a symmetry equivalent ... (closed: fixed)">#3664</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2a88e49c4d6a658a04cd17e96425c6846cadbbb6" title="2a88e49c4d6a658a04cd17e96425c6846cadbbb6">2a88e49c4d6a658a04cd17e96425c6846cadbbb6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="3664.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T16%3A31%3A43%2B01%3A00&amp;precision=second" title="2012-04-28T16:31:43+01:00 in Timeline">8 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The algorithm TransformHKL will allow the user to specify a tranformation, M, to apply to the lattice parameters.  The elements in the transformation matrix, must be specified as a comma separated list of 9 numbers.  The transformation must preserve the "handedness" of the UB matrix.  That is, it must have a positive determinant.  A transformation such as: 0,1,0 1,0,0, 0,0,-1 will swap the H and K values and negate the L value.  The basic equation UB*(hkl)=Q is changed to UB*M-inverse*M(hkl)=Q.  That is, the Q vectors are not changed, but UB is replaced by UB*M-inverse and the hkl vectors are replaced by M*(hkl). 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="3664.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A30%3A04%2B01%3A00&amp;precision=second" title="2012-04-28T22:30:04+01:00 in Timeline">8 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add algorithm TransformHKL and test.
+</p>
+<p>
+refs <a class="closed ticket" href="3664.html" title="enhancement: Add algorithm to change UB and re-index peaks with a symmetry equivalent ... (closed: fixed)">#3664</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/97b8115efaebef4199248fcd4bf04c28cba83cd7" title="97b8115efaebef4199248fcd4bf04c28cba83cd7">97b8115efaebef4199248fcd4bf04c28cba83cd7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="3664.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A30%3A05%2B01%3A00&amp;precision=second" title="2012-04-28T22:30:05+01:00 in Timeline">8 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Commenting out TransformHKL from CMakeLists
+</p>
+<p>
+This algorithm and test works, but causes problems
+with the following UNRELATED tests????
+</p>
+<blockquote>
+<p>
+522 - PythonWorkflowAlgorithmsTest_py (Failed)
+221 - VanillaPythonTest_py (Failed)
+689 - PythonReductionTest_py (Failed)
+520 - AlgorithmPythonUnitTests_py (Failed)
+</p>
+</blockquote>
+<p>
+Perhaps this is due the use of a MatrixProperty???
+refs <a class="closed ticket" href="3664.html" title="enhancement: Add algorithm to change UB and re-index peaks with a symmetry equivalent ... (closed: fixed)">#3664</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bb96bf1dc731fd61ff35db58b87cd9c73eb0b93a" title="bb96bf1dc731fd61ff35db58b87cd9c73eb0b93a">bb96bf1dc731fd61ff35db58b87cd9c73eb0b93a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="3664.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T22%3A30%3A27%2B01%3A00&amp;precision=second" title="2012-04-28T22:30:27+01:00 in Timeline">8 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Switch to use ArrayProperty instead of MatrixProperty.
+</p>
+<p>
+Using ArrayProperty makes this consistent with the SetUB
+algorithm.  It also avoids problems with several Python
+tests.
+refs <a class="closed ticket" href="3664.html" title="enhancement: Add algorithm to change UB and re-index peaks with a symmetry equivalent ... (closed: fixed)">#3664</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2a88e49c4d6a658a04cd17e96425c6846cadbbb6" title="2a88e49c4d6a658a04cd17e96425c6846cadbbb6">2a88e49c4d6a658a04cd17e96425c6846cadbbb6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="3664.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-30T00%3A16%3A07%2B01%3A00&amp;precision=second" title="2012-04-30T00:16:07+01:00 in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Andrei Savici</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="3664.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T16%3A49%3A24%2B01%3A00&amp;precision=second" title="2012-05-01T16:49:24+01:00 in Timeline">8 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Seems to be working. I use 2,0,0,0,2,0,0,0,2, and I got lattice parameters twice as large :)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="3664.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A12%3A12%2B01%3A00&amp;precision=second" title="2015-06-03T23:12:12+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/4511"><span class="icon">​</span>4511</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3664?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3664?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3664?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

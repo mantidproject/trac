@@ -1,0 +1,51 @@
+diff --git a/Code/Mantid/instrument/SANS2D_Definition.xml b/Code/Mantid/instrument/SANS2D_Definition.xml
+index 5bc9c8f..e14870d 100644
+--- a/Code/Mantid/instrument/SANS2D_Definition.xml
++++ b/Code/Mantid/instrument/SANS2D_Definition.xml
+@@ -3,8 +3,8 @@
+      see http://www.mantidproject.org/IDF -->
+ <instrument xmlns="http://www.mantidproject.org/IDF/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mantidproject.org/IDF/1.0 Schema/IDFSchema.xsd" 
+  name="SANS2D" valid-from   ="1900-01-31 23:59:59"
+-                          valid-to     ="2100-01-31 23:59:59"
+-		          last-modified="2012-03-04 00:00:00">
++                          valid-to     ="2014-02-01 23:59:58"
++		          last-modified="2014-02-07 08:34:00">
+ 
+   <defaults>
+     <length unit="meter"/>
+diff --git a/Code/Mantid/scripts/SANS/SANSUtility.py b/Code/Mantid/scripts/SANS/SANSUtility.py
+index 4b8eb50..1a0869b 100644
+--- a/Code/Mantid/scripts/SANS/SANSUtility.py
++++ b/Code/Mantid/scripts/SANS/SANSUtility.py
+@@ -453,13 +453,14 @@ def fromEvent2Histogram(ws_event, ws_monitor = None):
+     """
+     if not ws_monitor:
+         ws_monitor = getMonitor4event(ws_event)
+-    
+-    aux_hist = RebinToWorkspace(ws_event, ws_monitor, False)
++    rebbining = "5.5,45.5,50.0, 50.0,1000.0, 500.0,1500.0, 750.0,99750.0, 255.0,100005.0"
++    aux_hist = Rebin(ws_event, rebbining, False)#RebinToWorkspace(ws_event, ws_monitor, False)
+     
+     name = '__monitor_tmp'
+-    ws_monitor.clone(OutputWorkspace=name)
++    Rebin(ws_monitor, rebbining,False,OutputWorkspace=name)
++    #ws_monitor.clone(OutputWorkspace=name)
+     ConjoinWorkspaces(name, aux_hist, CheckOverlapping=True)    
+-    CopyInstrumentParameters(ws_event, OutputWorkspace=name)
++    CopyInstrumentParameters(ws_event, OutputWorkspace='__monitor_tmp')
+     
+     ws_hist = RenameWorkspace(name, OutputWorkspace=str(ws_event))
+ 
+diff --git a/Code/Mantid/scripts/SANS/isis_reduction_steps.py b/Code/Mantid/scripts/SANS/isis_reduction_steps.py
+index 2b1536c..a19b617 100644
+--- a/Code/Mantid/scripts/SANS/isis_reduction_steps.py
++++ b/Code/Mantid/scripts/SANS/isis_reduction_steps.py
+@@ -1613,7 +1613,7 @@ class SliceEvent(ReductionStep):
+             return
+         start, stop = reducer.getCurrSliceLimit()
+         
+-        _monitor = getMonitor4event(ws_pointer)
++        _monitor = LoadNexusMonitors(reducer.get_sample().loader._data_file)
+ 
+         hist, others = slice2histogram(ws_pointer, start, stop, _monitor)
+         

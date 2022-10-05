@@ -1,0 +1,696 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9089 (Add keepalive implementation)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9088.html" title="Ticket #9088" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9089?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9089?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9089?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9090.html" title="Ticket #9090" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9089, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9088.html" title="Ticket #9088">Previous Ticket</a></span></li><li><span><a class="next" href="9090.html" title="Ticket #9090">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/9089.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9089.html">Ticket #9089</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-26T10%3A00%3A40Z&amp;precision=second" title="2014-02-26T10:00:40Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A03%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T03:03:43+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Add keepalive implementation</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Jay+Rainey">Jay Rainey</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Jay+Rainey">Jay Rainey</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~ICAT">ICAT</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="9084.html" title="Create a catalog manager">#9084</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Currently, <tt>ICatalog</tt> has a method named <tt>keepAlive</tt>, which is not implemented in any of the inherited catalogs. Ideally, this should have an implementation that keeps the session of the catalog alive indefinitely.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9089.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-26T13%3A32%3A30Z&amp;precision=second" title="2014-02-26T13:32:30Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9089.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-04T11%3A26%3A00Z&amp;precision=second" title="2014-03-04T11:26:00Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9084</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9089.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-19T16%3A10%3A18Z&amp;precision=second" title="2014-03-19T16:10:18Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Added ICat4 implementation for keepAlive. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d3f02348955e6a5f4920548ede6bf745512184d" title="4d3f02348955e6a5f4920548ede6bf745512184d">4d3f02348955e6a5f4920548ede6bf745512184d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9089.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-19T16%3A10%3A19Z&amp;precision=second" title="2014-03-19T16:10:19Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added CatalogKeepAlive algorithm. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<ul><li>This allows external scripts and GUIs within Mantid to keep the catalog alive.
+</li></ul><p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a3ac546578c1350b50e03edd926b75a67be60e9a" title="a3ac546578c1350b50e03edd926b75a67be60e9a">a3ac546578c1350b50e03edd926b75a67be60e9a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9089.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-19T16%3A10%3A19Z&amp;precision=second" title="2014-03-19T16:10:19Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Execute KeepAlive when logged in. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a323ad5c7130779d5dbf15f9c2b7a333c53706fc" title="a323ad5c7130779d5dbf15f9c2b7a333c53706fc">a323ad5c7130779d5dbf15f9c2b7a333c53706fc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9089.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-19T16%3A10%3A20Z&amp;precision=second" title="2014-03-19T16:10:20Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Output the keep alive algorithm. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<ul><li>Renamed login keepAlive property to prevent confusion.
+</li></ul><p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3fe12a780afb42457c6a9a90d4ababc9aa23ae04" title="3fe12a780afb42457c6a9a90d4ababc9aa23ae04">3fe12a780afb42457c6a9a90d4ababc9aa23ae04</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9089.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-19T16%3A10%3A20Z&amp;precision=second" title="2014-03-19T16:10:20Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Execute keepAlive every 20 minutes. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4a789f86bb928208dac7088a2c154ce0430debf8" title="4a789f86bb928208dac7088a2c154ce0430debf8">4a789f86bb928208dac7088a2c154ce0430debf8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9089.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-19T16%3A10%3A20Z&amp;precision=second" title="2014-03-19T16:10:20Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Updated catalogLogout documentation. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f9d902e363da6db8bff4aa230a566ccd89406e02" title="f9d902e363da6db8bff4aa230a566ccd89406e02">f9d902e363da6db8bff4aa230a566ccd89406e02</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9089.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-19T16%3A10%3A20Z&amp;precision=second" title="2014-03-19T16:10:20Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cancel algorithm based on session info. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a9f560c3a0df4e1b2f66bbc219fe0e420145d7c4" title="a9f560c3a0df4e1b2f66bbc219fe0e420145d7c4">a9f560c3a0df4e1b2f66bbc219fe0e420145d7c4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9089.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-19T16%3A33%3A13Z&amp;precision=second" title="2014-03-19T16:33:13Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Attempt to fix WIN build. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<ul><li>No need for this property to be a long as it's now in seconds.
+</li></ul><p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d3364c7ff3a7ebf2355ef03d4424866e6f5eb223" title="d3364c7ff3a7ebf2355ef03d4424866e6f5eb223">d3364c7ff3a7ebf2355ef03d4424866e6f5eb223</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9089.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-20T11%3A56%3A25Z&amp;precision=second" title="2014-03-20T11:56:25Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed unnecessary thread use. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/38b9067dea1a2628f5a6465a5e1b0410a9aaca59" title="38b9067dea1a2628f5a6465a5e1b0410a9aaca59">38b9067dea1a2628f5a6465a5e1b0410a9aaca59</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9089.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-20T12%3A35%3A34Z&amp;precision=second" title="2014-03-20T12:35:34Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+It's difficult to verify that the session is actually kept alive other than waiting 2 hours (default limit) and then searching to see if it's alive. Instead, a code review should be performed to verify that the functionality will work as expected.
+</p>
+<h2 id="Totest">To test</h2>
+<ol><li>Open the catalog login dialog (<tt>Catalog</tt> -&gt; <tt>Login</tt>) and enter your credentials.
+</li><li>In the dialog check the <tt>KeepSessionAlive</tt> option.
+</li><li>Note that the <tt>CatalogKeepAlive</tt> has been executed. You can view details of this algorithm by clicking the <tt>Details</tt> option to the right of the progress bar.
+</li></ol><h3 id="Verifythefollowing">Verify the following</h3>
+<ol><li>Pressing <tt>Cancel</tt> from the <tt>Details</tt> option cancels the <tt>CatalogKeepAlive</tt> algorithm.
+</li><li>Clicking <tt>Logout</tt> from the catalog menu terminates <strong>all</strong> active catalogs.
+</li><li>You should manually remove <a class="ext-link" href="https://github.com/mantidproject/mantid/blob/master/Code/Mantid/Framework/API/src/CatalogManager.cpp#L29"><span class="icon">​</span>this line</a> in order to verify that <tt>CatalogKeepAlive</tt> works across multiple catalogs. To do this, just log into the catalog again with the same credentials.
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9089.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T13%3A42%3A18Z&amp;precision=second" title="2014-03-28T13:42:18Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9089.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T14%3A33%3A59Z&amp;precision=second" title="2014-03-28T14:33:59Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Generally this is fine &amp; the code looks good.
+</p>
+<p>
+I think there is a small improvement we can make. At the moment if you login to ICat and then look at the processor usage then you see 1 thread continuously polling. It seems a bit wasteful for 1 thread to be completely occupied by doing this. However, we need to check reasonably frequently for cancellation to be usable.
+</p>
+<p>
+My suggestion is to add a <tt>Poco::Thread::sleep(1000)</tt> call to the start of the <tt>while(true)</tt> loop. This way the thread will not be continously checking and will simply wake up briefly for a second to do the work and then sleep again. To be clearer the loop cold look like:
+</p>
+<div class="code"><pre><span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+<span class="p">{</span>
+  Poco<span class="o">::</span>Thread<span class="o">::</span>sleep<span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+  <span class="p">...</span>
+</pre></div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9089.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T14%3A58%3A57Z&amp;precision=second" title="2014-03-28T14:58:57Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Check every second. Refs <a class="closed ticket" href="9089.html" title="enhancement: Add keepalive implementation (closed: fixed)">#9089</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dd77ce14c83c98efb6a69d54f911836479c2059a" title="dd77ce14c83c98efb6a69d54f911836479c2059a">dd77ce14c83c98efb6a69d54f911836479c2059a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9089.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-28T14%3A59%3A47Z&amp;precision=second" title="2014-03-28T14:59:47Z in Timeline">7 years</a> ago by Jay Rainey
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9089.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-31T10%3A05%3A37%2B01%3A00&amp;precision=second" title="2014-03-31T10:05:37+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9089.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-31T10%3A12%3A02%2B01%3A00&amp;precision=second" title="2014-03-31T10:12:02+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9089_icat_keep_alive'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/799f89edb4a89b7d53d3e61f33c0b0a5a06ff008"><span class="icon">​</span>799f89edb4a89b7d53d3e61f33c0b0a5a06ff008</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9089.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A03%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T03:03:43+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9932"><span class="icon">​</span>9932</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9089?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9089?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9089?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

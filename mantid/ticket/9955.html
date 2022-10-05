@@ -1,0 +1,793 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9955 (Strange NaN issues with Stitch1D)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9954.html" title="Ticket #9954" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9955?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9955?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9955?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9956.html" title="Ticket #9956" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9955, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9954.html" title="Ticket #9954">Previous Ticket</a></span></li><li><span><a class="next" href="9956.html" title="Ticket #9956">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/9955.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9955.html">Ticket #9955</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-17T16%3A51%3A43%2B01%3A00&amp;precision=second" title="2014-07-17T16:51:43+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A39%3A38%2B01%3A00&amp;precision=second" title="2015-06-04T03:39:38+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Strange NaN issues with Stitch1D</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Owen+Arnold">Owen Arnold</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Owen+Arnold">Owen Arnold</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=blocker">blocker</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.1.html">Release 3.2.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="9956.html" title="SURF IDF">#9956</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Anders Markvardsen
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-08-06 08:26:41.128154+00:00">
+        (last modified by Owen Arnold)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/9955?action=diff&amp;version=10">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+The following is a script reported by an scientist.
+</p>
+<div class="code"><pre><span class="c"># Load SURF00110504, SURF00110503. SURF00110505 from ICAT</span>
+RenameWorkspace<span class="p">(</span><span class="s">'SURF00110504'</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">'_110504'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span><span class="s">'SURF00110503'</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">'_110503'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span><span class="s">'SURF00110505'</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">'_110505'</span><span class="p">)</span>
+CreateSingleValuedWorkspace<span class="p">(</span>OutputWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">)</span>
+Plus<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_110504'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp0'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp0'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'Wavelength'</span><span class="p">,</span>AlignBins<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CloneWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>XMin<span class="o">=</span><span class="s">'0.5'</span><span class="p">,</span>XMax<span class="o">=</span><span class="s">'9'</span><span class="p">)</span>
+CalculateFlatBackground<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartX<span class="o">=</span><span class="s">'7.5999999999999996'</span><span class="p">,</span>EndX<span class="o">=</span><span class="s">'8.5'</span><span class="p">,</span>WorkspaceIndexList<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_I0P'</span><span class="p">)</span>
+Integration<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_I0P'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monInt'</span><span class="p">,</span>RangeLower<span class="o">=</span><span class="s">'4'</span><span class="p">,</span>RangeUpper<span class="o">=</span><span class="s">'6'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_monInt'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">)</span>
+CreateSingleValuedWorkspace<span class="p">(</span>OutputWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">)</span>
+Plus<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_110503'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp1'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp1'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'Wavelength'</span><span class="p">,</span>AlignBins<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CloneWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>XMin<span class="o">=</span><span class="s">'0.5'</span><span class="p">,</span>XMax<span class="o">=</span><span class="s">'9'</span><span class="p">)</span>
+CalculateFlatBackground<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartX<span class="o">=</span><span class="s">'7.5999999999999996'</span><span class="p">,</span>EndX<span class="o">=</span><span class="s">'8.5'</span><span class="p">,</span>WorkspaceIndexList<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i0p_trans'</span><span class="p">)</span>
+Integration<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_i0p_trans'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_mon_int_trans'</span><span class="p">,</span>RangeLower<span class="o">=</span><span class="s">'4'</span><span class="p">,</span>RangeUpper<span class="o">=</span><span class="s">'6'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_mon_int_trans'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'transWS'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'transWS'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_trans'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_trans'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_corrected'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_corrected'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">)</span>
+MoveInstrumentComponent<span class="p">(</span>Workspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>ComponentName<span class="o">=</span><span class="s">'point-detector'</span><span class="p">,</span>Y<span class="o">=</span><span class="s">'0.031287739139067995'</span><span class="p">,</span>Z<span class="o">=</span><span class="s">'11.43'</span><span class="p">,</span>RelativePosition<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsQ'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'MomentumTransfer'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110504_IvsQ'</span><span class="p">)</span>
+CreateSingleValuedWorkspace<span class="p">(</span>OutputWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">)</span>
+Plus<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_110505'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp0'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp0'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'Wavelength'</span><span class="p">,</span>AlignBins<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CloneWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>XMin<span class="o">=</span><span class="s">'0.5'</span><span class="p">,</span>XMax<span class="o">=</span><span class="s">'9'</span><span class="p">)</span>
+CalculateFlatBackground<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartX<span class="o">=</span><span class="s">'7.5999999999999996'</span><span class="p">,</span>EndX<span class="o">=</span><span class="s">'8.5'</span><span class="p">,</span>WorkspaceIndexList<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_I0P'</span><span class="p">)</span>
+Integration<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_I0P'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monInt'</span><span class="p">,</span>RangeLower<span class="o">=</span><span class="s">'4'</span><span class="p">,</span>RangeUpper<span class="o">=</span><span class="s">'6'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_monInt'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'transWS'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_trans'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_trans'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_corrected'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_corrected'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">)</span>
+MoveInstrumentComponent<span class="p">(</span>Workspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>ComponentName<span class="o">=</span><span class="s">'point-detector'</span><span class="p">,</span>Y<span class="o">=</span><span class="s">'0.058102261279893055'</span><span class="p">,</span>Z<span class="o">=</span><span class="s">'11.43'</span><span class="p">,</span>RelativePosition<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsQ'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'MomentumTransfer'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ'</span><span class="p">)</span>
+Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'110504_IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110504_IvsQ_binned'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.011,-0.0376509,0.051'</span><span class="p">)</span>
+Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ_binned'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.02,-0.0376509,0.142471'</span><span class="p">)</span>
+CloneWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'110504_IvsQ_binned'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'currentSum'</span><span class="p">)</span>
+Stitch1D<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'currentSum'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'110505_IvsQ_binned'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'currentSum'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'currentSum'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110504_50'</span><span class="p">)</span>
+plotSpectrum<span class="p">(</span><span class="s">'110504_50'</span><span class="p">)</span>
+</pre></div><p>
+The plot is bad because of the first y-value in 110505, which is a NAN. We should be ignoring this! Anyway, changing 
+</p>
+<div class="code"><pre>Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ_binned'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.02,-0.0376509,0.142471'</span><span class="p">)</span>
+</pre></div><p>
+to 
+</p>
+<div class="code"><pre>Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ_binned'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.0206,-0.0376509,0.142471'</span><span class="p">)</span>
+</pre></div><p>
+Fixes the issue of the discontinuity at the intersection, but we should really be keeping Nans post processing.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9955.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-18T16%3A23%3A50%2B01%3A00&amp;precision=second" title="2014-07-18T16:23:50+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>9956</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9955.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-23T10%3A06%3A51%2B01%3A00&amp;precision=second" title="2014-07-23T10:06:51+01:00 in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9955.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-05T09%3A08%3A18%2B01%3A00&amp;precision=second" title="2014-08-05T09:08:18+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The fix that the instrument scientist have asked for in Stitch1D is as follows:
+</p>
+<ul><li>After rebinning the data, find the positions of the special values (NaNs, Infs)
+</li><li>Perform the processing including determining the stitch overlap
+</li><li>Right at the end of the processing, put the special values back.
+</li><li>As a corollary to this, we may not need to perform the current call to ReplaceSpecialValues since the rebinned workspaces being integrated will already be missing the special values.
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9955.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-05T09%3A08%3A28%2B01%3A00&amp;precision=second" title="2014-08-05T09:08:28+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9955.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-05T13%3A14%3A50%2B01%3A00&amp;precision=second" title="2014-08-05T13:14:50+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9955.html" title="Strange NaN issues with Stitch1D (closed: fixed)">#9955</a>. No need for replace special values.
+</p>
+<p>
+Replace special values done as part of finding and recording those indexes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0c5642237c428bd5ca151ef7435ba6cf8c7882c4" title="0c5642237c428bd5ca151ef7435ba6cf8c7882c4">0c5642237c428bd5ca151ef7435ba6cf8c7882c4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9955.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-05T15%3A04%3A09%2B01%3A00&amp;precision=second" title="2014-08-05T15:04:09+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9955.html" title="Strange NaN issues with Stitch1D (closed: fixed)">#9955</a>. Add test and introduce replace functionality.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1355491d395009ea197ae1fe7f7cab181e6baee3" title="1355491d395009ea197ae1fe7f7cab181e6baee3">1355491d395009ea197ae1fe7f7cab181e6baee3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9955.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T08%3A15%3A04%2B01%3A00&amp;precision=second" title="2014-08-06T08:15:04+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9955.html" title="Strange NaN issues with Stitch1D (closed: fixed)">#9955</a>. Special treatment for errors too
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/346f9eaa54e593bf89b3cd94243ae670b6e35efe" title="346f9eaa54e593bf89b3cd94243ae670b6e35efe">346f9eaa54e593bf89b3cd94243ae670b6e35efe</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9955.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T08%3A45%3A46%2B01%3A00&amp;precision=second" title="2014-08-06T08:45:46+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9955.html" title="Strange NaN issues with Stitch1D (closed: fixed)">#9955</a>. Document and format.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7f5d87212f8baaedf134c648f50fff8434fd9702" title="7f5d87212f8baaedf134c648f50fff8434fd9702">7f5d87212f8baaedf134c648f50fff8434fd9702</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9955.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T09%3A22%3A40%2B01%3A00&amp;precision=second" title="2014-08-06T09:22:40+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tester:
+</p>
+<ul><li>Check the new documentation
+</li><li>New unit test covers this functionality
+</li><li>Running the following should include the perturbation due to the nan, but (a) the scale factors (error) and (value) with log=debug for Stitch1D should be real numbers, the continuation of the curve on both sides of the perturbation should look ok.
+</li></ul><div class="code"><pre>SURF00110503<span class="o">=</span>Load<span class="p">(</span><span class="s">'SURF00110503'</span><span class="p">)</span>
+SURF00110504<span class="o">=</span>Load<span class="p">(</span><span class="s">'SURF00110504'</span><span class="p">)</span>
+SURF00110505<span class="o">=</span>Load<span class="p">(</span><span class="s">'SURF00110505'</span><span class="p">)</span>
+
+
+
+RenameWorkspace<span class="p">(</span><span class="s">'SURF00110504'</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">'_110504'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span><span class="s">'SURF00110503'</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">'_110503'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span><span class="s">'SURF00110505'</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">'_110505'</span><span class="p">)</span>
+CreateSingleValuedWorkspace<span class="p">(</span>OutputWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">)</span>
+Plus<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_110504'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp0'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp0'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'Wavelength'</span><span class="p">,</span>AlignBins<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CloneWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>XMin<span class="o">=</span><span class="s">'0.5'</span><span class="p">,</span>XMax<span class="o">=</span><span class="s">'9'</span><span class="p">)</span>
+CalculateFlatBackground<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartX<span class="o">=</span><span class="s">'7.5999999999999996'</span><span class="p">,</span>EndX<span class="o">=</span><span class="s">'8.5'</span><span class="p">,</span>WorkspaceIndexList<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_I0P'</span><span class="p">)</span>
+Integration<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_I0P'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monInt'</span><span class="p">,</span>RangeLower<span class="o">=</span><span class="s">'4'</span><span class="p">,</span>RangeUpper<span class="o">=</span><span class="s">'6'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_monInt'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">)</span>
+CreateSingleValuedWorkspace<span class="p">(</span>OutputWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">)</span>
+Plus<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_110503'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp1'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp1'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'Wavelength'</span><span class="p">,</span>AlignBins<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CloneWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>XMin<span class="o">=</span><span class="s">'0.5'</span><span class="p">,</span>XMax<span class="o">=</span><span class="s">'9'</span><span class="p">)</span>
+CalculateFlatBackground<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartX<span class="o">=</span><span class="s">'7.5999999999999996'</span><span class="p">,</span>EndX<span class="o">=</span><span class="s">'8.5'</span><span class="p">,</span>WorkspaceIndexList<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i0p_trans'</span><span class="p">)</span>
+Integration<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_i0p_trans'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_mon_int_trans'</span><span class="p">,</span>RangeLower<span class="o">=</span><span class="s">'4'</span><span class="p">,</span>RangeUpper<span class="o">=</span><span class="s">'6'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_mon_int_trans'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'transWS'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'transWS'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_trans'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_trans'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_corrected'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_corrected'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">)</span>
+MoveInstrumentComponent<span class="p">(</span>Workspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>ComponentName<span class="o">=</span><span class="s">'point-detector'</span><span class="p">,</span>Y<span class="o">=</span><span class="s">'0.031287739139067995'</span><span class="p">,</span>Z<span class="o">=</span><span class="s">'11.43'</span><span class="p">,</span>RelativePosition<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsQ'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'MomentumTransfer'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110504_IvsQ'</span><span class="p">)</span>
+CreateSingleValuedWorkspace<span class="p">(</span>OutputWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">)</span>
+Plus<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'__tmp_binary_operation_double'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_110505'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp0'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'__python_op_tmp0'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'Wavelength'</span><span class="p">,</span>AlignBins<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'1'</span><span class="p">)</span>
+CloneWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'sum_wavelength'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>StartWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">,</span>EndWorkspaceIndex<span class="o">=</span><span class="s">'2'</span><span class="p">)</span>
+CropWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_in_rng'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>XMin<span class="o">=</span><span class="s">'0.5'</span><span class="p">,</span>XMax<span class="o">=</span><span class="s">'9'</span><span class="p">)</span>
+CalculateFlatBackground<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>StartX<span class="o">=</span><span class="s">'7.5999999999999996'</span><span class="p">,</span>EndX<span class="o">=</span><span class="s">'8.5'</span><span class="p">,</span>WorkspaceIndexList<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'_monitor_ws'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_I0P'</span><span class="p">)</span>
+Integration<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_I0P'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_monInt'</span><span class="p">,</span>RangeLower<span class="o">=</span><span class="s">'4'</span><span class="p">,</span>RangeUpper<span class="o">=</span><span class="s">'6'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'_detector_ws'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_monInt'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">)</span>
+RebinToWorkspace<span class="p">(</span>WorkspaceToRebin<span class="o">=</span><span class="s">'transWS'</span><span class="p">,</span>WorkspaceToMatch<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_trans'</span><span class="p">)</span>
+Divide<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_trans'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_corrected'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'_i_vs_lam_corrected'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">)</span>
+MoveInstrumentComponent<span class="p">(</span>Workspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>ComponentName<span class="o">=</span><span class="s">'point-detector'</span><span class="p">,</span>Y<span class="o">=</span><span class="s">'0.058102261279893055'</span><span class="p">,</span>Z<span class="o">=</span><span class="s">'11.43'</span><span class="p">,</span>RelativePosition<span class="o">=</span><span class="s">'0'</span><span class="p">)</span>
+ConvertUnits<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'IvsLam'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'IvsQ'</span><span class="p">,</span>Target<span class="o">=</span><span class="s">'MomentumTransfer'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ'</span><span class="p">)</span>
+Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'110504_IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110504_IvsQ_binned'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.011,-0.0376509,0.051'</span><span class="p">)</span>
+Rebin<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110505_IvsQ_binned'</span><span class="p">,</span>Params<span class="o">=</span><span class="s">'0.02,-0.0376509,0.142471'</span><span class="p">)</span>
+CloneWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'110504_IvsQ_binned'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'currentSum'</span><span class="p">)</span>
+Stitch1D<span class="p">(</span>LHSWorkspace<span class="o">=</span><span class="s">'currentSum'</span><span class="p">,</span>RHSWorkspace<span class="o">=</span><span class="s">'110505_IvsQ_binned'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'currentSum'</span><span class="p">)</span>
+RenameWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'currentSum'</span><span class="p">,</span>OutputWorkspace<span class="o">=</span><span class="s">'110504_50'</span><span class="p">)</span>
+graph_spec<span class="o">=</span>plotSpectrum<span class="p">(</span><span class="s">'110504_50'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+l <span class="o">=</span> graph_spec<span class="o">.</span>activeLayer<span class="p">()</span>
+l<span class="o">.</span>logLogAxes<span class="p">()</span>
+</pre></div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9955.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T09%3A26%3A41%2B01%3A00&amp;precision=second" title="2014-08-06T09:26:41+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/9955?action=diff&amp;version=10">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9955.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T09%3A26%3A53%2B01%3A00&amp;precision=second" title="2014-08-06T09:26:53+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9955.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T11%3A18%3A50%2B01%3A00&amp;precision=second" title="2014-08-08T11:18:50+01:00 in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Anders Markvardsen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9955.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T11%3A32%3A24%2B01%3A00&amp;precision=second" title="2014-08-08T11:32:24+01:00 in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9955_nans'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/41410b10f418e639101ebabda460fb916867ff44"><span class="icon">​</span>41410b10f418e639101ebabda460fb916867ff44</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9955.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T11%3A34%3A08%2B01%3A00&amp;precision=second" title="2014-08-08T11:34:08+01:00 in Timeline">6 years</a> ago by Anders Markvardsen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+update to doc matches changes made to code and script runs with continuation on both sides
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9955.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-14T15%3A22%3A54%2B01%3A00&amp;precision=second" title="2014-08-14T15:22:54+01:00 in Timeline">6 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Keywords</strong>
+        <em>PatchCandidate</em> removed
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.3</em> to <em>Release 3.2.1</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9955.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-20T16%3A39%3A59%2B01%3A00&amp;precision=second" title="2014-08-20T16:39:59+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Although not technically blocked by <a class="closed ticket" href="9954.html" title="Speed up Stitch1D unit test (closed: fixed)">#9954</a>, it there was some changes to Stitch1D there that mean this will only merge cleanly of <a class="closed ticket" href="9954.html" title="Speed up Stitch1D unit test (closed: fixed)">#9954</a> goes in first.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9955.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T08%3A20%3A38%2B01%3A00&amp;precision=second" title="2014-08-21T08:20:38+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Cherry-pick fixes from feature/9955_nans into next
+</p>
+<p>
+Changes:
+</p>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="9955.html" title="Strange NaN issues with Stitch1D (closed: fixed)">#9955</a>. No need for replace special values.
+</p>
+</blockquote>
+<blockquote>
+<p>
+Replace special values done as part of finding and recording those indexes.
+(cherry picked from commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0c5642237c428bd5ca151ef7435ba6cf8c7882c4" title="0c5642237c428bd5ca151ef7435ba6cf8c7882c4">0c5642237c428bd5ca151ef7435ba6cf8c7882c4</a>)
+</p>
+</blockquote>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="9955.html" title="Strange NaN issues with Stitch1D (closed: fixed)">#9955</a>. Add test and introduce replace functionality.
+(cherry picked from commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1355491d395009ea197ae1fe7f7cab181e6baee3" title="1355491d395009ea197ae1fe7f7cab181e6baee3">1355491d395009ea197ae1fe7f7cab181e6baee3</a>)
+</p>
+</blockquote>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="9955.html" title="Strange NaN issues with Stitch1D (closed: fixed)">#9955</a>. Special treatment for errors too
+(cherry picked from commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/346f9eaa54e593bf89b3cd94243ae670b6e35efe" title="346f9eaa54e593bf89b3cd94243ae670b6e35efe">346f9eaa54e593bf89b3cd94243ae670b6e35efe</a>)
+</p>
+</blockquote>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="9955.html" title="Strange NaN issues with Stitch1D (closed: fixed)">#9955</a>. Document and format.
+(cherry picked from commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7f5d87212f8baaedf134c648f50fff8434fd9702" title="7f5d87212f8baaedf134c648f50fff8434fd9702">7f5d87212f8baaedf134c648f50fff8434fd9702</a>)
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e834c2a0c1141e3ee258d6d756bcd3aa2e853203" title="e834c2a0c1141e3ee258d6d756bcd3aa2e853203">e834c2a0c1141e3ee258d6d756bcd3aa2e853203</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9955.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A39%3A38%2B01%3A00&amp;precision=second" title="2015-06-04T03:39:38+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10797"><span class="icon">​</span>10797</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9955?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9955?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9955?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,781 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10007 (Make Resolution Calculation More robust.)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10006.html" title="Ticket #10006" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10007?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10007?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10007?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10008.html" title="Ticket #10008" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10007, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10006.html" title="Ticket #10006">Previous Ticket</a></span></li><li><span><a class="next" href="10008.html" title="Ticket #10008">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10007.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10007.html">Ticket #10007</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-28T12%3A46%3A42%2B01%3A00&amp;precision=second" title="2014-07-28T12:46:42+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A41%3A47%2B01%3A00&amp;precision=second" title="2015-06-04T03:41:47+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Make Resolution Calculation More robust.</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Owen+Arnold">Owen Arnold</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Harry+Jeffery">Harry Jeffery</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Reflectometry">Reflectometry</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="10161.html" title="Expand on Calculate Resolution Documentation">#10161</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Owen Arnold
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+John, the SURF instrument scientist is finding this routine unreliable.
+</p>
+<p>
+This could possibly be done as a separate Algorithm, which would work nicely with the workflow algorithm approach we are currently using.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10007.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-30T11%3A08%3A42%2B01%3A00&amp;precision=second" title="2014-07-30T11:08:42+01:00 in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10007.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-05T08%3A29%3A39%2B01%3A00&amp;precision=second" title="2014-08-05T08:29:39+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Owen Arnold</em> to <em>Harry Jeffery</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10007.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T09%3A14%3A07%2B01%3A00&amp;precision=second" title="2014-08-21T09:14:07+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10007.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T11%3A12%3A08%2B01%3A00&amp;precision=second" title="2014-08-21T11:12:08+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add new algorithm: CalculateResolution.
+</p>
+<p>
+This algoritm is to replace the calcRes function found in refl_gui.py.
+It is used to calculate the resolution (dq/q) for reflectometry, given
+the instrument and a value of theta.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/958d8d7be81c31feaf25021c98739fce209dee8a" title="958d8d7be81c31feaf25021c98739fce209dee8a">958d8d7be81c31feaf25021c98739fce209dee8a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10007.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T11%3A12%3A09%2B01%3A00&amp;precision=second" title="2014-08-21T11:12:09+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add documentation for CalculateResolution.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81a8a9859492f9e3b2651707fcad56a4796a8479" title="81a8a9859492f9e3b2651707fcad56a4796a8479">81a8a9859492f9e3b2651707fcad56a4796a8479</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10007.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T11%3A12%3A09%2B01%3A00&amp;precision=second" title="2014-08-21T11:12:09+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add unit test for CalculateResolution.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/196165720279b4ad834c1859ec79d490e6dc8b4a" title="196165720279b4ad834c1859ec79d490e6dc8b4a">196165720279b4ad834c1859ec79d490e6dc8b4a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10007.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T11%3A12%3A09%2B01%3A00&amp;precision=second" title="2014-08-21T11:12:09+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace calcRes with CalculateResolution.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e2e92535501279d7b7ff0cd5752cc3a680d80fdc" title="e2e92535501279d7b7ff0cd5752cc3a680d80fdc">e2e92535501279d7b7ff0cd5752cc3a680d80fdc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10007.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T11%3A41%3A16%2B01%3A00&amp;precision=second" title="2014-08-21T11:41:16+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove orphaned function from refl_gui.py
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ab968931fb6c256347421008f66f00d0fadec08c" title="ab968931fb6c256347421008f66f00d0fadec08c">ab968931fb6c256347421008f66f00d0fadec08c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10007.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T11%3A57%3A33%2B01%3A00&amp;precision=second" title="2014-08-21T11:57:33+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>Testing</strong>
+</p>
+<ul><li>Code inspection - <a class="ext-link" href="https://github.com/mantidproject/mantid/compare/feature/10007_make_resolution_calculation_more_robust"><span class="icon">​</span>https://github.com/mantidproject/mantid/compare/feature/10007_make_resolution_calculation_more_robust</a>
+</li><li>Test the reflectometry interface before and after the new algorithm, verify the behaviour is the same.
+</li><li>Verify the new unit test is passing.
+</li><li>Verify the usage example is passing.
+</li><li>Review documentation.
+</li></ul>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T11%3A58%3A42%2B01%3A00&amp;precision=second" title="2014-08-21T11:58:42+01:00 in Timeline">6 years</a> ago
+                      by Harry Jeffery
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10007?cversion=0&amp;cnum_hist=9#comment:9">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10007?action=comment-diff&amp;cnum=9&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10007.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T12%3A25%3A31%2B01%3A00&amp;precision=second" title="2014-08-21T12:25:31+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10007.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T13%3A05%3A23%2B01%3A00&amp;precision=second" title="2014-08-21T13:05:23+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <ul><li>Theta should be labelled 'two theta scattering angle' in the algorithm property description. There is a bit of confusion around this regarding the naming in the original user generated code, but we want to make sure that it's documented in the algorithm as this.
+</li><li>Hard coded names 'slit1', 'slit2' 'vertical gap' etc are bad. These should be input property names (property with value string), which default to these current values.
+</li><li>Should not assume instrument geometry (as was done in the refl_gui code). Use the reference frame to determine what you want and take dot products between reference frame axis and the positions of components to complete the calculations. See SpecularReflectionCalculateTheta.cpp.
+</li><li>As a minor thing. Probably best to fetch the parameterized instrument once and pass the shared pointer about.
+</li></ul>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T13%3A06%3A25%2B01%3A00&amp;precision=second" title="2014-08-21T13:06:25+01:00 in Timeline">6 years</a> ago
+                      by Owen Arnold
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10007?cversion=0&amp;cnum_hist=11#comment:11">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/10007?action=comment-diff&amp;cnum=11&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10007.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T16%3A41%3A20%2B01%3A00&amp;precision=second" title="2014-08-21T16:41:20+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10007.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T11%3A15%3A47%2B01%3A00&amp;precision=second" title="2014-08-22T11:15:47+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Parameterize strings in CalculateResolution.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5bc6180a7d69342c735a931c0513cf5410b32766" title="5bc6180a7d69342c735a931c0513cf5410b32766">5bc6180a7d69342c735a931c0513cf5410b32766</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10007.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T11%3A15%3A47%2B01%3A00&amp;precision=second" title="2014-08-22T11:15:47+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename theta to two theta for clarity.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/247e3ddc9a7c9f960d67a9b50bc7be22a07069bb" title="247e3ddc9a7c9f960d67a9b50bc7be22a07069bb">247e3ddc9a7c9f960d67a9b50bc7be22a07069bb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10007.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T11%3A15%3A47%2B01%3A00&amp;precision=second" title="2014-08-22T11:15:47+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Only fetch instrument once.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/742296c775e62627ab057082810586ac2ae01907" title="742296c775e62627ab057082810586ac2ae01907">742296c775e62627ab057082810586ac2ae01907</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10007.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T11%3A15%3A48%2B01%3A00&amp;precision=second" title="2014-08-22T11:15:48+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make CalculateResolution orientation agnostic.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/becb916dc06e1f7664b02cc48b19ec67b529989e" title="becb916dc06e1f7664b02cc48b19ec67b529989e">becb916dc06e1f7664b02cc48b19ec67b529989e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10007.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T11%3A15%3A48%2B01%3A00&amp;precision=second" title="2014-08-22T11:15:48+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Optimise CalculateResolutionTest.
+</p>
+<p>
+Refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/38468ec5134d782951e883185fbc02433f4dbb7c" title="38468ec5134d782951e883185fbc02433f4dbb7c">38468ec5134d782951e883185fbc02433f4dbb7c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10007.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T11%3A25%3A42%2B01%3A00&amp;precision=second" title="2014-08-22T11:25:42+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10007.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T14%3A22%3A21%2B01%3A00&amp;precision=second" title="2014-08-22T14:22:21+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10161</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10007.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T15%3A51%3A49%2B01%3A00&amp;precision=second" title="2014-08-22T15:51:49+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/10007_make_resolution_calculation_more_robust'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/cd16a0dc651afa655a6ef156d184fc22f7be0b00"><span class="icon">​</span>cd16a0dc651afa655a6ef156d184fc22f7be0b00</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10007.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-22T15%3A51%3A49%2B01%3A00&amp;precision=second" title="2014-08-22T15:51:49+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="10007.html" title="Make Resolution Calculation More robust. (closed: fixed)">#10007</a>. Not quite wired up correctly.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7560909ce7217e5b3f35f88eaeb527d0ad3b80ff" title="7560909ce7217e5b3f35f88eaeb527d0ad3b80ff">7560909ce7217e5b3f35f88eaeb527d0ad3b80ff</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10007.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A41%3A47%2B01%3A00&amp;precision=second" title="2015-06-04T03:41:47+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10849"><span class="icon">​</span>10849</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10007?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10007?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10007?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

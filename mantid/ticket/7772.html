@@ -1,0 +1,648 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7772 (Make LoadDetectorGroupingFile work with .map files)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7771.html" title="Ticket #7771" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7772?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7772?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7772?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7773.html" title="Ticket #7773" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7772, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7771.html" title="Ticket #7771">Previous Ticket</a></span></li><li><span><a class="next" href="7773.html" title="Ticket #7773">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/7772.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7772.html">Ticket #7772</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-19T09%3A33%3A45%2B01%3A00&amp;precision=second" title="2013-08-19T09:33:45+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A09%3A07%2B01%3A00&amp;precision=second" title="2015-06-04T02:09:07+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Make LoadDetectorGroupingFile work with .map files</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Arturs+Bekasovs">Arturs Bekasovs</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Arturs+Bekasovs">Arturs Bekasovs</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=minor">minor</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.0.html">Release 3.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Muon">Muon</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="inprogress ticket" href="7765.html" title="Refactor GroupDetectors2">#7765</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Roman Tolchenov
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Currently it's done in GroupDetectors2, which shouldn't probably care about dealing with files.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/7772/grouping.map.html" title="View attachment">grouping.map</a><a href="../raw-attachment/ticket/7772/grouping.map" class="trac-rawlink" title="Download">​</a>
+       (<span title="89 bytes">89 bytes</span>) -
+      added by <em>Arturs Bekasovs</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T16%3A55%3A27%2B01%3A00&amp;precision=second" title="2013-08-22T16:55:27+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Sample grouping Map file
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7772.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-19T09%3A35%3A25%2B01%3A00&amp;precision=second" title="2013-08-19T09:35:25+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li><li>
+      <strong>Blocking</strong>
+        <em>7765</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7772.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-19T10%3A10%3A05%2B01%3A00&amp;precision=second" title="2013-08-19T10:10:05+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>From <tt>GroupDetectors2</tt> documentation:</strong>
+</p>
+<p>
+The file must have the following format (extra space and comments starting with # are allowed) :
+</p>
+<pre class="wiki">"unused number1"             
+"unused number2"
+"number_of_input_spectra1"
+"input spec1" "input spec2" "input spec3" "input spec4"
+"input spec5 input spec6"
+**    
+"unused number2" 
+"number_of_input_spectra2"
+"input spec1" "input spec2" "input spec3" "input spec4"
+</pre><p>
+Each phrase in "" is replaced by a single integer. The section of the file that follows <tt>**</tt> is repeated once for each group.
+</p>
+<p>
+Some programs require that "unused number1" is the number of groups specified in the file but Mantid ignores that number and all groups contained in the file are read regardless. "unused number2" is in other implementations the group's spectrum number but in this algorithm it is is ignored and can be any integer (not necessarily the same integer)
+</p>
+<p>
+An example of an input file follows:
+</p>
+<pre class="wiki">2
+1  
+12  
+1 2 3 4 5
+6 7 8 9 10
+11 12
+2  
+10
+65 66 67 68 69 
+70 71 72 73 74  
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="7772.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T10%3A58%3A09%2B01%3A00&amp;precision=second" title="2013-08-22T10:58:09+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added a new exception type for errors happened during file parsing.
+</p>
+<p>
+Refs <a class="closed ticket" href="7772.html" title="enhancement: Make LoadDetectorGroupingFile work with .map files (closed: fixed)">#7772</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/43de19fabd73a2d2c0c25f735468b51851a23296" title="43de19fabd73a2d2c0c25f735468b51851a23296">43de19fabd73a2d2c0c25f735468b51851a23296</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="7772.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T10%3A58%3A09%2B01%3A00&amp;precision=second" title="2013-08-22T10:58:09+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added a publicly available function to parse a numeric range.
+</p>
+<p>
+This is quite a useful one, as I've seen at least 3 different implementations
+of that. Rigorous tests for it were added as well.
+</p>
+<p>
+Refs <a class="closed ticket" href="7772.html" title="enhancement: Make LoadDetectorGroupingFile work with .map files (closed: fixed)">#7772</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3894f4aa48a78190997072670f1d41ab45b3fce2" title="3894f4aa48a78190997072670f1d41ab45b3fce2">3894f4aa48a78190997072670f1d41ab45b3fce2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="7772.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T10%3A58%3A09%2B01%3A00&amp;precision=second" title="2013-08-22T10:58:09+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added a class to parse Map grouping files and used it in the algorithm.
+</p>
+<p>
+Refs <a class="closed ticket" href="7772.html" title="enhancement: Make LoadDetectorGroupingFile work with .map files (closed: fixed)">#7772</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/427056773b090b429e4618749dc7c5adcc29eea0" title="427056773b090b429e4618749dc7c5adcc29eea0">427056773b090b429e4618749dc7c5adcc29eea0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="7772.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T10%3A58%3A09%2B01%3A00&amp;precision=second" title="2013-08-22T10:58:09+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added tests for Map files.
+</p>
+<p>
+Refs <a class="closed ticket" href="7772.html" title="enhancement: Make LoadDetectorGroupingFile work with .map files (closed: fixed)">#7772</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8c98af86f39b3963f5a49eea80991edf1b340bc2" title="8c98af86f39b3963f5a49eea80991edf1b340bc2">8c98af86f39b3963f5a49eea80991edf1b340bc2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="7772.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T10%3A58%3A09%2B01%3A00&amp;precision=second" title="2013-08-22T10:58:09+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make FilePropertyWidget use default extension.
+</p>
+<p>
+Before these changes it was using default extension for save dialogs only.
+The point here is that code for save and load dialogs is doing almost the
+same thing and should probably be moved to a single method. Additionally,
+for some reason load dialogs are using ".ext (*.ext)" approach, while
+save dialogs are displaying "*.ext" straight away. Somebody should probably
+take a look at that as a maintenance.
+</p>
+<p>
+Refs <a class="closed ticket" href="7772.html" title="enhancement: Make LoadDetectorGroupingFile work with .map files (closed: fixed)">#7772</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dde8e9f33ad284a41c871697c69e417ab2dc5885" title="dde8e9f33ad284a41c871697c69e417ab2dc5885">dde8e9f33ad284a41c871697c69e417ab2dc5885</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="7772.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T14%3A42%3A12%2B01%3A00&amp;precision=second" title="2013-08-22T14:42:12+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix build errors due to using initialization lists.
+</p>
+<p>
+Refs <a class="closed ticket" href="7772.html" title="enhancement: Make LoadDetectorGroupingFile work with .map files (closed: fixed)">#7772</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3030d1c6adff434c76c551fff8c124375ead5411" title="3030d1c6adff434c76c551fff8c124375ead5411">3030d1c6adff434c76c551fff8c124375ead5411</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="7772.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T16%3A54%3A26%2B01%3A00&amp;precision=second" title="2013-08-22T16:54:26+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Tester:</strong>
+</p>
+<ol><li>Save an attached <em>grouping.map</em> file somewhere on your drive.
+</li><li>Run MantidPlot.
+</li><li>Run <tt>LoadDetectorsGroupingFile</tt> algorithm.
+</li><li>Click the <strong>Browse</strong> for the InputFile. Notice that .map extension was added to the extension list, but make sure that .xml is selected by default.
+</li><li>Change the extension to .map and select the <em>grouping.map</em> file.
+</li><li>Run the algorithm with some OutputWorkspace name. Make sure it completes silently and the workspace is created.
+</li><li>Open the data view for all the spectra of created workspace. 
+</li><li>Check that spectra with indices (0-9) have a single Y value of 1.0, spectra (10-19) - value of 2.0, and (20-29) - value of 3.0.
+</li><li>Read the description of the .map format in the comment above, and try to experiment by changing the contents of <em>grouping.map</em> and checking that the algorithm parses it correctly. Try to introduce errors, e.g. insufficiently many spectra specified for a group, incorrect integer, reversed range, garbage on the line etc, and make sure that informative error messages are returned.
+</li><li>Now try to load a <em>AutoTestData/MUSRGrouping.xml</em> file and make sure it parses it correctly as well. Correct values for a resulting workspace: spectra indices (0-31) - value of 2.0, and (32-63) - value of 1.0. This is just to make sure that the old code is not affected.
+</li></ol><p>
+  
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T16%3A55%3A02%2B01%3A00&amp;precision=second" title="2013-08-22T16:55:02+01:00 in Timeline">7 years</a> ago
+                      by Arturs Bekasovs
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/7772?cversion=0&amp;cnum_hist=9#comment:9">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/7772?action=comment-diff&amp;cnum=9&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T16%3A55%3A27%2B01%3A00&amp;precision=second" title="2013-08-22T16:55:27+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7772/grouping.map.html"><em>grouping.map</em></a><a href="../raw-attachment/ticket/7772/grouping.map" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Sample grouping Map file
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7772.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-22T16%3A56%3A08%2B01%3A00&amp;precision=second" title="2013-08-22T16:56:08+01:00 in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7772.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-23T15%3A43%3A56%2B01%3A00&amp;precision=second" title="2013-08-23T15:43:56+01:00 in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7772.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-23T16%3A05%3A41%2B01%3A00&amp;precision=second" title="2013-08-23T16:05:41+01:00 in Timeline">7 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/7772_load_map_grouping_file'
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="7772.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-23T11%3A15%3A30%2B01%3A00&amp;precision=second" title="2013-10-23T11:15:30+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Muon</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="7772.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A09%3A07%2B01%3A00&amp;precision=second" title="2015-06-04T02:09:07+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/8617"><span class="icon">​</span>8617</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7772?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7772?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7772?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

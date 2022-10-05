@@ -1,0 +1,2179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10855 (Rewrite indirect diffraction reduction algorithm)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10854.html" title="Ticket #10854" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10855?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10855?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10855?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10856.html" title="Ticket #10856" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10855, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10854.html" title="Ticket #10854">Previous Ticket</a></span></li><li><span><a class="next" href="10856.html" title="Ticket #10856">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10855.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10855.html">Ticket #10855</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-06T14%3A29%3A45Z&amp;precision=second" title="2015-01-06T14:29:45Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A14%3A02%2B01%3A00&amp;precision=second" title="2015-06-04T04:14:02+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Rewrite indirect diffraction reduction algorithm</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Dan+Nixon">Dan Nixon</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Dan+Nixon">Dan Nixon</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="milestone" href="../milestone/Release&#32;3.5.html">Release 3.5</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="verify ticket" href="9093.html" title="remove dependency on reduction folder from Inelastic">#9093</a>, <a class="assigned ticket" href="11431.html" title="Create some basic reduction scripts for users">#11431</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Federico Montesino Pouzols
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2015-05-18 11:29:34.200256+00:00">
+        (last modified by Dan Nixon)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/10855?action=diff&amp;version=34">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+This can use functions from the ET algorithm, allowing workflow diagrams  for both algorithms.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10855.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-06T14%3A29%3A49Z&amp;precision=second" title="2015-01-06T14:29:49Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10855.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-06T16%3A23%3A58Z&amp;precision=second" title="2015-01-06T16:23:58Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work on new algorithm
+</p>
+<p>
+Gets identical results for IRIS reductions (at least usng as much as has
+been implemented so far)
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0f20d2a926a5635235c7851512d702874dae431e" title="0f20d2a926a5635235c7851512d702874dae431e">0f20d2a926a5635235c7851512d702874dae431e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10855.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-06T16%3A45%3A33Z&amp;precision=second" title="2015-01-06T16:45:33Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added correct rebinning, workspage grouping, moved rst page
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7c7531a80c69c034823c4bdad8a25c2c9c228e55" title="7c7531a80c69c034823c4bdad8a25c2c9c228e55">7c7531a80c69c034823c4bdad8a25c2c9c228e55</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10855.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-06T16%3A58%3A54Z&amp;precision=second" title="2015-01-06T16:58:54Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Load the IPF, added skeleton function for spectra grouping
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6014e82d4566fa350b84f94805219acf83e35305" title="6014e82d4566fa350b84f94805219acf83e35305">6014e82d4566fa350b84f94805219acf83e35305</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10855.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-07T09%3A08%3A15Z&amp;precision=second" title="2015-01-07T09:08:15Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added workspace naming step
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac13c17a519abe936dd3838f3a2cbdba91540fd7" title="ac13c17a519abe936dd3838f3a2cbdba91540fd7">ac13c17a519abe936dd3838f3a2cbdba91540fd7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10855.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-07T09%3A56%3A44Z&amp;precision=second" title="2015-01-07T09:56:44Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Support proper grouping options
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/55c7717b609b51ea1aca860a0f649834cb861f53" title="55c7717b609b51ea1aca860a0f649834cb861f53">55c7717b609b51ea1aca860a0f649834cb861f53</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10855.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-07T11%3A25%3A36Z&amp;precision=second" title="2015-01-07T11:25:36Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Better handling of grouping, convert to wavelength property
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/005af0a8f4d49041804066c5e32414686efbbf6c" title="005af0a8f4d49041804066c5e32414686efbbf6c">005af0a8f4d49041804066c5e32414686efbbf6c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10855.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-07T14%3A00%3A09Z&amp;precision=second" title="2015-01-07T14:00:09Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Handle summing raw files
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/00d8feb5f01e187866a44874ec382c255922e227" title="00d8feb5f01e187866a44874ec382c255922e227">00d8feb5f01e187866a44874ec382c255922e227</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10855.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-07T14%3A00%3A09Z&amp;precision=second" title="2015-01-07T14:00:09Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add original run numbers as sample log
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b04023c931702ca14372f07563d1a0251efd68ea" title="b04023c931702ca14372f07563d1a0251efd68ea">b04023c931702ca14372f07563d1a0251efd68ea</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10855.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-07T14%3A16%3A26Z&amp;precision=second" title="2015-01-07T14:16:26Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use correct scale factor parameter
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/378a8457240acfdbb8a98622e1fecb1b32078a48" title="378a8457240acfdbb8a98622e1fecb1b32078a48">378a8457240acfdbb8a98622e1fecb1b32078a48</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10855.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-07T14%3A31%3A01Z&amp;precision=second" title="2015-01-07T14:31:01Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Swap tests to use new algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7b8c2bbb54cc1d22576234614301de59a37b5b2c" title="7b8c2bbb54cc1d22576234614301de59a37b5b2c">7b8c2bbb54cc1d22576234614301de59a37b5b2c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10855.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-12T16%3A39%3A51Z&amp;precision=second" title="2015-01-12T16:39:51Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+To test:
+</p>
+<ul><li>Ensure system tests are passing: <tt></tt><tt>IRISDiffractionTest</tt><tt></tt>, <tt></tt><tt>OSIRISDiffractionTest</tt><tt></tt>, <tt></tt><tt>TOSCADiffractionTest</tt><tt></tt>
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10855.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-12T16%3A41%3A23Z&amp;precision=second" title="2015-01-12T16:41:23Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Updated ref results for changes in algorithm
+</p>
+<p>
+Previously param files were not loaded so monitor scaling was not done
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f935edf7617180a542990d98f37ccc2ed06faa3" title="4f935edf7617180a542990d98f37ccc2ed06faa3">4f935edf7617180a542990d98f37ccc2ed06faa3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10855.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-12T16%3A48%3A06Z&amp;precision=second" title="2015-01-12T16:48:06Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed old reduction scripts, switch UI to new algo
+</p>
+<p>
+Need to add saving
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bbe37ec11c3b123d378bf59812acdb1ac5010b35" title="bbe37ec11c3b123d378bf59812acdb1ac5010b35">bbe37ec11c3b123d378bf59812acdb1ac5010b35</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10855.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-13T10%3A17%3A10Z&amp;precision=second" title="2015-01-13T10:17:10Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re add saving to generic reductions
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca008d2133db9276c58ba17590a5d667d365718b" title="ca008d2133db9276c58ba17590a5d667d365718b">ca008d2133db9276c58ba17590a5d667d365718b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10855.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T14%3A56%3A48Z&amp;precision=second" title="2015-02-13T14:56:48Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/IndirectDiffractionReduction.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4344b3f8f1e233e41c8d9efbaa7bf258a5b13a80" title="4344b3f8f1e233e41c8d9efbaa7bf258a5b13a80">4344b3f8f1e233e41c8d9efbaa7bf258a5b13a80</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10855.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T09%3A10%3A44Z&amp;precision=second" title="2015-02-20T09:10:44Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11139</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10855.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T09%3A44%3A29Z&amp;precision=second" title="2015-02-20T09:44:29Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c8a3e551b0be3bf5c1b38a71c832c56fafd85650" title="c8a3e551b0be3bf5c1b38a71c832c56fafd85650">c8a3e551b0be3bf5c1b38a71c832c56fafd85650</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10855.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-16T16%3A36%3A37Z&amp;precision=second" title="2015-03-16T16:36:37Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11139</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10855.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-19T16%3A17%3A47Z&amp;precision=second" title="2015-03-19T16:17:47Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/MSGDiffractionReduction.py
+Code/Mantid/scripts/Inelastic/IndirectDiffractionReduction.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/44fa4c0595039f59bb3f80b4dc3659a63c4747c5" title="44fa4c0595039f59bb3f80b4dc3659a63c4747c5">44fa4c0595039f59bb3f80b4dc3659a63c4747c5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10855.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-19T16%3A24%3A20Z&amp;precision=second" title="2015-03-19T16:24:20Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Switch system tests to use new algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/462192a06a731685740da4be99bd1e74cdf28123" title="462192a06a731685740da4be99bd1e74cdf28123">462192a06a731685740da4be99bd1e74cdf28123</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10855.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-25T16%3A30%3A25Z&amp;precision=second" title="2015-03-25T16:30:25Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11431</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10855.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-02T10%3A31%3A16%2B01%3A00&amp;precision=second" title="2015-04-02T10:31:16+01:00 in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.4</em> to <em>Release 3.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10855.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-10T11%3A19%3A04%2B01%3A00&amp;precision=second" title="2015-04-10T11:19:04+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/MSGDiffractionReduction.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/11748c8c0c1f2cac751d81e3473f7d477ba4c976" title="11748c8c0c1f2cac751d81e3473f7d477ba4c976">11748c8c0c1f2cac751d81e3473f7d477ba4c976</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10855.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-15T10%3A45%3A20%2B01%3A00&amp;precision=second" title="2015-05-15T10:45:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f93593a2575c1c275d24f4dac4e5f27c72916272" title="f93593a2575c1c275d24f4dac4e5f27c72916272">f93593a2575c1c275d24f4dac4e5f27c72916272</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10855.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-15T10%3A45%3A20%2B01%3A00&amp;precision=second" title="2015-05-15T10:45:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Start moving common functionality to seperate script file
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d28eab1a5f10c3f1e4133b651e0164ab8664874e" title="d28eab1a5f10c3f1e4133b651e0164ab8664874e">d28eab1a5f10c3f1e4133b651e0164ab8664874e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10855.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-15T12%3A04%3A49%2B01%3A00&amp;precision=second" title="2015-05-15T12:04:49+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Split all functions into additional file
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4cbc8168fc870f061ee48ea5ab458194d20e53db" title="4cbc8168fc870f061ee48ea5ab458194d20e53db">4cbc8168fc870f061ee48ea5ab458194d20e53db</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10855.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-15T13%3A34%3A29%2B01%3A00&amp;precision=second" title="2015-05-15T13:34:29+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor diffraction algorithm, all tests now pass
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8d205bd0c55c6dd80ec3dbe8d43e7222978434be" title="8d205bd0c55c6dd80ec3dbe8d43e7222978434be">8d205bd0c55c6dd80ec3dbe8d43e7222978434be</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10855.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-15T13%3A47%3A17%2B01%3A00&amp;precision=second" title="2015-05-15T13:47:17+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove unused files  Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fb4df43300cbecbed3ef81b076f21deafccbf64c" title="fb4df43300cbecbed3ef81b076f21deafccbf64c">fb4df43300cbecbed3ef81b076f21deafccbf64c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10855.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T09%3A20%3A34%2B01%3A00&amp;precision=second" title="2015-05-18T09:20:34+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move more common code to IndirectReductionCommon.py
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2bbec8e929763627851ffed017c6137e7124bd4" title="f2bbec8e929763627851ffed017c6137e7124bd4">f2bbec8e929763627851ffed017c6137e7124bd4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10855.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T11%3A04%3A34%2B01%3A00&amp;precision=second" title="2015-05-18T11:04:34+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added diagrams for ET and diff workflows
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/10e95398dc998d3d257fe2c2c33cc817f43375c1" title="10e95398dc998d3d257fe2c2c33cc817f43375c1">10e95398dc998d3d257fe2c2c33cc817f43375c1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10855.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T12%3A19%3A24%2B01%3A00&amp;precision=second" title="2015-05-18T12:19:24+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More work on workflow diagrams
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/832f4cbb63825c489be772c4111257387ec75bba" title="832f4cbb63825c489be772c4111257387ec75bba">832f4cbb63825c489be772c4111257387ec75bba</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="10855.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T12%3A24%3A17%2B01%3A00&amp;precision=second" title="2015-05-18T12:24:17+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Update diffraction reduction diagram
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c746ce676c0908eb821328ce5ff89a515a64c7f6" title="c746ce676c0908eb821328ce5ff89a515a64c7f6">c746ce676c0908eb821328ce5ff89a515a64c7f6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="10855.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T12%3A29%3A34%2B01%3A00&amp;precision=second" title="2015-05-18T12:29:34+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/10855?action=diff&amp;version=34">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="10855.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T12%3A30%3A18%2B01%3A00&amp;precision=second" title="2015-05-18T12:30:18+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/763"><span class="icon">​</span>pull request #763</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="10855.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T13%3A24%3A05%2B01%3A00&amp;precision=second" title="2015-05-18T13:24:05+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Did not account for VESUVIO on diffraction.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="10855.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T16%3A37%3A09%2B01%3A00&amp;precision=second" title="2015-05-18T16:37:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Support VESUVIO on diffraction properly
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5312298a21f4da4d56bc5350f58c25aa987564bd" title="5312298a21f4da4d56bc5350f58c25aa987564bd">5312298a21f4da4d56bc5350f58c25aa987564bd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="10855.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-18T16%3A37%3A09%2B01%3A00&amp;precision=second" title="2015-05-18T16:37:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix broken system tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac4d05b29a015400e65fbba82508240f7f3ac1c2" title="ac4d05b29a015400e65fbba82508240f7f3ac1c2">ac4d05b29a015400e65fbba82508240f7f3ac1c2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="10855.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-20T09%3A53%3A50%2B01%3A00&amp;precision=second" title="2015-05-20T09:53:50+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix trivial doctest failure Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bad9b5f7fb6913c8de81504ad7b542e5d8994165" title="bad9b5f7fb6913c8de81504ad7b542e5d8994165">bad9b5f7fb6913c8de81504ad7b542e5d8994165</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="10855.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-05-29T11%3A24%3A00%2B01%3A00&amp;precision=second" title="2015-05-29T11:24:00+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/ISISIndirectEnergyTransfer.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/342140e2620c36d21114d344d206d903e0a3f9e2" title="342140e2620c36d21114d344d206d903e0a3f9e2">342140e2620c36d21114d344d206d903e0a3f9e2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="10855.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-02T08%3A34%3A44%2B01%3A00&amp;precision=second" title="2015-06-02T08:34:44+01:00 in Timeline">5 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Federico Montesino Pouzols</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="10855.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-02T08%3A57%3A29%2B01%3A00&amp;precision=second" title="2015-06-02T08:57:29+01:00 in Timeline">5 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+All looks fine and the documentation makes perfect sense. But pylint has a different opinion... IndirectReductionCommon.py comes with 42 warnings: <a class="ext-link" href="http://builds.mantidproject.org/job/pull_requests-pylint/439/violations/file/IndirectReductionCommon.py/"><span class="icon">​</span>http://builds.mantidproject.org/job/pull_requests-pylint/439/violations/file/IndirectReductionCommon.py/</a>, and ISISIndirectDiffractionReduction.py introduces 15. Some of them make sense and seem esay to fix (like an unused import). Then there is also the annoying issue with mantid.simpleapi where <tt>from mantid.simpleapi import ...</tt>  will produce a warning for every function name that you use (<a class="ext-link" href="https://github.com/mantidproject/mantid/pull/806#issuecomment-106856824"><span class="icon">​</span>https://github.com/mantidproject/mantid/pull/806#issuecomment-106856824</a>). I'm running the system and doc tests locally just in case, but otherwise everything seems fine.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="10855.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-02T09%3A14%3A09%2B01%3A00&amp;precision=second" title="2015-06-02T09:14:09+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Keep Pylint happy Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0d577606ac7d8ffb95d3529f40fe7ab8772037e1" title="0d577606ac7d8ffb95d3529f40fe7ab8772037e1">0d577606ac7d8ffb95d3529f40fe7ab8772037e1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="10855.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-02T09%3A16%3A19%2B01%3A00&amp;precision=second" title="2015-06-02T09:16:19+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I'm assuming <tt></tt><tt>no-name-in-module</tt><tt></tt> was the right thing to disable to fix those errors, I'm slightly reluctant to have to change the use of those algorithms since there is actually nothing wrong with the way it was already done.
+</p>
+<p>
+Considering I do this in pretty much every Python algorithm I write (as do a fair few other developers) this should just be ignored globally.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="10855.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A12%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:12+01:00 in Timeline">5 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The only (spurious) issue is the failed windows doc-test. I passed them locally and it went fine. The doc-test issues are totally unrelated to this PR.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="10855.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A20%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Checkpointing work on new algorithm
+</p>
+<p>
+Gets identical results for IRIS reductions (at least usng as much as has
+been implemented so far)
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0f20d2a926a5635235c7851512d702874dae431e" title="0f20d2a926a5635235c7851512d702874dae431e">0f20d2a926a5635235c7851512d702874dae431e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="10855.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A20%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added correct rebinning, workspage grouping, moved rst page
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7c7531a80c69c034823c4bdad8a25c2c9c228e55" title="7c7531a80c69c034823c4bdad8a25c2c9c228e55">7c7531a80c69c034823c4bdad8a25c2c9c228e55</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="10855.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A20%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Load the IPF, added skeleton function for spectra grouping
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6014e82d4566fa350b84f94805219acf83e35305" title="6014e82d4566fa350b84f94805219acf83e35305">6014e82d4566fa350b84f94805219acf83e35305</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="10855.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A20%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added workspace naming step
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac13c17a519abe936dd3838f3a2cbdba91540fd7" title="ac13c17a519abe936dd3838f3a2cbdba91540fd7">ac13c17a519abe936dd3838f3a2cbdba91540fd7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="10855.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A20%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Support proper grouping options
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/55c7717b609b51ea1aca860a0f649834cb861f53" title="55c7717b609b51ea1aca860a0f649834cb861f53">55c7717b609b51ea1aca860a0f649834cb861f53</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="10855.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A20%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Better handling of grouping, convert to wavelength property
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/005af0a8f4d49041804066c5e32414686efbbf6c" title="005af0a8f4d49041804066c5e32414686efbbf6c">005af0a8f4d49041804066c5e32414686efbbf6c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="10855.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A20%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Handle summing raw files
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/00d8feb5f01e187866a44874ec382c255922e227" title="00d8feb5f01e187866a44874ec382c255922e227">00d8feb5f01e187866a44874ec382c255922e227</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="10855.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A20%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:20+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add original run numbers as sample log
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b04023c931702ca14372f07563d1a0251efd68ea" title="b04023c931702ca14372f07563d1a0251efd68ea">b04023c931702ca14372f07563d1a0251efd68ea</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="10855.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Use correct scale factor parameter
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/378a8457240acfdbb8a98622e1fecb1b32078a48" title="378a8457240acfdbb8a98622e1fecb1b32078a48">378a8457240acfdbb8a98622e1fecb1b32078a48</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="10855.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Removed old reduction scripts, switch UI to new algo
+</p>
+<p>
+Need to add saving
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bbe37ec11c3b123d378bf59812acdb1ac5010b35" title="bbe37ec11c3b123d378bf59812acdb1ac5010b35">bbe37ec11c3b123d378bf59812acdb1ac5010b35</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="10855.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re add saving to generic reductions
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca008d2133db9276c58ba17590a5d667d365718b" title="ca008d2133db9276c58ba17590a5d667d365718b">ca008d2133db9276c58ba17590a5d667d365718b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="10855.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/CustomInterfaces/src/Indirect/IndirectDiffractionReduction.cpp
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4344b3f8f1e233e41c8d9efbaa7bf258a5b13a80" title="4344b3f8f1e233e41c8d9efbaa7bf258a5b13a80">4344b3f8f1e233e41c8d9efbaa7bf258a5b13a80</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="10855.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c8a3e551b0be3bf5c1b38a71c832c56fafd85650" title="c8a3e551b0be3bf5c1b38a71c832c56fafd85650">c8a3e551b0be3bf5c1b38a71c832c56fafd85650</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="10855.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/MSGDiffractionReduction.py
+Code/Mantid/scripts/Inelastic/IndirectDiffractionReduction.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/44fa4c0595039f59bb3f80b4dc3659a63c4747c5" title="44fa4c0595039f59bb3f80b4dc3659a63c4747c5">44fa4c0595039f59bb3f80b4dc3659a63c4747c5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="10855.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Switch system tests to use new algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/462192a06a731685740da4be99bd1e74cdf28123" title="462192a06a731685740da4be99bd1e74cdf28123">462192a06a731685740da4be99bd1e74cdf28123</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="10855.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/MSGDiffractionReduction.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/11748c8c0c1f2cac751d81e3473f7d477ba4c976" title="11748c8c0c1f2cac751d81e3473f7d477ba4c976">11748c8c0c1f2cac751d81e3473f7d477ba4c976</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="10855.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f93593a2575c1c275d24f4dac4e5f27c72916272" title="f93593a2575c1c275d24f4dac4e5f27c72916272">f93593a2575c1c275d24f4dac4e5f27c72916272</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="10855.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Start moving common functionality to seperate script file
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d28eab1a5f10c3f1e4133b651e0164ab8664874e" title="d28eab1a5f10c3f1e4133b651e0164ab8664874e">d28eab1a5f10c3f1e4133b651e0164ab8664874e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="10855.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Split all functions into additional file
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4cbc8168fc870f061ee48ea5ab458194d20e53db" title="4cbc8168fc870f061ee48ea5ab458194d20e53db">4cbc8168fc870f061ee48ea5ab458194d20e53db</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="10855.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor diffraction algorithm, all tests now pass
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8d205bd0c55c6dd80ec3dbe8d43e7222978434be" title="8d205bd0c55c6dd80ec3dbe8d43e7222978434be">8d205bd0c55c6dd80ec3dbe8d43e7222978434be</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="10855.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove unused files  Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fb4df43300cbecbed3ef81b076f21deafccbf64c" title="fb4df43300cbecbed3ef81b076f21deafccbf64c">fb4df43300cbecbed3ef81b076f21deafccbf64c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="10855.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move more common code to IndirectReductionCommon.py
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2bbec8e929763627851ffed017c6137e7124bd4" title="f2bbec8e929763627851ffed017c6137e7124bd4">f2bbec8e929763627851ffed017c6137e7124bd4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="10855.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added diagrams for ET and diff workflows
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/10e95398dc998d3d257fe2c2c33cc817f43375c1" title="10e95398dc998d3d257fe2c2c33cc817f43375c1">10e95398dc998d3d257fe2c2c33cc817f43375c1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="10855.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More work on workflow diagrams
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/832f4cbb63825c489be772c4111257387ec75bba" title="832f4cbb63825c489be772c4111257387ec75bba">832f4cbb63825c489be772c4111257387ec75bba</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="10855.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Update diffraction reduction diagram
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c746ce676c0908eb821328ce5ff89a515a64c7f6" title="c746ce676c0908eb821328ce5ff89a515a64c7f6">c746ce676c0908eb821328ce5ff89a515a64c7f6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="10855.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Support VESUVIO on diffraction properly
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5312298a21f4da4d56bc5350f58c25aa987564bd" title="5312298a21f4da4d56bc5350f58c25aa987564bd">5312298a21f4da4d56bc5350f58c25aa987564bd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="10855.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix broken system tests
+</p>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac4d05b29a015400e65fbba82508240f7f3ac1c2" title="ac4d05b29a015400e65fbba82508240f7f3ac1c2">ac4d05b29a015400e65fbba82508240f7f3ac1c2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="10855.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix trivial doctest failure Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bad9b5f7fb6913c8de81504ad7b542e5d8994165" title="bad9b5f7fb6913c8de81504ad7b542e5d8994165">bad9b5f7fb6913c8de81504ad7b542e5d8994165</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="10855.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/ISISIndirectEnergyTransfer.py
+</p>
+</blockquote>
+<p>
+Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/342140e2620c36d21114d344d206d903e0a3f9e2" title="342140e2620c36d21114d344d206d903e0a3f9e2">342140e2620c36d21114d344d206d903e0a3f9e2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="10855.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Keep Pylint happy Refs <a class="closed ticket" href="10855.html" title="Rewrite indirect diffraction reduction algorithm (closed: fixed)">#10855</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0d577606ac7d8ffb95d3529f40fe7ab8772037e1" title="0d577606ac7d8ffb95d3529f40fe7ab8772037e1">0d577606ac7d8ffb95d3529f40fe7ab8772037e1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="10855.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T09%3A34%3A21%2B01%3A00&amp;precision=second" title="2015-06-03T09:34:21+01:00 in Timeline">5 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="763.html" title="defect: RPM fails to build (closed: fixed)">#763</a> from mantidproject/feature/10855_rewrite_indirect_diffraction_reduction
+</p>
+<p>
+New ISIS indirect diffraction reduction algorithm
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/eb7b303011d72d9aac711a2bfaa00c7cbbe89c32"><span class="icon">​</span>eb7b303011d72d9aac711a2bfaa00c7cbbe89c32</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="10855.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A14%3A02%2B01%3A00&amp;precision=second" title="2015-06-04T04:14:02+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11697"><span class="icon">​</span>11697</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10855?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10855?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10855?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

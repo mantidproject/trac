@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11188 (Flat plate Paalman &amp; Pings absorption correct algorithm)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11187.html" title="Ticket #11187" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11188?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11188?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11188?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11189.html" title="Ticket #11189" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11188, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11187.html" title="Ticket #11187">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="11189.html" title="Ticket #11189">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11188.html">Ticket #11188</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-26T15%3A15%3A41Z&amp;precision=second" title="2015-02-26T15:15:41Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A27%3A00%2B01%3A00&amp;precision=second" title="2015-06-04T04:27:00+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Flat plate Paalman &amp; Pings absorption correct algorithm</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Dan+Nixon">Dan Nixon</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Dan+Nixon">Dan Nixon</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              abuts
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Spencer has provided an absorption correction algorithm for generic workspaces in wavelength that outputs the correction factors in Paalman and Pings format.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11188.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-26T15%3A15%3A46Z&amp;precision=second" title="2015-02-26T15:15:46Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11188.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-26T15%3A16%3A39Z&amp;precision=second" title="2015-02-26T15:16:39Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Initial commit of Spencer's algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/084e1a84e3a25b7fe85c6656e845909eda99634e" title="084e1a84e3a25b7fe85c6656e845909eda99634e">084e1a84e3a25b7fe85c6656e845909eda99634e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11188.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-26T15%3A25%3A04Z&amp;precision=second" title="2015-02-26T15:25:04Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Partially refactored algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ef08fe15eb4b585805b3c1a18c2e11b7192e211c" title="ef08fe15eb4b585805b3c1a18c2e11b7192e211c">ef08fe15eb4b585805b3c1a18c2e11b7192e211c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11188.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-27T11%3A57%3A22Z&amp;precision=second" title="2015-02-27T11:57:22Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fixed a few issues running algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b543eb9b3be57661dc2930880393ad3e7a669101" title="b543eb9b3be57661dc2930880393ad3e7a669101">b543eb9b3be57661dc2930880393ad3e7a669101</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="11188.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-27T12%3A29%3A25Z&amp;precision=second" title="2015-02-27T12:29:25Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More refactoring of algorithm
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/82acd0496b84d7ece967b8d180054a90fd4ff40a" title="82acd0496b84d7ece967b8d180054a90fd4ff40a">82acd0496b84d7ece967b8d180054a90fd4ff40a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="11188.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-27T15%3A25%3A42Z&amp;precision=second" title="2015-02-27T15:25:42Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Improve property validation
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3845f94154be2c7432d787813378966e1e825fc3" title="3845f94154be2c7432d787813378966e1e825fc3">3845f94154be2c7432d787813378966e1e825fc3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="11188.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T11%3A52%3A21Z&amp;precision=second" title="2015-03-02T11:52:21Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Updated documentation, added unit testing
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6a82cb857597028e8630ccb56fa0c6eff430546d" title="6a82cb857597028e8630ccb56fa0c6eff430546d">6a82cb857597028e8630ccb56fa0c6eff430546d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="11188.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T12%3A09%3A24Z&amp;precision=second" title="2015-03-02T12:09:24Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added more unit tests, fixed an issue with Elastic mode
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/597e400a4c06af6cc09369e3f01fc25458c10309" title="597e400a4c06af6cc09369e3f01fc25458c10309">597e400a4c06af6cc09369e3f01fc25458c10309</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="11188.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T12%3A11%3A13Z&amp;precision=second" title="2015-03-02T12:11:13Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/328"><span class="icon">​</span>pull request #328</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="11188.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T13%3A46%3A06Z&amp;precision=second" title="2015-03-02T13:46:06Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add link to RAL report describing calculation
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0ee3029676b20f02cdcd53476783df444dc22f77" title="0ee3029676b20f02cdcd53476783df444dc22f77">0ee3029676b20f02cdcd53476783df444dc22f77</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="11188.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T15%3A33%3A56Z&amp;precision=second" title="2015-03-02T15:33:56Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+FIx test failure due to older Python
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0022145364892369df081f33af93f9d615bd133c" title="0022145364892369df081f33af93f9d615bd133c">0022145364892369df081f33af93f9d615bd133c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="11188.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-06T08%3A40%3A09Z&amp;precision=second" title="2015-03-06T08:40:09Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into 11188_paalman_pings_flat_plate
+</p>
+<p>
+Refs <a class="closed ticket" href="11188.html" title="Flat plate Paalman &amp; Pings absorption correct algorithm (closed: fixed)">#11188</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02ae94056e2f5f58defc096e7ff0dd95ff96b707" title="02ae94056e2f5f58defc096e7ff0dd95ff96b707">02ae94056e2f5f58defc096e7ff0dd95ff96b707</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="11188.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-06T16%3A59%3A46Z&amp;precision=second" title="2015-03-06T16:59:46Z in Timeline">6 years</a> ago by abuts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>closed</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>abuts</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="328.html" title="defect: Bug in PlotSPpectra for workspace with only 1 spectrum (closed: duplicate)">#328</a> from mantidproject/11188_paalman_pings_flat_plate
+</p>
+<p>
+Flat plate absorption correction algorithm that output Paalman &amp; Pings style factors
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/725978419a980b5b14581825df0cd5771630a165"><span class="icon">​</span>725978419a980b5b14581825df0cd5771630a165</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="11188.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T10%3A21%3A42%2B01%3A00&amp;precision=second" title="2015-04-22T10:21:42+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Somehow these slipped through without a resolution.  Set to Fixed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="11188.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A27%3A00%2B01%3A00&amp;precision=second" title="2015-06-04T04:27:00+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/12027"><span class="icon">​</span>12027</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11188?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11188?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11188?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,473 @@
+From:	Taylor, Jon (STFC,RAL,ISIS)
+Sent:	11 January 2011 14:58
+To:	Draper, Nick (-,RAL,ISIS)
+Subject:	RE: sofqw
+
+Follow Up Flag:	Follow up
+Flag Status:	Flagged
+
+hi
+the lamp routine is below, its in the lamp macro language... enjoy
+cheers 
+Jon
+;-----------------------------------------------------------------------------
+---
+;*****************************************************************************
+***
+;
+ FUNCTION sqw_rebin, w_in, dQ = dQ, Emin = Emin0, all_angles = all_angles, $
+   pos_angles = pos_angles, neg_angles = neg_angles, $
+   swap_QE = swap_QE, qb, em, ib
+;
+; For IN4, IN5, IN6, BRISP and D7
+;
+;rebins output data from t2e and reb to regular-grid S(Q,w) data using the old
+;KHA IN6 rebin algorithm. Proper rebionning routine with error analysis 
+(unlike
+;sqw_interp.pro).
+;
+;ARGUMENTS:
+; dQ : Q bin width
+; Emin0: Minimum energy value (meV) - neutron energy gain is negative
+;
+;KEYWORDS (- only for D7 data)
+; /neg_angles : use only negative angles
+; /pos_angles : use only positive angles
+; /all_angles : use all angles (default)
+;  input workspace must be in energy transfer versus scattering angle,
+;  i.e. only one component or spin phase.
+; (qb, em and ib are obsolete, kept for backwards compatibility)
+;
+;DIMENSIONS:
+; w_in(nE,nphi) -> w_out(nQs,nEs)
+;
+;COMMAND SYNTAX:
+; w10=spw_rebin(w9,dQ=<dQ>, 
+Emin=<Emin>[,/neg_angles][,/pos_angles][,/all_angles])
+;
+; (optional keywords shown in square brackets)
+;
+;       KHA,JRS 9/02/06
+;-----------------------------------------------------------------------------
+---
+;*****************************************************************************
+***
+ common c_lamp_access, inst
+ common grid, Qmin, Qmax, Emin, Emax
+ iprint = 0 ; if iprint>0, show debugging messages
+ IF iprint THEN PRINT,'Start sqw_rebin:'
+ take_datp, datp
+ ibank = 2
+ IF N_ELEMENTS(qb) GT 0 THEN dQ    = qb
+ IF N_ELEMENTS(em) GT 0 THEN Emin  = em
+ IF N_ELEMENTS(ib) GT 0 THEN ibank = ib
+ IF KEYWORD_SET(pos_angles) THEN ibank   = 1
+ IF KEYWORD_SET(neg_angles) THEN ibank   = 0
+ IF KEYWORD_SET(all_angles) THEN ibank   = 2
+ IF KEYWORD_SET(swap_QE)    THEN swap_QE = 1 ELSE swap_QE = 0
+ no_small = 0
+ IF (datp.y(0) GT 10.) AND (inst EQ 'IN4') THEN BEGIN
+  no_small = 1
+  PRINT, 'SQW_rebin: IN4 data without small angle bank'
+ ENDIF
+;-----------------------------------------------------------------------------
+--
+;Set up starting parameters
+ IF N_ELEMENTS(dQ) NE 1 THEN BEGIN
+  ii = WIDGET_MESSAGE('SQW_rebin: Error - dQ must be specified', /ERROR)
+  RETURN, w_in
+ ENDIF
+ 
+ IF N_ELEMENTS(Emin0) NE 1 THEN Emin0=-1.E+10
+ sw = SIZE(w_in)
+ IF iprint THEN PRINT,'SIZE(w_in) = ',sw
+ 
+ IF sw(0) NE 2 THEN BEGIN
+  s = 'SQW_rebin: Error - input workspace must be 2-D: E vs. phi'
+  ii = WIDGET_MESSAGE(s, /ERROR)
+  RETURN, w_in
+ ENDIF
+ 
+ nx = sw(1)
+ ny = sw(2)
+ IF iprint THEN PRINT,'nx=',nx,' ny=',ny
+ x_in = datp.x & sx = SIZE(x_in)
+ y_in = datp.y & sy = SIZE(y_in)
+ IF (nx NE sx(1)) OR (ny NE sy(1)) THEN BEGIN
+  s = 'SQW_rebin: sx = ' + STRTRIM(STRING(sx),2) + $
+                              ' sy = ' + STRTRIM(STRING(sy),2)
+  ii = WIDGET_MESSAGE(s, /ERROR)
+  RETURN, w_in
+ ENDIF
+ e_in = datp.e
+ se   = SIZE(e_in)
+ IF (se(0) NE sw(0) OR se(1) NE sw(1) OR se(2) NE sw(2)) THEN e_in=w_in*0.
+ par=datp.p
+ IF iprint THEN PRINT,'Instrument = ',inst
+ IF (inst EQ 'D7') THEN lambda = par(4) ELSE lambda = par(21)
+ IF iprint THEN PRINT,'lambda = ',lambda,'A'
+;-----------------------------------------------------------------------------
+--------
+; Set constants and prepare arrays for rebinning to regular Q-E grid
+ const1 = 5.22697  ; E(meV)  = const1*V(m/ms)^2 
+ const2 = 2.07193571  ; E(meV)  = const2*k(A^-1)^2
+ const3 = 3.956076  ; V(m/ms) = const3/lambda(A)
+ const4 = 81.8066  ; E(meV)  = const4/lambda(A)^2
+ Ei   = const4 / lambda^2
+ ki   = SQRT(Ei / const2)
+ y_in = y_in*!pi/180. ; convert to radians
+ nEps = nx + 1
+        Eps  = FLTARR(nEps)
+ Eps(0)      =  x_in(0) - (x_in(1) - x_in(0)) / 2.
+ Eps(1:nx-1) = (x_in(0:nx - 2) + x_in(1:nx - 1)) / 2.
+ Eps(nx)     =  x_in(nx - 1) + (x_in(nx - 1) - x_in(nx - 2)) / 2.
+ iEarr = WHERE(x_in GT Emin0)
+ Eps   = Eps(iEarr(0):nx)
+ nEps  = nx - iEarr(0) + 1
+ Emin  = Eps(0)
+ Emax  = Eps(nEps - 1)
+ Qmin  = 0
+ max_y = MAX(y_in)
+ Qmax = SQRT((2.*Ei - Emin - 2.*SQRT(Ei*(Ei - Emin))*COS(max_y))/const2)
+ Qmax=MAX([Qmax,ki])
+ IF iprint THEN PRINT,'x        = ',x_in
+ IF iprint THEN PRINT,'iEarr(0) = ',iEarr(0),' nx = ',nx
+ IF iprint THEN PRINT,'Emin     = ',Emin,' Emax=',Emax,' meV'
+ IF iprint THEN PRINT,'Eps      = ',Eps
+ IF iprint THEN PRINT,'SQW_rebin: E-array prepared'
+;-----------------------------------------------------------------------------
+;angle grid generation
+ nQ    = FIX((Qmax - Qmin) / dQ) + 1
+ w_out = FLTARR(nQ,nEps)
+ e_out = w_out - 1.
+ Q     = Qmin + FLOAT(INDGEN(nQ))*dQ
+ IF iprint THEN PRINT,'Qmin = ', Qmin
+ IF iprint THEN PRINT,'Qmax = ', Qmax
+ IF iprint THEN PRINT,'nQ   = ', nQ
+ IF iprint THEN PRINT,'Q    = ', Q
+ IF iprint THEN PRINT,'y_in = ', y_in*180./!pi
+ IF inst EQ 'D7' THEN BEGIN
+  isort = SORT(y_in)
+  y_buf1 = y_in(isort)
+  w_buf1 = w_in(*,isort)
+  e_buf1 = e_in(*,isort)
+  i     = WHERE(y_buf1 GT 0.,n)
+  
+  IF ibank EQ 2 THEN BEGIN
+   twice = 1
+   iphi1 = 0  & iphi1next = i(0)
+   iphi2 = i(0) - 1 & iphi2next = ny - 1
+  ENDIF ELSE BEGIN
+   twice = 0
+   IF ibank EQ 0 THEN BEGIN
+    iphi1 = 0
+    iphi2 = i(0) - 1
+   ENDIF ELSE IF ibank EQ 1 THEN BEGIN
+    iphi1 = i(0)
+    iphi2 = ny - 1
+   ENDIF
+  ENDELSE
+ ENDIF ELSE BEGIN
+  twice = 0
+  iphi1 = 0 & iphi2 = ny - 1
+ ENDELSE
+ IF iprint THEN PRINT,'twice=',twice,' iphi1=',iphi1,' iphi2=',iphi2
+start:
+ IF inst EQ 'D7' THEN BEGIN
+  nphi          = iphi2 - iphi1 + 2
+  phi           = FLTARR(nphi)
+  phi(0)        = y_buf1(iphi1) - (y_buf1(iphi1 + 1) - y_buf1(iphi1)) / 2.
+  phi(1:nphi-2) = (y_buf1(iphi1:iphi2 - 1) + y_buf1(iphi1 + 1:iphi2)) / 2.
+  phi(nphi-1)   = y_buf1(iphi2) + (y_buf1(iphi2) - y_buf1(iphi2 - 1))/2.
+  w_buf = w_buf1(iEarr,iphi1:iphi2)
+  e_buf = e_buf1(iEarr,iphi1:iphi2)
+  y_buf = y_buf1(iphi1:iphi2) 
+ ENDIF ELSE IF (inst EQ 'IN4') AND (NOT no_small)  THEN BEGIN
+  nphi          = ny+2
+  phi           = FLTARR(nphi)
+  IF iprint THEN PRINT,'y_in=',y_in*180./!pi
+  i1=(WHERE(y_in GT 10.*!pi/180.))(0)-1
+  phi(0)    = y_in(0) - (y_in(1) - y_in(0)) / 2.
+  phi(1:i1) = (y_in(0:i1-1)+y_in(1:i1))/2.
+  phi(i1+1) = phi(i1)+(y_in(i1)-y_in(i1-1))
+  phi(i1+3:nphi-2) = (y_in(i1+1:ny-2)+y_in(i1+2:ny-1))/2.
+  phi(i1+2) = phi(i1+3)-(y_in(i1+2)-y_in(i1+1))
+  phi(nphi-1) = phi(nphi-2)+(y_in(ny-1)-y_in(ny-2))
+  w_buf = [[w_in(iEarr,0:i1)],[0.*iEarr],[w_in(iEarr,i1+1:ny-1)]]
+  e_buf = [[e_in(iEarr,0:i1)],[0.*iEarr-1.],[e_in(iEarr,i1+1:ny-1)]]
+  y_buf = (phi(0:nphi-2)+phi(1:nphi-1))/2.
+  IF iprint THEN PRINT,' phi =',phi*180./!pi
+  IF iprint THEN FOR i=0,50 DO PRINT, i, phi(i)*180./!pi, y_in(i)*180./!pi
+ ENDIF ELSE BEGIN
+  nphi          = iphi2 - iphi1 + 2
+  phi           = FLTARR(nphi)
+  phi(0)        = y_in(iphi1) - (y_in(iphi1 + 1) - y_in(iphi1)) / 2.
+  phi(1:nphi-2) = (y_in(iphi1:iphi2 - 1) + y_in(iphi1 + 1:iphi2)) / 2.
+  phi(nphi-1)   = y_in(iphi2) + (y_in(iphi2) - y_in(iphi2 - 1))/2.
+  w_buf = w_in(iEarr,iphi1:iphi2)
+  e_buf = e_in(iEarr,iphi1:iphi2)
+  y_buf = y_in(iphi1:iphi2)
+ ENDELSE
+ COSphi        = COS(phi)
+ 
+; reverse array direction for negative angles
+ IF phi(0) LT 0. THEN BEGIN 
+  w_buf =     REVERSE(w_buf,2)
+  e_buf =     REVERSE(e_buf,2)
+  y_buf = ABS(REVERSE(y_buf))
+  phi   = ABS(REVERSE(phi))
+  COSphi=     REVERSE(COSphi)
+ ENDIF
+ IF iprint THEN PRINT,'phi=',phi*180./!pi
+ IF iprint THEN PRINT,'End of "prepare angle arrays" section'
+;-----------------------------------------------------------------------------
+--------
+; Rebin angles to constant Q grid
+ a       = const2   ; E(meV)=a*Q(A**-1)**2
+ iprint0 = iprint
+ oldymin = 0.
+ IF iprint THEN BEGIN
+  b=''
+  PRINT,'About to start rebinning. Hit return to continue'
+  READ, b
+ ENDIF
+ FOR iQ = 0,nQ - 1 DO BEGIN
+  Qmin = Q(iQ) - (dQ / 2.)
+  Qmax = Q(iQ) + (dQ / 2.)
+  Q00  = [Qmin, Qmin, Qmax, Qmax]
+  FOR iEps = 0, nEps - 2 DO BEGIN
+   Emin     = Eps(iEps)
+   Emax     = Eps(iEps + 1)
+   corrarea = dQ*(Emax - Emin)
+   Eps0     = [Emin, Emax, Emax, Emin]
+   COSphi0  = (2.*Ei - Eps0 - a*Q00^2) / (2.*SQRT(Ei*(Ei - Eps0)))
+   IF MAX(ABS(COSphi0)) GE 1. THEN GOTO, outside
+   phi0     = ACOS(COSphi0)
+   phimin   = MIN(phi0)
+   phimax   = MAX(phi0)
+   IF (phimax LT phi(0)) OR (phimin GT phi(nphi-1)) THEN GOTO, outside
+   iphi     = WHERE(phi GT phimin AND phi LT phimax, nlines)
+   iphi0    = (iphi(0) - 1) > 0
+   IF nlines EQ 0 THEN BEGIN
+    phimean = (phimin + phimax) / 2.
+    ip      = WHERE(phi LT phimean, np)
+    iphi0   = ip(np - 1)
+   ENDIF
+startrebin:  Areasum    = 0.
+   wsum       = 0.
+   e2sum      = 0.
+   phiminmeas = 7.
+   phimaxmeas = 0.
+   FOR iphi = iphi0,(iphi0 + nlines) < (nphi - 2) DO BEGIN
+    COSphi1 = COSphi(iphi)
+    COSphi2 = COSphi(iphi + 1)
+    COSphi0 = [COSphi1, COSphi1, COSphi2, COSphi2]
+    Q0      = SQRT((2.*Ei - Eps0 - 2.*SQRT(Ei*(Ei - Eps0))*COSphi0)/a)
+    area    = OVERLAP(Q0, Eps0, iprint, oldymin)
+    IF area GT 0. THEN BEGIN
+     w = w_buf(iEps,iphi)
+     e = e_buf(iEps,iphi)
+     IF (w NE 0.) OR (e GE 0.) THEN BEGIN
+      areasum    = areasum + area
+      wsum       = wsum + area*w
+      e2sum      = e2sum + (area*e)^2
+      phiminmeas = phiminmeas < phi(iphi)
+      phimaxmeas = phimaxmeas > phi(iphi + 1)
+     ENDIF
+    ENDIF
+   ENDFOR
+   IF areasum NE 0. THEN BEGIN
+    w_out(iQ,iEps) = wsum / areasum
+    e_out(iQ,iEps) = SQRT(e2sum) / areasum
+    GOTO, binned
+   ENDIF 
+outside:  w_out(iQ,iEps) =  0.
+   e_out(iQ,iEps) = -1.
+   GOTO, nextpoint
+binned:
+   p1 = phimin > phiminmeas
+   p2 = phimax < phimaxmeas
+   IF p2 - p1 LT (phimax - phimin)/2. THEN BEGIN
+    w_out(iQ,iEps) =  0.
+    e_out(iQ,iEps) = -1.
+   ENDIF
+nextpoint:
+  ENDFOR
+ ENDFOR
+ iprint = iprint0
+ IF iprint THEN PRINT,'End of rebinning'
+ IF twice THEN BEGIN
+  IF (iphi1 EQ 0) THEN BEGIN
+   w_out1 = w_out
+   e_out1 = e_out
+   iphi1  = iphi1next
+   iphi2  = iphi2next
+   GOTO, start
+  ENDIF ELSE BEGIN
+;take weighted averages of negative and positive banks for D7
+   w_out2 = w_out
+   e_out2 = e_out
+   w_out  = 0.
+   e_out  = 0.
+   not1   = WHERE(e_out1 LE 0.,n1)
+   IF n1 NE 0 THEN e_out1(not1) = 1.
+   not2   = WHERE(e_out2 LE 0.,n2)
+   IF n2 NE 0 THEN e_out2(not2) = 1.
+   w_out = (w_out1/e_out1^2 + w_out2/e_out2^2) / (1./e_out1^2 + 1./e_out2^2)
+   e_out = 1./SQRT(1./e_out1^2 + 1./e_out2^2)
+   IF n1 NE 0 THEN e_out1(not1) = -1.
+   IF n2 NE 0 THEN e_out2(not2) = -1.
+   IF n1 NE 0 THEN BEGIN
+    w_out(not1) = w_out2(not1)
+    e_out(not1) = e_out2(not1)
+   ENDIF
+   IF n2 NE 0 THEN BEGIN
+    w_out(not2) = w_out1(not2)
+    e_out(not2) = e_out1(not2)
+   ENDIF
+  ENDELSE
+ ENDIF
+ IF iprint THEN PRINT,'End of rebinning section'
+;-----------------------------------------------------------------------------
+--------
+;Chop off superfluous bits
+ i = WHERE(e_out GT -1.,n)
+ IF iprint THEN PRINT, n, ' non-zeroed points'
+checkQ2:
+ iw0 = WHERE(w_out(nQ - 1,*) EQ  0., nw0)
+ ie0 = WHERE(e_out(nQ - 1,*) EQ -1., ne0)
+ IF (nw0 EQ nEps) AND (ne0 EQ nEps) THEN BEGIN
+  nQ    = nQ - 1
+  w_out = w_out(0:nQ - 1,*)
+  e_out = e_out(0:nQ - 1,*)
+  Q     = Q(0:nQ - 1)
+  GOTO, checkQ2
+ ENDIF
+checkEps1:
+ iw0 = WHERE(w_out(*,0) EQ  0., nw0)
+ ie0 = WHERE(e_out(*,0) EQ -1., ne0)
+ IF (nw0 EQ nQ) AND (ne0 EQ nQ) THEN BEGIN
+  nEps  = nEps - 1
+  w_out = w_out(*,1:nEps)
+  e_out = e_out(*,1:nEps)
+  Eps   = Eps(1:nEps)
+  GOTO, checkEps1
+ ENDIF
+checkEps2:
+ iw0 = WHERE(w_out(*,nEps - 1) EQ  0., nw0)
+ ie0 = WHERE(e_out(*,nEps - 1) EQ -1., ne0)
+ IF (nw0 EQ nQ) AND (ne0 EQ nQ) THEN BEGIN
+  nEps  = nEps - 1
+  w_out = w_out(*,0:nEps - 1)
+  e_out = e_out(*,0:nEps - 1)
+  Eps   = Eps(0:nEps - 1)
+  GOTO, checkEps2
+ ENDIF
+ IF iprint THEN PRINT,'End of chopping section'
+;-----------------------------------------------------------------------------
+--------
+;Return parameters and exit
+ IF NOT swap_QE THEN BEGIN
+  datp.y_tit = datp.x_tit
+  datp.x_tit = 'Wavevector Transfer (A!U-1!N)'
+  MOD_DATP, datp, "x", Q
+  MOD_DATP, datp, "y", x_in(iEarr)
+ ENDIF ELSE BEGIN
+  w_out      = TRANSPOSE(w_out)
+  e_out      = TRANSPOSE(e_out)
+  datp.y_tit = 'Wavevector Transfer (A!U-1!N)'
+  MOD_DATP, datp, "x", x_in(iEarr)
+  MOD_DATP, datp, "y", Q
+ ENDELSE
+ MOD_DATP, datp, "e", e_out
+ PRINT, FORMAT = '("Sqw_Rebin: Rebinned to constant Q-w: dQ=",F4.2," A-1")', 
+dQ
+ s = STRTRIM(STRING(FLOAT(dQ)),2) & dQ = string_round(s)
+ s = ' -sr(dQ=' + dQ
+ IF Emin0 GT -9.E+09 THEN BEGIN 
+  Emin = STRTRIM(STRING(FIX(Emin0)),2)
+  s = s + ',emin='+Emin
+ ENDIF
+ CASE ibank OF
+  0: bs = '/neg)'
+  1: bs = '/pos)'
+  2: bs = '/all)'
+ ENDCASE
+ IF inst EQ 'D7' THEN s = s + bs ELSE s = s + ')'
+ datp.other_tit = datp.other_tit + s
+ GIVE_DATP, datp
+finished:
+ RETURN, w_out
+ END
+
+________________________________________
+From: Draper, Nick (-,RAL,ISIS) [nick.draper@stfc.ac.uk]
+Sent: 11 January 2011 13:34
+To: Taylor, Jon (STFC,RAL,ISIS)
+Subject: RE: sofqw
+Jon,
+Thanks for this.  I was right on the phone when I said that this had been 
+created for indirect instruments where they have so much less data that it is 
+hard to spot any effect of this bug.
+I'll raise a ticket to look at the lack of curvature on the lower boundary 
+(http://trac.mantidproject.org/mantid/ticket/2214).  If you can drag anything 
+out from lamp that would be appreciated for the rebinning.
+For swapping the axes you could try the Transpose algorithm.
+Regards,
+Nick Draper
+
+-----Original Message-----
+From: Taylor, Jon (STFC,RAL,ISIS)
+Sent: 11 January 2011 11:39
+To: Draper, Nick (-,RAL,ISIS)
+Subject: sofqw
+hi
+I've attached a pic of what mslice produces for modQ for MARI and the output 
+from the sofqw algorithm. at low Q one should see a curved trajectory for the 
+detector group rather than a horizontal one.
+Do you know if its possible to rotate the axis in mantid plot (a minor niggle)
+the rebin is a finer correction as for a fist approximation a simple rebin 
+works OKish i will dig the ILL code from lamp out which does the full 
+treatment.
+cheers
+jon
+
+
+________________________________________
+From: Draper, Nick (-,RAL,ISIS) [nick.draper@stfc.ac.uk]
+Sent: 11 January 2011 13:34
+To: Taylor, Jon (STFC,RAL,ISIS)
+Subject: RE: sofqw
+
+Jon,
+
+Thanks for this.  I was right on the phone when I said that this had been 
+created for indirect instruments where they have so much less data that it is 
+hard to spot any effect of this bug.
+
+I'll raise a ticket to look at the lack of curvature on the lower boundary 
+(http://trac.mantidproject.org/mantid/ticket/2214).  If you can drag anything 
+out from lamp that would be appreciated for the rebinning.
+
+For swapping the axes you could try the Transpose algorithm.
+
+Regards,
+Nick Draper
+
+
+-----Original Message-----
+From: Taylor, Jon (STFC,RAL,ISIS)
+Sent: 11 January 2011 11:39
+To: Draper, Nick (-,RAL,ISIS)
+Subject: sofqw
+
+hi
+I've attached a pic of what mslice produces for modQ for MARI and the output 
+from the sofqw algorithm. at low Q one should see a curved trajectory for the 
+detector group rather than a horizontal one.
+Do you know if its possible to rotate the axis in mantid plot (a minor niggle)
+the rebin is a finer correction as for a fist approximation a simple rebin 
+works OKish i will dig the ILL code from lamp out which does the full 
+treatment.
+cheers
+jon

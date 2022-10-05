@@ -1,0 +1,1747 @@
+*
+* Fit tof spectrum to sum of N Voigt or Gaussian functions.
+* Fitting parameters are heights and sigmas in y. Position fixed by mass.
+* Individual widths or areas can also be fixed
+      PROGRAM TFIT_FSE
+      PARAMETER (NP=20,ndet=200,npts=1024)
+      REAL CM(NP,NP),CMI(NP,NP),ERR(NP),DE1G(3),DE1L(3)
+      REAL WORK(23000),F(3000),P(30),PS(30),PST(30)
+      REAL TH(200),RL0(200),RL1(200),DT0A(200),
+     $M,K0,K1,L0,L1,SIGY(20)
+      REAL COMP(20),DCOMP(20),WIDW(20),DWIDW(20),AV(20),DAV(20)
+     $,RV(20),DRV(20)
+      REAL xva(ndet,npts),yva(ndet,npts),eva(ndet,npts)
+      real xin(npts),yin(npts),ein(npts)
+      real xout(npts),yout(npts),eout(npts),yout2(np,npts)
+      REAL wt(np,ndet),wte(np,ndet),sig(np,ndet)
+     *,sige(np,ndet),Chi(ndet)
+    
+      COMMON QA(3000,3),E0A(3000,3),YA(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS
+      CHARACTER MSDATA*70, FNAMEIN*80
+      CHARACTER DET1*1,DET2*2,DET3*3,FNAME*80,fin*70,FDAT*80
+
+C  READ IN DATA.
+      write(6,*) ' Name of file containing time of flight data?'
+      read(5,'(a)') FIN
+      write(6,5) fin
+    5 format(' input file is ',80a)
+      FDAT=FIN//'D.DAT'
+    6 write(6,*) ' tmin,tmax? (tmax-tmin must be 2**n)'
+      read(5,*) tmin,tmax
+      npt=tmax-tmin
+      if(npt.ne.64.and.npt.ne.128.and.npt.ne.256.and.npt.ne.512)then
+       write(6,*) ' tmin-tmax must be 2**n'
+       go to 6
+      end if
+      ndmin=1000
+      ndmax=0
+      open(unit=3,file=fin,status='old')
+  10  read(3,*) idet,lpt
+*      write(6,*) ' idet=',idet,' lpt=',lpt
+      if(idet.gt.1000) go to 20
+*      WRITE(6,*) ' IDET=',IDET
+      if(idet.lt.ndmin)ndmin=idet
+      if(idet.gt.ndmax)ndmax=idet
+      iv=0
+      do i=1,lpt
+       read(3,*) xv,yv,ev
+       if(yv.eq.0.0) yv=1e-6
+       if(ev.eq.0.0) ev=1e-6
+*       write(6,*) xv,yv,ev
+       if(xv.ge.tmin.and.xv.lt.tmax)then
+        iv=iv+1
+        xva(idet,iv)=xv
+        yva(idet,iv)=yv
+        eva(idet,iv)=ev
+*       write(6,*) iv,xv,yv,ev
+       end if
+      end do
+      lpt=iv
+      lptlast=lpt
+      go to 10
+   20 irun1=idet
+      write(6,*) ' irun1=',irun1
+      lpt=lptlast
+      close(3)
+      write(6,*) ' number of points=',lpt
+      write(6,*) ' ndmin=',ndmin,' ndmax=',ndmax 
+
+      write(6,*) ' Name of file containing fit parameters?'
+      read(5,'(a)') fnamein 
+C  TAKE INPUT FROM PREVIOUSLY PREPARED DATA FILE
+      OPEN(UNIT=3,FILE=fnamein,STATUS='OLD')
+      E1(1)=4897.4 ! Calibrated value of E1 
+
+* DEFINE ENERGY RESOLUTION FUNCTION AND IPNO
+* OPTION 1 IS FORWARD SCATTERING
+* OPTION 2 IS BACK SCATTERING SINGLE DIFFERENCE, DETECTORS 3-90.
+* OPTION 3 IS BACK SCATTERING DOUBLE DIFFERENCE* DETECTORS 3-90.
+* OPTION 4 IS BACK SCATTERING SINGLE DIFFERENCE, DETECTORS 91-135.
+* OPTION 5 IS BACK SCATTERING DOUBLE DIFFERENCE* DETECTORS 91-135.
+*
+      READ(3,*) IOPT
+      IF(IOPT.EQ.1) THEN
+      DE1G(1)=74.0
+      DE1L(1)=24.0
+*      write(6,*) ' de1g=',de1g(1),' de1l=',de1l(1)
+      IF(irun1.lt.15210)IPNO=0004
+      IF(irun1.gt.15210)IPNO=0005
+      ELSE IF(IOPT.EQ.5) THEN
+      DE1G(1)=54.0
+      DE1L(1)=137.0
+      IF(irun1.lt.15210)IPNO=0004
+      IF(irun1.gt.15210)IPNO=0005
+      ELSE IF(IOPT.EQ.3) THEN
+      DE1G(1)=54.0
+      DE1L(1)=137.0
+      IF(irun1.lt.15210)IPNO=0004
+      IF(irun1.gt.15210)IPNO=0005
+      ELSE IF(IOPT.EQ.4) THEN
+      DE1G(1)=54.0
+      DE1L(1)=137.0
+      IF(irun1.lt.15210)IPNO=0004
+      IF(irun1.gt.15210)IPNO=0005
+      ELSE IF(IOPT.EQ.2) THEN
+      DE1G(1)=88.0
+      DE1L(1)=41.0
+      IF(irun1.lt.15210)IPNO=0004
+      IF(irun1.gt.15210)IPNO=0005
+      END IF
+      write(6,*) ' irun1=',irun1,' ipno=',ipno
+
+*      write(6,*) ' e1=',e1(1)
+      E1(2)=60300.0
+      E1(3)=78400.0
+     
+*      READ(3,*) DE1G(1),DE1L(1) ! Energy resolution.
+*      write(6,*) ' de1g=',de1g(1),' de1l=',de1l(1)
+      DE1L(2)=202.0
+      DE1L(3)=192.0
+      DE1G(2)=1.0
+      DE1G(3)=1.0
+*      READ(3,*) IPNO ! Instrument parameter file number.
+*      write(6,*) ' ipno=',ipno
+*      READ(3,*) MAXFUN
+*      write(6,*) ' maxfun=',maxfun
+      MAXFUN=1000
+      READ(3,*) NPEAKS ! Number of different masses in sample.
+      write(6,*) ' npeaks=',npeaks
+      DO I=1,NPEAKS
+      READ(3,*) AM(I),XS(I),WID(I)
+      write(6,*) i,' am=',am(i),' xs=',xs(i),' wid=',wid(i)
+      END DO
+
+*      READ(3,*) NBACK
+      NBACK=0
+*      write(6,*) ' nback=',nback
+      IF(NBACK.EQ.1) THEN
+       WRITE(6,*) ' BACKGROUND SUBTRACTED'
+      ELSE
+*       WRITE(6,*) ' NO BACKGROUND SUBTRACTED'
+      END IF
+
+      NBPTS=0
+*      READ(3,*) NBPTS
+      IF(NBPTS.EQ.1) THEN
+        WRITE(6,*) ' ERRORS ON BAD PTS SET TO 1E6'
+      ELSE
+*        WRITE(6,*) ' BAD PTS NOT EXCLUDED'
+      END IF
+
+*      READ(3,*) NMSSUB
+*       write(6,*) ' nmssub=',nmssub
+      NMSSUB=0
+      IF(NMSSUB.EQ.1) THEN
+       WRITE(6,*) ' MULTIPLE SCATTERING SUBTRACTED'
+       READ(3,'(70A)') MSDATA
+       write(6,'(70a)') msdata
+       READ(3,*) NFACT
+       IF(NFACT.EQ.1) THEN
+        WRITE(6,*) ' MS MUTIPLIED BY FITTING FACTOR'
+       END IF
+       CALL MSNORM(XI,YI,LPT,MSDATA,ND,RMS)
+      ELSE
+*       WRITE(6,*) ' NO MULIPLE SCATTERING SUBTRACTED'
+      END IF
+      READ(3,*) NFSE
+      IF(NFSE.EQ.1) THEN
+       WRITE(6,*) ' FSE SUBTRACTED'
+      ELSE
+       WRITE(6,*) ' FSE NOT SUBTRACTED'
+      END IF
+      CLOSE(3)
+
+
+
+
+   25 write(6,*) ' First and last spectrum number?'
+      read(5,*) nfirst,nlast
+      if(nfirst.lt.ndmin.or.nlast.gt.ndmax) then
+       write(6,*) ' first spectrum must be >',ndmin
+       write(6,*) ' last spectrum must be <',ndmax
+       go to 25
+      end if 
+      
+      OPEN(UNIT=2,FILE=FDAT,STATUS='NEW') 
+      do nvv=nfirst,nlast   ! Start of loop over spectra.
+*      open(unit=4,file='temp.dat',status='new')       
+       n=nvv
+      do it=1,lpt
+       xin(it)=xva(n,it)
+       yin(it)=yva(n,it)
+       ein(it)=eva(n,it)
+*       write(4,*) xin(it),yin(it),ein(it)
+      end do
+*      close(4)
+       
+      TCHW=XIN(10)-XIN(9)
+      WRITE(6,*) ' TIME CHANNEL WIDTH=',TCHW
+      WRITE(6,*) ' NUMBER OF INPUT DATA POINTS=',LPT
+      YMAX=0.0
+      sum=0.0
+      DO I=1,LPT
+       IF(YIN(I).GT.YMAX) YMAX=YIN(I)
+      END DO
+      DO I=1,LPT
+       IF(YIN(I).EQ.0.0) THEN
+        YIN(I)=YMAX*1E-6
+        EIN(I)=1E6
+       END IF
+      END DO
+      
+      DO I=1,LPT
+      XI(I)=XIN(I)
+      YI(I)=YIN(I) 
+      EI(I)=EIN(I)
+      END DO
+
+      ND=N
+      NPL=1
+      PI=ACOS(-1.0)
+
+C 2.  READ IN VALUES OF THETA AND L1 FROM FILE
+      CALL PAR_READ(TH,DT0A,RL0,RL1,IPNO,NDET,NS)
+      
+
+C 3. DEFINE FIXED RESOLUTION COMPONENTS
+      CALL RES_READ(DL0,DL1,DT0,DW)
+      DL0=DL0/100.0
+      DL1=DL1/100.0
+      DW=DW/100.0
+      DO I=1,NS
+      TH(I)=TH(I)*PI/180.0
+      END DO
+
+      ISPEC=N
+      L0=RL0(N)
+      L1=RL1(N)
+      THETA=TH(N)
+      DTHETA=0.5*DW/RL1(N)
+      THETAW=TH(N)*180.0/PI
+      DTHW=DTHETA*180.0/PI
+      T0=DT0A(N)
+      if(iopt.eq.2.and.ispec.ge.3.and.ispec.le.46) then
+       de1g(1)=93.0
+       de1l(1)=33.0
+      else if(iopt.eq.2.and.ispec.ge.47.and.ispec.le.90) then
+       de1g(1)=88.0
+       de1l(1)=41.0
+      else if(iopt.eq.2.and.ispec.ge.91.and.ispec.le.134) then
+       de1g(1)=85.0
+       de1l(1)=47.5
+      end if
+
+      WRITE(6,*) ' DETECTOR NUMBER=',N
+      WRITE(6,*) ' L0=',L0,' +-',DL0,' METRES'
+      WRITE(6,*) ' L1=',L1,' +-',DL1,' METRES'
+      WRITE(6,*) ' THETA=',THETAW,' +-',DTHW,' DEGREES'      
+      WRITE(6,*) ' E1=',E1
+      WRITE(6,*) ' DE1L=',DE1L(1),' DE1G=',DE1G(1)
+      WRITE(6,*) ' T0=',T0,' +-',DT0, 'uSEC'
+      WRITE(6,*) ' NUMBER OF PEAKS=',NPEAKS
+*      WRITE(6,*) ' MAXFUN=',MAXFUN
+*      write(6,*) l0,l1,theta,e1,t0,am(i) 
+
+
+      NXSP=0 ! Number of peak amplitude fitting parameters
+      DO I=1,NPEAKS
+      IF(XS(I).EQ.0.0) NXSP=NXSP+1
+      IF(AM(I).EQ.0.0) GO TO 130
+      END DO
+      IF(NXSP.EQ.NPEAKS) XS(1)=1.0 ! amp parameters not independent.
+
+*  Calculate tof at at peak centre.
+*      write(6,*) l0,l1,theta,e1,t0,am(i) 
+      DO I=1,NPEAKS
+      TR0(I)=TREC(L0,L1,THETA,E1,T0,AM(I))
+      END DO
+      
+* 5. Calculate Q and E0 and y for each tof and each energy.
+
+      DO IE=1,1 
+       V1=SQRT(E1(IE)/5.2276E-6)
+       T1=L1/V1 
+      DO I=1,LPT
+*       T=XIN(I)+TCHW ! Fudge
+       T=XIN(I)
+       V0=L0/(T*1E-6-T0*1E-6-T1)
+       E0=5.2276E-6*V0**2
+       K0=SQRT(E0/2.0717)
+       K1=SQRT(E1(IE)/2.0717)
+       QA(I,IE)=SQRT(K0**2+K1**2-2.0*K0*K1*COS(THETA))
+       E0A(I,IE)=E0
+      END DO
+      END DO
+
+* Calculate y for each t and for each mass.
+      DO IE=1,1
+      DO IM=1,NPEAKS
+      DO I=1,LPT
+      W=E0A(I,IE)-E1(IE)
+      RM=AM(IM)/1.00867 ! Mass in multiples of neutron mass.
+      WR=2.0717*QA(I,IE)**2/RM
+      YA(IM,I,IE)=0.2413*(RM/QA(I,IE))*(W-WR)
+      END DO
+      END DO
+      END DO
+
+      QAV=QA(LPT/2,1)
+
+* 6. Calculate resolution function for each mass in time of flight.
+      DO IE=1,1
+      DO IM=1,NPEAKS
+       DTG(IM,IE)= TRESN(L0,DL0,L1,DL1,THETA,DTHETA
+     $ ,E1(IE),DE1G(IE),T0,DT0,AM(IM))
+       DTE(IM,IE)= TRESN(L0,0.0,L1,0.0,THETA,0.0,
+     $ E1(IE),DE1L(IE),T0,0.0,AM(IM))
+      END DO   
+      END DO 
+      DT=XIN(2)-XIN(1)
+      DO IE=1,1
+      DO IM=1,NPEAKS
+       DO IT=1,LPT/2
+        TV=(IT-1)*DT
+        TRES(IM,IT,IE)=DT*VOIGT(TV,DTG(IM,IE),DTE(IM,IE),0)
+       END DO
+       DO IT=LPT/2+1,LPT
+        TV=(IT-1-LPT)*DT
+        TRES(IM,IT,IE)=DT*VOIGT(TV,DTG(IM,IE),DTE(IM,IE),0)
+       END DO
+      END DO
+      END DO
+
+      WRITE(6,*) ' '
+      WRITE(6,*) '   MASS     ','  POSITION ','    INTENSITY ',
+     $'   WIDTH    ','    DTG     ','    DTE     '
+      DO I=1,NPEAKS
+      WRITE(6,50) AM(I),TR0(I),XS(I),WID(I),DTG(I,1),DTE(I,1)
+      if(tr0(i).lt.tmin.or.tr0(i).gt.tmax) then
+       write(6,*) ' Peak for mass', Am(i),' lies outside fitting range'
+       stop
+      end if 
+   50 FORMAT(' ',1P6E12.4)
+      END DO
+
+C Calculate estimates for amplitude.
+      YMAX=0.0
+      DO I=1,LPT
+      IF(YMAX.LT.YI(I)) THEN
+      YMAX=YI(I)
+      IMAX=I
+      END IF
+      END DO
+
+* Estimate of standard deviation in tof.
+      DO I=1,NPEAKS
+      WD=800/11.604 ! Estimated Debye energy in meV.
+      SIGY(I)=SQRT(0.75*0.1196*AM(I)*WD)
+      END DO
+
+      NPAR=0 ! Number of fitting parameters other than scale and background.
+      DO I=1,NPEAKS
+*       write(6,*) i, ' xs=',xs(i),' wid=',wid(i) 
+       IF(XS(I).EQ.0.0) THEN 
+        NPAR=NPAR+1
+        P(NPAR)=10.0*ymax*AM(I)/SIGY(I) 
+        WRITE(6,*) ' PARAMETER',NPAR,' IS AMP OF PEAK',I
+*        WRITE(6,*) ' Start value=',p(npar)
+       END IF
+       IF(WID(I).EQ.0.0) THEN 
+        NPAR=NPAR+1
+        P(NPAR)=SIGY(I) 
+        WRITE(6,*) ' PARAMETER', NPAR, ' IS WIDTH OF PEAK',I
+       END IF
+      END DO
+      N=NPAR+1
+      P(N)=YMAX ! Scale Factor.
+      NSC=N ! Number of parameter containing scale factor.
+      WRITE(6,*) ' PARAMETER',N,' IS SCALE FACTOR'
+      CALL CTS(YOUT,LPT,NPEAKS,P)
+
+
+      NV=0 
+      nr=0 
+      DO I=1,NPEAKS
+      SUMD=0.0
+      SUMF=0.0 
+*       WRITE(6,*) I, ' M=',AM(I),' TR=',tr0(i)
+       DO IT=1,LPT
+*        write(6,*) it,xin(it),yin(it),yout(it)
+         trp=tr0(I)+2.0*TCHW
+         trm=tr0(i)-2.0*TCHW
+*        write(6,*) it,' t=',xin(it),' trm=',trm,' trp=',trp  
+        IF(XIN(IT).GT.TRM.AND.xin(it).LT.TRP) THEN
+         SUMD=SUMD+YIN(IT)
+         SUMF=SUMF+YOUT(IT)
+*         write(6,*) ' t=',xin(it),' data=',yin(it),' estimate=',yout(it)  
+*        write(6,*) it,' t=',xin(it),' trm=',trm,' trp=',trp  
+*        write(6,*) it,'sumd=',sumd,' sumf=',sumf
+        END IF
+       END DO
+       if(sumf.eq.0.0) then
+        write(6,*) ' Bad Spectrum'
+        do it=1,lpt
+         yout(it)=0.0
+         eout(it)=0.0
+        end do
+        go to 100
+       end if
+
+       RATIO=SUMD/SUMF
+       IF(XS(I).EQ.0.0) THEN 
+        NV=NV+1
+        P(NV)=P(NV)*RATIO
+        WRITE(6,*) ' PARAMETER',nv,' =',p(nv),' IS AMP OF PEAK',I
+*        write(6,*) ' SUMD=',SUMD,' SUMF=',SUMF,' ratio=',ratio
+       ELSE
+        nr=nr+1
+        if(nr.lt.2)P(N)=P(N)*RATIO 
+       END IF
+       IF(WID(I).EQ.0.0) THEN 
+        nv=nv+1
+        WRITE(6,*) ' PARAMETER',nv,' =',p(nv),' IS width OF PEAK',I
+       END IF
+      END DO
+
+      IF(NBACK.EQ.1) THEN
+       N=N+3
+       CALL BSTART(XIN,YIN,LPT,TMAX,A,B,C)
+       P(N-2)=A
+       P(N-1)=B
+       P(N)=C
+      END IF
+      IF(NMSSUB.EQ.1.AND.NFACT.EQ.1) THEN
+      N=N+1
+      P(N)=1.0
+      WRITE(6,*) ' PARAMETER',N,' IS MS FACTOR'
+      END IF
+
+      WRITE(6,*) ' Number of fitting parameters=',N
+
+
+C SCALE PARAMETERS
+      DO 70 I=1,N
+      V(I)=1.0/P(I)
+      PS(I)=P(I)*V(I)
+      PST(I)=P(I)! Store start values of fit parameters.
+  70  CONTINUE
+
+C  CALCULATE DMAX USED IN VA05A.
+      DMAX=3.0
+C  H IS DISTANCE BETWEEN X PTS USED TO CALCULATE PARTIAL DERIVATIVES.
+      H=DMAX*1E-2
+C
+      ACC=0.001
+      NDMAX=0
+   80 IPRINT=0
+
+      CALL VA05A(LPT,N,F,PS,H,DMAX,ACC,MAXFUN,IPRINT,WORK)
+
+      IF(IPRINT.EQ.1.AND.NDMAX.NE.1) THEN 
+      TYPE *,' SUM OF SQUARES FAILED TO DECREASE'
+      TYPE *, ' DMAX REDUCED TO 0.1'
+      write(6,*) ' ndmax=',ndmax
+      NDMAX=1
+      DMAX=0.1
+      H=DMAX*1E-2
+      write(6,*) ' ndmax=',ndmax
+      GO TO 80
+      END IF
+
+      IF(IPRINT.EQ.2) TYPE *,' MAXIMUM NUMBER OF CALLS TO VAO5A MADE '
+
+      LINC=0
+      CS=CHISQC(PS,N,LPT,LINC) ! Calculate chi-square
+      CS=CS/(LINC-N) ! Reduced chi-square.
+      WRITE(6,*) ' FIT COMPLETED CHI=',CS
+
+      WRITE(6,*) 'ERRORS NOW BEING CALCULATED.'
+
+      if(maxfun.ne.0.and.cs.lt.100.0) then
+* Calculate errors on fitted parameters.
+      CALL ERRORS(N,LPT,PS,CM,CMI,ERR)
+
+* Check calculated errors.
+      CALL ERRCHECK(N,LPT,PS,ERR)
+      else
+      do i=1,n
+       err(i)=1e6
+      end do
+      end if
+
+      DO 90 I=1,N
+      P(I)=PS(I)/V(I)
+      ERR(I)=ERR(I)/V(I)
+   90 CONTINUE
+
+      DO I=1,N
+      WRITE(6,*) I, ' PST=',PST(I),' P=',P(I),' +-',err(i)
+      END DO
+
+      NP1=0 ! Number of peak amplitude parameters
+      NPARV=0 ! Number of fitting parameters
+      SUMF=0.0 ! Sum of fixed amplitudes.
+      DO I=1,NPEAKS
+       IF(XS(I).EQ.0.0) THEN
+        NP1=NP1+1
+        NPARV=NPARV+1
+        AV(NP1)=ABS(P(NPARV))
+        DAV(NP1)=ABS(ERR(NPARV))
+       ELSE
+        SUMF=SUMF+ABS(XS(I))
+       END IF
+       IF(WID(I).EQ.0.0) NPARV=NPARV+1
+      END DO
+      NPF=NP1+1 ! Number of amplitude fitting parameters.
+      AV(NPF)=SUMF*ABS(P(NSC))
+      DAV(NPF)=SUMF*ABS(ERR(NSC))
+
+
+      SUM=0.0
+      DO I=1,NPF
+       SUM=SUM+ABS(AV(I))
+      END DO
+
+      DO M=1,NPF
+       SUM1=0.0
+       SUM2=0.0
+       DO N=1,NPF
+        IF(N.NE.M) THEN 
+         SUM1=SUM1+AV(N)
+         SUM2=SUM2+DAV(N)**2
+        END IF
+       END DO
+       DRSQ=(DAV(M)**2*SUM1**2+AV(M)**2*SUM2)/sum**4
+       RV(M)=AV(M)/SUM
+       DRV(M)=SQRT(DRSQ)
+      END DO
+
+      NP1=0
+      NPARV=0
+      DO I=1,NPEAKS
+       IF(XS(I).EQ.0.0) THEN
+        NP1=NP1+1
+        NPARV=NPARV+1
+        COMP(I)=RV(NP1)
+        DCOMP(I)=DRV(NP1)
+       ELSE
+        COMP(I)=ABS(XS(I)*RV(NPF))/SUMF
+        DCOMP(I)=ABS(XS(I)*DRV(NPF))/SUMF
+       END IF
+       
+       IF(WID(I).EQ.0.0) THEN
+        NPARV=NPARV+1
+        WIDW(I)=P(NPARV)
+        DWIDW(I)=ERR(NPARV)
+       ELSE
+        WIDW(I)=WID(I)
+        DWIDW(I)=1E-6
+       END IF
+       WIDW(I)=ABS(WIDW(I)) ! Eliminate negative values
+       DWIDW(I)=ABS(DWIDW(I)) ! Eliminate negative values
+       
+      END DO
+
+      write(6,*) ' scale factor=',p(npar+1)
+
+  100 Continue
+      WRITE(6,*) '       MASS    ','  RELATIVE WT ',
+     $'   ERROR    ',' SD OF J(Y) ','   ERROR', '       CHISQ' 
+      WRITE(6,*) ' spectrum number=',ND
+      DO I=1,NPEAKS
+      WRITE(6,95) I,AM(I),COMP(I),DCOMP(I),WIDW(I),DWIDW(I),CS
+   95 FORMAT(' ',I3,1P6E12.4)
+      wt(i,nd)=comp(i)
+      wte(i,nd)=dcomp(i)
+      sig(i,nd)=widw(i)
+      sige(i,nd)=dwidw(i)
+      end do 
+      Chi(nd)=CS
+    
+      
+      PMIN=0.00001
+      IF(NBPTS.EQ.1) THEN
+       CALL CTS(YOUT,LPT,NPEAKS,P)
+       DO I=1,LPT
+        WDIFF=ABS((YIN(I)-YOUT(I))/EIN(I))
+        PROB=2.0*(1-ERF(WDIFF))
+        IF(PROB.LT.PMIN) THEN
+         EIN(I)=1E6
+        WRITE(6,*) ' T=',XIN(I),WDIFF,PROB
+        END IF
+       END DO
+      END IF
+
+      CALL CTSF(YOUT,LPT,NPEAKS,P)
+      CALL CTSF2(YOUT2,LPT,NPEAKS,P)
+    
+      
+      write(2,*) NVV,lpt,npeaks
+      DO I=1,LPT
+       write(2,*) xin(i),yin(i),EIN(I),YOUT(I),(yout2(ip,i),ip=1,npeaks)  
+      END DO
+   97 format(' ',1e12.4,6e11.3) 
+      IF(NMSSUB.EQ.1.AND.NFACT.EQ.1) THEN
+       IF(ND.LT.10) THEN
+        WRITE(DET1(1:1),'(I1.1)')ND
+        FNAME='TEMP'//DET1
+       ELSE IF(ND.GE.10.AND.ND.LT.100) THEN
+        WRITE(DET2(1:2),'(I2.2)')ND
+        FNAME='TEMP'//DET2
+       ELSE
+        WRITE(DET3(1:3),'(I3.3)')ND
+        FNAME='TEMP'//DET3
+       END IF
+      
+*       WRITE(6,2) FNAME
+*    2  FORMAT(' ',' MS FACTOR IN FILE;',80A)
+*       OPEN(UNIT=2,FILE=FNAME,STATUS='NEW')
+*       WRITE(2,*) P(N)
+*       CLOSE(2)
+      END IF
+  130 CONTINUE  
+
+      END DO ! END OF LOOP OVER SPECTRA
+      CLOSE(2) 
+      
+* Create output file containing fitted parameters.
+      ndv=nlast-nfirst+1
+      
+      do i=nfirst,nlast
+*      write(6,*) i, wt(1,i),wte(1,i)
+      end do
+
+      CALL FOUT(NPEAKS,Nfirst,ndv,AM,WT,WTE,SIG,SIGE,CHI,FIN,IPNO) 
+
+
+      STOP
+      END
+
+      SUBROUTINE CALFUN(M,N,F,PS)
+      REAL F(3000),PS(30),P(30)
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS
+
+      DO 10 I=1,N
+      P(I)=PS(I)/V(I)
+      if(p(i).lt.0.0)p(i)=-p(i)
+   10 CONTINUE      
+      
+      CHI=0.0
+      CALL CTS(F,M,NPEAKS,P)
+      DO 20 I=1,M
+      X=XI(I)
+      if(ei(i).ne.0.0) F(I)=(F(I)-YI(I))/EI(I)
+      CHI=CHI+F(I)**2
+   20 CONTINUE
+      CHI=CHI/M
+   30 FORMAT(7E10.3)
+
+      RETURN
+      END
+
+C Function to calculate tof at recoil peak in micro seconds
+C L0 = incident flight path in metres.
+C L1= final flight path in metres.
+C TH = scattering angle in radians.
+C E1 = analyser energy in meV.
+C DT0 = time delay in microseconds.
+C M=atomic mass in amu.
+      FUNCTION TREC(L0,L1,TH,E1,DT0,M)
+      REAL L0,L1,M
+      M=M/1.00867 ! Convert to multiple of neutron mass.
+      ARG=M**2-SIN(TH)**2
+      IF(ARG.LT.0.0) ARG=0.0
+      FACT=(COS(TH)+SQRT(ARG))/(M+1)
+      M=M*1.00867
+      V1=SQRT(E1/5.2276E-6)
+      V0=V1/FACT
+      TREC=L0/V0+L1/V1+DT0*1E-6
+      TREC=TREC*1E6
+      RETURN
+      END
+ 
+C Function to calculate y.
+C L0 = incident flight path in metres.
+C L1= final flight path in metres.
+C TH = scattering angle in radians.
+C T = time of flight in microsec.
+C E1 = analyser energy in meV.
+C DT0 = time delay in microseconds.
+C M=atomic mass in amu.
+       FUNCTION Y(L0,L1,TH,E1,T,DT0,M)
+       REAL L0,L1,M,K0,K1
+       M=M/1.00867 ! Convert to multiple of neutron mass.
+       V1=SQRT(E1/5.2276E-6)
+       T1=L1/V1 
+       T0=T*1E-6-DT0*1E-6-T1
+       V0=L0/T0
+       E0=5.2276E-6*V0**2
+       W=E0-E1
+       K0=SQRT(E0/2.0717)
+       K1=SQRT(E1/2.0717)
+       Q=SQRT(K0**2+K1**2-2.0*K0*K1*COS(TH))
+       WR=2.0717*Q**2/M
+       Y=0.2413*M*(W-WR)/Q
+       M=M*1.00867
+       RETURN
+       END
+
+C
+C    Voigt function centred at X=X0
+C    sigma is gaussian standard deviation
+c    DYE is Lorentzian DYE.
+C    Peak area normalised to 1.
+C    WRITTEN BY WIFD
+C    Modified by JM
+C
+      FUNCTION VOIGT(X,SIGMA,DYE,X0)
+
+      DOUBLE PRECISION WR,WI,XX,YY
+C
+      
+      GAMMA=DYE*2.0
+      XS=X
+      X=XS-X0
+      OVRTPI=0.564189584
+      OVRT2=0.707106781
+      BTEM=OVRT2/SIGMA
+      ATEM=OVRTPI*BTEM
+      XTEM=X*BTEM
+      YTEM=0.5*GAMMA*BTEM
+      XX= DBLE(XTEM)
+      YY= DBLE(YTEM)
+      CALL WERF(WR,WI,XX,YY)
+      SWR=SNGL(WR)
+      SWI=SNGL(WI)
+      CTEM=ATEM*BTEM
+      VOIGT=ATEM*SWR
+      X=XS
+      DWRDX=-2.*(XTEM*SWR-YTEM*SWI)
+      DWRDY= 2.*(YTEM*SWR+XTEM*SWI-OVRTPI)
+      DERX=CTEM*DWRDX
+      DERS=-ATEM*(SWR+DWRDX*XTEM+DWRDY*YTEM)/SIGMA
+      DERG=0.5*CTEM*DWRDY
+C
+      RETURN
+      END
+c
+c
+	subroutine WERF(rs1,rs2,xx,yy)
+c	W.I.F.David 25-May-84
+	implicit real*8		(a-h,o-z)
+	real*8			lambda
+	logical			b
+	x=dabs(xx)
+	y=dabs(yy)
+	if (y .lt. 4.29 .and. x .lt. 5.33) go to 1
+	h= 0.
+	nc= 0
+	nu= 8
+	lambda= 0.
+	b= .true.
+	go to 2
+ 1	s=(1.0-y/4.29)*dsqrt(1.0-x**2/28.41)
+	h=1.6*s
+	h2=2.0*h
+	nc=6+idint(23.0*s)
+	nu=9+idint(21.0*s)
+	lambda=h2**nc
+	b= .false.
+	if (lambda .eq. 0.) b= .true.
+ 2	r1=0.
+	r2=0.
+	s1=0.
+	s2=0.
+	n=nu+1
+ 3	n=n-1
+	fn=n+1
+	t1=y+h+fn*r1
+	t2=x-fn*r2
+	c=0.5/(t1**2+t2**2)
+	r1=c*t1
+	r2=c*t2
+	if (h .le. 0.0 .or. n .gt. nc) go to 4
+	t1= lambda+s1
+	s1=r1*t1-r2*s2
+	s2=r2*t1+r1*s2
+	lambda=lambda/h2
+ 4	if (n .gt. 0) go to 3
+	if (b) go to 6
+	rs1=s1
+	rs2=s2
+	go to 7
+ 6	rs1=r1
+	rs2=r2
+ 7	rs1= 1.12837916709551*rs1
+	if (y .eq. 0.0) rs1= dexp(-x**2)
+	rs2= 1.12837916709551*rs2
+	if (xx .lt. 0) rs2= -rs2
+	return
+	end
+
+
+      FUNCTION CHISQ(PS,N,M)
+      
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS
+      REAL PS(30),P(30),F(3000)
+
+      
+      DO I=1,N
+      P(I)=PS(I)/V(I)
+      END DO
+
+      CHISQ=0.0
+      CALL CTS(F,M,NPEAKS,P)
+      DO 20 I=1,M
+      X=XI(I)
+      IF(EI(I).ne.0.0) F(I)=(F(I)-YI(I))/EI(I)
+      IF(EI(I).LT.1E5) THEN ! Eliminate excluded points.
+       CHISQ=CHISQ+F(I)**2
+      END IF 
+   20 CONTINUE
+
+      END 
+
+      FUNCTION CHISQC(PS,N,M,LINC)
+      
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS
+      REAL PS(30),P(30),F(3000)
+
+      LINC=0  
+      DO I=1,N
+      P(I)=PS(I)/V(I)
+      END DO
+
+      CHISQC=0.0
+      CALL CTS(F,M,NPEAKS,P)
+      DO 20 I=1,M
+      X=XI(I)
+      IF(Ei(I).ne.0.0)F(I)=(F(I)-YI(I))/EI(I)
+      CHISQC=CHISQC+F(I)**2
+      IF(EI(I).LT.1E5)LINC=LINC+1 
+   20 CONTINUE
+
+      END 
+
+      SUBROUTINE ERRCHECK(N,M,PS,ERR)
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS
+      REAL PS(N),ERR(N)
+     
+      DO I=1,N
+      CS=CHISQ(PS,N,M)
+      PS(I)=PS(I)+ERR(I)
+      CSP=CHISQ(PS,N,M)
+      PS(I)=PS(I)-ERR(I)
+      DCS=CSP-CS
+      IF(DCS.LE.0.0) THEN
+      ERR(I)=PS(I)
+      WRITE(6,*) ' FOR PARAMETER',I, 
+     $' CHISQ DECREASES AWAY FROM MINIMUM'
+      ELSE IF(DCS.LT.1.0) THEN
+      ERR(I)=ERR(I)/DCS
+      WRITE(6,*) ' PROBLEM WITH ERROR ON PARAMETER',I
+      WRITE(6,*) ' CHANGE IN CHISQ AT P(I)+DP(I)=',DCS
+      END IF
+      END DO
+
+      END
+
+      SUBROUTINE ERRORS(N,M,PS,CM,CMI,ERR)
+
+      REAL PS(N),ERR(N),CM(N,N),PD(30),CMI(N,N),DP(30)
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS
+
+      DO I=1,N
+      PD(I)=PS(I)
+      END DO
+
+* Find increments used in calculation of curvature matrix.
+      CALL INCREMENT(PS,N,M,DP)
+
+*  Calculate curvature matrix.
+      CALL CURVATURE(PS,DP,N,M,CM)
+
+*  Invert curvature matrix
+      CALL MINV(N,CM,CMI,SM)
+     
+*  CALCULATE ERRORS
+      DO I=1,N
+      IF(SM.EQ.0.0) ERR(I)=SQRT(ABS(CMI(I,I)))
+      IF(SM.EQ.1) ERR(I)=PS(I) ! Singular error matrix.
+      END DO
+
+      END
+
+*  Subroutine to invert matrix. Uses NAG subroutine F01AAF.
+*  A is N x N matrix. AI is inverse of A.
+      SUBROUTINE MINV(N,A,AI,SM)
+      REAL A(N,N),AI(N,N),W(50)
+
+* Check for singularity.
+      SM=0.0
+      DO I=1,N
+      ZERO=0.0
+      DO J=1,N
+      IF(A(I,J).NE.0.0) ZERO=1
+      END DO
+      IF(ZERO.EQ.0.0) THEN
+      WRITE(6,*) ' ALL ELEMENTS IN ROW',I,
+     $'OF ERROR MATRIX ARE ZERO'
+      SM=1.0
+      RETURN
+      END IF
+      END DO
+
+      IFAIL=-1
+      CALL F01AAE(A,N,N,AI,N,W,IFAIL)
+      IF(IFAIL.EQ.1) THEN 
+      WRITE(6,*) ' ERROR MATRIX IS SINGULAR'
+      DO I=1,N
+      DO J=1,N
+      AI(I,J)=0.0
+      END DO
+      END DO
+      RETURN
+      END IF
+
+      END
+
+* Calculate increments for calculation of curvature
+* take increment which increases chisq by BETWEEN 1 AND 2.
+      SUBROUTINE INCREMENT(PS,N,M,DP)
+      REAL PS(N),DP(N),PD(30)
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS
+
+      DO I=1,N
+      PD(I)=PS(I)
+      END DO
+
+      CS=CHISQ(PS,N,M)
+
+      DO I=1,N
+
+*  Find value of DCS >2.
+      DP(I)=PS(I) ! Start value for increment
+      DPMIN =0
+      NINC=0 
+   10 PD(I)=PS(I)+DP(I)
+
+      NINC=NINC+1 ! Check for no minimum.
+      IF(NINC.GT.10) THEN
+      DP(I)=PS(I)
+      GO TO 30
+      END IF 
+     
+      CSP=CHISQ(PD,N,M)
+      DCS=CSP-CS ! Calculate change in chisq in step dp from min.
+      IF(DCS.LT.1.0) THEN
+       DPMIN=DP(I)
+       DP(I)=DP(I)*2.0
+       GO TO 10
+      ELSE IF(DCS.GT.3.0) THEN 
+       DP(I)=DP(I)/2.0
+       go to 10
+      ELSE IF(DCS.GT.2.0) THEN 
+       DPMAX=DP(I)
+      ELSE
+       GO TO 30
+      END IF
+
+* Now find value of dp(i) which changes chisq by between 1 and 2.
+   20 DP(I)=(DPMAX+DPMIN)/2.0
+* Calculate change in chi-sq corresponding to dp(i).
+      PD(I)=PS(I)+DP(I)
+      CSP=CHISQ(PD,N,M)
+      DCS=CSP-CS
+      IF(DCS.GT.2.0) THEN
+      DPMAX=DP(I)
+      GO TO 20
+      ELSE IF(DCS.LT.1.0) THEN
+      DPMIN=DP(I)
+      GO TO 20
+      END IF
+   30 CONTINUE
+      PD(I)=PS(I) ! Reset pd to value at minimum.
+
+      END DO
+      END
+
+
+      SUBROUTINE CURVATURE(PS,DP,N,M,CM)
+      REAL PS(N),DP(N),CM(N,N),PD(30)
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS
+
+      DO I=1,N
+      PD(I)=PS(I) ! Initialise pd.
+      END DO
+
+      C=CHISQ(PS,N,M) ! chisq at minimum.
+
+      DO I=1,N
+      DO J=1,N
+      IF(J.LT.I) THEN
+      CM(I,J)=CM(J,I)
+      TIJ=0
+      GO TO 5
+      END IF
+
+      DPI=DP(I)
+      DPJ=DP(J)
+
+      IF(I.NE.J) THEN
+      PD(I)=PS(I)+DPI
+      PD(J)=PS(J)+DPJ
+      CIJ=CHISQ(PD,N,M)
+      PD(I)=PS(I)
+      PD(J)=PS(J)+DPJ
+      CJ=CHISQ(PD,N,M)
+      PD(I)=PS(I)+DPI
+      PD(J)=PS(J)
+      CI=CHISQ(PD,N,M)
+      PD(I)=PS(I)
+      PD(J)=PS(J)
+      CM(I,J)=0.5*(CIJ-CI-CJ+C)/(DPI*DPJ)
+      TIJ=(CIJ-C)/(DPI*DPJ)
+
+      ELSE IF(I.EQ.J) THEN
+      PD(I)=PS(I)+2.0*DPI
+      CII=CHISQ(PD,N,M)
+      PD(I)=PS(I)+DPI
+      CI=CHISQ(PD,N,M)
+      CM(I,I)=0.5*(CII-2.0*CI+C)/(DPI**2)
+      TIJ=(CII-C)/DPI**2
+      END IF
+    5 CONTINUE    
+  
+      END DO
+      END DO
+
+      END
+
+* Reads in resolution parameters.
+      SUBROUTINE RES_READ(DL0,DL1,DT0,DW)
+      OPEN(UNIT=3,FILE='EVS$DISK0:[EVSMGR.userprogs]RESOLUTION.DAT',
+     $STATUS='OLD',READONLY,SHARED)
+      READ(3,*) DL0 ! Uncertainty in incident flight path (cm)
+      READ(3,*) DL1 ! Uncertainty in scattered flight path(cm)
+      READ(3,*) DT0 ! Tof uncertainty (usec)
+      READ(3,*) DW  ! Detector width (cm)
+      CLOSE(3)
+      END
+
+* IPNO is IP run number,NDET is maximum no of detectors,NS is
+* number of detectors in IPNRUN.dat.
+      SUBROUTINE PAR_READ(TH,DT0,L0,L1,IPNO,NDET,NS)
+      REAL TH(NDET),L0(NDET),L1(NDET),DT0(NDET)
+      CHARACTER RUN*4,FIN*40
+
+* Define file name
+      WRITE(RUN(1:4),'(I4.4)')IPNO
+      FIN='EVS$disk0:[EVSMGR.CALIB.PAR]IP'//RUN
+      WRITE(6,5) FIN
+    5 FORMAT(' ',' IPFILE=',40A) 
+
+      OPEN(UNIT=3,FILE=FIN,STATUS='OLD',READONLY,SHARED)
+      NS=1
+   10 READ(3,*,END=20) I,TH(NS),DT0(NS),L0(NS),L1(NS)
+      NS=NS+1
+      GO TO 10
+   20 CLOSE(3)
+      NS=NS-1
+
+      END
+
+
+* Calculate time of flight spectrum.
+* NM=number of masses, M=mass, XS=amplitude, SIGY=width in y.
+* TRES=resolution fn in tof, L0,L1, lengths in metres, TH angle in rad.
+* T0 time delay in usec, E1 analyser energy in meV.
+      SUBROUTINE CTS(CT,NPTS,NPEAKS,P)
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS1
+      REAL CT(NPTS),M
+      REAL RES(3000),CTM(3000),P(30),AMP(30),WIDTH(30)
+
+      NP=0
+      DO I=1,NPEAKS
+       IF(XS(I).EQ.0.0) THEN
+        NP=NP+1
+        AMP(I)=ABS(P(NP))
+       ELSE
+        AMP(I)=ABS(P(NPAR+1)*XS(I))
+       END IF
+       IF(WID(I).EQ.0.0)THEN
+        NP=NP+1
+        WIDTH(I)=P(NP)
+       ELSE 
+        WIDTH(I)=WID(I)
+       END IF
+      END DO
+
+      DO IT=1,NPTS
+       CT(IT)=0.0
+      END DO
+
+      DO IE=1,1
+       IF(IE.EQ.1) FACT=1.0
+       IF(IE.EQ.2) FACT=0.516
+       IF(IE.EQ.3) FACT=0.079
+      DO IM=1,NPEAKS
+       IF(AM(IM).LT.3) THEN ! Harmonic Oscillator
+        DSQV=12.0*4.18036*WIDTH(IM)**4/AM(IM)
+       ELSE ! Debye Approximation
+        DSQV=12.8*4.18036*WIDTH(IM)**4/AM(IM)
+       END IF 
+       if(nfse.eq.0) dsqv=0.0
+       DO IT=1,NPTS
+        YV=YA(IM,IT,IE)
+        E0=E0A(IT,IE)
+        Q=QA(IT,IE) 
+        IF(IE.EQ.1) THEN
+         CPV=CP(YV,Q,AM(IM),WIDTH(IM),DSQV)
+        ELSE
+*         CPV=CP2(YV,yv2,Q,AM(IM),WIDTH(IM),DSQV)
+         cpv=0.0  
+        END IF
+        CTM(IT)=AM(IM)*AMP(IM)*CPV*E0**0.1/Q
+        RES(IT)=TRES(IM,IT,IE)
+       END DO
+
+       CALL C06EKE(1,CTM,RES,NPTS,IFAIL) ! Convolve with resn fn.
+       DO IT=1,NPTS
+        CT(IT)=CT(IT)+FACT*CTM(IT)
+       END DO
+
+      END DO
+      END DO
+
+      IF(NBACK.EQ.1) THEN
+       N=NP+4
+       DO IT=1,NPTS
+        X=XI(IT)
+       CT(IT)=CT(IT)+P(N-2)*(TMAX-X)+P(N-1)*(TMAX-X)**2
+     $ +P(N)*(TMAX-X)**3
+       END DO                    
+      END IF
+
+      IF(NMSSUB.EQ.1.AND.NFACT.EQ.1) THEN ! Muliple scattering correction.
+       DO I=1,NPTS
+        CT(I)=CT(I)+P(N+1)*RMS(I)
+       END DO
+      ELSE IF(NMSSUB.EQ.1.AND.NFACT.NE.1) THEN
+      DO I=1,NPTS
+       CT(I)=CT(I)+RMS(I)
+      END DO
+      END IF
+
+* Fudge to avoid unphysical widths in fit.        
+       do im=1,npeaks 
+        IF(AM(IM).GT.7.0.AND.WIDTH(IM).LT.3.0) then
+         do i=1,npts
+          CT(I)=CT(I)*1.0e2
+         END DO
+        END IF
+       END DO
+
+
+      END
+
+
+
+
+C Function to calculate resolution in time.
+C L0 +- DL0 = incident flight path in metres.
+C L1 +- DL1 = final flight path in metres.
+C TH +- DTH = scattering angle in radians.
+C E1 +- DE1 = analyser energy in meV.
+C T0 +- DT0 = time delay in microseconds.
+C M=atomic mass in amu.
+* Calls TREC.
+      FUNCTION TRESN(L0,DL0,L1,DL1,TH,DTH,E1,DE1,T0,DT0,M)
+      REAL L0,L1,M
+
+      TR=TREC(L0,L1,TH,E1,T0,M)
+*      write(6,*) ' tr=',tr,' t0=',t0
+      DTL0=TREC(L0+DL0,L1,TH,E1,T0,M)-TR
+      DTL1=TREC(L0,L1+DL1,TH,E1,T0,M)-TR
+      DTTH=TREC(L0,L1,TH+DTH,E1,T0,M)-TR
+      DTE1=TREC(L0,L1,TH,E1+DE1,T0,M)-TR
+      DTT0=TREC(L0,L1,TH,E1,T0+DT0,M)-TR
+      TRESN=SQRT(DTL0**2+DTL1**2+DTTH**2+DTE1**2+DTT0**2)
+*      WRITE(6,*) ' L0=',L0,' +-',DL0,' L1=',L1,' +-',DL1
+*      WRITE(6,*) ' TH=',TH,' +-',DTH,' E1=',E1,' =-',DE1
+*      WRITE(6,*) ' T0=',T0,' +-',DT0, ' M=',M
+*      WRITE(6,*) ' TRESN=',TRESN
+
+      END   
+      
+* Calculates J(y) including first Sears Correction terms
+      FUNCTION CP2(Y1,y2,Q,M,SIG1,D2V)
+      REAL Y,M,J0,J3
+
+      NP=101 ! Number of points in integration
+      CP=0.0
+      SIG=ABS(SIG1)
+      DY=(y2-y1)/(np-1)
+      do i=1,np
+       y=y1+dy*(i-1)
+       X=Y/SIG
+       J0=EXP(-X**2/2)/(2.506628*SIG) ! 2.5066=SQRT(2PI)
+       D3J=X*(3-X**2)*J0/SIG**3
+       J3=-M*D2V*D3J/(150.49*Q)
+       if(d2v.ne.0.0) then
+        CP=CP+J0+J3
+       else
+        cp=cp+j0
+       end if
+      END DO
+      CP2=CP*dy
+
+      END
+
+
+
+      SUBROUTINE BSTART(XIN,YIN,LPT,TMAX,A,B,C)
+      REAL XIN(LPT),YIN(LPT),N1,N2
+      T1=1E6
+      T3=0.0
+      Y1=0.0
+      DO I=1,LPT
+       IF(XIN(I).GT.497) THEN
+        TMAX=XIN(I)
+        YMAX=YIN(I)
+       END IF
+       IF(XIN(I).LT.T1) THEN
+        DO J=I,10
+         Y1=Y1+YIN(I)
+        END DO
+        T1=XIN(I)
+        Y1=Y1/10.0
+       END IF
+       IF(XIN(I).LT.400.0.AND.XIN(I).GT.T3)THEN
+        T3=XIN(I)
+        Y3=YIN(I)
+       END IF 
+      END DO
+
+      TMEAN=(T1+T3)/2
+      T2=0.0
+      DO I=1,LPT
+       IF(XIN(I).GT.T2.AND.XIN(I).LE.TMEAN) THEN
+        T2=XIN(I)
+        Y2=YIN(I)
+       END IF
+      END DO
+
+*      WRITE(6,*) ' TMAX=',TMAX,' YMAX=',YMAX   
+*      WRITE(6,*) ' T1=',T1,' Y1=',Y1  
+*      WRITE(6,*) ' T2=',T2,' Y2=',Y2  
+*      WRITE(6,*) ' T3=',T3,' Y3=',Y3  
+
+      X1=TMAX-T1
+      X2=TMAX-T2
+      X3=TMAX-T3
+      
+      D1=(Y1/X1**3-Y2/X2**3)/(1/X1-1/X2)
+      D2=(Y1/X1**3-Y3/X3**3)/(1/X1-1/X3)
+      N1=(1/X1**2-1/X2**2)/(1/X1-1/X2)
+      N2=(1/X1**2-1/X3**2)/(1/X1-1/X3)
+*      write(6,*) ' d1=',d1,' d2=',d2
+*      write(6,*) ' n1=',n1,' n2=',n2
+      A=(D1-D2)/(N1-N2)
+*      write(6,*) ' a=',a
+      B=((Y1/X1**3-Y2/X2**3)-A*(1/X1**2-1/X2**2))/(1/X1-1/X2)
+*      write(6,*) ' b=',b
+      C=Y1/X1**3-A/X1**2-B/X1
+*      WRITE(6,*) ' A=',A,' B=',B,' C=',C
+
+      END
+
+
+
+      FUNCTION CP(Y,Q,M,SIG1,D2V)
+      REAL Y,M,J0,J3
+      
+      SIG=ABS(SIG1)
+      X=Y/SIG
+      J0=EXP(-X**2/2)/(2.506628*SIG) ! 2.5066=SQRT(2PI)
+      D3J=X*(3-X**2)*J0/SIG**3
+      J3=-M*D2V*D3J/(150.49*Q)
+      if(d2v.ne.0.0)then
+      CP=J0+J3
+      else
+      CP=J0
+      END IF
+
+      END
+
+
+
+      SUBROUTINE MSNORM(XI,YI,LPT,MSDATA,ND,RMS)
+      CHARACTER MSDATA*70
+      REAL XI(LPT),YI(LPT),RMS(LPT)
+      real d(3000,20),de(3000,20),sum(20),X(3000),MSC(3000)
+      REAL WORK1(3000),WORK2(3000),TOTSC(3000)
+
+      CHARACTER DET1*1,DET2*2,DET3*3,FNAME*80
+
+      DO I=1,3000
+       MSC(I)=0.0
+       TOTSC(I)=0.0
+      END DO
+
+      IF(ND.LT.10) THEN
+       WRITE(DET1(1:1),'(I1.1)')ND
+       FNAME=MSDATA//DET1
+      ELSE IF(ND.GE.10.AND.ND.LT.100) THEN
+       WRITE(DET2(1:2),'(I2.2)')ND
+       FNAME=MSDATA//DET2
+      ELSE
+       WRITE(DET3(1:3),'(I3.3)')ND
+       FNAME=MSDATA//DET3
+      END IF
+      
+      WRITE(6,2) FNAME
+    2  FORMAT(' ',' MULTIPLE SCATTERING READ FROM FILE;',80A)
+      OPEN(UNIT=1,FILE=FNAME,STATUS='OLD')
+
+* Read multiple scattering data from file.       
+      read(1,*) nsmax
+      write(6,*) ' number of orders of scattering=',nsmax
+     
+      i=0
+   10 i=I+1
+      read(1,*,end=20) x(i),(d(i,j),j=1,nsmax)
+      read(1,*,end=20) x(i),(de(i,j),j=1,nsmax)
+      go to 10
+   20 CONTINUE
+      NPTS=i-1
+      close(1)
+      WRITE(6,*) ' NPTS=',NPTS,' LPT=',LPT
+  
+* Calculate ratio of multiple scattering to total scattering
+
+      do j=1,nsmax
+       sum(j)=0.0
+       do i=1,npts
+        sum(j)=sum(j)+d(i,j)
+        TOTSC(I)=TOTSC(I)+D(I,J)
+        IF(J.GT.1)MSC(I)=MSC(I)+D(I,J)
+       end do
+       write(6,*) ' area of neutrons scattered',j,' times=',sum(j)
+      end do
+
+      SUMT=0.0
+      SUMM=0.0
+      SUMD=0.0
+      do i=1,lpt
+       XV=XI(i)
+       WORK1(I)=YV(XV,X,TOTSC,NPTS)
+       WORK2(I)=YV(XV,X,MSC,NPTS)
+       SUMT=SUMT+WORK1(I)
+       SUMM=SUMM+WORK2(I)
+       SUMD=SUMD+YI(I)
+      END DO
+      WRITE(6,*) ' SUMT=',SUMT,' SUMM=',SUMM,' SUMD=',SUMD
+
+      DO I=1,LPT
+       RMS(I)=WORK2(I)*SUMD/SUMT
+      END DO 
+      END
+
+* CALCULATE Y GIVEN X AND ARRAYS OF X,Y VALUES. LINEAR INTERPOLATION.
+      FUNCTION YV(XV,X,Y,N)
+      REAL X(N),Y(N)
+
+      IF(XV.LT.X(1).OR.XV.GT.X(N)) THEN
+       YV=0.0
+       RETURN
+      END IF
+
+      DO I=1,N-1
+      IF(X(I).LE.XV.AND.XV.LT.X(I+1)) THEN
+      YV=Y(I)+(XV-X(I))*(Y(I+1)-Y(I))/(X(I+1)-X(I))
+*      write(6,*) ' xv=',xv,' x(i)=',x(i),' x(i+1)=',x(i+1)
+*      write(6,*) ' yv=',yv,' y(i)=',y(i),' y(I+1)=',y(I+1)
+      RETURN
+      END IF
+      END DO
+
+      END
+
+* Error function. Taken from Numerical Recipes p164
+      FUNCTION ERF(X)
+      Z=ABS(X)
+      T=1.0/(1.0+0.5*Z)
+      ERFCC=T*EXP(-Z*Z-1.26551223+T*(1.00002368+T*(.37409196+
+     $     T*(.09678418+T*(-.18628806+T*(.27886807+T*(-1.13520398+
+     $     T*(1.48851587+T*(-.82215223+T*.17087277)))))))))
+      IF(X.LT.0) ERFCC=2.-ERFCC
+      ERF=1.0-ERFCC
+      RETURN
+      END
+ 
+* Calculate time of flight spectrum.
+* NM=number of masses, M=mass, XS=amplitude, SIGY=width in y.
+* TRES=resolution fn in tof, L0,L1, lengths in metres, TH angle in rad.
+* T0 time delay in usec, E1 analyser energy in meV.
+      SUBROUTINE CTSF(CT,NPTS,NPEAKS,P)
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS1
+      REAL CT(NPTS),M
+      REAL RES(3000),CTM(3000),P(30),AMP(30),WIDTH(30)
+*       open(unit=4,file='temp.dat',status='new')
+      NP=0
+      DO I=1,NPEAKS
+       IF(XS(I).EQ.0.0) THEN
+        NP=NP+1
+        AMP(I)=ABS(P(NP))
+       ELSE
+        AMP(I)=ABS(P(NPAR+1)*XS(I))
+       END IF
+       IF(WID(I).EQ.0.0)THEN
+        NP=NP+1
+        WIDTH(I)=P(NP)
+       ELSE 
+        WIDTH(I)=WID(I)
+       END IF
+      END DO
+
+      DO IT=1,NPTS
+       CT(IT)=0.0
+      END DO
+
+      DO IE=1,1
+       IF(IE.EQ.1) FACT=1.0
+       IF(IE.EQ.2) FACT=0.516
+       IF(IE.EQ.3) FACT=0.079
+      DO IM=1,NPEAKS
+*       write(4,*) ' e1=',e1(ie),' M=',am(im)
+       IF(AM(IM).LT.3) THEN ! Harmonic Oscillator
+        DSQV=12.0*4.18036*WIDTH(IM)**4/AM(IM)
+       ELSE ! Debye Approximation
+        DSQV=12.8*4.18036*WIDTH(IM)**4/AM(IM)
+       END IF 
+       if(nfse.eq.0) dsqv=0.0
+       DO IT=1,NPTS
+        YV=YA(IM,IT,IE)
+        YV2=YA(IM,IT+1,IE)
+        if(xi(it).eq.0.0) return
+        DYDT=(yv2-yv)/(xi(it+1)-xi(it))
+         if(dydt.eq.0.0) then
+         YV=YA(IM,IT-1,IE)
+         YV2=YA(IM,IT,IE)
+         DYDT=(yv2-yv)/(xi(it+1)-xi(it))
+         end if 
+        E0=E0A(IT,IE)
+        Q=QA(IT,IE) 
+        IF(IE.EQ.1) THEN
+         CPV=CP(YV,Q,AM(IM),WIDTH(IM),DSQV)
+        ELSE
+         if(dydt.eq.0.0) then
+          write(6,*) ' e1=',e1(ie),' m=',am(im)
+          write(6,*) ' yv2=',yv2,' yv=',yv
+          write(6,*) ' t2=',xi(it+1),' t=',xi(it)
+         end if
+         if(dydt.ne.0.0) then
+          CPV=CP2(YV,YV2,Q,AM(IM),WIDTH(IM),DSQV)/dydt
+         else
+          CPV=0.0
+         end if
+         if(it.eq.npts) cpv=0.0
+*         if(xi(it).eq.110.and.IE.eq.2) then
+*          CPV=CP2W(YV,YV2,Q,AM(IM),WIDTH(IM),DSQV)/dydt
+*         end if
+        END IF
+        CTM(IT)=AM(IM)*AMP(IM)*CPV*E0**0.1/Q
+*        write(4,11) xi(it),yv,cpv,ctm(it)
+   11    Format(' ',' t=',1pe11.4,' yv=',1pe11.4,' cpv=',1pe11.4,
+     $' ctm=',1pe11.4)        
+        RES(IT)=TRES(IM,IT,IE)
+       END DO
+       CALL C06EKE(1,CTM,RES,NPTS,IFAIL) ! Convolve with resn fn.
+       DO IT=1,NPTS
+        CT(IT)=CT(IT)+FACT*CTM(IT)
+       END DO
+
+      END DO
+      END DO
+
+      IF(NBACK.EQ.1) THEN
+       N=NP+4
+       DO IT=1,NPTS
+        X=XI(IT)
+       CT(IT)=CT(IT)+P(N-2)*(TMAX-X)+P(N-1)*(TMAX-X)**2
+     $ +P(N)*(TMAX-X)**3
+       END DO                    
+      END IF
+
+      IF(NMSSUB.EQ.1.AND.NFACT.EQ.1) THEN ! Muliple scattering correction.
+       DO I=1,NPTS
+        CT(I)=CT(I)+P(N+1)*RMS(I)
+       END DO
+      ELSE IF(NMSSUB.EQ.1.AND.NFACT.NE.1) THEN
+      DO I=1,NPTS
+       CT(I)=CT(I)+RMS(I)
+      END DO
+      END IF
+
+      close(4)
+      END
+
+* Calculates J(y) including first Sears Correction terms
+      FUNCTION CP2W(Y1,y2,Q,M,SIG1,D2V)
+      REAL Y,M,J0,J3
+
+      NP=101 ! Number of points in integration
+      CP=0.0
+      SIG=ABS(SIG1)
+      DY=(y2-y1)/(np-1)
+*       write(4,*) ' y1=',y1,' y2=',y2,' dy=',dy
+      do i=1,np
+       y=y1+dy*(i-1)
+       X=Y/SIG
+       J0=EXP(-X**2/2)/(2.506628*SIG) ! 2.5066=SQRT(2PI)
+       D3J=X*(3-X**2)*J0/SIG**3
+       J3=-M*D2V*D3J/(150.49*Q)
+       if(d2v.ne.0.0) then
+        CP=CP+J0+J3
+       else
+        cp=cp+j0
+       end if
+*       write(4,*) ' y=',y,' j0=',j0,' cp=',cp
+      END DO
+      CP2W=CP*dy
+
+      END
+
+* SUBROUTINE TO PRODUCE OUTPUT FILE CONTAINING FITTED
+* PARAMETERS
+      SUBROUTINE FOUT(NM,NDETMIN,ndet,
+     $AM,WT,WTE,SIG,SIGE,CHI,FIN,ipno) 
+      PARAMETER (NP=20,nd=200)
+      REAL wt(np,nd),wte(np,nd),sig(np,nd)
+     *,sige(np,nd),Chi(nd),am(nm)
+      CHARACTER FIN*70,fileout*80
+     
+*      write(6,*) ' nm=',nm,' ndetmin=',ndetmin,' ndet=',ndet
+      ndetmax=ndetmin+ndet-1
+      
+*      do i=ndetmin,ndetmax
+*      write(6,*) i, wt(1,i),wte(1,i)
+*      end do
+      
+      
+      FileOUT=FIN//'P.dat'
+      OPEN(UNIT=4,FILE=fileout,STATUS='NEW')
+      WRITE(4,*) NM
+      NDTOT=NDETMAX-NDETMIN+1
+      WRITE(4,*) NDTOT
+      WRITE(4,*) ' '
+      DO IM=1,NM
+       WRITE(4,*) ' '
+       WRITE(4,*) am(IM)
+       WRITE(4,*) ' '
+      WRITE(4,*) '   ','      WEIGHT    ','     ERROR     ',
+     $'     SIGMA     ','     ERROR     ','   CHI-SQ      '
+       WRITE(6,*) ' '
+       WRITE(6,*) ' FOR MASS', am(IM)
+       WRITE(6,*) ' '
+      WRITE(6,*) '   ','      WEIGHT    ','     ERROR     ',
+     $'     SIGMA     ','     ERROR     ','   CHI-SQ      '
+       DO ID=Ndetmin,Ndetmax
+        WRITE(6,15) ID,WT(Im,Id),WTE(Im,Id),SIG(Im,Id)
+     $  ,SIGE(Im,Id),CHI(ID)
+        WRITE(4,15) ID,WT(Im,Id),WTE(Im,Id),SIG(Im,Id)
+     $  ,SIGE(Im,Id),CHI(ID)
+   15   FORMAT(' ',I3,1P5E15.4)
+       END DO
+      END DO
+      write(4,*) ipno
+      CLOSE(4)
+
+      end
+        
+
+* Calculate time of flight spectrum.
+* NM=number of masses, M=mass, XS=amplitude, SIGY=width in y.
+* TRES=resolution fn in tof, L0,L1, lengths in metres, TH angle in rad.
+* T0 time delay in usec, E1 analyser energy in meV.
+      SUBROUTINE CTSF2(CT2,NPTS,NPEAKS,P,N)
+      COMMON QA(3000,3),E0A(3000,3),ya(20,3000,3),TMAX
+     $,TRES(20,3000,3),E1(3),NBACK,NMSSUB,NFACT,NFSE
+      COMMON AM(20),DTG(20,3),XS(20),WID(20),NPAR
+      COMMON XI(3000),YI(3000),EI(3000),V(30),RMS(3000),
+     $ DTE(20,3),TR0(20),NPEAKS1
+      REAL CT2(20,1024),M,ct(npts),amp1(30)
+      REAL RES(3000),CTM(3000),P(30),AMP(30),WIDTH(30)
+
+      do ip=1,npeaks ! Start of loop over peaks
+      NP=0
+      DO I=1,NPEAKS
+       IF(XS(I).EQ.0.0) THEN
+        NP=NP+1
+        AMP1(I)=ABS(P(NP))
+*        write(6,*) i,' xs=0.amp1=',amp1(i)
+       ELSE
+        AMP1(I)=ABS(P(NPAR+1)*XS(I))
+*        write(6,*) i,' xs.ne.0.amp1=',amp1(i)
+       END IF
+       
+       IF(WID(I).EQ.0.0)THEN
+        NP=NP+1
+        WIDTH(I)=P(NP)
+       ELSE 
+        WIDTH(I)=WID(I)
+       END IF
+*       write(6,*) i, ' amp1=',amp1(i),' width=',width(i)
+      END DO
+
+      do i=1,npeaks
+      if(i.ne.ip) amp(i)=0.0
+      if(i.eq.ip) amp(i)=amp1(i)
+      end do
+*      write(6,*) ip, amp(1),amp(2),amp(3)
+
+      DO IT=1,NPTS
+       CT(IT)=0.0
+      END DO
+
+      DO IE=1,1
+       IF(IE.EQ.1) FACT=1.0
+       IF(IE.EQ.2) FACT=0.516
+       IF(IE.EQ.3) FACT=0.079
+      DO IM=1,NPEAKS
+*       write(6,*) ' e1=',e1(ie),' M=',am(im)
+       IF(AM(IM).LT.3) THEN ! Harmonic Oscillator
+        DSQV=12.0*4.18036*WIDTH(IM)**4/AM(IM)
+       ELSE ! Debye Approximation
+        DSQV=12.8*4.18036*WIDTH(IM)**4/AM(IM)
+       END IF 
+       if(nfse.eq.0) dsqv=0.0
+       DO IT=1,NPTS
+        YV=YA(IM,IT,IE)
+        YV2=YA(IM,IT+1,IE)
+        if(xi(it).eq.0.0) return
+        DYDT=(yv2-yv)/(xi(it+1)-xi(it))
+         if(dydt.eq.0.0) then
+         YV=YA(IM,IT-1,IE)
+         YV2=YA(IM,IT,IE)
+         DYDT=(yv2-yv)/(xi(it+1)-xi(it))
+         end if 
+        E0=E0A(IT,IE)
+        Q=QA(IT,IE) 
+        IF(IE.EQ.1) THEN
+         CPV=CP(YV,Q,AM(IM),WIDTH(IM),DSQV)
+        ELSE
+         if(dydt.eq.0.0) then
+          write(6,*) ' e1=',e1(ie),' m=',am(im)
+          write(6,*) ' yv2=',yv2,' yv=',yv
+          write(6,*) ' t2=',xi(it+1),' t=',xi(it)
+         end if
+         if(dydt.ne.0.0) then
+          CPV=CP2(YV,YV2,Q,AM(IM),WIDTH(IM),DSQV)/dydt
+         else
+          CPV=0.0
+         end if
+         if(it.eq.npts) cpv=0.0
+        END IF
+        CTM(IT)=AM(IM)*AMP(IM)*CPV*E0**0.1/Q
+*        if(im.eq.3.and.ip.eq.3) write(6,11) xi(it),yv,cpv,ctm(it)
+   11    Format(' ',' t=',1pe11.4,' yv=',1pe11.4,' cpv=',1pe11.4,
+     $' ctm=',1pe11.4)        
+        RES(IT)=TRES(IM,IT,IE)
+       END DO
+       CALL C06EKE(1,CTM,RES,NPTS,IFAIL) ! Convolve with resn fn.
+       DO IT=1,NPTS
+        CT(IT)=CT(IT)+FACT*CTM(IT)
+       END DO
+
+      END DO
+      END DO
+
+      IF(NBACK.EQ.1) THEN
+       N=NP+4
+       DO IT=1,NPTS
+        X=XI(IT)
+       CT(IT)=CT(IT)+P(N-2)*(TMAX-X)+P(N-1)*(TMAX-X)**2
+     $ +P(N)*(TMAX-X)**3
+       END DO                    
+      END IF
+
+      IF(NMSSUB.EQ.1.AND.NFACT.EQ.1) THEN ! Muliple scattering correction.
+       DO I=1,NPTS
+        CT(I)=CT(I)+P(N+1)*RMS(I)
+       END DO
+      ELSE IF(NMSSUB.EQ.1.AND.NFACT.NE.1) THEN
+      DO I=1,NPTS
+       CT(I)=CT(I)+RMS(I)
+      END DO
+      END IF
+
+      do i=1,npts
+      ct2(ip,i)=ct(i) 
+      end do
+      
+      end do ! end of loop over peaks
+
+
+      END

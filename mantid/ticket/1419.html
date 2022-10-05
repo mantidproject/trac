@@ -1,0 +1,1540 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #1419 (Implement multiple file loading/summing for all data loading algorithms)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="1418.html" title="Ticket #1418" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/1419?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/1419?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/1419?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="1420.html" title="Ticket #1420" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 1419, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="1418.html" title="Ticket #1418">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="1420.html" title="Ticket #1420">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="1419.html">Ticket #1419</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-07-22T17%3A48%3A25%2B01%3A00&amp;precision=second" title="2010-07-22T17:48:25+01:00 in Timeline">10 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A32%3A07%2B01%3A00&amp;precision=second" title="2015-06-03T22:32:07+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Implement multiple file loading/summing for all data loading algorithms</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Nick+Draper">Nick Draper</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Peter+Parker">Peter Parker</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.1.html">Release 2.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Alex Buts
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Rob,
+</p>
+<p>
+This is very interesting, and I hadn't thought about it too much, but I think there is something we can do.
+</p>
+<p>
+What I want to avoid is having every load routine written to handle this as it would be tedious and repeated code.  However I think there is a way of handling this in a base class.
+</p>
+<p>
+How about if worked out what you wanted from the file property to load several files you would enter:
+CSP2011, 2012
+</p>
+<blockquote>
+<p>
+If you wanted to load two files and not sum them
+</p>
+</blockquote>
+<p>
+CSP2011 + 2012
+</p>
+<blockquote>
+<p>
+If you wanted to load an sum two files
+</p>
+</blockquote>
+<p>
+CSP2011-2021
+</p>
+<blockquote>
+<p>
+If you wanted to load eleven files
+</p>
+</blockquote>
+<p>
++CSP2011-2012
+</p>
+<blockquote>
+<p>
+If you wanted to sum 11 files
+</p>
+</blockquote>
+<p>
+I'm not too sure about the last one and I'm open to suggestions.
+</p>
+<p>
+I don't think this will get in for the August release, but it is a great idea.
+</p>
+<p>
+Regards,
+Nick Draper
+</p>
+<hr />
+<p>
+From: mantid-help-bounces@… mantid-help-bounces@… On Behalf Of robert.dalgliesh@…
+Sent: 22 July 2010 13:24
+To: Mantid Help
+Cc: Charlton, Timothy (STFC,RAL,ISIS)
+Subject: [Mantid-help] load raw and load nexus add runs
+</p>
+<p>
+Hi Nick, Martyn, Russell,
+</p>
+<p>
+Are there and plans to allow the load data routines to accept more than
+1 run number or data file?
+</p>
+<p>
+We quite regularly add data on the fly by simply adding whole data sets
+on a spectrum by spectrum basis.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="1419.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-11-16T11%3A31%3A59Z&amp;precision=second" title="2010-11-16T11:31:59Z in Timeline">10 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Roman Tolchenov</em> to <em>Sofia Antony</em>
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Component</strong>
+        set to <em>Mantid</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="1419.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-11-16T16%3A14%3A15Z&amp;precision=second" title="2010-11-16T16:14:15Z in Timeline">10 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I've added a hopefully final suggestion from me:
+</p>
+<pre class="wiki">Add a list of files:
+2010+2012
+Add a range of files:
+2010-2012
+2010-2012:2 (in steps of 2)
+
+Load a list of files:
+2010,2012
+Load a range of files:
+2010:2012
+2010:2012:2 (steps of 2)
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="1419.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-12-16T09%3A49%3A15Z&amp;precision=second" title="2010-12-16T09:49:15Z in Timeline">10 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 26</em> to <em>Iteration 27</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets to iteration 27, if your ticket is essential for Iteration 26 then move it back.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="1419.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-15T09%3A09%3A17Z&amp;precision=second" title="2011-02-15T09:09:17Z in Timeline">10 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 27</em> to <em>Iteration 28</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets at the end of iteration 27
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="1419.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-27T08%3A35%3A32%2B01%3A00&amp;precision=second" title="2011-04-27T08:35:32+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 28</em> to <em>Iteration 29</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets at the end of iteration 28
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="1419.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-06-10T14%3A22%3A27%2B01%3A00&amp;precision=second" title="2011-06-10T14:22:27+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>new</em>
+    </li><li>
+      <strong>Owner</strong>
+        <em>Sofia Antony</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Taken from Sofia Antony's list after she left
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="1419.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-06-27T09%3A20%3A14%2B01%3A00&amp;precision=second" title="2011-06-27T09:20:14+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 29</em> to <em>Iteration 30</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+"New" tickets moved at the code freeze of iteration 29
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="1419.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-08-31T14%3A25%3A58%2B01%3A00&amp;precision=second" title="2011-08-31T14:25:58+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Priority</strong>
+        changed from <em>major</em> to <em>critical</em>
+    </li><li>
+      <strong>Owner</strong>
+        set to <em>Anyone</em>
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="1419.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-19T10%3A30%3A00%2B01%3A00&amp;precision=second" title="2011-09-19T10:30:00+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 30</em> to <em>Iteration 31</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets to iteration 31 at the iteration 30 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="1419.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-10-14T13%3A39%3A56%2B01%3A00&amp;precision=second" title="2011-10-14T13:39:56+01:00 in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>accepted</em>
+    </li><li>
+      <strong>Owner</strong>
+        changed from <em>Anyone</em> to <em>Peter Parker</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="1419.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T11%3A34%3A05Z&amp;precision=second" title="2011-11-25T11:34:05Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Amendments to fix compiler errors on non-win7 builds.  Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/859e741453003dc9b15c3c4a856d99bf8a3650ec" title="859e741453003dc9b15c3c4a856d99bf8a3650ec">859e741453003dc9b15c3c4a856d99bf8a3650ec</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="1419.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T11%3A40%3A11Z&amp;precision=second" title="2011-11-25T11:40:11Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Further fixes for compiler warnings on non-win7 builds ... Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/95cc1ca14a1d9d4289e628b5402d9df7c7556ba4" title="95cc1ca14a1d9d4289e628b5402d9df7c7556ba4">95cc1ca14a1d9d4289e628b5402d9df7c7556ba4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="1419.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T11%3A44%3A13Z&amp;precision=second" title="2011-11-25T11:44:13Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Further fixes for compiler warnings on non-win7 builds ... Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2682403ea0a5cf6c536acf2608ac46ebafaba6c9" title="2682403ea0a5cf6c536acf2608ac46ebafaba6c9">2682403ea0a5cf6c536acf2608ac46ebafaba6c9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="1419.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-09T09%3A41%3A55Z&amp;precision=second" title="2012-01-09T09:41:55Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 32</em> to <em>Iteration 33</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to iteration 33 at iteration 32 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="1419.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-07T14%3A09%3A45Z&amp;precision=second" title="2012-02-07T14:09:45Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - MultiFileValidator class added, along with unit tests.
+</p>
+<p>
+Further work to eventually support multiple loading/summing in the Load
+algorithm. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a16cbccf581de9baa4f6a40f571d19f182182d9d" title="a16cbccf581de9baa4f6a40f571d19f182182d9d">a16cbccf581de9baa4f6a40f571d19f182182d9d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="1419.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-10T10%3A46%3A05Z&amp;precision=second" title="2012-02-10T10:46:05Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Add run parser.  Temp remove multifilename parser.
+</p>
+<p>
+Added a more robust run string parser, with better validation / error
+messages.  Will make implementation of multifilename parser simpler, which
+is to follow shortly. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/68dc2ba3acea5dcd9cb0f32f2d4f99ace688e081" title="68dc2ba3acea5dcd9cb0f32f2d4f99ace688e081">68dc2ba3acea5dcd9cb0f32f2d4f99ace688e081</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="1419.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-11T13%3A15%3A13Z&amp;precision=second" title="2012-02-11T13:15:13Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Add multi filename parser. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1e29bdba4b273e1a8d81614cd78c540a89de42a3" title="1e29bdba4b273e1a8d81614cd78c540a89de42a3">1e29bdba4b273e1a8d81614cd78c540a89de42a3</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="1419.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-11T13%3A31%3A14Z&amp;precision=second" title="2012-02-11T13:31:14Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix error on templated function, as well as warnings. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/30626fd446adc275a8bb582b694051f2c5cd5f99" title="30626fd446adc275a8bb582b694051f2c5cd5f99">30626fd446adc275a8bb582b694051f2c5cd5f99</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="1419.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-11T13%3A39%3A30Z&amp;precision=second" title="2012-02-11T13:39:30Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - And again ... 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a61a23f2aa6adb4fb2fb5753b9eb09aef15b3703" title="a61a23f2aa6adb4fb2fb5753b9eb09aef15b3703">a61a23f2aa6adb4fb2fb5753b9eb09aef15b3703</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="1419.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-11T13%3A55%3A23Z&amp;precision=second" title="2012-02-11T13:55:23Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Once more. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96b518157f37162c33f4c62d8d42a7d136222595" title="96b518157f37162c33f4c62d8d42a7d136222595">96b518157f37162c33f4c62d8d42a7d136222595</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="1419.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-11T14%3A01%3A12Z&amp;precision=second" title="2012-02-11T14:01:12Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Removing commented unit tests. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/da6ad2559d00cd34c4b5be08e18801b7df7640c6" title="da6ad2559d00cd34c4b5be08e18801b7df7640c6">da6ad2559d00cd34c4b5be08e18801b7df7640c6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="1419.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T08%3A47%3A21Z&amp;precision=second" title="2012-02-14T08:47:21Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Changes to finally support multi file loading.
+</p>
+<p>
+MultiFileProperty changed to store a vector of vectors of file names. File
+names that share a vector are to be added. Old functionality can be produced
+by calling "flattenFileNames".  See source code for more info.
+</p>
+<p>
+MultiFileProperty was used in one place previously (MDMergeFiles), this has
+been modified to relect these changes.
+</p>
+<p>
+Load now implemented in terms of MultiFileProperty, though its interface is
+unchanged.  "Filename" input is now parsed as a multi file, and if that
+fails old functionality is attempted.  Error reports will output the result
+of both attempts.
+</p>
+<p>
+Some additional template specialisations / "toString" overloads
+surrounding the Property class heirachy were necessary to properly support
+std::vector&lt;std::vector&lt;std::string&gt; &gt;. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6039c89ac2e9cb95fa9b379333fa07a0476ac831" title="6039c89ac2e9cb95fa9b379333fa07a0476ac831">6039c89ac2e9cb95fa9b379333fa07a0476ac831</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="1419.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T09%3A09%3A05Z&amp;precision=second" title="2012-02-14T09:09:05Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix error. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a5a5a88dbf26210e1de5a1e8a3187bde55a064a5" title="a5a5a88dbf26210e1de5a1e8a3187bde55a064a5">a5a5a88dbf26210e1de5a1e8a3187bde55a064a5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="1419.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-14T10%3A03%3A15Z&amp;precision=second" title="2012-02-14T10:03:15Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix for failed FilePropertyTest.py 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ddb74efc65b2987fea4879cffd39323bd0388e1a" title="ddb74efc65b2987fea4879cffd39323bd0388e1a">ddb74efc65b2987fea4879cffd39323bd0388e1a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="1419.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-15T09%3A36%3A07Z&amp;precision=second" title="2012-02-15T09:36:07Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix for System test and broken MergeMDFiles. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c61f6e01d7b9f52c409540b92d5c5b8492ff867c" title="c61f6e01d7b9f52c409540b92d5c5b8492ff867c">c61f6e01d7b9f52c409540b92d5c5b8492ff867c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="1419.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-15T15%3A25%3A07Z&amp;precision=second" title="2012-02-15T15:25:07Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix a further system test.
+</p>
+<p>
+Added a further specialised version of IPropertymanager::setProperty to
+explicitly handle std::string. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/baef962acad52cef0a7643989768caf24315546d" title="baef962acad52cef0a7643989768caf24315546d">baef962acad52cef0a7643989768caf24315546d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="1419.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T09%3A29%3A34Z&amp;precision=second" title="2012-02-17T09:29:34Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Support loading of incorrectly padded runs.
+</p>
+<p>
+In the case where a user wants to load a file that had an "inccorrect" zero
+padding according to Facilities.xml, he/she should be allowed to if that
+file exists!
+</p>
+<p>
+If the user only specifies a single file, then we should use the string they
+provided in its untampered form.
+</p>
+<p>
+Note, files with incorrect zero padding will not work with multi file
+loading in its present form. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/66e7d9ca2e12454cbeaa4916374ba18051b146c7" title="66e7d9ca2e12454cbeaa4916374ba18051b146c7">66e7d9ca2e12454cbeaa4916374ba18051b146c7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="1419.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A27Z&amp;precision=second" title="2012-02-17T19:16:27Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Changes to finally support multi file loading.
+</p>
+<p>
+MultiFileProperty changed to store a vector of vectors of file names. File
+names that share a vector are to be added. Old functionality can be produced
+by calling "flattenFileNames".  See source code for more info.
+</p>
+<p>
+MultiFileProperty was used in one place previously (MDMergeFiles), this has
+been modified to relect these changes.
+</p>
+<p>
+Load now implemented in terms of MultiFileProperty, though its interface is
+unchanged.  "Filename" input is now parsed as a multi file, and if that
+fails old functionality is attempted.  Error reports will output the result
+of both attempts.
+</p>
+<p>
+Some additional template specialisations / "toString" overloads
+surrounding the Property class heirachy were necessary to properly support
+std::vector&lt;std::vector&lt;std::string&gt; &gt;. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6039c89ac2e9cb95fa9b379333fa07a0476ac831" title="6039c89ac2e9cb95fa9b379333fa07a0476ac831">6039c89ac2e9cb95fa9b379333fa07a0476ac831</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="1419.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A27Z&amp;precision=second" title="2012-02-17T19:16:27Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix error. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a5a5a88dbf26210e1de5a1e8a3187bde55a064a5" title="a5a5a88dbf26210e1de5a1e8a3187bde55a064a5">a5a5a88dbf26210e1de5a1e8a3187bde55a064a5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="1419.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A28Z&amp;precision=second" title="2012-02-17T19:16:28Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix for failed FilePropertyTest.py 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ddb74efc65b2987fea4879cffd39323bd0388e1a" title="ddb74efc65b2987fea4879cffd39323bd0388e1a">ddb74efc65b2987fea4879cffd39323bd0388e1a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="1419.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A40Z&amp;precision=second" title="2012-02-17T19:16:40Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix for System test and broken MergeMDFiles. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c61f6e01d7b9f52c409540b92d5c5b8492ff867c" title="c61f6e01d7b9f52c409540b92d5c5b8492ff867c">c61f6e01d7b9f52c409540b92d5c5b8492ff867c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="1419.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A42Z&amp;precision=second" title="2012-02-17T19:16:42Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix a further system test.
+</p>
+<p>
+Added a further specialised version of IPropertymanager::setProperty to
+explicitly handle std::string. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/baef962acad52cef0a7643989768caf24315546d" title="baef962acad52cef0a7643989768caf24315546d">baef962acad52cef0a7643989768caf24315546d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="1419.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-17T19%3A16%3A54Z&amp;precision=second" title="2012-02-17T19:16:54Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Support loading of incorrectly padded runs.
+</p>
+<p>
+In the case where a user wants to load a file that had an "inccorrect" zero
+padding according to Facilities.xml, he/she should be allowed to if that
+file exists!
+</p>
+<p>
+If the user only specifies a single file, then we should use the string they
+provided in its untampered form.
+</p>
+<p>
+Note, files with incorrect zero padding will not work with multi file
+loading in its present form. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/66e7d9ca2e12454cbeaa4916374ba18051b146c7" title="66e7d9ca2e12454cbeaa4916374ba18051b146c7">66e7d9ca2e12454cbeaa4916374ba18051b146c7</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="1419.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-20T14%3A00%3A00Z&amp;precision=second" title="2012-02-20T14:00:00Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Changing a log message priority from error to debug.
+</p>
+<p>
+In the case where a user wishes to load a file with a name which is not of the
+"standard" format (including a valid instrument), our call to the
+ConfigService getInstrument method should not report an error.
+</p>
+<p>
+A debug message is sufficient, and there is still an exception thrown which
+a class user can then interpret in any way he/she sees fit. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8b391d76bb058833bd689716831ae2905dddefe2" title="8b391d76bb058833bd689716831ae2905dddefe2">8b391d76bb058833bd689716831ae2905dddefe2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="1419.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-02-23T10%3A27%3A54Z&amp;precision=second" title="2012-02-23T10:27:54Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Dev on this ticket seems to have died down, so closing.
+</p>
+<p>
+To test, use the <tt>Load</tt> algo as per the examples on the <a href="http://www.mantidproject.org/Load#Loading_Multiple_Files">Load Wiki page</a>.  Testing can be done in Python, but it is worth checking out the Load Dialog too.  Files that load into group workspaces (i.e. MUSR files) should be tested as well as those that load into single workspaces.
+</p>
+<p>
+Furthermore, helpful error messages should originate from the multi-run parser if a user types an invalid string (e.g. "TSC92273-92273-.raw").
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="1419.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-08T16%3A51%3A52Z&amp;precision=second" title="2012-03-08T16:51:52Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Reopening this to have Mantid try the default instrument in the case where none is specified by the user.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="1419.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-03-23T11%3A15%3A25Z&amp;precision=second" title="2012-03-23T11:15:25Z in Timeline">9 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Extra properties given to Load (e.g. "LoadLogFiles") are ignored during multi file loading - the parent "controller" instance of Load currently neglects to pass them on to the child instances that it spawns.  This needs to be rectified.
+</p>
+<p>
+(Note that in the case of single file loading, extra properties still work the way they always have.)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="1419.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-11T10%3A03%3A41%2B01%3A00&amp;precision=second" title="2012-04-11T10:03:41+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - MultiFileNameParser now uses default instrument.
+</p>
+<p>
+Where no instrument is specified in the string to be parsed, the default is
+taken from the ConfigService and used instead. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c6a9ae0c238ebcaaaa039aa788d1f359be129b34" title="c6a9ae0c238ebcaaaa039aa788d1f359be129b34">c6a9ae0c238ebcaaaa039aa788d1f359be129b34</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="1419.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-13T10%3A52%3A27%2B01%3A00&amp;precision=second" title="2012-04-13T10:52:27+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - All properties now passed to spawned Load algs.
+</p>
+<p>
+In the case of multiple files being passed to Load, all extra (non-base)
+properties are passed on to the spawned individual instances of Load that
+handle each file. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/25c0394ad95f4bec9810b3133f90a756912dfe04" title="25c0394ad95f4bec9810b3133f90a756912dfe04">25c0394ad95f4bec9810b3133f90a756912dfe04</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="1419.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-13T11%3A00%3A33%2B01%3A00&amp;precision=second" title="2012-04-13T11:00:33+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="1419.html" title="enhancement: Implement multiple file loading/summing for all data loading algorithms (closed: fixed)">#1419</a> - Fix for non-win builds.
+</p>
+<p>
+Just changed a templated function to no longer be generic.  Templates were
+uneeded anyway. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1219ce6d273ee552a38a01d2c1c78b5c6761258f" title="1219ce6d273ee552a38a01d2c1c78b5c6761258f">1219ce6d273ee552a38a01d2c1c78b5c6761258f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="1419.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T20%3A19%3A30%2B01%3A00&amp;precision=second" title="2012-04-28T20:19:30+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="1419.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-04-28T20%3A19%3A47%2B01%3A00&amp;precision=second" title="2012-04-28T20:19:47+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Closing again.
+</p>
+<p>
+Testing as per <a href="1419.html#comment:35" title="Comment 35 for Ticket #1419">comment:35</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="1419.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T14%3A43%3A32%2B01%3A00&amp;precision=second" title="2012-05-01T14:43:32+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Alex Buts</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="1419.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T19%3A06%3A44%2B01%3A00&amp;precision=second" title="2012-05-01T19:06:44+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Requested functionality is very much needed and is there. Things work both from GUI and Python. 
+</p>
+<p>
+There are number of various issues around the algorithm, which highlighted by the thickets:
+</p>
+<p>
+<a class="closed ticket" href="5205.html" title="defect: Load algorithm throws exception when load nxspe is present and raw file ... (closed: fixed)">#5205</a>, <a class="closed ticket" href="5210.html" title="defect: loading group of files never finishes if target workspace exists (closed: fixed)">#5210</a>, <a class="closed ticket" href="5212.html" title="defect: Load algorithm with operations do not copies to python correctly (closed: fixed)">#5212</a> and <a class="closed ticket" href="5213.html" title="enhancement: Load algorithm OutputWorkspace property has wrong name. (closed: fixed)">#5213</a>
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-02T09%3A09%3A20%2B01%3A00&amp;precision=second" title="2012-05-02T09:09:20+01:00 in Timeline">8 years</a> ago
+                      by Alex Buts
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/1419?cversion=0&amp;cnum_hist=44#comment:44">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/1419?action=comment-diff&amp;cnum=44&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="1419.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-01T19%3A07%3A02%2B01%3A00&amp;precision=second" title="2012-05-01T19:07:02+01:00 in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="1419.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A32%3A07%2B01%3A00&amp;precision=second" title="2015-06-03T22:32:07+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/2266"><span class="icon">​</span>2266</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/1419?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/1419?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/1419?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

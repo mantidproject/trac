@@ -1,0 +1,57 @@
+diff --git a/Code/Mantid/Framework/Algorithms/src/Q1D2.cpp b/Code/Mantid/Framework/Algorithms/src/Q1D2.cpp
+index 1635516..e698686 100644
+--- a/Code/Mantid/Framework/Algorithms/src/Q1D2.cpp
++++ b/Code/Mantid/Framework/Algorithms/src/Q1D2.cpp
+@@ -136,6 +136,7 @@ The error was calculation did not include the errors due the normalization or an
+ #include "MantidAlgorithms/Qhelper.h"
+ #include "MantidKernel/BoundedValidator.h"
+ #include "MantidAPI/ISpectrum.h"
++#include <boost/algorithm/string/split.hpp>
+ 
+ namespace Mantid
+ {
+@@ -240,6 +241,19 @@ void Q1D2::exec()
+   const int numSpec = static_cast<int>(m_dataWS->getNumberHistograms());
+   Progress progress(this, 0.05, 1.0, numSpec+1);
+ 
++  std::set<int> ignore_numbers;
++  std::string pname = "ignore-spectra"; 
++  if( m_dataWS->getInstrument()->hasParameter(pname))
++    {
++      struct GetNum { int operator()(const std::string& inp) const { return atoi(inp.c_str()); } };
++      std::string str_values = m_dataWS->getInstrument()->getStringParameter(pname)[0];
++      std::vector<std::string> data;
++      boost::split(data, str_values, boost::is_any_of(",")); 
++      auto it1 = std::inserter(ignore_numbers, ignore_numbers.begin()); 
++      std::transform(data.begin(), data.end(), it1, GetNum()); 
++    }
++
++
+   PARALLEL_FOR3(m_dataWS, outputWS, pixelAdj)
+   for (int i = 0; i < numSpec; ++i)
+   {
+@@ -249,7 +263,8 @@ void Q1D2::exec()
+     try {
+       det = m_dataWS->getDetector(i);
+     } catch (Exception::NotFoundError&) {
+-      g_log.warning() << "Workspace index " << i << " (SpectrumIndex = " << m_dataWS->getSpectrum(i)->getSpectrumNo() << ") has no detector assigned to it - discarding" << std::endl;
++      if ( ignore_numbers.find(m_dataWS->getSpectrum(i)->getSpectrumNo()) == ignore_numbers.end())
++        g_log.warning() << "Workspace index " << i << " (SpectrumIndex = " << m_dataWS->getSpectrum(i)->getSpectrumNo() << ") has no detector assigned to it - discarding" << std::endl;
+       // Catch if no detector. Next line tests whether this happened - test placed
+       // outside here because Mac Intel compiler doesn't like 'continue' in a catch
+       // in an openmp block.
+diff --git a/Code/Mantid/instrument/LOQ_Parameters.xml b/Code/Mantid/instrument/LOQ_Parameters.xml
+index 493b819..628ad38 100644
+--- a/Code/Mantid/instrument/LOQ_Parameters.xml
++++ b/Code/Mantid/instrument/LOQ_Parameters.xml
+@@ -55,6 +55,10 @@
+   <value val="3"/>
+ </parameter>
+ 
++<parameter name="ignore-spectra" type="string">
++  <value val="16735, 17085, 17086, 16736, 17785, 17786, 17787, 17788, 17789, 17790, 17791, 17792, 17435, 17436"/>
++</parameter>
++
+ </component-link>
+ 
+ </parameter-file>

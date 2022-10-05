@@ -1,0 +1,2848 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #5306 (Implement LeBail fitting of cubic lattice)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="5305.html" title="Ticket #5305" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5306?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5306?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5306?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="5307.html" title="Ticket #5307" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 5306, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="5305.html" title="Ticket #5305">Previous Ticket</a></span></li><li><span><a class="next" href="5307.html" title="Ticket #5307">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/5306.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="5306.html">Ticket #5306</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-10T21%3A45%3A45%2B01%3A00&amp;precision=second" title="2012-05-10T21:45:45+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A27%3A01%2B01%3A00&amp;precision=second" title="2015-06-04T00:27:01+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Implement LeBail fitting of cubic lattice</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Wenduo+Zhou">Wenduo Zhou</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.3.html">Release 2.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              petersonpf@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="5651.html" title="Generalise and rename HigherOrderPolynomialBackground">#5651</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Alex Buts
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2012-11-01 17:26:24.003015+00:00">
+        (last modified by Wenduo Zhou)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/5306?action=diff&amp;version=103">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Implement LeBail fitting in Mantid.  It will support sample of cubic lattice structure in this task.  
+</p>
+<h4 id="TestInstruction">Test Instruction</h4>
+<p>
+Please run the following script to prepare for Le Bail Fit. The data files can be found in systemtests/data/
+</p>
+<pre class="wiki"># Import data
+LoadAscii(Filename='4844b1.inp',OutputWorkspace='4844b1',Unit='TOF')
+
+# Create some table workspaces for staring values
+CreateLeBailFitInput(Instrument='NOMAD',ReflectionsFile='LB4844b1.hkl',
+   FullprofParameterFile='2011B_HR60b1.irf',LatticeConstant='4.1568899999999998',
+   InstrumentParameterWorkspace='Peak4844',BraggPeakParameterWorkspace='HKL4844')
+
+# Fit for background of the diffraction pattern
+ProcessBackground(InputWorkspace='4844b1',OutputWorkspace='4844b1_bkgd',
+    Options='SelectBackgroundPoints',LowerBound='5053',UpperBound='49387',
+    BackgroundType='Chebyshev',
+    BackgroundPoints='5000,6500,8951,10670,15231,16943,24887,33527,40200,45110,49725',
+    NoiseTolerance='20')
+
+Fit(Function='name=Polynomial,n=6,A0=0,A1=0,A2=0,A3=0,A4=0,A5=0,A6=0',
+    InputWorkspace='4844b1_bkgd',MaxIterations='1000',
+    Minimizer='Levenberg-MarquardtMD',
+    CreateOutput='1',Output='4844b_polybkgd',
+    StartX='2277.27',EndX='49988.900000000001')
+
+# Calculate peak heights with Le Bail algorithm
+LeBailFit(InputWorkspace='4844b1',OutputWorkspace='4844b1_cal',
+    InputParameterWorkspace='Peak4844',OutputParameterWorkspace='Temp1',
+    InputHKLWorkspace='HKL4844',OutputPeaksWorkspace='Temp2',Function='Calculation',
+    BackgroundFunctionOrder='6',BackgroundParametersWorkspace='4844b_polybkgd_Parameters',
+    UseInputPeakHeights='0',PeakRadius='8')
+</pre><p>
+The input instrument resolution file already contains well-fitted data.  Thus for testing purpose, some parameter value can be shifted. 
+</p>
+<pre class="wiki"># Fix all the parameters
+UpdatePeakParameterTableValue(InputWorkspace='Peak4844',Column='FitOrTie',NewStringValue='t')
+# Change value of Alph1
+UpdatePeakParameterTableValue(InputWorkspace='Peak4844',ParameterNames='Alph1',NewFloatValue='6')
+# Flag Alph1 to be fit
+UpdatePeakParameterTableValue(InputWorkspace='Peak4844',Column='FitOrTie',ParameterNames='Alph1',NewStringValue='f')
+</pre><p>
+Then LeBailFit() can be called as
+</p>
+<pre class="wiki">LeBailFit(InputWorkspace='4844b1',OutputWorkspace='4844b1_fitalph1',InputParameterWorkspace='Peak4844',OutputParameterWorkspace='Peak4844X',InputHKLWorkspace='HKL4844',OutputPeaksWorkspace='HKL4844X',BackgroundFunctionOrder='6',BackgroundParametersWorkspace='4844b_polybkgd_Parameters',UseInputPeakHeights='0',PeakRadius='8',Minimizer='SteepestDescent')
+</pre>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="5306.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-10T21%3A45%3A58%2B01%3A00&amp;precision=second" title="2012-05-10T21:45:58+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>type</strong>
+        changed from <em>enhancement</em> to <em>task</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="5306.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-14T15%3A22%3A03%2B01%3A00&amp;precision=second" title="2012-06-14T15:22:03+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="5306.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A22%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:22+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement prototype of LeBailFunction.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/51df2100ac902365c174866bc378f6ad4f8a9dfc" title="51df2100ac902365c174866bc378f6ad4f8a9dfc">51df2100ac902365c174866bc378f6ad4f8a9dfc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="5306.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A23%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:23+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename to LeBailFunction.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3c7eac65d414200466a7ab540dca3a8ffba7b056" title="3c7eac65d414200466a7ab540dca3a8ffba7b056">3c7eac65d414200466a7ab540dca3a8ffba7b056</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="5306.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A23%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:23+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Algorithm to create input for LeBail.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>.
+</p>
+<p>
+Add algorithm to create input TableWorkspaces for LeBail fitting from
+input data, Fullprof peak parameter file and etc. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8240abb63746e1d2999b5f1e0dd90f87457e619" title="b8240abb63746e1d2999b5f1e0dd90f87457e619">b8240abb63746e1d2999b5f1e0dd90f87457e619</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="5306.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A23%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:23+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add algorithm for LeBail input. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/71b9fdd68ca4320e20dce2c535d8db19ed96e06f" title="71b9fdd68ca4320e20dce2c535d8db19ed96e06f">71b9fdd68ca4320e20dce2c535d8db19ed96e06f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="5306.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A23%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:23+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>.
+</p>
+<p>
+LeBailFit is an Algorithm do fit on LeBailFunction. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a039e917a4970dab406c8b94ab135f86a30e099e" title="a039e917a4970dab406c8b94ab135f86a30e099e">a039e917a4970dab406c8b94ab135f86a30e099e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="5306.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A23%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:23+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify CMake List.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee5c067c68b70ea222e390e348b7800488445794" title="ee5c067c68b70ea222e390e348b7800488445794">ee5c067c68b70ea222e390e348b7800488445794</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="5306.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A24%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:24+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+For detailed information in error message.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/738a98d29770946f5ed11f24df1fb865051258c6" title="738a98d29770946f5ed11f24df1fb865051258c6">738a98d29770946f5ed11f24df1fb865051258c6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="5306.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A24%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:24+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFunction.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5b1519eccbe8a7b3289fbb9813418926d9cd96c8" title="5b1519eccbe8a7b3289fbb9813418926d9cd96c8">5b1519eccbe8a7b3289fbb9813418926d9cd96c8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="5306.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T14%3A11%3A24%2B01%3A00&amp;precision=second" title="2012-07-06T14:11:24+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Some minor modification.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cb2d1638744f5cb8a84dd27ae50fbd0a818b1e4e" title="cb2d1638744f5cb8a84dd27ae50fbd0a818b1e4e">cb2d1638744f5cb8a84dd27ae50fbd0a818b1e4e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="5306.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T15%3A55%3A05%2B01%3A00&amp;precision=second" title="2012-07-06T15:55:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix for Windows.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8f076869d94b34edbf5299e97d724a3d4566ada5" title="8f076869d94b34edbf5299e97d724a3d4566ada5">8f076869d94b34edbf5299e97d724a3d4566ada5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="5306.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-06T15%3A55%3A05%2B01%3A00&amp;precision=second" title="2012-07-06T15:55:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove some warning.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eea67b16af8e65f0b647710ca87ee5a6c7a2919b" title="eea67b16af8e65f0b647710ca87ee5a6c7a2919b">eea67b16af8e65f0b647710ca87ee5a6c7a2919b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="5306.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-09T23%3A06%3A01%2B01%3A00&amp;precision=second" title="2012-07-09T23:06:01+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make progress on LeBail Fit. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e096f28023fbcddbe2639ea4c5cefc113186e8f1" title="e096f28023fbcddbe2639ea4c5cefc113186e8f1">e096f28023fbcddbe2639ea4c5cefc113186e8f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="5306.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-13T23%3A12%3A04%2B01%3A00&amp;precision=second" title="2012-07-13T23:12:04+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add Le Bail Fit design doc. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d22d7c5ca3ac267e69892b362619c95127d8a8ea" title="d22d7c5ca3ac267e69892b362619c95127d8a8ea">d22d7c5ca3ac267e69892b362619c95127d8a8ea</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="5306.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-19T19%3A50%3A02%2B01%3A00&amp;precision=second" title="2012-07-19T19:50:02+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Progress on Le Bail Fit. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0bed987f5e7d019aa2c4c26c6b350854d4cf59ce" title="0bed987f5e7d019aa2c4c26c6b350854d4cf59ce">0bed987f5e7d019aa2c4c26c6b350854d4cf59ce</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="5306.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-19T19%3A50%3A02%2B01%3A00&amp;precision=second" title="2012-07-19T19:50:02+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Progress on Le Bail Fit. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f4590a859a16ffda66eaa32b682a1bf433445b9b" title="f4590a859a16ffda66eaa32b682a1bf433445b9b">f4590a859a16ffda66eaa32b682a1bf433445b9b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="5306.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-20T21%3A20%3A21%2B01%3A00&amp;precision=second" title="2012-07-20T21:20:21+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename peak function.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f1fdd16ad8074c4e3fefdea778cb5230faa0755e" title="f1fdd16ad8074c4e3fefdea778cb5230faa0755e">f1fdd16ad8074c4e3fefdea778cb5230faa0755e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="5306.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-20T21%3A20%3A21%2B01%3A00&amp;precision=second" title="2012-07-20T21:20:21+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix codes due to renaming Bk2BkExpConvPV. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b867e3b2e13f612f11d5dd989937317a15786db6" title="b867e3b2e13f612f11d5dd989937317a15786db6">b867e3b2e13f612f11d5dd989937317a15786db6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="5306.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-20T21%3A20%3A22%2B01%3A00&amp;precision=second" title="2012-07-20T21:20:22+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add an algorith to process background.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c55b710ee93244f751075ceb5dd07e683c5b987c" title="c55b710ee93244f751075ceb5dd07e683c5b987c">c55b710ee93244f751075ceb5dd07e683c5b987c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="5306.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-20T21%3A20%3A22%2B01%3A00&amp;precision=second" title="2012-07-20T21:20:22+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a polynomial background function.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a91e9d07ae55cf0c4ea0c1eb336730c6e953277a" title="a91e9d07ae55cf0c4ea0c1eb336730c6e953277a">a91e9d07ae55cf0c4ea0c1eb336730c6e953277a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="5306.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-23T21%3A16%3A11%2B01%3A00&amp;precision=second" title="2012-07-23T21:16:11+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement peak profile for neutron TOF.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/64899922338b6284c90320c497e773adb9b801d4" title="64899922338b6284c90320c497e773adb9b801d4">64899922338b6284c90320c497e773adb9b801d4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="5306.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-23T22%3A31%3A20%2B01%3A00&amp;precision=second" title="2012-07-23T22:31:20+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Start new LeBailFit version 2.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a61daffb3f2d8aed554fc574d1046959b360a38b" title="a61daffb3f2d8aed554fc574d1046959b360a38b">a61daffb3f2d8aed554fc574d1046959b360a38b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="5306.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-25T16%3A06%3A05%2B01%3A00&amp;precision=second" title="2012-07-25T16:06:05+01:00 in Timeline">8 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>5651</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="5306.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T16%3A36%3A59%2B01%3A00&amp;precision=second" title="2012-07-26T16:36:59+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Unit tests on LeBailFit2. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19128d99af5428471d8e642d217d05050bbdbe89" title="19128d99af5428471d8e642d217d05050bbdbe89">19128d99af5428471d8e642d217d05050bbdbe89</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="5306.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T16%3A37%3A00%2B01%3A00&amp;precision=second" title="2012-07-26T16:37:00+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix category. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1cf0a8fe81d08fb020d37054d76939f32f6c47ad" title="1cf0a8fe81d08fb020d37054d76939f32f6c47ad">1cf0a8fe81d08fb020d37054d76939f32f6c47ad</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="5306.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T16%3A44%3A21%2B01%3A00&amp;precision=second" title="2012-07-26T16:44:21+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove old LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/58b9aa6b5d2df2c74dd04359ee099e7e38b6891b" title="58b9aa6b5d2df2c74dd04359ee099e7e38b6891b">58b9aa6b5d2df2c74dd04359ee099e7e38b6891b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="5306.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T16%3A44%3A21%2B01%3A00&amp;precision=second" title="2012-07-26T16:44:21+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change CMake.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8b315b8fde6b8366a552913377290e538406e264" title="8b315b8fde6b8366a552913377290e538406e264">8b315b8fde6b8366a552913377290e538406e264</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="5306.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T16%3A48%3A14%2B01%3A00&amp;precision=second" title="2012-07-26T16:48:14+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix an error.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9b0a0fd2dac571a626ec555ba0d298d7beda570b" title="9b0a0fd2dac571a626ec555ba0d298d7beda570b">9b0a0fd2dac571a626ec555ba0d298d7beda570b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="5306.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T17%3A11%3A49%2B01%3A00&amp;precision=second" title="2012-07-26T17:11:49+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename LeBailFit2 to LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/55304216ac04097a35b8267edf75d49fe2600f9f" title="55304216ac04097a35b8267edf75d49fe2600f9f">55304216ac04097a35b8267edf75d49fe2600f9f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="5306.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T17%3A11%3A49%2B01%3A00&amp;precision=second" title="2012-07-26T17:11:49+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename LeBailFit2 to LeBailFit and fix the codes.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b013b29f5787551f97ab6bdd15c1348bc2da30cc" title="b013b29f5787551f97ab6bdd15c1348bc2da30cc">b013b29f5787551f97ab6bdd15c1348bc2da30cc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="5306.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T23%3A22%3A44%2B01%3A00&amp;precision=second" title="2012-07-26T23:22:44+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add one method.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d8e6cc84ca9772a208553c19397236d8178839c8" title="d8e6cc84ca9772a208553c19397236d8178839c8">d8e6cc84ca9772a208553c19397236d8178839c8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="5306.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-26T23%3A22%3A45%2B01%3A00&amp;precision=second" title="2012-07-26T23:22:45+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/76afeca7aae24c91164a2b3c58af4e3c14802046" title="76afeca7aae24c91164a2b3c58af4e3c14802046">76afeca7aae24c91164a2b3c58af4e3c14802046</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="5306.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A03%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:03+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement prototype of LeBailFunction.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/51df2100ac902365c174866bc378f6ad4f8a9dfc" title="51df2100ac902365c174866bc378f6ad4f8a9dfc">51df2100ac902365c174866bc378f6ad4f8a9dfc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="5306.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A03%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:03+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename to LeBailFunction.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3c7eac65d414200466a7ab540dca3a8ffba7b056" title="3c7eac65d414200466a7ab540dca3a8ffba7b056">3c7eac65d414200466a7ab540dca3a8ffba7b056</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="5306.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A04%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:04+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Algorithm to create input for LeBail.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>.
+</p>
+<p>
+Add algorithm to create input TableWorkspaces for LeBail fitting from
+input data, Fullprof peak parameter file and etc. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b8240abb63746e1d2999b5f1e0dd90f87457e619" title="b8240abb63746e1d2999b5f1e0dd90f87457e619">b8240abb63746e1d2999b5f1e0dd90f87457e619</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="5306.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A04%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:04+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add algorithm for LeBail input. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/71b9fdd68ca4320e20dce2c535d8db19ed96e06f" title="71b9fdd68ca4320e20dce2c535d8db19ed96e06f">71b9fdd68ca4320e20dce2c535d8db19ed96e06f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="5306.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A05%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>.
+</p>
+<p>
+LeBailFit is an Algorithm do fit on LeBailFunction. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a039e917a4970dab406c8b94ab135f86a30e099e" title="a039e917a4970dab406c8b94ab135f86a30e099e">a039e917a4970dab406c8b94ab135f86a30e099e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="5306.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A06%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:06+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Modify CMake List.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee5c067c68b70ea222e390e348b7800488445794" title="ee5c067c68b70ea222e390e348b7800488445794">ee5c067c68b70ea222e390e348b7800488445794</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="5306.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A06%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:06+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+For detailed information in error message.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/738a98d29770946f5ed11f24df1fb865051258c6" title="738a98d29770946f5ed11f24df1fb865051258c6">738a98d29770946f5ed11f24df1fb865051258c6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="5306.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A07%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:07+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFunction.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5b1519eccbe8a7b3289fbb9813418926d9cd96c8" title="5b1519eccbe8a7b3289fbb9813418926d9cd96c8">5b1519eccbe8a7b3289fbb9813418926d9cd96c8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="5306.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A08%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:08+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Some minor modification.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cb2d1638744f5cb8a84dd27ae50fbd0a818b1e4e" title="cb2d1638744f5cb8a84dd27ae50fbd0a818b1e4e">cb2d1638744f5cb8a84dd27ae50fbd0a818b1e4e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="5306.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A08%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:08+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix for Windows.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8f076869d94b34edbf5299e97d724a3d4566ada5" title="8f076869d94b34edbf5299e97d724a3d4566ada5">8f076869d94b34edbf5299e97d724a3d4566ada5</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="5306.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A09%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:09+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove some warning.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eea67b16af8e65f0b647710ca87ee5a6c7a2919b" title="eea67b16af8e65f0b647710ca87ee5a6c7a2919b">eea67b16af8e65f0b647710ca87ee5a6c7a2919b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="5306.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A41%3A26%2B01%3A00&amp;precision=second" title="2012-07-30T08:41:26+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make progress on LeBail Fit. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e096f28023fbcddbe2639ea4c5cefc113186e8f1" title="e096f28023fbcddbe2639ea4c5cefc113186e8f1">e096f28023fbcddbe2639ea4c5cefc113186e8f1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="5306.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A04%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:04+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Unit tests on LeBailFit2. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19128d99af5428471d8e642d217d05050bbdbe89" title="19128d99af5428471d8e642d217d05050bbdbe89">19128d99af5428471d8e642d217d05050bbdbe89</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="5306.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A05%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix category. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1cf0a8fe81d08fb020d37054d76939f32f6c47ad" title="1cf0a8fe81d08fb020d37054d76939f32f6c47ad">1cf0a8fe81d08fb020d37054d76939f32f6c47ad</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="5306.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A05%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove old LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/58b9aa6b5d2df2c74dd04359ee099e7e38b6891b" title="58b9aa6b5d2df2c74dd04359ee099e7e38b6891b">58b9aa6b5d2df2c74dd04359ee099e7e38b6891b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="5306.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A05%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change CMake.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8b315b8fde6b8366a552913377290e538406e264" title="8b315b8fde6b8366a552913377290e538406e264">8b315b8fde6b8366a552913377290e538406e264</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="5306.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A05%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix an error.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9b0a0fd2dac571a626ec555ba0d298d7beda570b" title="9b0a0fd2dac571a626ec555ba0d298d7beda570b">9b0a0fd2dac571a626ec555ba0d298d7beda570b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="5306.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A05%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename LeBailFit2 to LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/55304216ac04097a35b8267edf75d49fe2600f9f" title="55304216ac04097a35b8267edf75d49fe2600f9f">55304216ac04097a35b8267edf75d49fe2600f9f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="5306.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A06%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:06+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename LeBailFit2 to LeBailFit and fix the codes.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b013b29f5787551f97ab6bdd15c1348bc2da30cc" title="b013b29f5787551f97ab6bdd15c1348bc2da30cc">b013b29f5787551f97ab6bdd15c1348bc2da30cc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="5306.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A07%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:07+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add one method.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d8e6cc84ca9772a208553c19397236d8178839c8" title="d8e6cc84ca9772a208553c19397236d8178839c8">d8e6cc84ca9772a208553c19397236d8178839c8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="5306.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A08%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:08+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/76afeca7aae24c91164a2b3c58af4e3c14802046" title="76afeca7aae24c91164a2b3c58af4e3c14802046">76afeca7aae24c91164a2b3c58af4e3c14802046</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="5306.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-31T20%3A06%3A50%2B01%3A00&amp;precision=second" title="2012-07-31T20:06:50+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b7ef4df3882de8c5d99a060ffb627cbcb6999a5e" title="b7ef4df3882de8c5d99a060ffb627cbcb6999a5e">b7ef4df3882de8c5d99a060ffb627cbcb6999a5e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="5306.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-01T22%3A56%3A28%2B01%3A00&amp;precision=second" title="2012-08-01T22:56:28+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>.
+</p>
+<p>
+Unit test was broken due to change in IFunction.
+Modify the peak function to fix the issue. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c1fdecc68ba08d1d15f095fa079b30e0d0ac720a" title="c1fdecc68ba08d1d15f095fa079b30e0d0ac720a">c1fdecc68ba08d1d15f095fa079b30e0d0ac720a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="5306.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-02T18%3A25%3A05%2B01%3A00&amp;precision=second" title="2012-08-02T18:25:05+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a shared pointer. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ea181f059dff3beb8c85aec0fe5ab48ab823bceb" title="ea181f059dff3beb8c85aec0fe5ab48ab823bceb">ea181f059dff3beb8c85aec0fe5ab48ab823bceb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="5306.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-02T18%3A25%3A06%2B01%3A00&amp;precision=second" title="2012-08-02T18:25:06+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More functions and unit tests. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3dee1b2fa73a3f54a0a185199e0549dd91dd87fa" title="3dee1b2fa73a3f54a0a185199e0549dd91dd87fa">3dee1b2fa73a3f54a0a185199e0549dd91dd87fa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="5306.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-02T18%3A25%3A06%2B01%3A00&amp;precision=second" title="2012-08-02T18:25:06+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More  unit tests. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/581db9083dc9de2c0397b9aa4e8e5aed6b64aa7d" title="581db9083dc9de2c0397b9aa4e8e5aed6b64aa7d">581db9083dc9de2c0397b9aa4e8e5aed6b64aa7d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="5306.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T13%3A43%3A48%2B01%3A00&amp;precision=second" title="2012-08-10T13:43:48+01:00 in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.2</em> to <em>Release 2.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved at the end of release 2.2
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="5306.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T20%3A22%3A37%2B01%3A00&amp;precision=second" title="2012-08-10T20:22:37+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add background option to LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0d95e8767618c264924be263dfd5150872f7747b" title="0d95e8767618c264924be263dfd5150872f7747b">0d95e8767618c264924be263dfd5150872f7747b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="5306.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T20%3A22%3A38%2B01%3A00&amp;precision=second" title="2012-08-10T20:22:38+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move ProcessBackground to CurveFitting. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0c50fd5c3a21d305e09d901caa5d0ee3f3511a6" title="c0c50fd5c3a21d305e09d901caa5d0ee3f3511a6">c0c50fd5c3a21d305e09d901caa5d0ee3f3511a6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="5306.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T20%3A22%3A38%2B01%3A00&amp;precision=second" title="2012-08-10T20:22:38+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Expand functionality on ProcessBackground.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1afbbedaabb5ff012cd53bcc51fd8fc671e924ba" title="1afbbedaabb5ff012cd53bcc51fd8fc671e924ba">1afbbedaabb5ff012cd53bcc51fd8fc671e924ba</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="5306.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T20%3A22%3A38%2B01%3A00&amp;precision=second" title="2012-08-10T20:22:38+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Start to integrate background.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/62f037ae551601fd15b618072903ab2138bcbe36" title="62f037ae551601fd15b618072903ab2138bcbe36">62f037ae551601fd15b618072903ab2138bcbe36</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="5306.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T20%3A37%3A55%2B01%3A00&amp;precision=second" title="2012-08-10T20:37:55+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ab83cca8ffe49e239132d2611a10721d03c34119" title="ab83cca8ffe49e239132d2611a10721d03c34119">ab83cca8ffe49e239132d2611a10721d03c34119</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="5306.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T21%3A11%3A23%2B01%3A00&amp;precision=second" title="2012-08-10T21:11:23+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9edd0794410a58a271b109a6928bf70437d6f501" title="9edd0794410a58a271b109a6928bf70437d6f501">9edd0794410a58a271b109a6928bf70437d6f501</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="5306.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-13T23%3A09%3A50%2B01%3A00&amp;precision=second" title="2012-08-13T23:09:50+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/659ff59912d6b70cfb258b07f70f372e68ae9370" title="659ff59912d6b70cfb258b07f70f372e68ae9370">659ff59912d6b70cfb258b07f70f372e68ae9370</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="5306.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A44%3A22%2B01%3A00&amp;precision=second" title="2012-08-14T19:44:22+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b7ef4df3882de8c5d99a060ffb627cbcb6999a5e" title="b7ef4df3882de8c5d99a060ffb627cbcb6999a5e">b7ef4df3882de8c5d99a060ffb627cbcb6999a5e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="5306.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A44%3A30%2B01%3A00&amp;precision=second" title="2012-08-14T19:44:30+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>.
+</p>
+<p>
+Unit test was broken due to change in IFunction.
+Modify the peak function to fix the issue. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c1fdecc68ba08d1d15f095fa079b30e0d0ac720a" title="c1fdecc68ba08d1d15f095fa079b30e0d0ac720a">c1fdecc68ba08d1d15f095fa079b30e0d0ac720a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="5306.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A44%3A40%2B01%3A00&amp;precision=second" title="2012-08-14T19:44:40+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a shared pointer. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ea181f059dff3beb8c85aec0fe5ab48ab823bceb" title="ea181f059dff3beb8c85aec0fe5ab48ab823bceb">ea181f059dff3beb8c85aec0fe5ab48ab823bceb</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="5306.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A44%3A41%2B01%3A00&amp;precision=second" title="2012-08-14T19:44:41+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More functions and unit tests. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3dee1b2fa73a3f54a0a185199e0549dd91dd87fa" title="3dee1b2fa73a3f54a0a185199e0549dd91dd87fa">3dee1b2fa73a3f54a0a185199e0549dd91dd87fa</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="5306.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A44%3A41%2B01%3A00&amp;precision=second" title="2012-08-14T19:44:41+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More  unit tests. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/581db9083dc9de2c0397b9aa4e8e5aed6b64aa7d" title="581db9083dc9de2c0397b9aa4e8e5aed6b64aa7d">581db9083dc9de2c0397b9aa4e8e5aed6b64aa7d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="5306.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A45%3A31%2B01%3A00&amp;precision=second" title="2012-08-14T19:45:31+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add background option to LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0d95e8767618c264924be263dfd5150872f7747b" title="0d95e8767618c264924be263dfd5150872f7747b">0d95e8767618c264924be263dfd5150872f7747b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="5306.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A45%3A31%2B01%3A00&amp;precision=second" title="2012-08-14T19:45:31+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move ProcessBackground to CurveFitting. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0c50fd5c3a21d305e09d901caa5d0ee3f3511a6" title="c0c50fd5c3a21d305e09d901caa5d0ee3f3511a6">c0c50fd5c3a21d305e09d901caa5d0ee3f3511a6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="5306.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A45%3A31%2B01%3A00&amp;precision=second" title="2012-08-14T19:45:31+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Expand functionality on ProcessBackground.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1afbbedaabb5ff012cd53bcc51fd8fc671e924ba" title="1afbbedaabb5ff012cd53bcc51fd8fc671e924ba">1afbbedaabb5ff012cd53bcc51fd8fc671e924ba</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="5306.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A45%3A32%2B01%3A00&amp;precision=second" title="2012-08-14T19:45:32+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Start to integrate background.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/62f037ae551601fd15b618072903ab2138bcbe36" title="62f037ae551601fd15b618072903ab2138bcbe36">62f037ae551601fd15b618072903ab2138bcbe36</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="5306.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A45%3A32%2B01%3A00&amp;precision=second" title="2012-08-14T19:45:32+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ab83cca8ffe49e239132d2611a10721d03c34119" title="ab83cca8ffe49e239132d2611a10721d03c34119">ab83cca8ffe49e239132d2611a10721d03c34119</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="5306.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A45%3A33%2B01%3A00&amp;precision=second" title="2012-08-14T19:45:33+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9edd0794410a58a271b109a6928bf70437d6f501" title="9edd0794410a58a271b109a6928bf70437d6f501">9edd0794410a58a271b109a6928bf70437d6f501</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="5306.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A45%3A39%2B01%3A00&amp;precision=second" title="2012-08-14T19:45:39+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/659ff59912d6b70cfb258b07f70f372e68ae9370" title="659ff59912d6b70cfb258b07f70f372e68ae9370">659ff59912d6b70cfb258b07f70f372e68ae9370</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="5306.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-16T20%3A14%3A56%2B01%3A00&amp;precision=second" title="2012-08-16T20:14:56+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/05756a5d700c00df91c373b28478939801709086" title="05756a5d700c00df91c373b28478939801709086">05756a5d700c00df91c373b28478939801709086</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="5306.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-17T22%3A13%3A34%2B01%3A00&amp;precision=second" title="2012-08-17T22:13:34+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9c3070c35bd732c54f7bcd33687e822dc9e3806d" title="9c3070c35bd732c54f7bcd33687e822dc9e3806d">9c3070c35bd732c54f7bcd33687e822dc9e3806d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-82">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:82" class="cnum">
+      <a href="5306.html#comment:82">comment:82</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-21T20%3A17%3A55%2B01%3A00&amp;precision=second" title="2012-08-21T20:17:55+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement functionality background calculation.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cec72f9eb969c2ccf6341dc3475154533e124806" title="cec72f9eb969c2ccf6341dc3475154533e124806">cec72f9eb969c2ccf6341dc3475154533e124806</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-83">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:83" class="cnum">
+      <a href="5306.html#comment:83">comment:83</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-21T20%3A25%3A11%2B01%3A00&amp;precision=second" title="2012-08-21T20:25:11+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1f67e41a474758b9df61aeec4650c8f30acda3c2" title="1f67e41a474758b9df61aeec4650c8f30acda3c2">1f67e41a474758b9df61aeec4650c8f30acda3c2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-84">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:84" class="cnum">
+      <a href="5306.html#comment:84">comment:84</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-22T22%3A15%3A53%2B01%3A00&amp;precision=second" title="2012-08-22T22:15:53+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8dad687d68f14b4a03434895062b45a9dfc4e2d4" title="8dad687d68f14b4a03434895062b45a9dfc4e2d4">8dad687d68f14b4a03434895062b45a9dfc4e2d4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-85">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:85" class="cnum">
+      <a href="5306.html#comment:85">comment:85</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-30T16%3A08%3A49%2B01%3A00&amp;precision=second" title="2012-08-30T16:08:49+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More work on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d028a71ad4fba999b0320776bc8f643837252bf" title="4d028a71ad4fba999b0320776bc8f643837252bf">4d028a71ad4fba999b0320776bc8f643837252bf</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-86">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:86" class="cnum">
+      <a href="5306.html#comment:86">comment:86</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-30T16%3A08%3A50%2B01%3A00&amp;precision=second" title="2012-08-30T16:08:50+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add support of Chebyshev. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee45727f603624283fbce251523cf2b8922b8725" title="ee45727f603624283fbce251523cf2b8922b8725">ee45727f603624283fbce251523cf2b8922b8725</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-87">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:87" class="cnum">
+      <a href="5306.html#comment:87">comment:87</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-31T19%3A36%3A19%2B01%3A00&amp;precision=second" title="2012-08-31T19:36:19+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0c61d4e705e8112655ed87cf14ec4b981266be67" title="0c61d4e705e8112655ed87cf14ec4b981266be67">0c61d4e705e8112655ed87cf14ec4b981266be67</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-88">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:88" class="cnum">
+      <a href="5306.html#comment:88">comment:88</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-31T22%3A39%3A33%2B01%3A00&amp;precision=second" title="2012-08-31T22:39:33+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Enable to exclude some peaks out of range. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/06d96689c47a33ac0ea24520bb93298e943ff213" title="06d96689c47a33ac0ea24520bb93298e943ff213">06d96689c47a33ac0ea24520bb93298e943ff213</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-89">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:89" class="cnum">
+      <a href="5306.html#comment:89">comment:89</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-04T14%3A59%3A08%2B01%3A00&amp;precision=second" title="2012-09-04T14:59:08+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add another algorithm for LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9cfbf5d277b5079ddaec5bbfa37bea0a562e71ff" title="9cfbf5d277b5079ddaec5bbfa37bea0a562e71ff">9cfbf5d277b5079ddaec5bbfa37bea0a562e71ff</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-90">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:90" class="cnum">
+      <a href="5306.html#comment:90">comment:90</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-04T14%3A59%3A08%2B01%3A00&amp;precision=second" title="2012-09-04T14:59:08+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a thermal neutron unit conversion function.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/59badff52a82c31542d61ba0b5ad2237c0a4c60e" title="59badff52a82c31542d61ba0b5ad2237c0a4c60e">59badff52a82c31542d61ba0b5ad2237c0a4c60e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-91">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:91" class="cnum">
+      <a href="5306.html#comment:91">comment:91</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-09-12T20%3A27%3A53%2B01%3A00&amp;precision=second" title="2012-09-12T20:27:53+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-92">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:92" class="cnum">
+      <a href="5306.html#comment:92">comment:92</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A31%3A25%2B01%3A00&amp;precision=second" title="2012-10-08T16:31:25+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/05756a5d700c00df91c373b28478939801709086" title="05756a5d700c00df91c373b28478939801709086">05756a5d700c00df91c373b28478939801709086</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-93">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:93" class="cnum">
+      <a href="5306.html#comment:93">comment:93</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A31%3A30%2B01%3A00&amp;precision=second" title="2012-10-08T16:31:30+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9c3070c35bd732c54f7bcd33687e822dc9e3806d" title="9c3070c35bd732c54f7bcd33687e822dc9e3806d">9c3070c35bd732c54f7bcd33687e822dc9e3806d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-94">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:94" class="cnum">
+      <a href="5306.html#comment:94">comment:94</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A31%3A46%2B01%3A00&amp;precision=second" title="2012-10-08T16:31:46+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement functionality background calculation.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cec72f9eb969c2ccf6341dc3475154533e124806" title="cec72f9eb969c2ccf6341dc3475154533e124806">cec72f9eb969c2ccf6341dc3475154533e124806</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-95">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:95" class="cnum">
+      <a href="5306.html#comment:95">comment:95</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A31%3A46%2B01%3A00&amp;precision=second" title="2012-10-08T16:31:46+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix unit test.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1f67e41a474758b9df61aeec4650c8f30acda3c2" title="1f67e41a474758b9df61aeec4650c8f30acda3c2">1f67e41a474758b9df61aeec4650c8f30acda3c2</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-96">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:96" class="cnum">
+      <a href="5306.html#comment:96">comment:96</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A31%3A49%2B01%3A00&amp;precision=second" title="2012-10-08T16:31:49+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8dad687d68f14b4a03434895062b45a9dfc4e2d4" title="8dad687d68f14b4a03434895062b45a9dfc4e2d4">8dad687d68f14b4a03434895062b45a9dfc4e2d4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-97">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:97" class="cnum">
+      <a href="5306.html#comment:97">comment:97</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A32%3A19%2B01%3A00&amp;precision=second" title="2012-10-08T16:32:19+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More work on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4d028a71ad4fba999b0320776bc8f643837252bf" title="4d028a71ad4fba999b0320776bc8f643837252bf">4d028a71ad4fba999b0320776bc8f643837252bf</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-98">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:98" class="cnum">
+      <a href="5306.html#comment:98">comment:98</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A32%3A20%2B01%3A00&amp;precision=second" title="2012-10-08T16:32:20+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add support of Chebyshev. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee45727f603624283fbce251523cf2b8922b8725" title="ee45727f603624283fbce251523cf2b8922b8725">ee45727f603624283fbce251523cf2b8922b8725</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-99">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:99" class="cnum">
+      <a href="5306.html#comment:99">comment:99</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A32%3A23%2B01%3A00&amp;precision=second" title="2012-10-08T16:32:23+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+More on LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0c61d4e705e8112655ed87cf14ec4b981266be67" title="0c61d4e705e8112655ed87cf14ec4b981266be67">0c61d4e705e8112655ed87cf14ec4b981266be67</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-100">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:100" class="cnum">
+      <a href="5306.html#comment:100">comment:100</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A32%3A28%2B01%3A00&amp;precision=second" title="2012-10-08T16:32:28+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Enable to exclude some peaks out of range. Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/06d96689c47a33ac0ea24520bb93298e943ff213" title="06d96689c47a33ac0ea24520bb93298e943ff213">06d96689c47a33ac0ea24520bb93298e943ff213</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-101">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:101" class="cnum">
+      <a href="5306.html#comment:101">comment:101</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A32%3A31%2B01%3A00&amp;precision=second" title="2012-10-08T16:32:31+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add another algorithm for LeBailFit.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9cfbf5d277b5079ddaec5bbfa37bea0a562e71ff" title="9cfbf5d277b5079ddaec5bbfa37bea0a562e71ff">9cfbf5d277b5079ddaec5bbfa37bea0a562e71ff</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-102">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:102" class="cnum">
+      <a href="5306.html#comment:102">comment:102</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-08T16%3A32%3A31%2B01%3A00&amp;precision=second" title="2012-10-08T16:32:31+01:00 in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add a thermal neutron unit conversion function.  Refs <a class="closed ticket" href="5306.html" title="task: Implement LeBail fitting of cubic lattice (closed: fixed)">#5306</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/59badff52a82c31542d61ba0b5ad2237c0a4c60e" title="59badff52a82c31542d61ba0b5ad2237c0a4c60e">59badff52a82c31542d61ba0b5ad2237c0a4c60e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-103">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:103" class="cnum">
+      <a href="5306.html#comment:103">comment:103</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-01T17%3A26%3A24Z&amp;precision=second" title="2012-11-01T17:26:24Z in Timeline">8 years</a> ago by Wenduo Zhou
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/5306?action=diff&amp;version=103">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-104">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:104" class="cnum">
+      <a href="5306.html#comment:104">comment:104</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-01T18%3A11%3A33Z&amp;precision=second" title="2012-11-01T18:11:33Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Alex Buts</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-105">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:105" class="cnum">
+      <a href="5306.html#comment:105">comment:105</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T13%3A24%3A37Z&amp;precision=second" title="2012-11-02T13:24:37Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Well, The ticket is to implement LeBailFit for the cubic lattice and some LeBailFit is implemented. There are no request to implement it right and though the test script provided runs, I can not judge how stable/correct the run is. 
+</p>
+<p>
+My attempts to run modified LeBailFit Hangs Mantid on windows.  
+</p>
+<p>
+I am closing this particular ticket, but another ticket (<a class="closed ticket" href="5858.html" title="defect: Improve performance of LeBailFit (closed: fixed)">#5858</a>) mentions LeBailFit improvement, so I will address my comments to that ticket. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-106">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:106" class="cnum">
+      <a href="5306.html#comment:106">comment:106</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-11-02T13%3A24%3A48Z&amp;precision=second" title="2012-11-02T13:24:48Z in Timeline">8 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-107">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:107" class="cnum">
+      <a href="5306.html#comment:107">comment:107</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A27%3A01%2B01%3A00&amp;precision=second" title="2015-06-04T00:27:01+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/6152"><span class="icon">​</span>6152</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5306?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5306?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5306?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

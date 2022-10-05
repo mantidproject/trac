@@ -1,0 +1,4467 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9970 (Refactor and improve project load/saving code)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9969.html" title="Ticket #9969" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9970?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9970?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9970?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9971.html" title="Ticket #9971" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9970, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9969.html" title="Ticket #9969">Previous Ticket</a></span></li><li><span><a class="next" href="9971.html" title="Ticket #9971">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/9970.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9970.html">Ticket #9970</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-21T13%3A26%3A56%2B01%3A00&amp;precision=second" title="2014-07-21T13:26:56+01:00 in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A40%3A16%2B01%3A00&amp;precision=second" title="2015-06-04T03:40:16+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Refactor and improve project load/saving code</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Nick+Draper">Nick Draper</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Harry+Jeffery">Harry Jeffery</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.3.html">Release 3.3</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="assigned ticket" href="1042.html" title="Mantid project is not saving instrument window options and zooming of graphs">#1042</a>, <a class="closed ticket" href="2535.html" title="Improve project saving/loading  to the .mantid file - Python">#2535</a>, <a class="assigned ticket" href="2536.html" title="Improve project saving/loading to the .mantid file - Fitting">#2536</a>, <a class="closed ticket" href="5702.html" title="Plot window sizes not remembered correctly when saving projects.">#5702</a>, <a class="closed ticket" href="8252.html" title="Project loading changes type of the 2D plot">#8252</a>, <a class="assigned ticket" href="8310.html" title="Project Explorer has a fair few faults">#8310</a>, <a class="assigned ticket" href="8517.html" title="Graph Templates in Mantid">#8517</a>, <a class="closed ticket" href="9847.html" title="Crash on saving projects">#9847</a>, <a class="assigned ticket" href="9935.html" title="Matrix specific menu options not automatically displayed when loading project">#9935</a>, <a class="closed ticket" href="9952.html" title="Crash when opening project with spectrogram">#9952</a>, <a class="closed ticket" href="10121.html" title="You can't cancel quitting Mantid">#10121</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-10-15 11:23:58.522565+00:00">
+        (last modified by Harry Jeffery)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/9970?action=diff&amp;version=126">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+All of the project loading/saving code has been inherited from QtiPlot and suffers from several issues:
+</p>
+<ul><li>Fragile - Users report crashes when loading/saving projects
+</li><li>Buggy - Users have reported numerous bugs with its behaviour
+</li><li>Difficult to maintain - The code is messy and does not conform to Mantid's code standards
+</li><li>Incomplete - Many windows are not loaded/saved as part of projects, or only partially saved.
+</li></ul><p>
+This ticket aims to resolve the fragility and maintainability of the code.
+</p>
+<p>
+Goals:
+</p>
+<ul><li>Mantid should not crash while loading/saving
+</li><li>Project files should remain backwards compatible
+</li><li>Project loading/saving code should be easy to comprehend and conform to Mantid's standards
+</li><li>It should be easy to extend loading/saving coverage in future
+</li></ul>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9970.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-21T16%3A01%3A15%2B01%3A00&amp;precision=second" title="2014-07-21T16:01:15+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9970.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-21T16%3A01%3A21%2B01%3A00&amp;precision=second" title="2014-07-21T16:01:21+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9970.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-24T16%3A57%3A52%2B01%3A00&amp;precision=second" title="2014-07-24T16:57:52+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added TSVSerialiser utility class. Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+This class provides useful deserialisation routines for loading
+and saving project files. Currently it only supports loading but
+it will be given support for saving in the near future.
+</p>
+<p>
+Hopefully this will help to seriously reduce the technical debt
+of loading and saving project files.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d71d564025a04cf5985ca81679bab56e02aa64fe" title="d71d564025a04cf5985ca81679bab56e02aa64fe">d71d564025a04cf5985ca81679bab56e02aa64fe</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9970.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-24T17%3A03%3A02%2B01%3A00&amp;precision=second" title="2014-07-24T17:03:02+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Revert to fix broken build. Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4176734a929911099236aa94be38e46b2faeaf44" title="4176734a929911099236aa94be38e46b2faeaf44">4176734a929911099236aa94be38e46b2faeaf44</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9970.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T09%3A09%3A44%2B01%3A00&amp;precision=second" title="2014-07-25T09:09:44+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add TSVSerialiser class. Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+This time it ought not break the build.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8d7cbe578eb8c0817bee74a92d3602af491f1edf" title="8d7cbe578eb8c0817bee74a92d3602af491f1edf">8d7cbe578eb8c0817bee74a92d3602af491f1edf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9970.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T09%3A50%3A10%2B01%3A00&amp;precision=second" title="2014-07-25T09:50:10+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix most of, if not all, of the cppcheck warnings.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2349df105a32168d17374b63e17d6639fbf40f1e" title="2349df105a32168d17374b63e17d6639fbf40f1e">2349df105a32168d17374b63e17d6639fbf40f1e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9970.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T10%3A24%3A23%2B01%3A00&amp;precision=second" title="2014-07-25T10:24:23+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix cppcheck warning in TSVSerialiser. Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a32a3d81637d545f02c87628fc8499ed7d0c5ea3" title="a32a3d81637d545f02c87628fc8499ed7d0c5ea3">a32a3d81637d545f02c87628fc8499ed7d0c5ea3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9970.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T11%3A29%3A27%2B01%3A00&amp;precision=second" title="2014-07-25T11:29:27+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix crash when loading spectrogram. Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b6c826f60c4615b8d3f2acb79b1209c57e7e29e4" title="b6c826f60c4615b8d3f2acb79b1209c57e7e29e4">b6c826f60c4615b8d3f2acb79b1209c57e7e29e4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9970.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T11%3A36%3A15%2B01%3A00&amp;precision=second" title="2014-07-25T11:36:15+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix build on OSX. Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1e57394cb00e3f1a85eb4aa4b8a26f3ba963fd2b" title="1e57394cb00e3f1a85eb4aa4b8a26f3ba963fd2b">1e57394cb00e3f1a85eb4aa4b8a26f3ba963fd2b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9970.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-07-25T12%3A04%3A33%2B01%3A00&amp;precision=second" title="2014-07-25T12:04:33+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix spectrogram loading error found by cppcheck
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/00b18973e52fb19ae26f2619dbb50cbaaee3a161" title="00b18973e52fb19ae26f2619dbb50cbaaee3a161">00b18973e52fb19ae26f2619dbb50cbaaee3a161</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9970.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A33%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:33+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Create IProjectSerialisable interface.
+</p>
+<p>
+This is the first part of the interface needed for the project
+loading/saving refactoring. It specifies the method used to
+accept input lines from a project and apply them to the window.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f9502b8833e47078762be7ff29ac0259f9eecba2" title="f9502b8833e47078762be7ff29ac0259f9eecba2">f9502b8833e47078762be7ff29ac0259f9eecba2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9970.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A33%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:33+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Begin moving MultiLayer parsing into MultiLayer itself.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/833ee91d8ff4b0eb16fe267453728b26d72cd0f9" title="833ee91d8ff4b0eb16fe267453728b26d72cd0f9">833ee91d8ff4b0eb16fe267453728b26d72cd0f9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9970.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A33%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:33+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix minor bug where project root folder was left unnamed.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/daf1a9051c7dce20a3a7cadb7fd85da7f5a2b021" title="daf1a9051c7dce20a3a7cadb7fd85da7f5a2b021">daf1a9051c7dce20a3a7cadb7fd85da7f5a2b021</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9970.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A34%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change IProjectSerialisationInterface to ease further refactoring.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d399311e58564b1dae303b1e2091ce6c3533e07f" title="d399311e58564b1dae303b1e2091ce6c3533e07f">d399311e58564b1dae303b1e2091ce6c3533e07f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9970.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A34%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add float parsing to TSVSerialiser
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ae47ef6df16995d14a0f8bbc7546bf5295e5c4e6" title="ae47ef6df16995d14a0f8bbc7546bf5295e5c4e6">ae47ef6df16995d14a0f8bbc7546bf5295e5c4e6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9970.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A34%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement most of Graph::loadFromProject
+</p>
+<p>
+This is the vast majority of loadFromProject implemented.
+</p>
+<p>
+Yet to be implemented:
+</p>
+<ul><li>&lt;spectrogram&gt;
+</li><li>&lt;AxisFormula (N)&gt;
+</li></ul><p>
+Unable to be implemented currently:
+</p>
+<ul><li>&lt;CurveLabels&gt;
+</li><li>&lt;MantidYErrors&gt;
+</li><li>&lt;SkipPoints&gt;
+</li></ul><p>
+This is because their parsing depends on their order relative to the
+definition of curves in the project file. We cannot handle this
+correctly because we do not discern the order of elements when parsing.
+To resolve this, we will either have to make TSVSerialiser a lot more
+sophisticated, or break backwards compatibility for a few small cases.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1c4d88aad7668afc2f8050dbddd450ba39f98471" title="1c4d88aad7668afc2f8050dbddd450ba39f98471">1c4d88aad7668afc2f8050dbddd450ba39f98471</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9970.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A34%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix typo in date. Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3d5cd8d9b252aa8052d1ef698edf8260667b3ee2" title="3d5cd8d9b252aa8052d1ef698edf8260667b3ee2">3d5cd8d9b252aa8052d1ef698edf8260667b3ee2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9970.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A34%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove legacy cruft.
+</p>
+<blockquote>
+<p>
+Assertion: Mantid was forked from QtiPlot 0.9.5
+Therefore: Mantid has never saved a project file with a format older
+</p>
+<blockquote>
+<p>
+than 0.9.5.
+</p>
+</blockquote>
+</blockquote>
+<p>
+Conclusion: It's safe to delete this cruft as it'll be never used.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b23f01423780d4d930c0c331e20420ca3e917b72" title="b23f01423780d4d930c0c331e20420ca3e917b72">b23f01423780d4d930c0c331e20420ca3e917b72</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9970.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A12%3A34%2B01%3A00&amp;precision=second" title="2014-08-04T15:12:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>. Tweak comment.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c0d61905f15303d0482aa0228b10ba3288fe1122" title="c0d61905f15303d0482aa0228b10ba3288fe1122">c0d61905f15303d0482aa0228b10ba3288fe1122</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9970.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A22%3A20%2B01%3A00&amp;precision=second" title="2014-08-04T15:22:20+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Stub out ApplicationWindow::openGraph
+</p>
+<p>
+We're not yet at the point of being able to delete this, but we're
+getting close, so for now let's stub out this function.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/74235e084f057a8b17b0a905a9eade726f6220d2" title="74235e084f057a8b17b0a905a9eade726f6220d2">74235e084f057a8b17b0a905a9eade726f6220d2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9970.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A22%3A20%2B01%3A00&amp;precision=second" title="2014-08-04T15:22:20+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove unused methods from ApplicationWindow.
+</p>
+<p>
+These were used by openGraph. They have been moved into the Graph class.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/49ea7a52d7ca495f7603fe1c0e26b12a31acb284" title="49ea7a52d7ca495f7603fe1c0e26b12a31acb284">49ea7a52d7ca495f7603fe1c0e26b12a31acb284</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9970.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A33%3A03%2B01%3A00&amp;precision=second" title="2014-08-04T15:33:03+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove some obsolete logic from Graph::fillCurveSettings
+</p>
+<p>
+Mantid was forked from QtiPlot 0.9.5 so we'll never encounter a
+project with a file version older than 0.9.5.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5b1dd5eaa42096b0586d571224ee0940e175f65a" title="5b1dd5eaa42096b0586d571224ee0940e175f65a">5b1dd5eaa42096b0586d571224ee0940e175f65a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9970.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-04T15%3A33%3A04%2B01%3A00&amp;precision=second" title="2014-08-04T15:33:04+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>. Remove orphaned method in Graph.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8583a79379277c177ba7786c65ce9c472f2b98ea" title="8583a79379277c177ba7786c65ce9c472f2b98ea">8583a79379277c177ba7786c65ce9c472f2b98ea</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9970.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T11%3A08%3A58%2B01%3A00&amp;precision=second" title="2014-08-06T11:08:58+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add &lt;spectrogram&gt; handler to Graph::loadFromProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6284b90d03b4900e1807480992fcceb147885d72" title="6284b90d03b4900e1807480992fcceb147885d72">6284b90d03b4900e1807480992fcceb147885d72</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9970.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T11%3A08%3A59%2B01%3A00&amp;precision=second" title="2014-08-06T11:08:59+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Parse spectrogram sections from project files.
+</p>
+<p>
+This commit add basic support for parsing spectrogram sections and
+loading them into projects properly. Not all sections are supported yet.
+&lt;ColorBar&gt; and &lt;ColorMap&gt; are notably unsupported. They shouldn't be too
+difficult to add later on though.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6a886631d3b01cea1eb48376e6afe81dc85ab766" title="6a886631d3b01cea1eb48376e6afe81dc85ab766">6a886631d3b01cea1eb48376e6afe81dc85ab766</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="9970.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T11%3A39%3A32%2B01%3A00&amp;precision=second" title="2014-08-06T11:39:32+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Since this has been going on a while I'm taking a quick progress-check. This is proving to be quite a time sink but I'm managing my time so that I either spend roughly an afternoon or a morning working on this every day. That way it moves forward, but I still have time for other tickets.
+</p>
+<p>
+<strong>Done:</strong> (the short version)
+</p>
+<ul><li>Parse project files using <tt>TSVSerialiser</tt>
+<ul><li>Some subsections use <tt>TSVSerialiser</tt>, some still use old parsing code. More on that below.
+</li></ul></li><li>Create interface for ISerialisable and start implementing it with long term goal for a static factory to ease saving more stuff to project files in future.
+</li></ul><p>
+<strong>Todo:</strong>
+</p>
+<ul><li>Units in axis captions are not set correctly, for example pre-save: <tt>TOF (µs)</tt>, post-save: <tt>TOF (?s)</tt>
+</li><li><tt>&lt;spectrogram&gt;</tt>s load, but not fully.
+</li><li>There are numerous bugs in saving (many curves aren't saved), that give the illusion of a bug in loading.
+</li><li>To be refactored:
+<ul><li>All the project saving code.
+</li><li><tt>&lt;MultiLayer&gt;&lt;Graph&gt;&lt;Function&gt;...&lt;/Function&gt;&lt;/Graph&gt;&lt;/MultiLayer&gt;</tt>
+</li><li><tt>&lt;MultiLayer&gt;&lt;Graph&gt;&lt;image&gt;...&lt;/image&gt;&lt;/Graph&gt;&lt;/MultiLayer&gt;</tt>
+</li><li><tt>&lt;MultiLayer&gt;&lt;Graph&gt;&lt;legend&gt;...&lt;/legend&gt;&lt;/Graph&gt;&lt;/MultiLayer&gt;</tt>
+</li><li><tt>&lt;MultiLayer&gt;&lt;Graph&gt;&lt;line&gt;...&lt;/line&gt;&lt;/Graph&gt;&lt;/MultiLayer&gt;</tt>
+</li><li><tt>&lt;MultiLayer&gt;&lt;Graph&gt;&lt;PieLabel&gt;...&lt;/PieLabel&gt;&lt;/Graph&gt;&lt;/MultiLayer&gt;</tt>
+</li><li><tt>&lt;MultiLayer&gt;&lt;Graph&gt;&lt;text&gt;...&lt;/text&gt;&lt;/Graph&gt;&lt;/MultiLayer&gt;</tt>
+</li><li>And probably a few more.
+</li></ul></li><li>Sort out loading/closing projects in a sane way. Right now this is very buggy and awkward and the best way to close a project is to restart Mantid.
+</li></ul><p>
+<strong>Problems:</strong>
+</p>
+<ul><li>Some saved values (specified in comment 16) are saved in a very awkward way that depends on their order relative to other values. There's only a few of these, and it'd be a lot of unnecessary complication to support them. Long term we'll be far better off breaking backwards-compatibility for these and having something simpler and more reliable for all future releases.
+</li><li><tt>&lt;MultiLayer&gt;&lt;Graph&gt;&lt;AxisFormula 1&gt;...&lt;/AxisFormula&gt;&lt;/Graph&gt;&lt;/MultiLayer&gt;</tt>
+This is totally inconsistent (and the number changes in the tag name). I'll probably need to put in some manual parsing for this (if only to remove it and avoid breaking TSVSerialiser). I'm strongly leaning towards getting rid of this in saving completely and providing a new, more consistent way of saving these values.
+</li></ul><p>
+To summarise: This is going slowly but it's going. Refactoring saving ought to be much quicker and easier than doing the loading, but I expect to find many minor bugs in both loading/saving that will take time to fully resolve.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T11%3A43%3A31%2B01%3A00&amp;precision=second" title="2014-08-06T11:43:31+01:00 in Timeline">6 years</a> ago
+                      by Harry Jeffery
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9970?cversion=0&amp;cnum_hist=26#comment:26">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9970?action=comment-diff&amp;cnum=26&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="9970.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T16%3A39%3A26%2B01%3A00&amp;precision=second" title="2014-08-06T16:39:26+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Stub out ApplicationWindow::appendProject.
+</p>
+<p>
+This method uses the old parsing logic and is due to be replaced. I'm
+stubbing it out to allow myself to change the types of any other methods
+it calls in turn.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/160e172f684fa193db75e0fa4dab5890a5f73cde" title="160e172f684fa193db75e0fa4dab5890a5f73cde">160e172f684fa193db75e0fa4dab5890a5f73cde</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="9970.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-06T16%3A39%3A26%2B01%3A00&amp;precision=second" title="2014-08-06T16:39:26+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move &lt;Matrix&gt; parsing into interfaced stub.
+</p>
+<p>
+This is the first half of the work required to move &lt;Matrix&gt; parsing
+into an IProjectSerialisable interface. It does everything up to the
+point of actually parsing the contents of &lt;Matrix&gt;. That ought to come
+in the next commit.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8c4e2f74573fca415ab8fad0498c53202eab5d3b" title="8c4e2f74573fca415ab8fad0498c53202eab5d3b">8c4e2f74573fca415ab8fad0498c53202eab5d3b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="9970.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T11%3A47%3A23%2B01%3A00&amp;precision=second" title="2014-08-07T11:47:23+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8517</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+There's already extremely limited support for what <a class="assigned ticket" href="8517.html" title="enhancement: Graph Templates in Mantid (assigned)">#8517</a> describes, but it's so limited, messy and broken that there's no way it's worth carrying in its current form. I'll be clearing it out as part of the refactoring, and then once the refactoring is done it should be easier to implement and maintain.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="9970.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A03%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:03+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement Matrix::loadFromProject
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0285cb1490de58f6652651e24fdf534c937fd10b" title="0285cb1490de58f6652651e24fdf534c937fd10b">0285cb1490de58f6652651e24fdf534c937fd10b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="9970.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A03%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:03+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Prepare to remove d_file_version.
+</p>
+<p>
+It should not be a instance-global variable, but a parameter passed to
+the functions that need it. This commit cleans up the openProject and
+openProjectFolder methods of ApplicationWindow in preparation for its
+removal.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/21d5f1f59fe7aa26fa20369875e2f91e53f06df2" title="21d5f1f59fe7aa26fa20369875e2f91e53f06df2">21d5f1f59fe7aa26fa20369875e2f91e53f06df2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="9970.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A03%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:03+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove obsolete dependency logic.
+</p>
+<p>
+Reminder: MantidPlot forked QtiPlot 0.9.5, so we'll never encounter a
+mantid project file older that 0.9.5, so we can drop special handling
+for versions old than that.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eb7bb0915266a7a846804ef27e29ef786c0a55ad" title="eb7bb0915266a7a846804ef27e29ef786c0a55ad">eb7bb0915266a7a846804ef27e29ef786c0a55ad</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="9970.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A03%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:03+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove d_file_version.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2c4c055be3127c30aef3c39f9ca36d755cff1316" title="2c4c055be3127c30aef3c39f9ca36d755cff1316">2c4c055be3127c30aef3c39f9ca36d755cff1316</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="9970.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A03%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:03+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Application::openNote.
+</p>
+<p>
+This is a stop-gap.
+</p>
+<p>
+Note itself needs to be refactored to use the IProjectSerialisable
+interface in the future.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/882219eeaa7c5f1403a528f771185ceb29ea9773" title="882219eeaa7c5f1403a528f771185ceb29ea9773">882219eeaa7c5f1403a528f771185ceb29ea9773</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="9970.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A04%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:04+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor ApplicationWindow::openMantidMatrix
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19ad9701356e1b4807875cd55c4c43a9ef9b8338" title="19ad9701356e1b4807875cd55c4c43a9ef9b8338">19ad9701356e1b4807875cd55c4c43a9ef9b8338</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="9970.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A04%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:04+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace QString(str.c_str()) with QString::fromStdString(str)
+</p>
+<p>
+Turns out I've been converting std::strings to QStrings the bad way.
+There probably isn't much gain to this way, but if I'm refactoring I may
+as well be refactoring correctly.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/09baa975311bd1e62ca2ef6926fbe4eca2b57003" title="09baa975311bd1e62ca2ef6926fbe4eca2b57003">09baa975311bd1e62ca2ef6926fbe4eca2b57003</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="9970.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A04%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:04+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove curFolder param from App..Window::openProjectFolder
+</p>
+<p>
+It wasn't being used to replace current_folder, and it probably wouldn't
+be. Leaving it in would just cause confusion.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9a97519c91432fea3f769379e7c97cbf0279ad04" title="9a97519c91432fea3f769379e7c97cbf0279ad04">9a97519c91432fea3f769379e7c97cbf0279ad04</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="9970.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T12%3A02%3A04%2B01%3A00&amp;precision=second" title="2014-08-07T12:02:04+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove graph template cruft from ApplicationWindow.
+</p>
+<p>
+This is unmaintainable and nonfunctional in its current form. Once the
+refactoring is complete, it ought to be far easier to re-implement
+properly. See <a class="assigned ticket" href="8517.html" title="enhancement: Graph Templates in Mantid (assigned)">#8517</a> for more information on templates.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c045dd926dc45225087efa60af17ccf9285b0a77" title="c045dd926dc45225087efa60af17ccf9285b0a77">c045dd926dc45225087efa60af17ccf9285b0a77</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="9970.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T13%3A27%3A03%2B01%3A00&amp;precision=second" title="2014-08-07T13:27:03+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move multilayer loading logic into its own function.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c3a3d94e74b0a72ec4be41d5c753e114bd2bfa3b" title="c3a3d94e74b0a72ec4be41d5c753e114bd2bfa3b">c3a3d94e74b0a72ec4be41d5c753e114bd2bfa3b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="9970.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T13%3A27%3A03%2B01%3A00&amp;precision=second" title="2014-08-07T13:27:03+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove orphan: ApplicationWindow::openSpectrogram.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6e14c2fdcfda9f896fd080afe3f52e86d8935b8b" title="6e14c2fdcfda9f896fd080afe3f52e86d8935b8b">6e14c2fdcfda9f896fd080afe3f52e86d8935b8b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="9970.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T14%3A13%3A23%2B01%3A00&amp;precision=second" title="2014-08-07T14:13:23+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove orphan: ApplicationWindow::openGraph.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9138026b4700c571df038ab6c108e12ad72bbeb6" title="9138026b4700c571df038ab6c108e12ad72bbeb6">9138026b4700c571df038ab6c108e12ad72bbeb6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="9970.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-07T14%3A13%3A23%2B01%3A00&amp;precision=second" title="2014-08-07T14:13:23+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove more cruft from ApplicationWindow.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0c58cb9f1d87f50421b7668451a026a361c81070" title="0c58cb9f1d87f50421b7668451a026a361c81070">0c58cb9f1d87f50421b7668451a026a361c81070</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="9970.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T12%3A59%3A59%2B01%3A00&amp;precision=second" title="2014-08-08T12:59:59+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor loading SurfacePlot to use Graph3D (stub).
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/939cfcec1e4fcd57d5035cc7e8fbc81839c2323e" title="939cfcec1e4fcd57d5035cc7e8fbc81839c2323e">939cfcec1e4fcd57d5035cc7e8fbc81839c2323e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="9970.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T12%3A59%3A59%2B01%3A00&amp;precision=second" title="2014-08-08T12:59:59+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Include &lt;string&gt; int IProjectSerialisable.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ec00720a56da6ae09b6bcf0283d7500822f58de" title="6ec00720a56da6ae09b6bcf0283d7500822f58de">6ec00720a56da6ae09b6bcf0283d7500822f58de</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="9970.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T12%3A59%3A59%2B01%3A00&amp;precision=second" title="2014-08-08T12:59:59+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement Graph3D::loadFromProject.
+</p>
+<p>
+We can now load SurfacePlots from project files.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ec3272f17f0143b281982036244fb951120cae02" title="ec3272f17f0143b281982036244fb951120cae02">ec3272f17f0143b281982036244fb951120cae02</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="9970.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T13%3A00%3A00%2B01%3A00&amp;precision=second" title="2014-08-08T13:00:00+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor ApplicationWindow::openTable.
+</p>
+<p>
+Now openTable calls Table::loadFromProject (which is only a stub so far,
+its implementation is forthcoming in the next patch)
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f578767cf4d7130091bca22855d90e38b475499" title="5f578767cf4d7130091bca22855d90e38b475499">5f578767cf4d7130091bca22855d90e38b475499</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="9970.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T13%3A00%3A00%2B01%3A00&amp;precision=second" title="2014-08-08T13:00:00+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Resolve some cppcheck warnings and errors.
+</p>
+<p>
+In the case where a <tt>throw</tt> is removed, the <tt>return</tt> may be replaced with
+a new <tt>throw</tt> at a later date, as part of a polishing stage of this
+branch.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eab1ec2a91d3965fe50c8d4960a99b4d6252020d" title="eab1ec2a91d3965fe50c8d4960a99b4d6252020d">eab1ec2a91d3965fe50c8d4960a99b4d6252020d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="9970.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-08T13%3A00%3A00%2B01%3A00&amp;precision=second" title="2014-08-08T13:00:00+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implemented Table::loadFromProject
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5c7970c76b04f514e5ff8373eb396fc46684bc0e" title="5c7970c76b04f514e5ff8373eb396fc46684bc0e">5c7970c76b04f514e5ff8373eb396fc46684bc0e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="9970.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-14T11%3A19%3A34%2B01%3A00&amp;precision=second" title="2014-08-14T11:19:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix exception in Table::loadFromProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5eed59eb2972a5c224b52186802140cc22893d21" title="5eed59eb2972a5c224b52186802140cc22893d21">5eed59eb2972a5c224b52186802140cc22893d21</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="9970.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-14T11%3A19%3A34%2B01%3A00&amp;precision=second" title="2014-08-14T11:19:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor TableStatistics project loading.
+</p>
+<p>
+There still appears to be a bug with this though, where a statistics
+line is prepended to the statistics table upon project load. It's most
+likely being added when the statistics table is being created.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f02fecad7b72e13b33b6505cbf20eb5c90bbb7a1" title="f02fecad7b72e13b33b6505cbf20eb5c90bbb7a1">f02fecad7b72e13b33b6505cbf20eb5c90bbb7a1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="9970.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-14T11%3A19%3A34%2B01%3A00&amp;precision=second" title="2014-08-14T11:19:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidy up logging.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca2c8a82bb1ce09783eac83f917dd28617cedbdf" title="ca2c8a82bb1ce09783eac83f917dd28617cedbdf">ca2c8a82bb1ce09783eac83f917dd28617cedbdf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="9970.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-14T11%3A19%3A34%2B01%3A00&amp;precision=second" title="2014-08-14T11:19:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidy up project loading a little.
+</p>
+<p>
+This commit tidies up a few rough edges that I had left behind.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37b78f1d47c8bbd8621feac506fed81611cad599" title="37b78f1d47c8bbd8621feac506fed81611cad599">37b78f1d47c8bbd8621feac506fed81611cad599</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="9970.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-14T11%3A19%3A34%2B01%3A00&amp;precision=second" title="2014-08-14T11:19:34+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge ApplicationWindow::loadScript overloads.
+</p>
+<p>
+The overloaded version should just use a default parameter.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2d93817e38b3aaa9aacc939f305521f0c7ce0090" title="2d93817e38b3aaa9aacc939f305521f0c7ce0090">2d93817e38b3aaa9aacc939f305521f0c7ce0090</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="9970.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-14T11%3A19%3A35%2B01%3A00&amp;precision=second" title="2014-08-14T11:19:35+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidy up ApplicationWindow.h a bit.
+</p>
+<p>
+This commit does not contain any functional changes, and should not
+change any behaviour whatsoever. It is merely tidying up
+ApplicationWindow's header a little bit.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6fee883a660bdf38f199c823787f687c28497a34" title="6fee883a660bdf38f199c823787f687c28497a34">6fee883a660bdf38f199c823787f687c28497a34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="9970.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-19T12%3A28%3A53%2B01%3A00&amp;precision=second" title="2014-08-19T12:28:53+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace QString(str.c_str()) with QString::fromStdString.
+</p>
+<p>
+This is more idiomatic, and less hacky.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4f5b3a24a74c6440f3f3c2affe4116fb8419f845" title="4f5b3a24a74c6440f3f3c2affe4116fb8419f845">4f5b3a24a74c6440f3f3c2affe4116fb8419f845</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="9970.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-19T12%3A28%3A53%2B01%3A00&amp;precision=second" title="2014-08-19T12:28:53+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Finish project loading support for Graphs.
+</p>
+<p>
+This commit adds support for a few awkward edge cases that were not yet
+supported by the project file loading refactoring.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9733dcfec7ab935aa0367f29e6bbc215450a7c87" title="9733dcfec7ab935aa0367f29e6bbc215450a7c87">9733dcfec7ab935aa0367f29e6bbc215450a7c87</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="9970.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T15%3A45%3A48%2B01%3A00&amp;precision=second" title="2014-08-21T15:45:48+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Clear out old project on project load.
+</p>
+<p>
+Before this commit, old projects would stay loaded when a new one was
+loaded. This commit causes them to be removed properly before loading
+the new one.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/88f2cb939ca3bdc815905630bf654fe7744c211d" title="88f2cb939ca3bdc815905630bf654fe7744c211d">88f2cb939ca3bdc815905630bf654fe7744c211d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="9970.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-21T15%3A45%3A49%2B01%3A00&amp;precision=second" title="2014-08-21T15:45:49+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Restore current folder from project file.
+</p>
+<p>
+Projects save which folder was selected. This commit restores this
+setting upon load.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/59b6d5c9bbe94adaef0452f1f6245150e030b081" title="59b6d5c9bbe94adaef0452f1f6245150e030b081">59b6d5c9bbe94adaef0452f1f6245150e030b081</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="9970.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A50%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:50+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement writing logic of TSVSerialiser.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ec2118173180864705f806bbcccbe5a47bc03ea2" title="ec2118173180864705f806bbcccbe5a47bc03ea2">ec2118173180864705f806bbcccbe5a47bc03ea2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="9970.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A50%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:50+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move project serialisation logic into saveProjectFolder.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bc8fe494fe08115d599e042f2270b8b7ffa16a8d" title="bc8fe494fe08115d599e042f2270b8b7ffa16a8d">bc8fe494fe08115d599e042f2270b8b7ffa16a8d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="9970.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A50%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:50+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Rename saveFolder to saveProjectFile.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e3870256b6c5f8dc2f6697bcc5c50a00a7387d2c" title="e3870256b6c5f8dc2f6697bcc5c50a00a7387d2c">e3870256b6c5f8dc2f6697bcc5c50a00a7387d2c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="9970.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A50%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:50+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor saveProjectFolder to be recursive.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/697c2e817746cc87365b14b8aeb1394df383a8e8" title="697c2e817746cc87365b14b8aeb1394df383a8e8">697c2e817746cc87365b14b8aeb1394df383a8e8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="9970.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A50%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:50+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove saveAsTemplate orphans.
+</p>
+<p>
+These are currently unused and blocking refactoring of saveToString
+methods into saveToProject methods. They ought to be relatively easy to
+re-add later when needed.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8480e968e35da77b7596d20c79616ab1789aa3d2" title="8480e968e35da77b7596d20c79616ab1789aa3d2">8480e968e35da77b7596d20c79616ab1789aa3d2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="9970.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A50%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:50+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug where &lt;open&gt; was appended to project file.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f92ee48bf2cf281cf13cd9d998d44abef4cc7bc6" title="f92ee48bf2cf281cf13cd9d998d44abef4cc7bc6">f92ee48bf2cf281cf13cd9d998d44abef4cc7bc6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="9970.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A51%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add saveToProject to IProjectSerialisable and use it.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f5248cd4a4d9ccb9a3945c19db122823b41f4aae" title="f5248cd4a4d9ccb9a3945c19db122823b41f4aae">f5248cd4a4d9ccb9a3945c19db122823b41f4aae</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="9970.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A51%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Start refactoring Table to use saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d6fb13740834d013315abfa0c6334713f7ba060f" title="d6fb13740834d013315abfa0c6334713f7ba060f">d6fb13740834d013315abfa0c6334713f7ba060f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="9970.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A51%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Table::saveToProject to use TSVSerialiser.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f63b4ab14230ee48b1abd7c4f31cb8996390067c" title="f63b4ab14230ee48b1abd7c4f31cb8996390067c">f63b4ab14230ee48b1abd7c4f31cb8996390067c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="9970.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-08-28T09%3A44%3A51%2B01%3A00&amp;precision=second" title="2014-08-28T09:44:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Correct minor error when parsing TableStatistics.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/94934e9ed32d83e6d0c734cf1140cac7427e3fca" title="94934e9ed32d83e6d0c734cf1140cac7427e3fca">94934e9ed32d83e6d0c734cf1140cac7427e3fca</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="9970.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-01T14%3A32%3A37%2B01%3A00&amp;precision=second" title="2014-09-01T14:32:37+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9847</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="9970.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-01T14%3A32%3A53%2B01%3A00&amp;precision=second" title="2014-09-01T14:32:53+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>2535</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="9970.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-01T14%3A33%3A04%2B01%3A00&amp;precision=second" title="2014-09-01T14:33:04+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>2536</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="9970.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-01T14%3A33%3A11%2B01%3A00&amp;precision=second" title="2014-09-01T14:33:11+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>5702</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="9970.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-01T14%3A33%3A23%2B01%3A00&amp;precision=second" title="2014-09-01T14:33:23+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8252</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="9970.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-01T14%3A33%3A30%2B01%3A00&amp;precision=second" title="2014-09-01T14:33:30+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9952</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="9970.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-01T14%3A33%3A40%2B01%3A00&amp;precision=second" title="2014-09-01T14:33:40+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>1042</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="9970.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-01T14%3A33%3A49%2B01%3A00&amp;precision=second" title="2014-09-01T14:33:49+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9935</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="9970.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A37%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:37+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Stylistic tweaks to TSVSerialiser.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd432c1bc30aa55d90bbb8ed2f2c595c7329fc92" title="bd432c1bc30aa55d90bbb8ed2f2c595c7329fc92">bd432c1bc30aa55d90bbb8ed2f2c595c7329fc92</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="9970.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A37%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:37+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace Matrix::saveToString with Matrix::saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf56344b028535181bc27d55e7b2e080963c8e72" title="cf56344b028535181bc27d55e7b2e080963c8e72">cf56344b028535181bc27d55e7b2e080963c8e72</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="9970.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A37%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:37+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidy up newMantidMatrix orphans.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/80c13c05356ca560f0a1c50578e5494535dbd497" title="80c13c05356ca560f0a1c50578e5494535dbd497">80c13c05356ca560f0a1c50578e5494535dbd497</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="9970.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A37%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:37+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidy up MantidUI::openMatrixWorkspace.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9d1efa6215c0e949e7bb10a1e5ac5cc979364432" title="9d1efa6215c0e949e7bb10a1e5ac5cc979364432">9d1efa6215c0e949e7bb10a1e5ac5cc979364432</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="9970.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A37%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:37+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace MantidMatrix's saveToString with saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f0c6f213a5509727c9bc891b29ce87d66ad6c4a5" title="f0c6f213a5509727c9bc891b29ce87d66ad6c4a5">f0c6f213a5509727c9bc891b29ce87d66ad6c4a5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-82">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:82" class="cnum">
+      <a href="9970.html#comment:82">comment:82</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A37%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:37+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor ApplicationWindow::windowGeometryInfo.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6922f705f9153f009c678c38c2243622bcb345d7" title="6922f705f9153f009c678c38c2243622bcb345d7">6922f705f9153f009c678c38c2243622bcb345d7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-83">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:83" class="cnum">
+      <a href="9970.html#comment:83">comment:83</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A37%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:37+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace MultiLayer's saveToString with saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c7c7de97b49d5a725092b63d7e0706489723356d" title="c7c7de97b49d5a725092b63d7e0706489723356d">c7c7de97b49d5a725092b63d7e0706489723356d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-84">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:84" class="cnum">
+      <a href="9970.html#comment:84">comment:84</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A38%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:38+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Grid::saveToString.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4061a80f88151ef3203335756cab0e5c055c9aca" title="4061a80f88151ef3203335756cab0e5c055c9aca">4061a80f88151ef3203335756cab0e5c055c9aca</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-85">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:85" class="cnum">
+      <a href="9970.html#comment:85">comment:85</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A38%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:38+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Graph::saveScale()
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/548a73994939127c69b0307bc429655a1139c059" title="548a73994939127c69b0307bc429655a1139c059">548a73994939127c69b0307bc429655a1139c059</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-86">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:86" class="cnum">
+      <a href="9970.html#comment:86">comment:86</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A38%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:38+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Graph::saveCurves() into Graph::saveCurve()
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6c6b7d60634ecbe9c507bc9a67943a02eaa55e2a" title="6c6b7d60634ecbe9c507bc9a67943a02eaa55e2a">6c6b7d60634ecbe9c507bc9a67943a02eaa55e2a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-87">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:87" class="cnum">
+      <a href="9970.html#comment:87">comment:87</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A38%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:38+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Graph::saveMarkers()
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/afd9ec5f1f6c65c8d97db239f5289eb2a1ec6971" title="afd9ec5f1f6c65c8d97db239f5289eb2a1ec6971">afd9ec5f1f6c65c8d97db239f5289eb2a1ec6971</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-88">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:88" class="cnum">
+      <a href="9970.html#comment:88">comment:88</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-03T15%3A46%3A38%2B01%3A00&amp;precision=second" title="2014-09-03T15:46:38+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Graph::saveToString to Graph::saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5752781bfc125ef3e54e4102a5f7e72dee6f0edd" title="5752781bfc125ef3e54e4102a5f7e72dee6f0edd">5752781bfc125ef3e54e4102a5f7e72dee6f0edd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-89">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:89" class="cnum">
+      <a href="9970.html#comment:89">comment:89</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A51%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Graph doesn't need to inherit IProjectSerialisable.
+</p>
+<p>
+Graph itself is not a top level window that's saved as part of a
+project. It's a child object of MultiLayer. MultiLayer handles loading
+and saving graphs explicitly, so the interface is simply not needed
+here.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3540abe071a5ba311b351a835eb4a1127ba6f434" title="3540abe071a5ba311b351a835eb4a1127ba6f434">3540abe071a5ba311b351a835eb4a1127ba6f434</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-90">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:90" class="cnum">
+      <a href="9970.html#comment:90">comment:90</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A51%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Note's load/save to use IProjectSerialisable.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca98ab1b76b5dc8c5f141327594520e103fcca1b" title="ca98ab1b76b5dc8c5f141327594520e103fcca1b">ca98ab1b76b5dc8c5f141327594520e103fcca1b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-91">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:91" class="cnum">
+      <a href="9970.html#comment:91">comment:91</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A51%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace Graph3D::saveToString with Graph3D::saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7bb3533208f4b36892a255c40bd40bb7ce6c7971" title="7bb3533208f4b36892a255c40bd40bb7ce6c7971">7bb3533208f4b36892a255c40bd40bb7ce6c7971</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-92">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:92" class="cnum">
+      <a href="9970.html#comment:92">comment:92</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A51%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove IProjectSerialisable interface from Spectrogram.
+</p>
+<p>
+Spectrogram is not an MdiSubwindow, so it doesn't need this interface,
+as it's not going to be serialised directly. It's explicitly
+serialised/deserialised by the graph that owns it. So we can ditch the
+official interface and just use simplified methods similar to the
+interface.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cb632596afbf64e2d1c4a8a605bfd53bfe9dab58" title="cb632596afbf64e2d1c4a8a605bfd53bfe9dab58">cb632596afbf64e2d1c4a8a605bfd53bfe9dab58</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-93">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:93" class="cnum">
+      <a href="9970.html#comment:93">comment:93</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A51%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:51+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replace Spectrogram::saveToString with Spectrogram::saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f3aa906a1d6d20648a39168486ff5aa90f409d07" title="f3aa906a1d6d20648a39168486ff5aa90f409d07">f3aa906a1d6d20648a39168486ff5aa90f409d07</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-94">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:94" class="cnum">
+      <a href="9970.html#comment:94">comment:94</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A52%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:52+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Force implementors of IProjectSerialisable to implement saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8b939dd57cb678124c8ae04975c530ae9d80c665" title="8b939dd57cb678124c8ae04975c530ae9d80c665">8b939dd57cb678124c8ae04975c530ae9d80c665</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-95">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:95" class="cnum">
+      <a href="9970.html#comment:95">comment:95</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A52%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:52+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Make InstrumentWindow implement IProjectSerialisable.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2074e936a34b4e2f5c5c730322c8d30207cbf8ec" title="2074e936a34b4e2f5c5c730322c8d30207cbf8ec">2074e936a34b4e2f5c5c730322c8d30207cbf8ec</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-96">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:96" class="cnum">
+      <a href="9970.html#comment:96">comment:96</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A52%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:52+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Move some logic into Table::saveTableMetadata.
+</p>
+<p>
+I'm doing this so it can be re-used by TableStatistics.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cd568ede7f6f799ea18b5823d1bb6338377135bb" title="cd568ede7f6f799ea18b5823d1bb6338377135bb">cd568ede7f6f799ea18b5823d1bb6338377135bb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-97">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:97" class="cnum">
+      <a href="9970.html#comment:97">comment:97</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A52%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:52+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor TableStatistics's saveToString into saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bbf930511c01b7f7d5162bd42e637c2cee471b9c" title="bbf930511c01b7f7d5162bd42e637c2cee471b9c">bbf930511c01b7f7d5162bd42e637c2cee471b9c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-98">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:98" class="cnum">
+      <a href="9970.html#comment:98">comment:98</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A52%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:52+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove orphaned functions from Table.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/86636451dbcbf6995860563acaa445faf007c0a4" title="86636451dbcbf6995860563acaa445faf007c0a4">86636451dbcbf6995860563acaa445faf007c0a4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-99">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:99" class="cnum">
+      <a href="9970.html#comment:99">comment:99</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-05T15%3A35%3A52%2B01%3A00&amp;precision=second" title="2014-09-05T15:35:52+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix some small errors in Graph::saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/04f8bcf715d03944a66dd38bee88065e38060e76" title="04f8bcf715d03944a66dd38bee88065e38060e76">04f8bcf715d03944a66dd38bee88065e38060e76</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-100">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:100" class="cnum">
+      <a href="9970.html#comment:100">comment:100</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-08T16%3A05%3A19%2B01%3A00&amp;precision=second" title="2014-09-08T16:05:19+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor MatrixModel::saveToString to saveToProject.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7cb889a2b751f6ad77a0ca5d8d31883587e6f94c" title="7cb889a2b751f6ad77a0ca5d8d31883587e6f94c">7cb889a2b751f6ad77a0ca5d8d31883587e6f94c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-101">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:101" class="cnum">
+      <a href="9970.html#comment:101">comment:101</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-08T16%3A05%3A19%2B01%3A00&amp;precision=second" title="2014-09-08T16:05:19+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove obsolete saveToString calls.
+</p>
+<p>
+Table no longer implements saveToString, so these calls does nothing.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1b91408a83ec1d946e3bbb5746fd8b68feb4cd13" title="1b91408a83ec1d946e3bbb5746fd8b68feb4cd13">1b91408a83ec1d946e3bbb5746fd8b68feb4cd13</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-102">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:102" class="cnum">
+      <a href="9970.html#comment:102">comment:102</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-08T16%3A05%3A19%2B01%3A00&amp;precision=second" title="2014-09-08T16:05:19+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove some orphans from Graph and Table.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f9bba4cd1a9b49f8dac790ec66dc550ac156087a" title="f9bba4cd1a9b49f8dac790ec66dc550ac156087a">f9bba4cd1a9b49f8dac790ec66dc550ac156087a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-103">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:103" class="cnum">
+      <a href="9970.html#comment:103">comment:103</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-15T14%3A34%3A11%2B01%3A00&amp;precision=second" title="2014-09-15T14:34:11+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Support loading ColorMap and ColorBar in Spectrogram
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/aff161b3d057ac56054f3dbf7e235bf27c25a90a" title="aff161b3d057ac56054f3dbf7e235bf27c25a90a">aff161b3d057ac56054f3dbf7e235bf27c25a90a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-104">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:104" class="cnum">
+      <a href="9970.html#comment:104">comment:104</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-15T14%3A34%3A11%2B01%3A00&amp;precision=second" title="2014-09-15T14:34:11+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add enable waterfall plot parsing
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/123a00fd68b7980308171b2819cdf1472b8f0afa" title="123a00fd68b7980308171b2819cdf1472b8f0afa">123a00fd68b7980308171b2819cdf1472b8f0afa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-105">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:105" class="cnum">
+      <a href="9970.html#comment:105">comment:105</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-15T14%3A34%3A12%2B01%3A00&amp;precision=second" title="2014-09-15T14:34:12+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Reimplement ApplicationWindow::appendProject()
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa6ec2996c03543a367c731f76ca4a4b1fcfa007" title="fa6ec2996c03543a367c731f76ca4a4b1fcfa007">fa6ec2996c03543a367c731f76ca4a4b1fcfa007</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-106">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:106" class="cnum">
+      <a href="9970.html#comment:106">comment:106</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-15T14%3A46%3A22%2B01%3A00&amp;precision=second" title="2014-09-15T14:46:22+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix some errors found by checkbuild.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/480bb2c48906614da0084344e0bcb61d989bccfb" title="480bb2c48906614da0084344e0bcb61d989bccfb">480bb2c48906614da0084344e0bcb61d989bccfb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-107">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:107" class="cnum">
+      <a href="9970.html#comment:107">comment:107</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-16T12%3A11%3A48%2B01%3A00&amp;precision=second" title="2014-09-16T12:11:48+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Clean up usage of current_folder and loaded_folder
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/203c47b998ee267bda65252a7b8cb4f900e27eb1" title="203c47b998ee267bda65252a7b8cb4f900e27eb1">203c47b998ee267bda65252a7b8cb4f900e27eb1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-108">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:108" class="cnum">
+      <a href="9970.html#comment:108">comment:108</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-18T12%3A24%3A59%2B01%3A00&amp;precision=second" title="2014-09-18T12:24:59+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug where loaded windows were not resized
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37f44cb0cc186bd149893b9d42d93d55bb2d9842" title="37f44cb0cc186bd149893b9d42d93d55bb2d9842">37f44cb0cc186bd149893b9d42d93d55bb2d9842</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-109">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:109" class="cnum">
+      <a href="9970.html#comment:109">comment:109</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-18T12%3A24%3A59%2B01%3A00&amp;precision=second" title="2014-09-18T12:24:59+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refactor Graph::insertText
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6a0209470c16baabf01c0187473cabaa57096012" title="6a0209470c16baabf01c0187473cabaa57096012">6a0209470c16baabf01c0187473cabaa57096012</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-110">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:110" class="cnum">
+      <a href="9970.html#comment:110">comment:110</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-18T12%3A25%3A00%2B01%3A00&amp;precision=second" title="2014-09-18T12:25:00+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix bug when saving Graphs
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fab219d546c14e3b3d77dce213912b6f8847b26d" title="fab219d546c14e3b3d77dce213912b6f8847b26d">fab219d546c14e3b3d77dce213912b6f8847b26d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-111">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:111" class="cnum">
+      <a href="9970.html#comment:111">comment:111</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-18T15%3A12%3A38%2B01%3A00&amp;precision=second" title="2014-09-18T15:12:38+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix saving of function curve graphs
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d1590a18d075abfa96ba7cc218dec17aa110f98f" title="d1590a18d075abfa96ba7cc218dec17aa110f98f">d1590a18d075abfa96ba7cc218dec17aa110f98f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-112">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:112" class="cnum">
+      <a href="9970.html#comment:112">comment:112</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-19T09%3A30%3A38%2B01%3A00&amp;precision=second" title="2014-09-19T09:30:38+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>10121</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-113">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:113" class="cnum">
+      <a href="9970.html#comment:113">comment:113</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-19T09%3A31%3A02%2B01%3A00&amp;precision=second" title="2014-09-19T09:31:02+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8310</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-114">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:114" class="cnum">
+      <a href="9970.html#comment:114">comment:114</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-19T12%3A16%3A30%2B01%3A00&amp;precision=second" title="2014-09-19T12:16:30+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+TSVSerialiser: Add support for numbered sections
+</p>
+<p>
+There is exactly one case where this is needed:
+<tt>&lt;AxisFormula 1&gt;...&lt;/AxisFormula&gt;</tt>
+</p>
+<p>
+TSVSerialiser will now parse these sections and save them with
+the space and number included in the section name.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5a2b39e3b5c20e9db093448efad7bbc537ec85cf" title="5a2b39e3b5c20e9db093448efad7bbc537ec85cf">5a2b39e3b5c20e9db093448efad7bbc537ec85cf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-115">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:115" class="cnum">
+      <a href="9970.html#comment:115">comment:115</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-19T12%3A16%3A30%2B01%3A00&amp;precision=second" title="2014-09-19T12:16:30+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add support for loading &lt;AxisFormula n&gt; sections
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/394b34d1dcade6c3bfb7dfce0f0ebca84f6c3bd0" title="394b34d1dcade6c3bfb7dfce0f0ebca84f6c3bd0">394b34d1dcade6c3bfb7dfce0f0ebca84f6c3bd0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-116">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:116" class="cnum">
+      <a href="9970.html#comment:116">comment:116</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-24T10%3A09%3A57%2B01%3A00&amp;precision=second" title="2014-09-24T10:09:57+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+ApplicationWindow: Preserve unicode when loading/saving
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3771d4a643315024b6593c54c2b240e5b9ee613f" title="3771d4a643315024b6593c54c2b240e5b9ee613f">3771d4a643315024b6593c54c2b240e5b9ee613f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-117">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:117" class="cnum">
+      <a href="9970.html#comment:117">comment:117</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-24T10%3A09%3A57%2B01%3A00&amp;precision=second" title="2014-09-24T10:09:57+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+TSVSerialiser: add selectSection
+</p>
+<p>
+Going into the final polish, this ought to clean up serialisation logic
+a little.
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/edfdec695a57f50ba586f16710e3d775af55b59a" title="edfdec695a57f50ba586f16710e3d775af55b59a">edfdec695a57f50ba586f16710e3d775af55b59a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-118">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:118" class="cnum">
+      <a href="9970.html#comment:118">comment:118</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-24T10%3A09%3A57%2B01%3A00&amp;precision=second" title="2014-09-24T10:09:57+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Preserve unicode when loading/saving
+</p>
+<p>
+This applies to:
+</p>
+<ul><li>Graph
+</li><li>Graph3D
+</li><li>Grid
+</li><li>Matrix
+</li><li>MatrixModel
+</li><li>MultiLayer
+</li><li>Note
+</li><li>Table
+</li><li>TableStatistics
+</li></ul><p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/97d033c7b11301d36a45cd6c4af38dbab01fdfa2" title="97d033c7b11301d36a45cd6c4af38dbab01fdfa2">97d033c7b11301d36a45cd6c4af38dbab01fdfa2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-119">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:119" class="cnum">
+      <a href="9970.html#comment:119">comment:119</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-09-29T15%3A45%3A40%2B01%3A00&amp;precision=second" title="2014-09-29T15:45:40+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Progress report</strong>
+</p>
+<p>
+The refactoring and conversion of existing functionality is complete and the branch is almost ready for testing.
+</p>
+<p>
+The only known bug is in the loading and saving of windows' geometry. When loaded, windows shrink by the size of their window decorations. Somewhere geometry and frameGeometry are being confused. <a class="ext-link" href="https://qt-project.org/doc/qt-4.8/application-windows.html#window-geometry"><span class="icon">​</span>https://qt-project.org/doc/qt-4.8/application-windows.html#window-geometry</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-120">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:120" class="cnum">
+      <a href="9970.html#comment:120">comment:120</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T12%3A25%3A39%2B01%3A00&amp;precision=second" title="2014-10-02T12:25:39+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tidy up restoreWindowGeometry
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/972b97be78aa5e8099de08802ddc3528f09263f1" title="972b97be78aa5e8099de08802ddc3528f09263f1">972b97be78aa5e8099de08802ddc3528f09263f1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-121">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:121" class="cnum">
+      <a href="9970.html#comment:121">comment:121</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T12%3A25%3A39%2B01%3A00&amp;precision=second" title="2014-10-02T12:25:39+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Improve variable names
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/98598bacf8c9f613366365a32a420b9a6748b48e" title="98598bacf8c9f613366365a32a420b9a6748b48e">98598bacf8c9f613366365a32a420b9a6748b48e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-122">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:122" class="cnum">
+      <a href="9970.html#comment:122">comment:122</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T13%3A52%3A14%2B01%3A00&amp;precision=second" title="2014-10-02T13:52:14+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix the MdiSubWindow sizing bug
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/04c1c75a80b91569cbc27e4efe12fa733d37f138" title="04c1c75a80b91569cbc27e4efe12fa733d37f138">04c1c75a80b91569cbc27e4efe12fa733d37f138</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-123">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:123" class="cnum">
+      <a href="9970.html#comment:123">comment:123</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T14%3A08%3A36%2B01%3A00&amp;precision=second" title="2014-10-02T14:08:36+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a> Merge branch 'master' into feature branch
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidPlot/src/Mantid/MantidMatrix.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/18ec20da20a1012e08b443a9a042ddf814c2d9d7" title="18ec20da20a1012e08b443a9a042ddf814c2d9d7">18ec20da20a1012e08b443a9a042ddf814c2d9d7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-124">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:124" class="cnum">
+      <a href="9970.html#comment:124">comment:124</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-02T14%3A24%3A26%2B01%3A00&amp;precision=second" title="2014-10-02T14:24:26+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is obviously a very large branch touching a lot of functionality and
+should be tested carefully across all supported platforms. I have been
+using/testing it on Ubuntu 14.04 as I have been working, but as ever it's
+possible I've missed something.
+</p>
+<p>
+This ticket has reached feature parity with the existing functionality and has
+no known bugs (other than shortcomings for which other tickets already exist,
+(see blocking)).
+</p>
+<p>
+The only merge conflict that has occured has been an include added in the same place a different
+include was added on another branch.
+</p>
+<p>
+Branch: <a class="ext-link" href="https://github.com/mantidproject/mantid/compare/feature/9970_refactor_project_serialisation"><span class="icon">​</span>https://github.com/mantidproject/mantid/compare/feature/9970_refactor_project_serialisation</a>
+</p>
+<p>
+<strong>To Test</strong>:
+</p>
+<ul><li>Load and save projects with various graphs and windows open. Look for breakages.
+</li><li>Load existing project files in pre-refactored mantid and post-refactored mantid. Look for breakages.
+</li><li>Save project files in post-refactored mantid and open them in pre-refactored mantid. Look for breakages.
+</li><li>Inspect code
+</li><li>Check for broken unit and system tests
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-125">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:125" class="cnum">
+      <a href="9970.html#comment:125">comment:125</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-10T14%3A57%3A06%2B01%3A00&amp;precision=second" title="2014-10-10T14:57:06+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This ticket needs a description of the things that needed to have been fixed. In other words, I do not see the scope for this work. Please update the ticket description so that the tester can understand what has happened. The PM will also need this for project reporting upon release.
+</p>
+<p>
+You can close the ticket again when this has been added.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-126">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:126" class="cnum">
+      <a href="9970.html#comment:126">comment:126</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-15T12%3A23%3A58%2B01%3A00&amp;precision=second" title="2014-10-15T12:23:58+01:00 in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/9970?action=diff&amp;version=126">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-127">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:127" class="cnum">
+      <a href="9970.html#comment:127">comment:127</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-24T15%3A28%3A35%2B01%3A00&amp;precision=second" title="2014-10-24T15:28:35+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-128">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:128" class="cnum">
+      <a href="9970.html#comment:128">comment:128</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-24T15%3A54%3A06%2B01%3A00&amp;precision=second" title="2014-10-24T15:54:06+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Tested on windows. Defect found:
+</p>
+<ol><li>Not all types of workspaces can be saved.
+</li><li>3D plot doesn't load back (or not saved).
+</li><li>Colour fill plot loads blank.
+</li><li>Curve colours are lost after loading.
+</li></ol>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-129">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:129" class="cnum">
+      <a href="9970.html#comment:129">comment:129</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T14%3A39%3A36Z&amp;precision=second" title="2014-10-27T14:39:36Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/9970_refactor_project_serialisation
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidPlot/src/ApplicationWindow.cpp
+Code/Mantid/MantidPlot/src/ApplicationWindow.h
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eb3da6493eacdd8d9e8f02b25a416a30809c70b9" title="eb3da6493eacdd8d9e8f02b25a416a30809c70b9">eb3da6493eacdd8d9e8f02b25a416a30809c70b9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-130">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:130" class="cnum">
+      <a href="9970.html#comment:130">comment:130</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T14%3A39%3A36Z&amp;precision=second" title="2014-10-27T14:39:36Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a> Save spectrogram's matrix
+</p>
+<p>
+The matrix a spectrogram was meant to be representing was not being
+saved into the project files. This has now been resolved. However, this
+is not being saved in previous versions of Mantid (which crash when
+dealing with spectrograms apparently).
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ddd84331a7fbe07c249965515d026da2a1683779" title="ddd84331a7fbe07c249965515d026da2a1683779">ddd84331a7fbe07c249965515d026da2a1683779</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-131">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:131" class="cnum">
+      <a href="9970.html#comment:131">comment:131</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T14%3A39%3A36Z&amp;precision=second" title="2014-10-27T14:39:36Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a> Fix saving of 3D graphs
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e05874b80fe38ae37b29a4b5a5c1d3f7ef58d0a0" title="e05874b80fe38ae37b29a4b5a5c1d3f7ef58d0a0">e05874b80fe38ae37b29a4b5a5c1d3f7ef58d0a0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-132">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:132" class="cnum">
+      <a href="9970.html#comment:132">comment:132</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-27T15%3A41%3A10Z&amp;precision=second" title="2014-10-27T15:41:10Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a> Fix losing curve colors upon load
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7315320f68c2dd03331dfe37b63b0e77e8711cc5" title="7315320f68c2dd03331dfe37b63b0e77e8711cc5">7315320f68c2dd03331dfe37b63b0e77e8711cc5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-133">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:133" class="cnum">
+      <a href="9970.html#comment:133">comment:133</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-10-28T12%3A06%3A23Z&amp;precision=second" title="2014-10-28T12:06:23Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+See comment 124 (<a class="ext-link" href="9970.html#comment:124"><span class="icon">​</span>http://trac.mantidproject.org/mantid/ticket/9970#comment:124</a>) for testing instructions.
+</p>
+<p>
+Issues found so far have been resolved.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-134">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:134" class="cnum">
+      <a href="9970.html#comment:134">comment:134</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-07T13%3A21%3A44Z&amp;precision=second" title="2014-11-07T13:21:44Z in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Try to create a MDWorkspace like this:
+</p>
+<div class="code"><pre>CreateMDWorkspace<span class="p">(</span>Dimensions<span class="o">=</span><span class="mi">3</span><span class="p">,</span> Extents<span class="o">=</span><span class="s">'-10,10,-10,10,-10,10'</span><span class="p">,</span> Names<span class="o">=</span><span class="s">'A,B,C'</span><span class="p">,</span> Units<span class="o">=</span><span class="s">'U,U,U'</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">'demo'</span><span class="p">)</span>
+</pre></div><p>
+Then try to save the project.
+</p>
+<pre class="wiki">Error in execution of algorithm SaveNexusProcessed
+Workspace "demo" not saved because it is not of a type we can presently save.
+</pre><p>
+You may be able to fix this by getting the save project to consider looking at SaveMD also as a candidate algorithm.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-135">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:135" class="cnum">
+      <a href="9970.html#comment:135">comment:135</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-07T14%3A01%3A27Z&amp;precision=second" title="2014-11-07T14:01:27Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-136">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:136" class="cnum">
+      <a href="9970.html#comment:136">comment:136</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-10T10%3A11%3A33Z&amp;precision=second" title="2014-11-10T10:11:33Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a> Use SaveMD when required to save workspaces
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fadf696dfea5c147add8f624399fe1f2d5c13953" title="fadf696dfea5c147add8f624399fe1f2d5c13953">fadf696dfea5c147add8f624399fe1f2d5c13953</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-137">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:137" class="cnum">
+      <a href="9970.html#comment:137">comment:137</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-10T11%3A01%3A28Z&amp;precision=second" title="2014-11-10T11:01:28Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The issue raised in comment (134) has been fixed. However, the generated workspace cannot be loaded afterwards as it contains no data, which the loading algorithm does not seem to like.
+</p>
+<p>
+See comment 124 (​<a class="ext-link" href="9970.html#comment:124"><span class="icon">​</span>http://trac.mantidproject.org/mantid/ticket/9970#comment:124</a>) for testing instructions.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-138">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:138" class="cnum">
+      <a href="9970.html#comment:138">comment:138</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-10T12%3A25%3A52Z&amp;precision=second" title="2014-11-10T12:25:52Z in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        changed from <em>Roman Tolchenov</em> to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-139">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:139" class="cnum">
+      <a href="9970.html#comment:139">comment:139</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-11T10%3A08%3A43Z&amp;precision=second" title="2014-11-11T10:08:43Z in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Unfortunately doesn't work even after adding mdevents 
+</p>
+<div class="code"><pre>CreateMDWorkspace<span class="p">(</span>Dimensions<span class="o">=</span><span class="mi">3</span><span class="p">,</span> Extents<span class="o">=</span><span class="s">'-10,10,-10,10,-10,10'</span><span class="p">,</span> Names<span class="o">=</span><span class="s">'A,B,C'</span><span class="p">,</span> Units<span class="o">=</span><span class="s">'U,U,U'</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">'c'</span><span class="p">)</span>
+FakeMDEventData<span class="p">(</span>InputWorkspace<span class="o">=</span><span class="s">'c'</span><span class="p">,</span> PeakParams<span class="o">=</span><span class="s">'10000,0,0,0,1'</span><span class="p">)</span>
+</pre></div><p>
+Seems to save out ok, but doesn't load it. I presume it's using LoadNexus rather than LoadMD.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-140">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:140" class="cnum">
+      <a href="9970.html#comment:140">comment:140</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-11T10%3A08%3A49Z&amp;precision=second" title="2014-11-11T10:08:49Z in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-141">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:141" class="cnum">
+      <a href="9970.html#comment:141">comment:141</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-11T11%3A20%3A44Z&amp;precision=second" title="2014-11-11T11:20:44Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-142">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:142" class="cnum">
+      <a href="9970.html#comment:142">comment:142</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-11T11%3A32%3A11Z&amp;precision=second" title="2014-11-11T11:32:11Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a> Support loading MD workspaces in a project
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2f2f07d29cd1b387805705160b82448ce190c22" title="f2f2f07d29cd1b387805705160b82448ce190c22">f2f2f07d29cd1b387805705160b82448ce190c22</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-143">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:143" class="cnum">
+      <a href="9970.html#comment:143">comment:143</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-11T11%3A57%3A23Z&amp;precision=second" title="2014-11-11T11:57:23Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+See comment 124 (​​<a class="ext-link" href="9970.html#comment:124"><span class="icon">​</span>http://trac.mantidproject.org/mantid/ticket/9970#comment:124</a>) for testing instructions. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-144">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:144" class="cnum">
+      <a href="9970.html#comment:144">comment:144</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-11T11%3A59%3A11Z&amp;precision=second" title="2014-11-11T11:59:11Z in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-145">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:145" class="cnum">
+      <a href="9970.html#comment:145">comment:145</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T10%3A47%3A33Z&amp;precision=second" title="2014-11-28T10:47:33Z in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>verify</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Owen Arnold</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-146">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:146" class="cnum">
+      <a href="9970.html#comment:146">comment:146</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T14%3A39%3A02Z&amp;precision=second" title="2014-11-28T14:39:02Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The issue with MDWorkspaces seems to be resolved.
+</p>
+<p>
+Ont thing I noticed is that when I save a project with a detector table open in which multiple detectors are mapped to a single spectra when I load the project the detector ID cells which contained multiple detector IDs not just contain zeros.
+</p>
+<p>
+I also get this error in the console:
+</p>
+<pre class="wiki">TSVSerialiser-[Warning] Unable to identify line in TSVSerialiser::parseLines(): 'irs26176_graphite002_sqw-Detectors-1	13	7	28/11/2014 14:23'
+</pre><p>
+Also if I have the Python window open without saving the script, close Mantid saving the project but not the script I get a load dialog from the script window when I load the project.
+</p>
+<p>
+Also a very minor issue, if I load a project that contains plots then delete the workspaces behind one of the plots, the plot window remains (usually the plot window would be closed) and contour plots remain with the plot still visible.
+</p>
+<p>
+I also see that the results log is cleared sometimes, I'm not sure what the conditions for this are but should this really happen.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-147">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:147" class="cnum">
+      <a href="9970.html#comment:147">comment:147</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-11-28T15%3A01%3A52Z&amp;precision=second" title="2014-11-28T15:01:52Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-148">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:148" class="cnum">
+      <a href="9970.html#comment:148">comment:148</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-01T10%3A36%3A03Z&amp;precision=second" title="2014-12-01T10:36:03Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Further testing shows that the problem with detector tables is a bug in the tables themselves. Strings are placed into numeric columns, which reset to 0 when interacted with. The behaviour is the same before this branch.
+</p>
+<p>
+The Python script window issue has been identified and will be fixed.
+</p>
+<p>
+The plot window closing issue is small enough to be ignored for now and looked into later.
+</p>
+<p>
+The results log is cleared when the folder or project is changed. This is the original logic, and has not been modified. So far as I am aware, no users have had issue with this, so I won't be touching it.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-149">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:149" class="cnum">
+      <a href="9970.html#comment:149">comment:149</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-01T10%3A36%3A48Z&amp;precision=second" title="2014-12-01T10:36:48Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/master' into feature/9970_refactor_project_serialisation
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5c724069f83039db4e8641aa4513d978e27282ed" title="5c724069f83039db4e8641aa4513d978e27282ed">5c724069f83039db4e8641aa4513d978e27282ed</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-150">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:150" class="cnum">
+      <a href="9970.html#comment:150">comment:150</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-01T10%3A36%3A48Z&amp;precision=second" title="2014-12-01T10:36:48Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a> Do not save a blank script window
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46215dea3eda5d761bdf9f95b4cb8ff5d22e7849" title="46215dea3eda5d761bdf9f95b4cb8ff5d22e7849">46215dea3eda5d761bdf9f95b4cb8ff5d22e7849</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-151">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:151" class="cnum">
+      <a href="9970.html#comment:151">comment:151</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-01T10%3A54%3A05Z&amp;precision=second" title="2014-12-01T10:54:05Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-152">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:152" class="cnum">
+      <a href="9970.html#comment:152">comment:152</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-01T14%3A25%3A00Z&amp;precision=second" title="2014-12-01T14:25:00Z in Timeline">6 years</a> ago by Dan Nixon
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The issue with the Python window still exists if at least one script tab open is saved.
+</p>
+<p>
+Other than this I have no other issues, as far as I have tested plots and workspaces seem to load and save fine.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-153">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:153" class="cnum">
+      <a href="9970.html#comment:153">comment:153</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-02T10%3A25%3A07Z&amp;precision=second" title="2014-12-02T10:25:07Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The script window issue can be resolved as part of <a class="closed ticket" href="2535.html" title="enhancement: Improve project saving/loading  to the .mantid file - Python (closed: fixed)">#2535</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-154">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:154" class="cnum">
+      <a href="9970.html#comment:154">comment:154</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-03T14%3A13%3A56Z&amp;precision=second" title="2014-12-03T14:13:56Z in Timeline">6 years</a> ago by Lottie Greenwood
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Lottie Greenwood</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-155">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:155" class="cnum">
+      <a href="9970.html#comment:155">comment:155</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-03T15%3A12%3A55Z&amp;precision=second" title="2014-12-03T15:12:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into feature/9970_refactor_project_serialisation
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidPlot/src/ApplicationWindow.cpp
+Code/Mantid/MantidPlot/src/ApplicationWindow.h
+</p>
+</blockquote>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/eb3da6493eacdd8d9e8f02b25a416a30809c70b9"><span class="icon">​</span>eb3da6493eacdd8d9e8f02b25a416a30809c70b9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-156">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:156" class="cnum">
+      <a href="9970.html#comment:156">comment:156</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-03T15%3A12%3A55Z&amp;precision=second" title="2014-12-03T15:12:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/master' into feature/9970_refactor_project_serialisation
+</p>
+<p>
+Refs <a class="closed ticket" href="9970.html" title="Refactor and improve project load/saving code (closed: fixed)">#9970</a>
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/5c724069f83039db4e8641aa4513d978e27282ed"><span class="icon">​</span>5c724069f83039db4e8641aa4513d978e27282ed</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-157">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:157" class="cnum">
+      <a href="9970.html#comment:157">comment:157</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-03T15%3A12%3A55Z&amp;precision=second" title="2014-12-03T15:12:55Z in Timeline">6 years</a> ago by Lottie Greenwood
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9970_refactor_project_serialisation'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/65ff2f3d28fe2d4fe889cf5f2d2f2bd61eb12485"><span class="icon">​</span>65ff2f3d28fe2d4fe889cf5f2d2f2bd61eb12485</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-158">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:158" class="cnum">
+      <a href="9970.html#comment:158">comment:158</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-12-03T15%3A14%3A46Z&amp;precision=second" title="2014-12-03T15:14:46Z in Timeline">6 years</a> ago by Lottie Greenwood
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Tester</strong>
+        <em>Lottie Greenwood</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-159">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:159" class="cnum">
+      <a href="9970.html#comment:159">comment:159</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A40%3A16%2B01%3A00&amp;precision=second" title="2015-06-04T03:40:16+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10812"><span class="icon">​</span>10812</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9970?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9970?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9970?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8131 ([IDA] Update and tidy CalcCorr)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8130.html" title="Ticket #8130" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8131?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8131?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8131?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8132.html" title="Ticket #8132" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8131, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8130.html" title="Ticket #8130">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="8132.html" title="Ticket #8132">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8131.html">Ticket #8131</a>
+          <span class="status">(closed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-15T13%3A36%3A29%2B01%3A00&amp;precision=second" title="2013-10-15T13:36:29+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A24%3A03%2B01%3A00&amp;precision=second" title="2015-06-04T02:24:03+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">[IDA] Update and tidy CalcCorr</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              spencer.howells@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Spencer would like the CalCorr interface updated in a similar fashion to what happened with Apply Corr:
+</p>
+<blockquote class="citation">
+<ol><li>In 'Shape Details'  'Can Angle' should be 'Sample Angle'
+</li><li>'Beam Width'  default value from IPF 'beam-width'
+</li><li>In 'Can details'  Input file like Sample
+</li><li>In 'Sample &amp; Can Details':
+</li></ol><blockquote>
+<p>
+'Number Density' stays as-is on its own
+Then drop-down menu 'Cross-sections from' with values 'Input' &amp; 'Formula'
+If Input, Scatt &amp; Abs x-sect as now
+If Formula, text input box 'Chemical Formula'
+</p>
+</blockquote>
+<ol start="5"><li>Verbose, Plot &amp; Save in frame labelled 'Output Options'
+</li></ol></blockquote>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8131.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T11%3A05%3A01Z&amp;precision=second" title="2014-02-14T11:05:01Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move to assigned at the introduction of the triage step
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8131.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-27T09%3A06%3A25Z&amp;precision=second" title="2014-03-27T09:06:25Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Updated CalcCorr interface.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0eec27e6fd54c65c164c8588ec11c5ea5257af5b" title="0eec27e6fd54c65c164c8588ec11c5ea5257af5b">0eec27e6fd54c65c164c8588ec11c5ea5257af5b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8131.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-27T09%3A06%3A25Z&amp;precision=second" title="2014-03-27T09:06:25Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Adding new AbsRun method.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02399ecd4aea2825fd9b92219bfa5ee926c29941" title="02399ecd4aea2825fd9b92219bfa5ee926c29941">02399ecd4aea2825fd9b92219bfa5ee926c29941</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8131.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-27T09%3A06%3A25Z&amp;precision=second" title="2014-03-27T09:06:25Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Refactored IndirectAbsCor
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3521be2b57edadce4dde4b853386bb5aab10df50" title="3521be2b57edadce4dde4b853386bb5aab10df50">3521be2b57edadce4dde4b853386bb5aab10df50</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8131.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-27T09%3A08%3A56Z&amp;precision=second" title="2014-03-27T09:08:56Z in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Merge master into branch.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/607b3a3e004d50e13afd20149f6da77d9c8d1931" title="607b3a3e004d50e13afd20149f6da77d9c8d1931">607b3a3e004d50e13afd20149f6da77d9c8d1931</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8131.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-03T11%3A36%3A27%2B01%3A00&amp;precision=second" title="2014-04-03T11:36:27+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Pass correct parameters to routine.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0ae94feb933a181d0df517085ade8934c1bceb23" title="0ae94feb933a181d0df517085ade8934c1bceb23">0ae94feb933a181d0df517085ade8934c1bceb23</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8131.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-03T11%3A36%3A27%2B01%3A00&amp;precision=second" title="2014-04-03T11:36:27+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Fix various issues with SetSampleMaterial.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b4642736f29f51b10d2fa963953ab32f2bbb21fe" title="b4642736f29f51b10d2fa963953ab32f2bbb21fe">b4642736f29f51b10d2fa963953ab32f2bbb21fe</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8131.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-03T11%3A36%3A28%2B01%3A00&amp;precision=second" title="2014-04-03T11:36:28+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Minor interface tweak.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0ece923e6441472de9a280967dd291d216e14fff" title="0ece923e6441472de9a280967dd291d216e14fff">0ece923e6441472de9a280967dd291d216e14fff</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8131.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-03T15%3A29%3A41%2B01%3A00&amp;precision=second" title="2014-04-03T15:29:41+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Minor interface updates.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/00dac7620c1b63357b0ee15e31a48f8f3515b4ac" title="00dac7620c1b63357b0ee15e31a48f8f3515b4ac">00dac7620c1b63357b0ee15e31a48f8f3515b4ac</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8131.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-03T15%3A29%3A42%2B01%3A00&amp;precision=second" title="2014-04-03T15:29:42+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Only set sample material when using formula.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/808c0fc6ae0f60c739370126e3d918646091a590" title="808c0fc6ae0f60c739370126e3d918646091a590">808c0fc6ae0f60c739370126e3d918646091a590</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8131.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-03T15%3A29%3A42%2B01%3A00&amp;precision=second" title="2014-04-03T15:29:42+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Update documentation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8325d06dc9b451756a5a7a4dff7f02b66cb7cd03" title="8325d06dc9b451756a5a7a4dff7f02b66cb7cd03">8325d06dc9b451756a5a7a4dff7f02b66cb7cd03</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8131.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T15%3A42%3A53%2B01%3A00&amp;precision=second" title="2014-04-09T15:42:53+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Tidy and move FlatAbs comment to docstring.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/aa8b895f296cdc2777822da6f90c42a0f4775a23" title="aa8b895f296cdc2777822da6f90c42a0f4775a23">aa8b895f296cdc2777822da6f90c42a0f4775a23</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8131.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T08%3A39%3A04%2B01%3A00&amp;precision=second" title="2014-04-10T08:39:04+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Re-enable can input.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3c86658fc83cd6fb4b3e9f81122a0f08ae9dc461" title="3c86658fc83cd6fb4b3e9f81122a0f08ae9dc461">3c86658fc83cd6fb4b3e9f81122a0f08ae9dc461</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8131.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T09%3A19%3A52%2B01%3A00&amp;precision=second" title="2014-04-10T09:19:52+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Fix bug in FlatAbs.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8bd51811649aadaa665561b85d59a6d6a39cda45" title="8bd51811649aadaa665561b85d59a6d6a39cda45">8bd51811649aadaa665561b85d59a6d6a39cda45</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8131.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-16T16%3A22%3A33%2B01%3A00&amp;precision=second" title="2014-04-16T16:22:33+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> CalCorr was passing sample formula as both sample and can.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/143bcd67c7715ba9c961fdad48e1c005e5737b6f" title="143bcd67c7715ba9c961fdad48e1c005e5737b6f">143bcd67c7715ba9c961fdad48e1c005e5737b6f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8131.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-16T16%3A22%3A33%2B01%3A00&amp;precision=second" title="2014-04-16T16:22:33+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Change starting index to be the first tab.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a599ad8026a6e43d4ba8ecf08cae07120ac0195c" title="a599ad8026a6e43d4ba8ecf08cae07120ac0195c">a599ad8026a6e43d4ba8ecf08cae07120ac0195c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8131.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-17T11%3A58%3A04%2B01%3A00&amp;precision=second" title="2014-04-17T11:58:04+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Swap to make beam width non mandatory.
+</p>
+<p>
+We can try and get it from the instrument in the workspace.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca86a1129aa583aceb9d2ab3d66207846c57f39a" title="ca86a1129aa583aceb9d2ab3d66207846c57f39a">ca86a1129aa583aceb9d2ab3d66207846c57f39a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8131.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-24T11%3A27%3A10%2B01%3A00&amp;precision=second" title="2014-04-24T11:27:10+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Fix issues with running CalcCorr.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/749b1c02063934c2ef9431a88bfde6d43d5a79cf" title="749b1c02063934c2ef9431a88bfde6d43d5a79cf">749b1c02063934c2ef9431a88bfde6d43d5a79cf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8131.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-24T11%3A27%3A10%2B01%3A00&amp;precision=second" title="2014-04-24T11:27:10+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Validate input from formula.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c2ad6b3cc8707c27cb1c4229dbdd270642cfd9e8" title="c2ad6b3cc8707c27cb1c4229dbdd270642cfd9e8">c2ad6b3cc8707c27cb1c4229dbdd270642cfd9e8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8131.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-24T11%3A27%3A10%2B01%3A00&amp;precision=second" title="2014-04-24T11:27:10+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Swap to simply auto load the file at the beginning.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/278080444c5860e2aed7350b789fe9eaf6f27aa2" title="278080444c5860e2aed7350b789fe9eaf6f27aa2">278080444c5860e2aed7350b789fe9eaf6f27aa2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8131.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-24T11%3A27%3A10%2B01%3A00&amp;precision=second" title="2014-04-24T11:27:10+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Attempt to get the beam width from the workspace.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0ec788b3053d6023cc8be95288e3f7f354d26965" title="0ec788b3053d6023cc8be95288e3f7f354d26965">0ec788b3053d6023cc8be95288e3f7f354d26965</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="8131.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-24T13%3A43%3A44%2B01%3A00&amp;precision=second" title="2014-04-24T13:43:44+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Correct bug with can sample material.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8710bbe140259bf967d81893048bee789c9b481f" title="8710bbe140259bf967d81893048bee789c9b481f">8710bbe140259bf967d81893048bee789c9b481f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="8131.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-24T13%3A43%3A44%2B01%3A00&amp;precision=second" title="2014-04-24T13:43:44+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Fix PEP 8 warnings.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/36f59574cff5fe364f7a2adebb7f32b54fa98ec2" title="36f59574cff5fe364f7a2adebb7f32b54fa98ec2">36f59574cff5fe364f7a2adebb7f32b54fa98ec2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="8131.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-24T13%3A43%3A44%2B01%3A00&amp;precision=second" title="2014-04-24T13:43:44+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Attempt to get height of beam from IP file.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b94bd3f6c06f1c30146d5854d1db3d66869377e2" title="b94bd3f6c06f1c30146d5854d1db3d66869377e2">b94bd3f6c06f1c30146d5854d1db3d66869377e2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="8131.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-02T09%3A58%3A36%2B01%3A00&amp;precision=second" title="2014-05-02T09:58:36+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Update definition beam parameters.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/021324383bdf0cc299f0730f6e14fe9268d2d08f" title="021324383bdf0cc299f0730f6e14fe9268d2d08f">021324383bdf0cc299f0730f6e14fe9268d2d08f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="8131.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-02T09%3A58%3A36%2B01%3A00&amp;precision=second" title="2014-05-02T09:58:36+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Better form validation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37d066c673f5ccfdf694e7a7d4390ca4e94bcfbc" title="37d066c673f5ccfdf694e7a7d4390ca4e94bcfbc">37d066c673f5ccfdf694e7a7d4390ca4e94bcfbc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="8131.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-02T09%3A58%3A36%2B01%3A00&amp;precision=second" title="2014-05-02T09:58:36+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/8131_calc_corr_update' into develop
+</p>
+<p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a>
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/CustomInterfaces/inc/MantidQtCustomInterfaces/IndirectDataAnalysis.ui
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2a23e66150b3d2ee9fbe24a794dec115ad34f23a" title="2a23e66150b3d2ee9fbe24a794dec115ad34f23a">2a23e66150b3d2ee9fbe24a794dec115ad34f23a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="8131.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-02T13%3A31%3A24%2B01%3A00&amp;precision=second" title="2014-05-02T13:31:24+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Add basis for new tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7e2d4b11b22620586459d6f4ceae0d7d7fa5c770" title="7e2d4b11b22620586459d6f4ceae0d7d7fa5c770">7e2d4b11b22620586459d6f4ceae0d7d7fa5c770</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="8131.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-05-02T13%3A31%3A24%2B01%3A00&amp;precision=second" title="2014-05-02T13:31:24+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Tidy up existing tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4a6da9ee7186a52fb8d2d0214cd8b0d6ce19d610" title="4a6da9ee7186a52fb8d2d0214cd8b0d6ce19d610">4a6da9ee7186a52fb8d2d0214cd8b0d6ce19d610</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="8131.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-19T13%3A48%3A00%2B01%3A00&amp;precision=second" title="2014-06-19T13:48:00+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/master' into
+</p>
+<p>
+feature/8131_calc_corr_update
+</p>
+<p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a>
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/CustomInterfaces/inc/MantidQtCustomInterfaces/IndirectDataAnalysis.ui
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e6eb96df0cdee9adac9b146efc6b3d486284a921" title="e6eb96df0cdee9adac9b146efc6b3d486284a921">e6eb96df0cdee9adac9b146efc6b3d486284a921</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="8131.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-19T13%3A48%3A00%2B01%3A00&amp;precision=second" title="2014-06-19T13:48:00+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Fix a couple of minor interface issues.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d509beaa33b5ed1acbfb46f495cc63251f9a33ed" title="d509beaa33b5ed1acbfb46f495cc63251f9a33ed">d509beaa33b5ed1acbfb46f495cc63251f9a33ed</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="8131.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-20T09%3A51%3A15%2B01%3A00&amp;precision=second" title="2014-06-20T09:51:15+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Minor feedback changes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2c6be047b6dbc00587e531ef919206534a14233a" title="2c6be047b6dbc00587e531ef919206534a14233a">2c6be047b6dbc00587e531ef919206534a14233a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="8131.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-20T09%3A51%3A45%2B01%3A00&amp;precision=second" title="2014-06-20T09:51:45+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="8131.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-20T11%3A00%3A12%2B01%3A00&amp;precision=second" title="2014-06-20T11:00:12+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>To Test</strong>
+</p>
+<p>
+This ticket is for a <strong>windows</strong> tester and must be built in <strong>release mode</strong> (cylindrical corrections still use Fortran)
+</p>
+<p>
+Calculate Corrections has had a general face lift but we've also added the ability to calculate parameters from the sample material. Run through the instructions for calculate corrections at:
+</p>
+<p>
+<a href="http://www.mantidproject.org/Indirect:Indirect_Data_Analysis">http://www.mantidproject.org/Indirect:Indirect_Data_Analysis</a>
+</p>
+<p>
+Use irs26176_graphite002_red as the sample and irs26173_graphite002_red as the can (both in the sys tests). Check that the routine still works with the input parameters described on that page.
+</p>
+<p>
+Then try doing it again, but using the chemical formula for either the sample or can (or both). Sample is water (H2-O) and can is Vanadium (V). Can geometry is cylindrical. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="8131.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T13%3A24%3A35%2B01%3A00&amp;precision=second" title="2014-06-24T13:24:35+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="8131.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T15%3A21%3A28%2B01%3A00&amp;precision=second" title="2014-06-24T15:21:28+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/8131_calc_corr_update' of github.com:mantidproject/mantid into feature/8131_calc_corr_update
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/f8c5b45905de4b356d8a046ff4de545f9e7fd291"><span class="icon">​</span>f8c5b45905de4b356d8a046ff4de545f9e7fd291</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="8131.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T15%3A21%3A28%2B01%3A00&amp;precision=second" title="2014-06-24T15:21:28+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8131_calc_corr_update'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/002d2caa22f0b65b46f1414ea6483533370eea60"><span class="icon">​</span>002d2caa22f0b65b46f1414ea6483533370eea60</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="8131.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T15%3A33%3A01%2B01%3A00&amp;precision=second" title="2014-06-24T15:33:01+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8131_calc_corr_update'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/323bb2d2c58412dd805dd5a204477c3bb1a991a5"><span class="icon">​</span>323bb2d2c58412dd805dd5a204477c3bb1a991a5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="8131.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-24T15%3A38%3A36%2B01%3A00&amp;precision=second" title="2014-06-24T15:38:36+01:00 in Timeline">6 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The wiki page should be updated (<a class="closed ticket" href="9745.html" title="enhancement: Update Indirect data analysis wiki page (closed: duplicate)">#9745</a>)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="8131.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T09%3A00%3A45%2B01%3A00&amp;precision=second" title="2014-06-25T09:00:45+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Add missing load statements.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bbbc664bcd0f5699eb950b8a8b0e071df71d2dda" title="bbbc664bcd0f5699eb950b8a8b0e071df71d2dda">bbbc664bcd0f5699eb950b8a8b0e071df71d2dda</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="8131.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T10%3A03%3A48%2B01%3A00&amp;precision=second" title="2014-06-25T10:03:48+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8131.html" title="enhancement: [IDA] Update and tidy CalcCorr (closed)">#8131</a> Update with sensible values.
+</p>
+<p>
+Add reference results to match.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/87f50cfd162aab696a62beab38f4fd124218ac96" title="87f50cfd162aab696a62beab38f4fd124218ac96">87f50cfd162aab696a62beab38f4fd124218ac96</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="8131.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T10%3A06%3A20%2B01%3A00&amp;precision=second" title="2014-06-25T10:06:20+01:00 in Timeline">6 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>closed</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="8131.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T10%3A24%3A15%2B01%3A00&amp;precision=second" title="2014-06-25T10:24:15+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        changed from <em>Roman Tolchenov</em> to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="8131.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-06-25T10%3A25%3A04%2B01%3A00&amp;precision=second" title="2014-06-25T10:25:04+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8131_calc_corr_update'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/932dea0f81e23655991ba19791e24968b0588917"><span class="icon">​</span>932dea0f81e23655991ba19791e24968b0588917</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="8131.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A24%3A03%2B01%3A00&amp;precision=second" title="2015-06-04T02:24:03+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/8976"><span class="icon">​</span>8976</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8131?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8131?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8131?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

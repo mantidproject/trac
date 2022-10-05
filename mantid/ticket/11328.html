@@ -1,0 +1,1057 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11328 (Fix memory, initialization and other issues (coverity) in Framework (especially Load...))
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11327.html" title="Ticket #11327" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11328?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11328?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11328?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11329.html" title="Ticket #11329" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11328, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11327.html" title="Ticket #11327">Previous Ticket</a></span></li><li><span><a class="next" href="11329.html" title="Ticket #11329">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/11328.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11328.html">Ticket #11328</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T09%3A13%3A22Z&amp;precision=second" title="2015-03-12T09:13:22Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A32%3A25%2B01%3A00&amp;precision=second" title="2015-06-04T04:32:25+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Fix memory, initialization and other issues (coverity) in Framework (especially Load...)</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Federico+M+Pouzols">Federico M Pouzols</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Federico+M+Pouzols">Federico M Pouzols</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="inprogress ticket" href="10619.html" title="LoadEventNexus (+ LoadNexusMonitors and other LoadNexus...) cleaning/maintenance">#10619</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Harry Jeffery
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2015-03-12 11:22:04.004951+00:00">
+        (last modified by Federico M Pouzols)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/11328?action=diff&amp;version=2">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+This is a bunch of coverity issues (~30), with a bit of focus on Framework, and inside framework, on the Load* classes and related helpers.
+</p>
+<p>
+Unitialized member vars (scalars and pointers):
+</p>
+<ul><li>1075408: LoadEventPreNexus2 constructor
+</li><li>1075417: LoadPreNexusMonitors constructor
+</li><li>1075403: LoadMask constructor
+</li><li>1075405: LoadLLB
+</li><li>1075411: LoadDetectorsGroupingFile.cpp: LoadDetectorsGroupingFile constructor
+</li><li>1075412: LoadDetectorsGroupingFile.cpp: LoadGroupXMLFile constructor
+</li><li>1075399: LoadRawBin0 constructor
+</li><li>1075398: LoadRawHelper
+</li><li>1075397: LoadRawSpectrum0
+</li><li>1127169: LoadSINQFocus
+</li><li>1075395: LoadTOFRawNexus
+</li><li>1237306: LoadVulcanCalFile
+</li><li>1075349: LoadSQW.h / LoadSQWHelper
+</li><li>1075341: LoadSQW
+</li><li>1075404: LoadLogsForSNSPulsedMagnet
+</li><li>1075401: LoadRaw / item_struct constructor
+</li></ul><p>
+A few remaining leaks, supposedly high impact:
+</p>
+<ul><li>1271720, 21: leaks in AffineMatrixParameter (false positives I'd say), but the destructor can be improved so that we don't get this false positive and everything is more clear.
+</li><li>1271722: similar issue as above, in CoordTransformAffine
+</li></ul><p>
+Unchecked dynamic_casts
+</p>
+<ul><li>1223399: LoadILLReflectometry
+</li><li>1223400: LoadILLReflectometry
+</li><li>1076257: ​HFIRLoad
+</li><li>1076262, 63, 64: EQSANSLoad
+</li></ul><p>
+Integer handling:
+</p>
+<ul><li>1076097: LoadRawBin0 (int32/64 cast)
+</li><li>1076096: ​LoadRawHelper
+</li><li>1076095: LoadRawSpectrum0
+</li></ul><p>
+Control flow:
+</p>
+<ul><li>1075695: LoadCanSAS1D, Missing break in switch
+</li></ul><p>
+Unchecked return values:
+</p>
+<ul><li>1076114: LoadRawHelper
+</li></ul>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11328.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T09%3A13%3A32Z&amp;precision=second" title="2015-03-12T09:13:32Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11328.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A22%3A04Z&amp;precision=second" title="2015-03-12T11:22:04Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/11328?action=diff&amp;version=2">diff</a>)
+    </li><li>
+      <strong>Blocking</strong>
+        <em>10619</em> added
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>Fix memory and initialization issues (coverity) in Framework</em> to <em>Fix memory, initialization and other issues (coverity) in Framework (especially Load...)</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11328.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A29Z&amp;precision=second" title="2015-03-12T11:56:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075408, re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0a7446bf797b1ae95280e3135b7395a2cd9b95f0" title="0a7446bf797b1ae95280e3135b7395a2cd9b95f0">0a7446bf797b1ae95280e3135b7395a2cd9b95f0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11328.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A29Z&amp;precision=second" title="2015-03-12T11:56:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075417 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ecfe4bad656d1c8d9373a8279173cf4e784eedc8" title="ecfe4bad656d1c8d9373a8279173cf4e784eedc8">ecfe4bad656d1c8d9373a8279173cf4e784eedc8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="11328.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A29Z&amp;precision=second" title="2015-03-12T11:56:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075403 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/27aaf76b29e31347dcee68775c21d039b4133d79" title="27aaf76b29e31347dcee68775c21d039b4133d79">27aaf76b29e31347dcee68775c21d039b4133d79</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="11328.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A29Z&amp;precision=second" title="2015-03-12T11:56:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075405 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/83073dbb40784a3289dbf1feb1d8a9c3409bbd86" title="83073dbb40784a3289dbf1feb1d8a9c3409bbd86">83073dbb40784a3289dbf1feb1d8a9c3409bbd86</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="11328.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A29Z&amp;precision=second" title="2015-03-12T11:56:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075411,12 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c5856a0f1ae6b33b848cffebb08d2a27ff7d9659" title="c5856a0f1ae6b33b848cffebb08d2a27ff7d9659">c5856a0f1ae6b33b848cffebb08d2a27ff7d9659</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="11328.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A29Z&amp;precision=second" title="2015-03-12T11:56:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075399, 1076097 (init and int32/64), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/816b1f75ac85b6b84ac00fb4b8084ecf36ad2cdb" title="816b1f75ac85b6b84ac00fb4b8084ecf36ad2cdb">816b1f75ac85b6b84ac00fb4b8084ecf36ad2cdb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="11328.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A29Z&amp;precision=second" title="2015-03-12T11:56:29Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075398,1076096,1076114 (init,int32/64,return), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1456d585ebf72c9a8574c25e352ae3d80fc3c4b7" title="1456d585ebf72c9a8574c25e352ae3d80fc3c4b7">1456d585ebf72c9a8574c25e352ae3d80fc3c4b7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="11328.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075397,1076095 (constructor init, int32/64), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eb2a92b9ab62629ba18825efea1828653a39b881" title="eb2a92b9ab62629ba18825efea1828653a39b881">eb2a92b9ab62629ba18825efea1828653a39b881</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="11328.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1127169 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e919757ee63e54a6feefa84183a19ccb27c2ff19" title="e919757ee63e54a6feefa84183a19ccb27c2ff19">e919757ee63e54a6feefa84183a19ccb27c2ff19</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="11328.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075395 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bf540a127d5cb6a488ad027b68d09d9b9def8466" title="bf540a127d5cb6a488ad027b68d09d9b9def8466">bf540a127d5cb6a488ad027b68d09d9b9def8466</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="11328.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1237306 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eeb168c66704f027bb03b1e8328f8bedb2b76f79" title="eeb168c66704f027bb03b1e8328f8bedb2b76f79">eeb168c66704f027bb03b1e8328f8bedb2b76f79</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="11328.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1271720,21  (destructor, leak), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/590375ba5cf144988ed74cc3e907377041167caa" title="590375ba5cf144988ed74cc3e907377041167caa">590375ba5cf144988ed74cc3e907377041167caa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="11328.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1271722 (destructor, leak), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6fcbfaed382638f7dec3b77fa0a544684da5cf56" title="6fcbfaed382638f7dec3b77fa0a544684da5cf56">6fcbfaed382638f7dec3b77fa0a544684da5cf56</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="11328.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075695 (switch-break), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a698e22c6515b6b8f349829e3af40eb6337ab403" title="a698e22c6515b6b8f349829e3af40eb6337ab403">a698e22c6515b6b8f349829e3af40eb6337ab403</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="11328.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075403 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b702ed2fe6e3057fac4490fa25b3170c68483467" title="b702ed2fe6e3057fac4490fa25b3170c68483467">b702ed2fe6e3057fac4490fa25b3170c68483467</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="11328.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075397,1076095 (constructor init, int32/64), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9aa44ba82f2abf474ba8c678b128385f7fea77fd" title="9aa44ba82f2abf474ba8c678b128385f7fea77fd">9aa44ba82f2abf474ba8c678b128385f7fea77fd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="11328.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075399, 1076097 (init and int32/64), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/125e2e8c67b615560d00753078ace04b92938686" title="125e2e8c67b615560d00753078ace04b92938686">125e2e8c67b615560d00753078ace04b92938686</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="11328.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075395 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a3789387c0d73d3b64af4164eac080bb1b1ab530" title="a3789387c0d73d3b64af4164eac080bb1b1ab530">a3789387c0d73d3b64af4164eac080bb1b1ab530</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="11328.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075395 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/28c6a474f7d93eaae6b97f9e045b76e108b8ed98" title="28c6a474f7d93eaae6b97f9e045b76e108b8ed98">28c6a474f7d93eaae6b97f9e045b76e108b8ed98</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="11328.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075417 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5dafbb7c331c116dbba8d351b28d38e24f67786f" title="5dafbb7c331c116dbba8d351b28d38e24f67786f">5dafbb7c331c116dbba8d351b28d38e24f67786f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="11328.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075349,1075341 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8ff5d47fe9aefda49f240155f5958e4f926dc6a1" title="8ff5d47fe9aefda49f240155f5958e4f926dc6a1">8ff5d47fe9aefda49f240155f5958e4f926dc6a1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="11328.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A30Z&amp;precision=second" title="2015-03-12T11:56:30Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075401 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/96a5638b5694598db6db60c282fff0c8557364bc" title="96a5638b5694598db6db60c282fff0c8557364bc">96a5638b5694598db6db60c282fff0c8557364bc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="11328.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A31Z&amp;precision=second" title="2015-03-12T11:56:31Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1075404 (constructor init), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d7efff826a48ee1aa036cfaad567b895fd3c3741" title="d7efff826a48ee1aa036cfaad567b895fd3c3741">d7efff826a48ee1aa036cfaad567b895fd3c3741</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="11328.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A31Z&amp;precision=second" title="2015-03-12T11:56:31Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1076262-64 (dynamic_cast checks), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a14f13a281396e3f40dc407be969577dd4d75069" title="a14f13a281396e3f40dc407be969577dd4d75069">a14f13a281396e3f40dc407be969577dd4d75069</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="11328.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A31Z&amp;precision=second" title="2015-03-12T11:56:31Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1076257 (dynamic_cast checks), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/78c44fe94020a47ac417daa1cb1300608ae59c88" title="78c44fe94020a47ac417daa1cb1300608ae59c88">78c44fe94020a47ac417daa1cb1300608ae59c88</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="11328.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-12T11%3A56%3A31Z&amp;precision=second" title="2015-03-12T11:56:31Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix coverity 1223399,1223400 (dynamic_cast checks), re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/27d21362b24110081c0410c1e90f68c25082a9f7" title="27d21362b24110081c0410c1e90f68c25082a9f7">27d21362b24110081c0410c1e90f68c25082a9f7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="11328.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-13T12%3A36%3A44Z&amp;precision=second" title="2015-03-13T12:36:44Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/390"><span class="icon">​</span>pull request #390</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="11328.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-13T13%3A32%3A34Z&amp;precision=second" title="2015-03-13T13:32:34Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Harry Jeffery</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="11328.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-13T15%3A39%3A37Z&amp;precision=second" title="2015-03-13T15:39:37Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Other than that it looks good. Nice big clean up for Coverity :+1: 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="11328.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-13T15%3A48%3A22Z&amp;precision=second" title="2015-03-13T15:48:22Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fix capitalization mistake in some data members, re <a class="closed ticket" href="11328.html" title="Fix memory, initialization and other issues (coverity) in Framework ... (closed: fixed)">#11328</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f78e829658a98ccddda668ba0c1978047426bab2" title="f78e829658a98ccddda668ba0c1978047426bab2">f78e829658a98ccddda668ba0c1978047426bab2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="11328.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-16T08%3A53%3A57Z&amp;precision=second" title="2015-03-16T08:53:57Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="390.html" title="enhancement: Create a solidangle algorithm (closed: fixed)">#390</a> from mantidproject/11328_fix_various_coverity_issues_framework_load_classes
+</p>
+<p>
+Fix memory, initialization and other coverity issues in Framework (especially Load* classes)
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/da9098552c6c453df0f265e923992a02553afaf8"><span class="icon">​</span>da9098552c6c453df0f265e923992a02553afaf8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="11328.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T10%3A21%3A42%2B01%3A00&amp;precision=second" title="2015-04-22T10:21:42+01:00 in Timeline">5 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Somehow these slipped through without a resolution.  Set to Fixed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="11328.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A32%3A25%2B01%3A00&amp;precision=second" title="2015-06-04T04:32:25+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/12167"><span class="icon">​</span>12167</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11328?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11328?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11328?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

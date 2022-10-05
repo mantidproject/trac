@@ -1,0 +1,1710 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8804 (Create ConvertToMD helper algorithm which uses the limits of transformations to identify ConvertToMD ranges)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8803.html" title="Ticket #8803" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8804?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8804?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8804?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8805.html" title="Ticket #8805" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8804, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8803.html" title="Ticket #8803">Previous Ticket</a></span></li><li><span><a class="next" href="8805.html" title="Ticket #8805">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8804.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8804.html">Ticket #8804</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T12%3A45%3A08Z&amp;precision=second" title="2014-01-31T12:45:08Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A51%3A54%2B01%3A00&amp;precision=second" title="2015-06-04T02:51:54+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Create ConvertToMD helper algorithm which uses the limits of transformations to identify ConvertToMD ranges</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Alex+Buts">Alex Buts</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Alex+Buts">Alex Buts</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="8026.html" title="ConvertToMD fails when it should not">#8026</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2014-02-04 18:01:01.638999+00:00">
+        (last modified by Alex Buts)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/8804?action=diff&amp;version=33">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Additional purpose is extracted from <a class="closed ticket" href="7529.html" title="enhancement: ConvertToMD should determine limits if not supplied (closed: duplicate)">#7529</a>
+</p>
+<p>
+"ConvertToMD should use the Helper algorithm internally if the defaults are left blank, or not supplied"
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8804.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T13%3A55%3A42Z&amp;precision=second" title="2014-01-31T13:55:42Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> started cherry-picking from <a class="closed ticket" href="7529.html" title="enhancement: ConvertToMD should determine limits if not supplied (closed: duplicate)">#7529</a>
+</p>
+<blockquote>
+<p>
+Started new ConvertToMDHelper
+</p>
+</blockquote>
+<p>
+which would use ConvertToMD core as the main part of the algorithm
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/MDAlgorithms/test/ConvertToQ3DdETest.h
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a384bafb942e4b0127b4d870d8bfd92a2004a83f" title="a384bafb942e4b0127b4d870d8bfd92a2004a83f">a384bafb942e4b0127b4d870d8bfd92a2004a83f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8804.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T13%3A55%3A43Z&amp;precision=second" title="2014-01-31T13:55:43Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a>  cherry-picking General framework for ConvertToMDHelper2
+</p>
+<p>
+probably not yet working correctly
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/MDAlgorithms/inc/MantidMDAlgorithms/ConvertToMD.h
+Code/Mantid/Framework/MDAlgorithms/src/ConvertToMD.cpp
+Code/Mantid/Framework/MDAlgorithms/test/ConvertToMDComponentsTest.h
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b5aa7bab6ba82292158c7dcfdfdc8f2144cdf891" title="b5aa7bab6ba82292158c7dcfdfdc8f2144cdf891">b5aa7bab6ba82292158c7dcfdfdc8f2144cdf891</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8804.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T13%3A55%3A44Z&amp;precision=second" title="2014-01-31T13:55:44Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Get rid of test for ConvertToMDHelperParam
+</p>
+<p>
+as the function has gone
+</p>
+<p>
+cherry-picking
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/MDAlgorithms/test/ConvertToMDComponentsTest.h
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/58632f1c862f16e8f052d6a9bd13b8280ceff299" title="58632f1c862f16e8f052d6a9bd13b8280ceff299">58632f1c862f16e8f052d6a9bd13b8280ceff299</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8804.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T13%3A55%3A45Z&amp;precision=second" title="2014-01-31T13:55:45Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Cherry-picking: All seems fixed
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/MDAlgorithms/test/ConvertToQ3DdETest.h
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c1435ead63d6ad135965351ef57aadc705a2ba9c" title="c1435ead63d6ad135965351ef57aadc705a2ba9c">c1435ead63d6ad135965351ef57aadc705a2ba9c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8804.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T13%3A55%3A46Z&amp;precision=second" title="2014-01-31T13:55:46Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> fixing compiler warnings on Nix
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/MDAlgorithms/src/ConvertToMDHelper2.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/be2bcf282470c891eb9749318a0578793db789dc" title="be2bcf282470c891eb9749318a0578793db789dc">be2bcf282470c891eb9749318a0578793db789dc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8804.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T13%3A55%3A46Z&amp;precision=second" title="2014-01-31T13:55:46Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> A bit more wiki description.
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/MDAlgorithms/src/ConvertToMDHelper2.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c6d9d3ab2e805cb67bc305220c8057fa251e0df6" title="c6d9d3ab2e805cb67bc305220c8057fa251e0df6">c6d9d3ab2e805cb67bc305220c8057fa251e0df6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8804.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T13%3A55%3A47Z&amp;precision=second" title="2014-01-31T13:55:47Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> final bits of cherry-picking
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b2188e2df057194cc9d86dc618bca0b5b9b82fe7" title="b2188e2df057194cc9d86dc618bca0b5b9b82fe7">b2188e2df057194cc9d86dc618bca0b5b9b82fe7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8804.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-01-31T16%3A07%3A21Z&amp;precision=second" title="2014-01-31T16:07:21Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> finished separating ConvertToMDHelper2
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf3f68efe1c950c8eb96354056f814105e4ff4af" title="cf3f68efe1c950c8eb96354056f814105e4ff4af">cf3f68efe1c950c8eb96354056f814105e4ff4af</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8804.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-02T15%3A34%3A46Z&amp;precision=second" title="2014-02-02T15:34:46Z in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 3.1</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to backlog at the end of Release 3.1
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8804.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-02T20%3A01%3A05Z&amp;precision=second" title="2014-02-02T20:01:05Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Just some formatting
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b3413b1da55886cf1ffea87c87f5d79d53448047" title="b3413b1da55886cf1ffea87c87f5d79d53448047">b3413b1da55886cf1ffea87c87f5d79d53448047</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8804.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-02T20%3A27%3A07Z&amp;precision=second" title="2014-02-02T20:27:07Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> temporary disabling tests for ConvertToMDHelper2
+</p>
+<p>
+As the algorithm will be rebuild anyway.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/872452eff6f330945da05527d724e8d4d1a8c045" title="872452eff6f330945da05527d724e8d4d1a8c045">872452eff6f330945da05527d724e8d4d1a8c045</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8804.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-02T20%3A35%3A17Z&amp;precision=second" title="2014-02-02T20:35:17Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Temporary disabling unix warnings
+</p>
+<p>
+(changes to the algorithm are due anyway)
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/521b787e45ac1315a8c0f73f0e37a38681365f90" title="521b787e45ac1315a8c0f73f0e37a38681365f90">521b787e45ac1315a8c0f73f0e37a38681365f90</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8804.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-02T20%3A41%3A01Z&amp;precision=second" title="2014-02-02T20:41:01Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Disabling 3 more failing tests
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/62f2e6e0b90b6a754baf7e308d667cdd237998a9" title="62f2e6e0b90b6a754baf7e308d667cdd237998a9">62f2e6e0b90b6a754baf7e308d667cdd237998a9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8804.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T18%3A45%3A21Z&amp;precision=second" title="2014-02-03T18:45:21Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> method returns the range of the X-values from ISpectrum
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/968c7606a278f7ad627d79fb4d637321b7a7004b" title="968c7606a278f7ad627d79fb4d637321b7a7004b">968c7606a278f7ad627d79fb4d637321b7a7004b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8804.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T18%3A45%3A22Z&amp;precision=second" title="2014-02-03T18:45:22Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> checkpoint, nothing finished yet.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/956e6368949cfc5f75218a7c5086ecb42b683556" title="956e6368949cfc5f75218a7c5086ecb42b683556">956e6368949cfc5f75218a7c5086ecb42b683556</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8804.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T18%3A45%3A22Z&amp;precision=second" title="2014-02-03T18:45:22Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Checkpointing before pulling in master
+</p>
+<p>
+with changes necessary for this ticket.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bf3ec2933133e65dfda7472410bbe55e1e4c43ab" title="bf3ec2933133e65dfda7472410bbe55e1e4c43ab">bf3ec2933133e65dfda7472410bbe55e1e4c43ab</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8804.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T20%3A45%3A00Z&amp;precision=second" title="2014-02-03T20:45:00Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I have a few comments about the new method in comment 14:
+</p>
+<ul><li>the ISpectrum implementation can be done without needing to access the size;
+</li><li>the documentation for the ISpectrum method should actually say what it does and what others could do:
+</li></ul><div class="code"><pre>  <span class="cm">/** 
+    * Return the min/max X values for this spectrum.
+    * @returns A pair where the first is the minimum X value 
+    *          and the second the maximum
+    */</span>
+   std<span class="o">::</span>pair<span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="kt">double</span><span class="o">&gt;</span> ISpectrum<span class="o">::</span>getXDataRange<span class="p">()</span> <span class="k">const</span>
+   <span class="p">{</span>
+     <span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span> xdata <span class="o">=</span> <span class="o">*</span>refX<span class="p">;</span>
+     <span class="k">return</span> std<span class="o">::</span>pair<span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span>xdata<span class="p">.</span>front<span class="p">(),</span>xdata<span class="p">.</span>back<span class="p">());</span>
+   <span class="p">}</span>
+</pre></div><ul><li>The TODO in the EventList header for the method should not be there, please just provide the correct implementation. It's just leaving confusion for the future if it is not done now as people will start using it with one implementation and then it's going to be switched. 
+</li></ul>
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T20%3A49%3A19Z&amp;precision=second" title="2014-02-03T20:49:19Z in Timeline">7 years</a> ago
+                      by Martyn Gigg
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8804?cversion=0&amp;cnum_hist=17#comment:17">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8804?action=comment-diff&amp;cnum=17&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8804.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T20%3A46%3A09Z&amp;precision=second" title="2014-02-03T20:46:09Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Comments for ModQ transformation
+</p>
+<p>
+noted while testing ticket <a class="closed ticket" href="8810.html" title="enhancement: Add functions which return transformation limits for ConvertToMD transf ... (closed: fixed)">#8810</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81fca1460e927db59f841beed47d619c08c1942a" title="81fca1460e927db59f841beed47d619c08c1942a">81fca1460e927db59f841beed47d619c08c1942a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8804.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T20%3A46%3A10Z&amp;precision=second" title="2014-02-03T20:46:10Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Added method which checks unit conversion range.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/27ee41b1c24d4dc965259a33266a84d8f80b015d" title="27ee41b1c24d4dc965259a33266a84d8f80b015d">27ee41b1c24d4dc965259a33266a84d8f80b015d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8804.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T20%3A46%3A10Z&amp;precision=second" title="2014-02-03T20:46:10Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> one more place where m_Det has not been renamed
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ec94e8f9dd323573c9e18a52f51e0952c00bd6d3" title="ec94e8f9dd323573c9e18a52f51e0952c00bd6d3">ec94e8f9dd323573c9e18a52f51e0952c00bd6d3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8804.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T20%3A46%3A11Z&amp;precision=second" title="2014-02-03T20:46:11Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Compiles and looks correct
+</p>
+<p>
+But testing is needed.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a32d56b6f4f61237d6c1306ea1539158f7ebfa26" title="a32d56b6f4f61237d6c1306ea1539158f7ebfa26">a32d56b6f4f61237d6c1306ea1539158f7ebfa26</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="8804.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T21%3A14%3A29Z&amp;precision=second" title="2014-02-03T21:14:29Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Implemented Martyn's suggestions for ISpectum method
+</p>
+<p>
+Though with reservations. Of course it looks better and more generic, but for vector I know that size is achieved in const time and accessing the elements through brackets is almost the fastest operation possible. Have no idea how back is implemented.
+</p>
+<p>
+Other comments are work in progress -- have to discuss how actually this method is implemented for events.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d3e8d0791ddb03fb66456c2da7a5deb882956b9e" title="d3e8d0791ddb03fb66456c2da7a5deb882956b9e">d3e8d0791ddb03fb66456c2da7a5deb882956b9e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="8804.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T21%3A30%3A49Z&amp;precision=second" title="2014-02-03T21:30:49Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I think we can assume that the implementers of the STL have an eye on efficiency and we can use the fruits of their labour to write cleaner code. It is most probably implemented as <tt>v[size()-1]</tt> but I don't think we need to care, I think there are many more places in our own implementations of things that will be bottlenecks.
+</p>
+<p>
+I assume that the EventList method will be implemented before this is ticket is closed? 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="8804.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T09%3A24%3A17Z&amp;precision=second" title="2014-02-04T09:24:17Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Will be implemented either before it is closed or I think of bringing another ticket -- depending on amount of work/testing this method needs. Special cases (e.g. empty Xdata or empty cow_ptr all need consideration. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="8804.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T10%3A40%3A37Z&amp;precision=second" title="2014-02-04T10:40:37Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Comments and formatting
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4352755fb1f39fe8c0395f5bde335b0452619f9c" title="4352755fb1f39fe8c0395f5bde335b0452619f9c">4352755fb1f39fe8c0395f5bde335b0452619f9c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="8804.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T10%3A40%3A37Z&amp;precision=second" title="2014-02-04T10:40:37Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> fixed last minor things and enabled unit tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2090a06575f7ce0a99d955a40380b993d77afa47" title="2090a06575f7ce0a99d955a40380b993d77afa47">2090a06575f7ce0a99d955a40380b993d77afa47</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="8804.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T12%3A57%3A50Z&amp;precision=second" title="2014-02-04T12:57:50Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Unit tests and small bugfixes for UnitsConversionHelper
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8936fb9827bc895a1660e0737f5c1d619751e155" title="8936fb9827bc895a1660e0737f5c1d619751e155">8936fb9827bc895a1660e0737f5c1d619751e155</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="8804.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T12%3A57%3A51Z&amp;precision=second" title="2014-02-04T12:57:51Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Unix warnings
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ce6ac3e31b626406885fb075b5172e61781d88b" title="6ce6ac3e31b626406885fb075b5172e61781d88b">6ce6ac3e31b626406885fb075b5172e61781d88b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="8804.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T15%3A31%3A16Z&amp;precision=second" title="2014-02-04T15:31:16Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> one more test for UnitsConversionHelper
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4b27955f08eb2b122290e76a8b4e4af4d8a8a293" title="4b27955f08eb2b122290e76a8b4e4af4d8a8a293">4b27955f08eb2b122290e76a8b4e4af4d8a8a293</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="8804.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T15%3A40%3A12Z&amp;precision=second" title="2014-02-04T15:40:12Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> should fix Unix compilation error.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8ed2f650d4b524b9bd801003b07959ac808540d9" title="8ed2f650d4b524b9bd801003b07959ac808540d9">8ed2f650d4b524b9bd801003b07959ac808540d9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="8804.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T17%3A21%3A02Z&amp;precision=second" title="2014-02-04T17:21:02Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Minor change to convert to MD
+</p>
+<p>
+to improve error message if one wants to add MD data to existing workspace using incorrect ConvertToMD transformation
+(current error message was really confusing in this situation)
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1044cb40aadb0f39d617d42c91b4f3e88b9c6038" title="1044cb40aadb0f39d617d42c91b4f3e88b9c6038">1044cb40aadb0f39d617d42c91b4f3e88b9c6038</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="8804.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T17%3A57%3A56Z&amp;precision=second" title="2014-02-04T17:57:56Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The main code for this ticket has been extracted from <a class="closed ticket" href="7529.html" title="enhancement: ConvertToMD should determine limits if not supplied (closed: duplicate)">#7529</a> and the ticket both creates convertToMDHelper version 2 and integrates this helper into convertToMD, so this ticket duplicates <a class="closed ticket" href="7529.html" title="enhancement: ConvertToMD should determine limits if not supplied (closed: duplicate)">#7529</a>.
+</p>
+<p>
+Algorithm relies on correct work of getXDataRange method which certainly correct for histogram workspaces but may be incorrect for event workspaces. The ticket <a class="closed ticket" href="8870.html" title="enhancement: Ensure API mehtod getXDataRange works correctly for all workspaces. (closed: invalid)">#8870</a> is created to verify this. 
+</p>
+<p>
+Meanwhile, if tester works with event workspaces he should be sure that limits of the events at workspace XVector are synchronized with real limits of the events. It is correct for all workspaces I've tested but I can not be sure if it holds for any event workspace until <a class="closed ticket" href="8870.html" title="enhancement: Ensure API mehtod getXDataRange works correctly for all workspaces. (closed: invalid)">#8870</a> is finished. 
+</p>
+<p>
+Valuable Information on testing this ticket can be extracted from <a class="closed ticket" href="7529.html" title="enhancement: ConvertToMD should determine limits if not supplied (closed: duplicate)">#7529</a>. I would add, that the testing script, used there and copied below does not work unchanged for Direct mode, as times of events, present in the testing workspace CNCS_7860_event indeed correspond to  infinite energy transfer from the sample. ConvertToMDHelper V2 correctly estimate energy/momentum transfer in this situation as huge. 
+</p>
+<p>
+Crop workspace at e.g. t=50000 should be used to produce expected results, namely 
+</p>
+<pre class="wiki">CropWorkspace(InputWorkspace='CNCS_7860_event',OutputWorkspace='CNCS_7860_event_cr',XMin='50000')
+</pre><p>
+====
+Recommened testing script from <a class="closed ticket" href="7529.html" title="enhancement: ConvertToMD should determine limits if not supplied (closed: duplicate)">#7529</a>. 
+</p>
+<pre class="wiki">WS_Name='CNCS_7860_event'
+Load(Filename=WS_Name,OutputWorkspace=WS_Name)
+AddSampleLog(Workspace=WS_Name,LogName='Ei',LogText='3.',LogType='Number')
+SetUB(Workspace=WS_Name,a='1.4165',b='1.4165',c='1.4165',u='1,0,0',v='0,1,0')   
+AddSampleLog(Workspace=WS_Name,LogName='Psi',LogText=str(0.),LogType='Number Series')
+SetGoniometer(Workspace=WS_Name,Axis0='Psi,0,1,0,1')
+print ConvertToMDHelper(InputWorkspace=WS_Name, Version=1)
+print ConvertToMDHelper(InputWorkspace=WS_Name, QDimensions='Q3D',QConversionScales='HKL',dEAnalysisMode='Direct',Version=2)
+
+minValues = [-3, -3, -3, -1]
+maxValues = [3, 3, 3, 3]
+
+auto_limits = ConvertToMD(InputWorkspace=WS_Name,QDimensions='Q3D',QConversionScales='HKL',OverwriteExisting=0,dEAnalysisMode='Direct',SplitInto="20,20,1,1")
+manual_limits = ConvertToMD(InputWorkspace=WS_Name,QDimensions='Q3D',QConversionScales='HKL',OverwriteExisting=0,dEAnalysisMode='Direct',SplitInto="20,20,1,1",MinValues=minValues,MaxValues=maxValues)
+
+plotSlice(auto_limits)
+plotSlice(manual_limits)
+</pre>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="8804.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T18%3A01%3A01Z&amp;precision=second" title="2014-02-04T18:01:01Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/8804?action=diff&amp;version=33">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="8804.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-04T18%3A04%3A33Z&amp;precision=second" title="2014-02-04T18:04:33Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Unix warning
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee3dd4fd8e89d30cbe3af30d6786a70baf170162" title="ee3dd4fd8e89d30cbe3af30d6786a70baf170162">ee3dd4fd8e89d30cbe3af30d6786a70baf170162</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="8804.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T13%3A37%3A44Z&amp;precision=second" title="2014-02-05T13:37:44Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Doxygen warning
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b520e8b8c8a50c6f3988df18be6256d4a5fe17e5" title="b520e8b8c8a50c6f3988df18be6256d4a5fe17e5">b520e8b8c8a50c6f3988df18be6256d4a5fe17e5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="8804.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T13%3A46%3A15Z&amp;precision=second" title="2014-02-05T13:46:15Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> More Doxygen
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3d7ce98e6153df05468f180aa1a8bde4e397f1fa" title="3d7ce98e6153df05468f180aa1a8bde4e397f1fa">3d7ce98e6153df05468f180aa1a8bde4e397f1fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="8804.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-08T11%3A45%3A38Z&amp;precision=second" title="2014-02-08T11:45:38Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Alex, just a heads up.  Russell's recent reset of Develop means this will need another <tt>git checkbuild</tt> before it can be tested.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="8804.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-08T11%3A46%3A15Z&amp;precision=second" title="2014-02-08T11:46:15Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="8804.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-10T12%3A10%3A55Z&amp;precision=second" title="2014-02-10T12:10:55Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="8804.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-19T14%3A57%3A01Z&amp;precision=second" title="2014-02-19T14:57:01Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8026</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="closed ticket" href="8026.html" title="defect: ConvertToMD fails when it should not (closed)">#8026</a>) Convert to MD has been changed in <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> so the block to avoid merge conflicts
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="8804.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T20%3A35%3A23Z&amp;precision=second" title="2014-03-10T20:35:23Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> fixed accumulated merge problems with master
+</p>
+<p>
+Merge branch 'master' into feature/8804_ConverToMDHelperV2
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/Framework/MDEvents/inc/MantidMDEvents/UnitsConversionHelper.h
+Code/Mantid/Framework/MDEvents/src/MDTransfModQ.cpp
+Code/Mantid/Framework/MDEvents/src/UnitsConversionHelper.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/85850045292bfee86e1109506e64087e700e3b6f" title="85850045292bfee86e1109506e64087e700e3b6f">85850045292bfee86e1109506e64087e700e3b6f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="8804.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T21%3A21%3A32Z&amp;precision=second" title="2014-03-10T21:21:32Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> Fixing errors after merge
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/65afba1e8c2a3a379dae629080672e111b1b255b" title="65afba1e8c2a3a379dae629080672e111b1b255b">65afba1e8c2a3a379dae629080672e111b1b255b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="8804.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T21%3A34%3A24Z&amp;precision=second" title="2014-03-10T21:34:24Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> fixing conflicts with develop
+</p>
+<p>
+Merge branch 'feature/8804_ConverToMDHelperV2' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+.githooks/pre-commit
+Code/Mantid/Framework/MDEvents/inc/MantidMDEvents/UnitsConversionHelper.h
+Code/Mantid/Framework/MDEvents/src/MDTransfModQ.cpp
+Code/Mantid/Framework/MDEvents/src/UnitsConversionHelper.cpp
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a7985b8b6a3698a3332b9d12ee7cd7792aadd8fa" title="a7985b8b6a3698a3332b9d12ee7cd7792aadd8fa">a7985b8b6a3698a3332b9d12ee7cd7792aadd8fa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="8804.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-11T09%3A20%3A08Z&amp;precision=second" title="2014-03-11T09:20:08Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Alex, you've somehow deleted the git pre-commit hook file, <tt>.githooks/pre-commit</tt>. This is the pristine copy of that file which is then copied into the appropriate place by cmake.
+</p>
+<p>
+It needs to be restored before this can be tested/merged.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="8804.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-11T09%3A47%3A24Z&amp;precision=second" title="2014-03-11T09:47:24Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> returning precommit hook accidentally deleted
+</p>
+<p>
+during the merge. This will probably cause merge conflicts when merging to master (I will try to deal with them) but it should be easy to fix them - just choose any version of pre-commit
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9207d4d623b12dd547f1ca4f7e812ab88ed3c20f" title="9207d4d623b12dd547f1ca4f7e812ab88ed3c20f">9207d4d623b12dd547f1ca4f7e812ab88ed3c20f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="8804.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-11T09%3A50%3A25Z&amp;precision=second" title="2014-03-11T09:50:25Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> resolving conflicts around pre-commit hook
+</p>
+<p>
+Merge branch 'feature/8804_ConverToMDHelperV2' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+.githooks/pre-commit
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/220a659771fe2503196cfeae0a54a3c09849d132" title="220a659771fe2503196cfeae0a54a3c09849d132">220a659771fe2503196cfeae0a54a3c09849d132</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="8804.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-11T09%3A58%3A42Z&amp;precision=second" title="2014-03-11T09:58:42Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="8804.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T09%3A30%3A51Z&amp;precision=second" title="2014-03-13T09:30:51Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix githooks/pre-commit mode.
+</p>
+<p>
+It should be executable.
+Refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/94b00fb969ac080e494a0b493ae458210f27dac3" title="94b00fb969ac080e494a0b493ae458210f27dac3">94b00fb969ac080e494a0b493ae458210f27dac3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="8804.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T09%3A32%3A12Z&amp;precision=second" title="2014-03-13T09:32:12Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+It looks like are compiler warnings in <a class="ext-link" href="http://download.mantidproject.org/jenkins/view/Develop%20Clean%20Builds%20and%20Tests/job/is_clean_rhel6_develop/385/warnings22Result/"><span class="icon">​</span>MDTransfModQ</a>, can these be dealt with, please?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="8804.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T09%3A39%3A12Z&amp;precision=second" title="2014-03-13T09:39:12Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="8804.html" title="enhancement: Create ConvertToMD helper algorithm which uses the limits of ... (closed: fixed)">#8804</a> fixing compiler warning under unix
+</p>
+<p>
+appeared after complex conflicts resolution
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/930a5b82ddf90a217f9bb87c7bbfd2932741e20d" title="930a5b82ddf90a217f9bb87c7bbfd2932741e20d">930a5b82ddf90a217f9bb87c7bbfd2932741e20d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="8804.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T09%3A40%3A00Z&amp;precision=second" title="2014-03-13T09:40:00Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="8804.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T09%3A00%3A43Z&amp;precision=second" title="2014-03-21T09:00:43Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="8804.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T10%3A03%3A07Z&amp;precision=second" title="2014-03-21T10:03:07Z in Timeline">7 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/8804_ConverToMDHelperV2' of <a class="ext-link" href="https://github.com/mantidproject/mantid"><span class="icon">​</span>https://github.com/mantidproject/mantid</a> into feature/8804_ConverToMDHelperV2
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/438677028f8d122d77bf1779235346b19310f9c0"><span class="icon">​</span>438677028f8d122d77bf1779235346b19310f9c0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="8804.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T10%3A03%3A07Z&amp;precision=second" title="2014-03-21T10:03:07Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8804_ConverToMDHelperV2'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/bf7ef195b0b67debf51dd8d1bb38e105fd81c1b8"><span class="icon">​</span>bf7ef195b0b67debf51dd8d1bb38e105fd81c1b8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="8804.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-21T10%3A03%3A53Z&amp;precision=second" title="2014-03-21T10:03:53Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I tried the script and got what was expected.
+</p>
+<p>
+I also looked at the quantification/tobyfit scripts and taking out the limits there seems to produce something sensible for MERLIN data too so I think this looks okay.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="8804.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A51%3A54%2B01%3A00&amp;precision=second" title="2015-06-04T02:51:54+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9648"><span class="icon">​</span>9648</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8804?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8804?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8804?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

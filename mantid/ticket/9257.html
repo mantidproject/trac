@@ -1,0 +1,1543 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #9257 (Speed up IntegratePeaksUsingClusters)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="9256.html" title="Ticket #9256" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9257?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9257?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/9257?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="9258.html" title="Ticket #9258" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 9257, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="9256.html" title="Ticket #9256">Previous Ticket</a></span></li><li><span><a class="next" href="9258.html" title="Ticket #9258">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/9257.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="9257.html">Ticket #9257</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-02T17%3A16%3A09%2B01%3A00&amp;precision=second" title="2014-04-02T17:16:09+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A10%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T03:10:43+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Speed up IntegratePeaksUsingClusters</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Owen+Arnold">Owen Arnold</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Owen+Arnold">Owen Arnold</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Diffraction">Diffraction</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="9194.html" title="IntegratePeaksUsingClusters">#9194</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="9360.html" title="Record and avoid duplicates in merging">#9360</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Speed up the IntegratePeaksUsingClusters algorithm using the performance pointers described in <a class="closed ticket" href="9194.html" title="enhancement: IntegratePeaksUsingClusters (closed: fixed)">#9194</a>.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/9257/IntegrateTopaz.py.html" title="View attachment">IntegrateTopaz.py</a><a href="../raw-attachment/ticket/9257/IntegrateTopaz.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="1960 bytes">1.9 KB</span>) -
+      added by <em>Owen Arnold</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T09%3A12%3A02%2B01%3A00&amp;precision=second" title="2014-04-11T09:12:02+01:00 in Timeline">6 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/9257/peak_animation.gif.html" title="View attachment">peak_animation.gif</a><a href="../raw-attachment/ticket/9257/peak_animation.gif" class="trac-rawlink" title="Download">​</a>
+       (<span title="389966 bytes">380.8 KB</span>) -
+      added by <em>Owen Arnold</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T10%3A56%3A44%2B01%3A00&amp;precision=second" title="2014-04-14T10:56:44+01:00 in Timeline">6 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="9257.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-04T17%3A22%3A42%2B01%3A00&amp;precision=second" title="2014-04-04T17:22:42+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Working new parallel implementation of clustering.
+</p>
+<p>
+Clustering now works on a fundamentally thread-based basis. We then
+combine labels between the individual results for label ids that are
+otherewise equivalent. This seems to be working at least in the 1D test
+cases I have provided, but the implementation will need further work, and
+I must unbreak the Integration routines I have affected with these
+changes.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/77b50477ce2ea558caea75c08ccca1603d1fe98a" title="77b50477ce2ea558caea75c08ccca1603d1fe98a">77b50477ce2ea558caea75c08ccca1603d1fe98a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="9257.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T09%3A13%3A36%2B01%3A00&amp;precision=second" title="2014-04-07T09:13:36+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Extend tests to nThreads. Fix logic error.
+</p>
+<p>
+Tests extended and refactored. The multithreaded schenario now has some
+good test cases. I had to fix a bug where empty labels were being
+processed via a label map. However empty labels always have an id of -1,
+so weren't being found in the map and this was causing a null pointer
+exception further down the line.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f5b7b9f9daeff678e0d217fed75d3dbd9558e338" title="f5b7b9f9daeff678e0d217fed75d3dbd9558e338">f5b7b9f9daeff678e0d217fed75d3dbd9558e338</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="9257.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T09%3A16%3A53%2B01%3A00&amp;precision=second" title="2014-04-07T09:16:53+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The multithreaded implementation for the CCL algorithm now seems to be logically correct for the new multi threaded case. I have good test cases for this now. Performance can now be targeted safely. 
+</p>
+<p>
+There are a number of places to look to speed up: 
+</p>
+<p>
+1) namely the sequential section that builds clusters and handles the remote disjoint element cases. 
+</p>
+<p>
+2) Following this, I will then need to Return the cluster objects and have the integration algorithm use these clusters.
+</p>
+<p>
+3) I then need to look at swapping in the HardBackgroundThreshold for the PeakStrategy. This should massively speed up the Integration algorithm.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T09%3A20%3A14%2B01%3A00&amp;precision=second" title="2014-04-07T09:20:14+01:00 in Timeline">7 years</a> ago
+                      by Owen Arnold
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9257?cversion=0&amp;cnum_hist=3#comment:3">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9257?action=comment-diff&amp;cnum=3&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="9257.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T10%3A12%3A35%2B01%3A00&amp;precision=second" title="2014-04-07T10:12:35+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Move more into parallel blocks.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4016109b6d2117199afe49557b12c574a0d23697" title="4016109b6d2117199afe49557b12c574a0d23697">4016109b6d2117199afe49557b12c574a0d23697</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="9257.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T14%3A48%3A33%2B01%3A00&amp;precision=second" title="2014-04-07T14:48:33+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. More documentation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5ec0859ef40dc7fbfcbf656ac67b59697812f1e8" title="5ec0859ef40dc7fbfcbf656ac67b59697812f1e8">5ec0859ef40dc7fbfcbf656ac67b59697812f1e8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="9257.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T14%3A48%3A33%2B01%3A00&amp;precision=second" title="2014-04-07T14:48:33+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Track clusters.
+</p>
+<p>
+Cluster extracted to it's own type in it's own physical structure.
+Clusters are now passed around. Tests added for the cluster type.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ebe894c037201a32e3a895646df3d522067834fb" title="ebe894c037201a32e3a895646df3d522067834fb">ebe894c037201a32e3a895646df3d522067834fb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="9257.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T15%3A03%3A11%2B01%3A00&amp;precision=second" title="2014-04-07T15:03:11+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Actually. It would be a lot quicker. And most accurate to do the integration in the following way.
+</p>
+<p>
+1) Do not integrate the clusters, but return them from the CCL.
+</p>
+<p>
+2) Get the coordinates of the Peak centre in the WS coordinates. May need the transform code to do this properly.
+</p>
+<p>
+3) On the cluster workspace, get the label corresponding to that peak center.
+</p>
+<p>
+4) Look up the Cluster in the map via the just found peak label.
+</p>
+<p>
+5) Now integrate only the clusters of interest.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-07T15%3A16%3A36%2B01%3A00&amp;precision=second" title="2014-04-07T15:16:36+01:00 in Timeline">7 years</a> ago
+                      by Owen Arnold
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9257?cversion=0&amp;cnum_hist=7#comment:7">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9257?action=comment-diff&amp;cnum=7&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="9257.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-08T11%3A52%3A10%2B01%3A00&amp;precision=second" title="2014-04-08T11:52:10+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Move PeakTransform to Mantid API.
+</p>
+<p>
+This allows the PeakTransform to be used in multiple projects. It is required in Crystal where Peak coordinates must also be properly selected and transformed according to an IMDWorkspace setup.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f8b01fec2860c5f06f6aae79badfa8b5f25dbba4" title="f8b01fec2860c5f06f6aae79badfa8b5f25dbba4">f8b01fec2860c5f06f6aae79badfa8b5f25dbba4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="9257.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T09%3A07%3A09%2B01%3A00&amp;precision=second" title="2014-04-09T09:07:09+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Starting to fix integration.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b3e26e719c3245d26c2961a3229edf0cdfab1e52" title="b3e26e719c3245d26c2961a3229edf0cdfab1e52">b3e26e719c3245d26c2961a3229edf0cdfab1e52</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="9257.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T13%3A13%3A37%2B01%3A00&amp;precision=second" title="2014-04-09T13:13:37+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Have the integration working.
+</p>
+<p>
+Have the integration working parallel and non parallel. Peformance tests
+have reduced in speed by 1/2 so now run in approximately 1/2 a second. The
+non-parallel version runs quicker than the parallel version indicating
+that some work still needs to be done to improve the speed of the merging.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0c2d7a29bac0b8312cb21c9ff9efdae2dbd26896" title="0c2d7a29bac0b8312cb21c9ff9efdae2dbd26896">0c2d7a29bac0b8312cb21c9ff9efdae2dbd26896</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="9257.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T16%3A35%3A55%2B01%3A00&amp;precision=second" title="2014-04-09T16:35:55+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Make integration thread safe.
+</p>
+<p>
+A very simple solution to a threading issue. We can safely process the
+peaks list in parallel if the integration can be guaranteed to be thread
+safe. By making the interation a const member that simply returns the
+results we do this. Therefore concurrent thread access will cause no side
+effects. This Will allow us to handle the case where the user has selected
+a threshold such that two peaks end up sitting on the same cluster and
+therefore the integration method could be entered simultaneously.
+Functional programming had the solution.
+</p>
+<p>
+Also, I've made some changes to reduce the amount of work happening to
+determine the Clusters which are unresolved. I can avoid this duplication
+because for each indexpair that gets registered, there will always be a
+duplicate (there has to be as each unreachable neighbour for one process
+index is itself an unreachable neighbour for another process index) and
+therfore only one cluster needs to be entered into the vector.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8a99aee784d3387292d843402065ae76c1114014" title="8a99aee784d3387292d843402065ae76c1114014">8a99aee784d3387292d843402065ae76c1114014</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="9257.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T16%3A35%3A55%2B01%3A00&amp;precision=second" title="2014-04-09T16:35:55+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Do writeTo in parallel.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/299ab7d862cae155dda1d990271d00e5e851bb37" title="299ab7d862cae155dda1d990271d00e5e851bb37">299ab7d862cae155dda1d990271d00e5e851bb37</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="9257.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T16%3A35%3A55%2B01%3A00&amp;precision=second" title="2014-04-09T16:35:55+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Extend tests for cluster type.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6dbdecc4f8c8e1b80d9b3b8df1cbacb667d0980a" title="6dbdecc4f8c8e1b80d9b3b8df1cbacb667d0980a">6dbdecc4f8c8e1b80d9b3b8df1cbacb667d0980a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="9257.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T16%3A35%3A55%2B01%3A00&amp;precision=second" title="2014-04-09T16:35:55+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. No need to specify the radius any more.
+</p>
+<p>
+Part of the speedup is removing the PeakBackground strategy for the
+simplier Hard threshold. We also have no need to use the radius. This is
+nicer as we just let the algorithm figure out the integrated region
+associated with a peak with minimal help (other than the threshold of
+course).
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b077fb5059caa2f65b3d526c3d1f23e0c97f9ffa" title="b077fb5059caa2f65b3d526c3d1f23e0c97f9ffa">b077fb5059caa2f65b3d526c3d1f23e0c97f9ffa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="9257.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-09T17%3A06%3A23%2B01%3A00&amp;precision=second" title="2014-04-09T17:06:23+01:00 in Timeline">7 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Add diagnostics
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e83580f1954c1c24571b9fe18812dd0dea5af3d9" title="e83580f1954c1c24571b9fe18812dd0dea5af3d9">e83580f1954c1c24571b9fe18812dd0dea5af3d9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="9257.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T14%3A19%3A38%2B01%3A00&amp;precision=second" title="2014-04-10T14:19:38+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Fix critical bug.
+</p>
+<p>
+Also added reporting back in.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c2fa00e2756a21bd3e1ebb7dd64aebb99ef4b77b" title="c2fa00e2756a21bd3e1ebb7dd64aebb99ef4b77b">c2fa00e2756a21bd3e1ebb7dd64aebb99ef4b77b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="9257.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-10T21%3A36%3A16%2B01%3A00&amp;precision=second" title="2014-04-10T21:36:16+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. More performance work.
+</p>
+<p>
+Also start fixing a bug whereby the cluster offsets can become larger than the range of an integer. This has been partially fixed by better calculating the number of possible clusters that could exist. The full fix should be to also change the type of m_id in DisjointElement from int to size_t!
+</p>
+<p>
+Another issue that is being worked on here is a faster clone of the MDWorkspace. We only care about it's shape, so we just need something the right size to start putting data into!
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/24bb41c474025ec7b91f6e72f841acad116cba10" title="24bb41c474025ec7b91f6e72f841acad116cba10">24bb41c474025ec7b91f6e72f841acad116cba10</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="9257.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T09%3A05%3A12%2B01%3A00&amp;precision=second" title="2014-04-11T09:05:12+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Add clone method.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a2793e40a400ba38701de0759896e522ff59391c" title="a2793e40a400ba38701de0759896e522ff59391c">a2793e40a400ba38701de0759896e522ff59391c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T09%3A12%3A02%2B01%3A00&amp;precision=second" title="2014-04-11T09:12:02+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/9257/IntegrateTopaz.py.html"><em>IntegrateTopaz.py</em></a><a href="../raw-attachment/ticket/9257/IntegrateTopaz.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="9257.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T10%3A02%3A18%2B01%3A00&amp;precision=second" title="2014-04-11T10:02:18+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Update documentation. Fix RHEL6 header issue.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dafbd82a140e8aafec289ea963332d90ba749248" title="dafbd82a140e8aafec289ea963332d90ba749248">dafbd82a140e8aafec289ea963332d90ba749248</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="9257.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T12%3A44%3A35%2B01%3A00&amp;precision=second" title="2014-04-11T12:44:35+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Find and fix another bug.
+</p>
+<p>
+Unit tests revealed two bugs in the updated merge logic. Tests now pass
+again.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4942bcdc4ae5f4d993524c8d3c6368c0b46bd438" title="4942bcdc4ae5f4d993524c8d3c6368c0b46bd438">4942bcdc4ae5f4d993524c8d3c6368c0b46bd438</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="9257.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T13%3A27%3A16%2B01%3A00&amp;precision=second" title="2014-04-11T13:27:16+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. The way that logging works has changed.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4975bb8c42076468d68417a7fba4e8eb4e3ede76" title="4975bb8c42076468d68417a7fba4e8eb4e3ede76">4975bb8c42076468d68417a7fba4e8eb4e3ede76</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="9257.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T13%3A32%3A47%2B01%3A00&amp;precision=second" title="2014-04-11T13:32:47+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Dear Tester:
+</p>
+<p>
+First off: Apologies for the size of this ticket. I thought about splitting it up to make it more granular, but it really was a piece of work that could either be properly done (or not), and would have been confusing at best to break up.
+</p>
+<p>
+The changes here have reduced the processing time by 1/2 at least! Amongst some other desirable features over the original version of the algorithm, The user no longer needs to specify a guess at a PeakRadius. The entire set of clusters is processed, and only those that align with peaks are integrated (in parallel) when the time comes to do so.
+</p>
+<p>
+You can test this using the script given in <a class="closed ticket" href="9194.html" title="enhancement: IntegratePeaksUsingClusters (closed: fixed)">#9194</a>. Or using the one attached here. <strong>If you use either of these and you have a machine with low memory &lt; 16GB. Then change BinMD to bin to a 300 * 300 * 300 grid in both scripts before executing them.</strong>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="9257.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T13%3A43%3A09%2B01%3A00&amp;precision=second" title="2014-04-11T13:43:09+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="9257.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T13%3A43%3A21%2B01%3A00&amp;precision=second" title="2014-04-11T13:43:21+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="9257.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T14%3A21%3A09%2B01%3A00&amp;precision=second" title="2014-04-11T14:21:09+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="9257.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T15%3A01%3A00%2B01%3A00&amp;precision=second" title="2014-04-11T15:01:00+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="9257.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T15%3A03%3A04%2B01%3A00&amp;precision=second" title="2014-04-11T15:03:04+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Labeling across processor boundaries does not appear to be being updated properly. The following script illustrates this.
+</p>
+<div class="code"><pre>ws_name <span class="o">=</span> <span class="s">"TOPAZ_3132"</span>
+filename <span class="o">=</span> ws_name <span class="o">+</span><span class="s">"_event.nxs"</span>
+ws <span class="o">=</span> LoadEventNexus<span class="p">(</span>Filename<span class="o">=</span>filename<span class="p">,</span>FilterByTofMin<span class="o">=</span><span class="mi">3000</span><span class="p">,</span> FilterByTofMax<span class="o">=</span><span class="mi">16000</span><span class="p">)</span>
+
+<span class="c"># Convert to Q space</span>
+LabQ <span class="o">=</span> ConvertToDiffractionMDWorkspace<span class="p">(</span>InputWorkspace<span class="o">=</span>ws<span class="p">,</span> LorentzCorrection<span class="o">=</span><span class="s">'0'</span><span class="p">,</span>
+        OutputDimensions<span class="o">=</span><span class="s">'Q (lab frame)'</span><span class="p">,</span> SplitInto<span class="o">=</span><span class="mi">2</span><span class="p">,</span> SplitThreshold<span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+        
+<span class="c"># Find peaks</span>
+PeaksLattice <span class="o">=</span> FindPeaksMD<span class="p">(</span>InputWorkspace<span class="o">=</span>LabQ<span class="p">,</span>MaxPeaks<span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+        
+<span class="c"># Find the UB matrix using the peaks and known lattice parameters</span>
+FindUBUsingLatticeParameters<span class="p">(</span>PeaksWorkspace<span class="o">=</span>PeaksLattice<span class="p">,</span> a<span class="o">=</span><span class="mf">10.3522</span><span class="p">,</span> b<span class="o">=</span><span class="mf">6.0768</span><span class="p">,</span> c<span class="o">=</span><span class="mf">4.7276</span><span class="p">,</span>
+                alpha<span class="o">=</span><span class="mi">90</span><span class="p">,</span> beta<span class="o">=</span><span class="mi">90</span><span class="p">,</span> gamma<span class="o">=</span><span class="mi">90</span><span class="p">,</span> NumInitial<span class="o">=</span><span class="mi">20</span><span class="p">,</span> Tolerance<span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
+                
+<span class="c"># And index to HKL            </span>
+IndexPeaks<span class="p">(</span>PeaksWorkspace<span class="o">=</span>PeaksLattice<span class="p">,</span> Tolerance<span class="o">=</span><span class="mf">0.12</span><span class="p">)</span>
+
+HistoMDQLab <span class="o">=</span> BinMD<span class="p">(</span>InputWorkspace<span class="o">=</span>LabQ<span class="p">,</span>AlignedDim0<span class="o">=</span><span class="s">'Q_lab_x, 2.7, 3, 50'</span><span class="p">,</span>AlignedDim1<span class="o">=</span><span class="s">'Q_lab_y, -0.9, -0.6, 50'</span><span class="p">,</span>AlignedDim2<span class="o">=</span><span class="s">'Q_lab_z, 9.2, 9.5,  50'</span><span class="p">)</span>   
+
+PeaksLattice_Integrated_Clusters<span class="p">,</span> ClusterImage <span class="o">=</span> IntegratePeaksUsingClusters<span class="p">(</span>InputWorkspace<span class="o">=</span>HistoMDQLab<span class="p">,</span> PeaksWorkspace<span class="o">=</span>PeaksLattice<span class="p">,</span> Threshold<span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+
+svw <span class="o">=</span> plotSlice<span class="p">(</span>ClusterImage<span class="p">)</span>
+sv <span class="o">=</span> svw<span class="o">.</span>getSlicer<span class="p">()</span>
+pp_all <span class="o">=</span> sv<span class="o">.</span>setPeaksWorkspaces<span class="p">([</span>PeaksLattice_Integrated_Clusters<span class="p">])</span>
+pp <span class="o">=</span> pp_all<span class="o">.</span>getPeaksPresenter<span class="p">(</span>PeaksLattice_Integrated_Clusters<span class="p">)</span>
+pp<span class="o">.</span>zoomToPeak<span class="p">(</span><span class="mi">31</span><span class="p">)</span>
+svw<span class="o">.</span>zoomBy<span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+</pre></div><p>
+Now in the Slice viewer, move forward-backward over the peak cluster. You will see a colour change. This is because the labels are not being resolved properly.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-11T15%3A13%3A25%2B01%3A00&amp;precision=second" title="2014-04-11T15:13:25+01:00 in Timeline">6 years</a> ago
+                      by Owen Arnold
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9257?cversion=1&amp;cnum_hist=27#comment:27">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/9257?action=comment-diff&amp;cnum=27&amp;version=2">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="9257.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T08%3A42%3A31%2B01%3A00&amp;precision=second" title="2014-04-14T08:42:31+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+There are a few cppcheck errors in ConnectedComponentLabelling: <a class="ext-link" href="http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/536/cppcheckResult/"><span class="icon">​</span>http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/536/cppcheckResult/</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="9257.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T09%3A31%3A22%2B01%3A00&amp;precision=second" title="2014-04-14T09:31:22+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Also need to add a memory check. This would be incredibly useful as the algorithm will grind to a halt if the image is too large for the available space. See <a class="ext-link" href="https://github.com/mantidproject/mantid/blob/a17060aa8b75e3c2d70bca8e0367808e8f0cd9d3/Code/Mantid/Vates/VatesAPI/src/LoadVTK.cpp"><span class="icon">​</span>https://github.com/mantidproject/mantid/blob/a17060aa8b75e3c2d70bca8e0367808e8f0cd9d3/Code/Mantid/Vates/VatesAPI/src/LoadVTK.cpp</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T10%3A56%3A44%2B01%3A00&amp;precision=second" title="2014-04-14T10:56:44+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/9257/peak_animation.gif.html"><em>peak_animation.gif</em></a><a href="../raw-attachment/ticket/9257/peak_animation.gif" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="9257.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T13%3A16%3A32%2B01%3A00&amp;precision=second" title="2014-04-14T13:16:32+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Add test case for failure.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ed5270c7a6c0004354fd82b7b89c3789615307a5" title="ed5270c7a6c0004354fd82b7b89c3789615307a5">ed5270c7a6c0004354fd82b7b89c3789615307a5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="9257.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-14T17%3A25%3A07%2B01%3A00&amp;precision=second" title="2014-04-14T17:25:07+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Add composite cluster.
+</p>
+<p>
+A composite cluster will fix the problem I've been having. Namely that the clusters are processed in parallel to get the uniform min, but the order that they are processed in will affect the end labeling. If clusters are set up as composites before hand. This will not be a problem.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/75614849308c8749eed22d58422d06f2ac072ec0" title="75614849308c8749eed22d58422d06f2ac072ec0">75614849308c8749eed22d58422d06f2ac072ec0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="9257.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-15T08%3A19%3A11%2B01%3A00&amp;precision=second" title="2014-04-15T08:19:11+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+There are still a few cppcheck errors in ConnectedComponentLabelling: <a class="ext-link" href="http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/543/cppcheckResult/"><span class="icon">​</span>http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/543/cppcheckResult/</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="9257.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-15T17%3A04%3A37%2B01%3A00&amp;precision=second" title="2014-04-15T17:04:37+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Add ClusterRegister&gt;
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f05f257efc3523d948d04fb63c4e5d8e82e759a2" title="f05f257efc3523d948d04fb63c4e5d8e82e759a2">f05f257efc3523d948d04fb63c4e5d8e82e759a2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="9257.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-17T15%3A40%3A49%2B01%3A00&amp;precision=second" title="2014-04-17T15:40:49+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Fix cpp check issues.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e23618756e92fdcfd48148dfca4de8d048d84675" title="e23618756e92fdcfd48148dfca4de8d048d84675">e23618756e92fdcfd48148dfca4de8d048d84675</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="9257.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-22T08%3A39%3A28%2B01%3A00&amp;precision=second" title="2014-04-22T08:39:28+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Use ClusterRegister. Tests pass.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/50a64af88772a1902e1af5eee9b04f43210aee6b" title="50a64af88772a1902e1af5eee9b04f43210aee6b">50a64af88772a1902e1af5eee9b04f43210aee6b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="9257.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-22T08%3A39%3A28%2B01%3A00&amp;precision=second" title="2014-04-22T08:39:28+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Trying to fix a bug with merge on ClusterRegister
+</p>
+<p>
+The problem does not get picked up in the unit tests, and only occurs with
+a real dataset to work on. The problem is that we get a overloaded stack
+due to some clusters becoming their own children. When the getLabel is
+then called on the compositecluster, it results in an overloaded stack. I
+think this could be fixed by changing the logic and working of the merge
+method to use a member vector&lt;set&lt;label_id&gt; &gt; to track each cluster group
+for the incomplete clusters, and only generating the composites (which
+would only ever by one level deep) at the end of the process.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c013609c035a4e17767cbca2dab1875063083251" title="c013609c035a4e17767cbca2dab1875063083251">c013609c035a4e17767cbca2dab1875063083251</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="9257.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-22T13%3A00%3A53%2B01%3A00&amp;precision=second" title="2014-04-22T13:00:53+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Working clusterregister.
+</p>
+<p>
+ClusterRegister fixed. Test cases work (unit) as well as the test scripts
+that I have marked as broken previously.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cfeca1655c6c8c7dbf7305371f3e8ac3cd13f899" title="cfeca1655c6c8c7dbf7305371f3e8ac3cd13f899">cfeca1655c6c8c7dbf7305371f3e8ac3cd13f899</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="9257.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-22T13%3A00%3A53%2B01%3A00&amp;precision=second" title="2014-04-22T13:00:53+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Tidy up and add memory check.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3c4fe8436c4ccb3df3ea2634d0084861f98a6cfe" title="3c4fe8436c4ccb3df3ea2634d0084861f98a6cfe">3c4fe8436c4ccb3df3ea2634d0084861f98a6cfe</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="9257.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-22T14%3A08%3A55%2B01%3A00&amp;precision=second" title="2014-04-22T14:08:55+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Fix RHEL6 errors and warnings.
+</p>
+<p>
+Add better documentation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1d60bf388e18ece3d8c89daa98beb3ca8f76a199" title="1d60bf388e18ece3d8c89daa98beb3ca8f76a199">1d60bf388e18ece3d8c89daa98beb3ca8f76a199</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="9257.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-22T14%3A19%3A36%2B01%3A00&amp;precision=second" title="2014-04-22T14:19:36+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Fix GCC warning.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/584810bd55b38c288ce5e117e739eb3d7ec10764" title="584810bd55b38c288ce5e117e739eb3d7ec10764">584810bd55b38c288ce5e117e739eb3d7ec10764</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="9257.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-22T14%3A39%3A20%2B01%3A00&amp;precision=second" title="2014-04-22T14:39:20+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="9257.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-22T15%3A33%3A45%2B01%3A00&amp;precision=second" title="2014-04-22T15:33:45+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9360</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="9257.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T07%3A39%3A47%2B01%3A00&amp;precision=second" title="2014-04-23T07:39:47+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+There's a cppcheck  error in <a class="ext-link" href="http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/571/cppcheckResult/"><span class="icon">​</span>ConnectedComponentLabelling</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="9257.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T08%3A26%3A50%2B01%3A00&amp;precision=second" title="2014-04-23T08:26:50+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Delete unused variable.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e104446a89039549a6371f852486fc61ea09a8e0" title="e104446a89039549a6371f852486fc61ea09a8e0">e104446a89039549a6371f852486fc61ea09a8e0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="9257.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T08%3A30%3A18%2B01%3A00&amp;precision=second" title="2014-04-23T08:30:18+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="9257.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T09%3A36%3A15%2B01%3A00&amp;precision=second" title="2014-04-23T09:36:15+01:00 in Timeline">6 years</a> ago by Owen Arnold
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="9257.html" title="enhancement: Speed up IntegratePeaksUsingClusters (closed: fixed)">#9257</a>. Fix doxygen warnings.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f0efa6514a46400b66c867ded4af61ab60fccbb" title="5f0efa6514a46400b66c867ded4af61ab60fccbb">5f0efa6514a46400b66c867ded4af61ab60fccbb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="9257.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T09%3A42%3A43%2B01%3A00&amp;precision=second" title="2014-04-23T09:42:43+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="9257.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-04-23T14%3A14%3A08%2B01%3A00&amp;precision=second" title="2014-04-23T14:14:08+01:00 in Timeline">6 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/9257_ccl_performance'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/0e40cbb96dc71ba0ba7e43eff83223d5a19bd256"><span class="icon">​</span>0e40cbb96dc71ba0ba7e43eff83223d5a19bd256</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="9257.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T03%3A10%3A43%2B01%3A00&amp;precision=second" title="2015-06-04T03:10:43+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/10100"><span class="icon">​</span>10100</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9257?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9257?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/9257?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

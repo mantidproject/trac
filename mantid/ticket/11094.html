@@ -1,0 +1,2211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11094 (Eradicate Coverity issues in ApplicationWindow.cpp)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11093.html" title="Ticket #11093" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11094?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11094?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11094?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11095.html" title="Ticket #11095" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11094, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11093.html" title="Ticket #11093">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="11095.html" title="Ticket #11095">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11094.html">Ticket #11094</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T10%3A29%3A26Z&amp;precision=second" title="2015-02-16T10:29:26Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A23%3A11%2B01%3A00&amp;precision=second" title="2015-06-04T04:23:11+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Eradicate Coverity issues in ApplicationWindow.cpp</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Harry+Jeffery">Harry Jeffery</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Harry+Jeffery">Harry Jeffery</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=minor">minor</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Tools">Tools</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Federico M Pouzols
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2015-02-16 10:59:04.299586+00:00">
+        (last modified by Harry Jeffery)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/11094?action=diff&amp;version=2">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+ApplicationWindow.cpp is a nest of coverity issues (Nearly 100!). They shouldn't take too long to remove, and would drop the number of open Coverity issues substantially.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11094.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T10%3A29%3A30Z&amp;precision=second" title="2015-02-16T10:29:30Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11094.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T10%3A59%3A04Z&amp;precision=second" title="2015-02-16T10:59:04Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/11094?action=diff&amp;version=2">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11094.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076227
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5bb7b4cffe34136111e14e06de0c6147831e2d89" title="5bb7b4cffe34136111e14e06de0c6147831e2d89">5bb7b4cffe34136111e14e06de0c6147831e2d89</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11094.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076226
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/147322223323972f90d7f58891c090892df1b967" title="147322223323972f90d7f58891c090892df1b967">147322223323972f90d7f58891c090892df1b967</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="11094.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076225
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9995dbdddf687ebee29f363b4fc59d4b79740680" title="9995dbdddf687ebee29f363b4fc59d4b79740680">9995dbdddf687ebee29f363b4fc59d4b79740680</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="11094.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076224
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/35f4a4010ca18769dc2594758bb83b68fe0156e0" title="35f4a4010ca18769dc2594758bb83b68fe0156e0">35f4a4010ca18769dc2594758bb83b68fe0156e0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="11094.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076223
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7a4bcc849d64533a19390cd83c07d324dea106f1" title="7a4bcc849d64533a19390cd83c07d324dea106f1">7a4bcc849d64533a19390cd83c07d324dea106f1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="11094.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076222
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c10576d64318a9cf234b9657b95ca81c432e767a" title="c10576d64318a9cf234b9657b95ca81c432e767a">c10576d64318a9cf234b9657b95ca81c432e767a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="11094.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076221
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/befa32a573655aaba01bfa3cb2a608ee149d3f92" title="befa32a573655aaba01bfa3cb2a608ee149d3f92">befa32a573655aaba01bfa3cb2a608ee149d3f92</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="11094.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 10762{19,20}
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc9ea061c835b58c5bb50e7c5f403680cbc767a1" title="dc9ea061c835b58c5bb50e7c5f403680cbc767a1">dc9ea061c835b58c5bb50e7c5f403680cbc767a1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="11094.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076218
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/119ae339cf2ec1b3a5b0a9157afefdbf46c77504" title="119ae339cf2ec1b3a5b0a9157afefdbf46c77504">119ae339cf2ec1b3a5b0a9157afefdbf46c77504</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="11094.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076217
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a9f367cf48783c4c4d3aad4cf891872590c153a8" title="a9f367cf48783c4c4d3aad4cf891872590c153a8">a9f367cf48783c4c4d3aad4cf891872590c153a8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="11094.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076216
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b33e0371ffef1ef4283cd99049930760d7148e78" title="b33e0371ffef1ef4283cd99049930760d7148e78">b33e0371ffef1ef4283cd99049930760d7148e78</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="11094.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076215
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e19f7cf0181ae79b784662b68f82ecb2edc5d20b" title="e19f7cf0181ae79b784662b68f82ecb2edc5d20b">e19f7cf0181ae79b784662b68f82ecb2edc5d20b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="11094.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076214
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7afda07cc6155e74992dd4eaa494c4c0fae3397f" title="7afda07cc6155e74992dd4eaa494c4c0fae3397f">7afda07cc6155e74992dd4eaa494c4c0fae3397f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="11094.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 10762{11,13}
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7e12b3e10cc7b607d72c8dfa4704f60e72fe4a53" title="7e12b3e10cc7b607d72c8dfa4704f60e72fe4a53">7e12b3e10cc7b607d72c8dfa4704f60e72fe4a53</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="11094.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076212
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e6689c6e669def6bfe61971edb930532f21cc883" title="e6689c6e669def6bfe61971edb930532f21cc883">e6689c6e669def6bfe61971edb930532f21cc883</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="11094.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076210
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81bebab1c34da1becc959f564f96186b52ecd10d" title="81bebab1c34da1becc959f564f96186b52ecd10d">81bebab1c34da1becc959f564f96186b52ecd10d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="11094.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolves Coverity 1076209
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c54a505cdefb549db9454308c15187375afb0d28" title="c54a505cdefb549db9454308c15187375afb0d28">c54a505cdefb549db9454308c15187375afb0d28</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="11094.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in pasteSelection
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b295d10ba64159716905e9b157d948d2dde63db3" title="b295d10ba64159716905e9b157d948d2dde63db3">b295d10ba64159716905e9b157d948d2dde63db3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="11094.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in changeMatrixName
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a59cb98b6753261ecb3ed7939a4fedf4377875e9" title="a59cb98b6753261ecb3ed7939a4fedf4377875e9">a59cb98b6753261ecb3ed7939a4fedf4377875e9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="11094.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in clone
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e17288d8f23eca85b9e7493565e67957980086d9" title="e17288d8f23eca85b9e7493565e67957980086d9">e17288d8f23eca85b9e7493565e67957980086d9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="11094.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in custom3DActions
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d0887d2a9b2004814d4cdcd5b1f752b198933a10" title="d0887d2a9b2004814d4cdcd5b1f752b198933a10">d0887d2a9b2004814d4cdcd5b1f752b198933a10</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="11094.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in customizeTables
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2d97c7e4d0233dd529e8988605fb1e52f7461fe" title="f2d97c7e4d0233dd529e8988605fb1e52f7461fe">f2d97c7e4d0233dd529e8988605fb1e52f7461fe</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="11094.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in defineErrorBars
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9e97a67a5d3cce55e02f1046ca1a8848e2e0e9c9" title="9e97a67a5d3cce55e02f1046ca1a8848e2e0e9c9">9e97a67a5d3cce55e02f1046ca1a8848e2e0e9c9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="11094.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in deleteFitTables
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/604db70e1064ce1f8800dd18011dbfb1b3fb9067" title="604db70e1064ce1f8800dd18011dbfb1b3fb9067">604db70e1064ce1f8800dd18011dbfb1b3fb9067</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="11094.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in deleteSelectedItems
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/331b218413ce71082f51a514b5e91dfed3180c79" title="331b218413ce71082f51a514b5e91dfed3180c79">331b218413ce71082f51a514b5e91dfed3180c79</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="11094.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in depending3DPlots
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7fed047a520869cabf244d7869b892415292e8a9" title="7fed047a520869cabf244d7869b892415292e8a9">7fed047a520869cabf244d7869b892415292e8a9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="11094.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in dropFolderItems
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9b374086281d1b5c193a40cf26677243075db429" title="9b374086281d1b5c193a40cf26677243075db429">9b374086281d1b5c193a40cf26677243075db429</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="11094.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in dependingPlots
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ddb2668056a13397eafbb660542112b08462b9b3" title="ddb2668056a13397eafbb660542112b08462b9b3">ddb2668056a13397eafbb660542112b08462b9b3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="11094.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in editSurfacePlot
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a50619eeeb1ae9c7aa120008aa7fe864620c05c9" title="a50619eeeb1ae9c7aa120008aa7fe864620c05c9">a50619eeeb1ae9c7aa120008aa7fe864620c05c9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="11094.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in exportAllGraphs
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/07a1a269237c8b9dde5847edc683478db1ccba40" title="07a1a269237c8b9dde5847edc683478db1ccba40">07a1a269237c8b9dde5847edc683478db1ccba40</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="11094.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in exportAllTables
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dbc9d4579b096711ccf4412c8ad7e5b624d968ba" title="dbc9d4579b096711ccf4412c8ad7e5b624d968ba">dbc9d4579b096711ccf4412c8ad7e5b624d968ba</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="11094.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in exportPDF
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/db2301e388d687e2003fdf0d1fcadcaa5f3c223a" title="db2301e388d687e2003fdf0d1fcadcaa5f3c223a">db2301e388d687e2003fdf0d1fcadcaa5f3c223a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="11094.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in folderItemChanged
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/68015ac732e749fb37a3c492a648465d534ca322" title="68015ac732e749fb37a3c492a648465d534ca322">68015ac732e749fb37a3c492a648465d534ca322</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="11094.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in folderItemDoubleClicked
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5c2e27556cc4afa6fd27bb1dc4e329c3c763757e" title="5c2e27556cc4afa6fd27bb1dc4e329c3c763757e">5c2e27556cc4afa6fd27bb1dc4e329c3c763757e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="11094.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in goToRow
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2474d52321b37122269146b36d0569206ae1c7ce" title="2474d52321b37122269146b36d0569206ae1c7ce">2474d52321b37122269146b36d0569206ae1c7ce</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="11094.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A54Z&amp;precision=second" title="2015-02-16T14:22:54Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in hideSelectedWindows
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ed90dbb22b20d56ce6dc4055f05a62a49eb5a36e" title="ed90dbb22b20d56ce6dc4055f05a62a49eb5a36e">ed90dbb22b20d56ce6dc4055f05a62a49eb5a36e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="11094.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in insert3DMatrixPlot
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d9b0d184340b65e9964228e85334727305750b8c" title="d9b0d184340b65e9964228e85334727305750b8c">d9b0d184340b65e9964228e85334727305750b8c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="11094.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in insertNew3DData
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d966782e299d9b8de5cc8564b2e3726862de3fbd" title="d966782e299d9b8de5cc8564b2e3726862de3fbd">d966782e299d9b8de5cc8564b2e3726862de3fbd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="11094.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in integrate
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02b3e12595201bc7cba2216194fff0b2ce00f979" title="02b3e12595201bc7cba2216194fff0b2ce00f979">02b3e12595201bc7cba2216194fff0b2ce00f979</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="11094.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in minimizeWindow
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2596e11322705a378806d6552dce1672a26808b6" title="2596e11322705a378806d6552dce1672a26808b6">2596e11322705a378806d6552dce1672a26808b6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="11094.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in multilayerDependencies
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fd0a7f83e72696bb8e0f36e4fcbdb6b5b9f2eefc" title="fd0a7f83e72696bb8e0f36e4fcbdb6b5b9f2eefc">fd0a7f83e72696bb8e0f36e4fcbdb6b5b9f2eefc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="11094.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in print
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/655fd6da4029e1532b4f7489035e364d24e8a1f6" title="655fd6da4029e1532b4f7489035e364d24e8a1f6">655fd6da4029e1532b4f7489035e364d24e8a1f6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="11094.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in projectFolder
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/09414e086d164d3a511191df2de3184dab88dc11" title="09414e086d164d3a511191df2de3184dab88dc11">09414e086d164d3a511191df2de3184dab88dc11</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="11094.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in recalculateTable
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3c5782ecc51cf01555cbd2b507d089d06b2cf77d" title="3c5782ecc51cf01555cbd2b507d089d06b2cf77d">3c5782ecc51cf01555cbd2b507d089d06b2cf77d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="11094.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in redo
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3d75bf589d33814faf7a633c3f1b897bb9b7fefb" title="3d75bf589d33814faf7a633c3f1b897bb9b7fefb">3d75bf589d33814faf7a633c3f1b897bb9b7fefb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="11094.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in remove3DMatrixPlots
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2f3546c5eab0239c236526ada88f3176f71e6cfc" title="2f3546c5eab0239c236526ada88f3176f71e6cfc">2f3546c5eab0239c236526ada88f3176f71e6cfc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="11094.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in removeErrorBars
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7edfda6c34d4f5691eb3d167cef78f56ea8327b9" title="7edfda6c34d4f5691eb3d167cef78f56ea8327b9">7edfda6c34d4f5691eb3d167cef78f56ea8327b9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="11094.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in removeWindowFromLists
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a2d141d433990f6d0c64fabdb67153576f06344d" title="a2d141d433990f6d0c64fabdb67153576f06344d">a2d141d433990f6d0c64fabdb67153576f06344d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="11094.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in setGraphDefaultSettings
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c6c55b6ee46cb5834f8f475059d0de43ff97741c" title="c6c55b6ee46cb5834f8f475059d0de43ff97741c">c6c55b6ee46cb5834f8f475059d0de43ff97741c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="11094.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in setMatrixUndoStackSize
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/884fdea8f73e1869bc8f73a846b257cd3df6439b" title="884fdea8f73e1869bc8f73a846b257cd3df6439b">884fdea8f73e1869bc8f73a846b257cd3df6439b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="11094.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in setPlot3DOptions
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c9420b312bc44a4c69470cc52aaeb773cd6dbf13" title="c9420b312bc44a4c69470cc52aaeb773cd6dbf13">c9420b312bc44a4c69470cc52aaeb773cd6dbf13</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="11094.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showAllFolderWindows
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e11fb508498a15d5f7cdee6028fd8ce79a85f374" title="e11fb508498a15d5f7cdee6028fd8ce79a85f374">e11fb508498a15d5f7cdee6028fd8ce79a85f374</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="11094.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showAxisDialog
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4a3c6ee85be11765e59718173b509d9e7deb7a21" title="4a3c6ee85be11765e59718173b509d9e7deb7a21">4a3c6ee85be11765e59718173b509d9e7deb7a21</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="11094.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showAxisTitleDialog
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8434e6b5953c02577251eeece32bad73ef68e4f3" title="8434e6b5953c02577251eeece32bad73ef68e4f3">8434e6b5953c02577251eeece32bad73ef68e4f3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="11094.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showCurveWorksheet
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/54d522ca934314b31876952ffe0cf89f29fc578d" title="54d522ca934314b31876952ffe0cf89f29fc578d">54d522ca934314b31876952ffe0cf89f29fc578d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="11094.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showCurvesDialog
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9a361fc31ba03ce4a0619864994891af84a446f2" title="9a361fc31ba03ce4a0619864994891af84a446f2">9a361fc31ba03ce4a0619864994891af84a446f2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="11094.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showFolderPopupMenu
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/aaeecfe453284dfb0fd517f9c9d6eadc89274953" title="aaeecfe453284dfb0fd517f9c9d6eadc89274953">aaeecfe453284dfb0fd517f9c9d6eadc89274953</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="11094.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showGraphContextMenu
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f16b0cd722d3e2efa20a9307b908d6d41873e9d1" title="f16b0cd722d3e2efa20a9307b908d6d41873e9d1">f16b0cd722d3e2efa20a9307b908d6d41873e9d1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="11094.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showPlotAssociations
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ded79973b2f13f2181059bcfa207d4c37ea8b241" title="ded79973b2f13f2181059bcfa207d4c37ea8b241">ded79973b2f13f2181059bcfa207d4c37ea8b241</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="11094.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showScaleDialog
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bac19413f710e6455379e8e0b7f6d6ca3999d871" title="bac19413f710e6455379e8e0b7f6d6ca3999d871">bac19413f710e6455379e8e0b7f6d6ca3999d871</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="11094.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showSelectedWindows
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/80935443e31aed512a39623ed666120a41c7fb9e" title="80935443e31aed512a39623ed666120a41c7fb9e">80935443e31aed512a39623ed666120a41c7fb9e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="11094.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showTitleDialog
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/73905a87a99d0e51990d466e9399b7c4fac05c6a" title="73905a87a99d0e51990d466e9399b7c4fac05c6a">73905a87a99d0e51990d466e9399b7c4fac05c6a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="11094.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showWindowContextMenu
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4464ba428582f0bcc78175aa6109288043676b3d" title="4464ba428582f0bcc78175aa6109288043676b3d">4464ba428582f0bcc78175aa6109288043676b3d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="11094.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in showWindowPopupMenu
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/445de3e685b12a0c6947080a26a4d8b64eeacc98" title="445de3e685b12a0c6947080a26a4d8b64eeacc98">445de3e685b12a0c6947080a26a4d8b64eeacc98</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="11094.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in startRenameFolder
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9cf4ee23f8df81c491e9d0f9dd657168eea504d1" title="9cf4ee23f8df81c491e9d0f9dd657168eea504d1">9cf4ee23f8df81c491e9d0f9dd657168eea504d1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="11094.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in undo
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/922a393a03450eef4697a6dc490ec5380beb5ed7" title="922a393a03450eef4697a6dc490ec5380beb5ed7">922a393a03450eef4697a6dc490ec5380beb5ed7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="11094.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in updateColNames
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0a6fc572af9e9de81297c8303e1844f19df9be6c" title="0a6fc572af9e9de81297c8303e1844f19df9be6c">0a6fc572af9e9de81297c8303e1844f19df9be6c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="11094.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in updateTableNames
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/8eea26c8a186a4051c7de30e9baedb4a30883cef" title="8eea26c8a186a4051c7de30e9baedb4a30883cef">8eea26c8a186a4051c7de30e9baedb4a30883cef</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="11094.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in windowProperties
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/545aedb14d3aa132c41e6a227db2c33b34c45737" title="545aedb14d3aa132c41e6a227db2c33b34c45737">545aedb14d3aa132c41e6a227db2c33b34c45737</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="11094.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in updateMatrixPlots
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f5e6c385c17f06e05f729f0285f01f9beaa81481" title="f5e6c385c17f06e05f729f0285f01f9beaa81481">f5e6c385c17f06e05f729f0285f01f9beaa81481</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="11094.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in open
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d0efde6c59b3036242c5901dc09ad04acddd092e" title="d0efde6c59b3036242c5901dc09ad04acddd092e">d0efde6c59b3036242c5901dc09ad04acddd092e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="11094.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A22%3A55Z&amp;precision=second" title="2015-02-16T14:22:55Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a> Resolve Coverity issues in appendProject
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a5b71390cbd802b605333e2584dffd0eb47a4c72" title="a5b71390cbd802b605333e2584dffd0eb47a4c72">a5b71390cbd802b605333e2584dffd0eb47a4c72</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="11094.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A28%3A16Z&amp;precision=second" title="2015-02-16T14:28:16Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/224"><span class="icon">​</span>pull request #224</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="11094.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A48%3A13Z&amp;precision=second" title="2015-02-16T14:48:13Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Federico M Pouzols</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="11094.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-16T14%3A50%3A33Z&amp;precision=second" title="2015-02-16T14:50:33Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This is what I call a brave effort :)
+MantidPlot was so much in need of this. I'll review it but all looks fine at first glimpse.
+</p>
+<p>
+The build failed because of a random test failure on rhel6. I've seen that one before (TEST-AlgorithmsTest.RemoveExpDecayTest) some days ago. Not sure what's randomly wrong with it.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="11094.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T11%3A46%3A16Z&amp;precision=second" title="2015-02-17T11:46:16Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+All looks good to me. I just have a few comments that I'm writing inline. Let me know if those are worth fixing and I'll merge the branch.
+</p>
+<p>
+Oh, in principle this looked ready to be merged in, but it seems that a merge conflict has popped up?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="11094.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T11%3A52%3A52Z&amp;precision=second" title="2015-02-17T11:52:52Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into 11094_eradicate_coverity_issues_in_appwindow
+</p>
+<p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0cb4e3d748c0d394a378090338a36d2c04d78740" title="0cb4e3d748c0d394a378090338a36d2c04d78740">0cb4e3d748c0d394a378090338a36d2c04d78740</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="11094.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T11%3A54%3A14Z&amp;precision=second" title="2015-02-17T11:54:14Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Okay, I've resolved the merge conflict - but I've not yet gone through your feedback :)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-81">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:81" class="cnum">
+      <a href="11094.html#comment:81">comment:81</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T11%3A57%3A15Z&amp;precision=second" title="2015-02-17T11:57:15Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Good, I've added all my comments now. Take those just as suggestions from a paranoid mind ;)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-82">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:82" class="cnum">
+      <a href="11094.html#comment:82">comment:82</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T12%3A03%3A31Z&amp;precision=second" title="2015-02-17T12:03:31Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Okay, I dug into the classes you highlighted, and the pointers you referred to appear to be created or initialised in the constructors, so they'll always be valid.
+</p>
+<p>
+It ought be safe to merge this branch without further changes.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-83">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:83" class="cnum">
+      <a href="11094.html#comment:83">comment:83</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T13%3A10%3A44Z&amp;precision=second" title="2015-02-17T13:10:44Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Hum, the merge build failed on osx because of the git checkout issue. False alarm. I think it's safe to merge this in before more conflicts arise.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-84">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:84" class="cnum">
+      <a href="11094.html#comment:84">comment:84</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T15%3A38%3A24Z&amp;precision=second" title="2015-02-17T15:38:24Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins, retest this  please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-85">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:85" class="cnum">
+      <a href="11094.html#comment:85">comment:85</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T15%3A55%3A01Z&amp;precision=second" title="2015-02-17T15:55:01Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+The only failures now seem to be the flaky <tt>RemoveExpDecay</tt> test. Ought to be safe to merge.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-86">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:86" class="cnum">
+      <a href="11094.html#comment:86">comment:86</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T16%3A39%3A27Z&amp;precision=second" title="2015-02-17T16:39:27Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+At last it compiled on all platform and the test failures are absolutely not related to this.
+</p>
+<p>
+It seems that there's a merge conflict again though.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-87">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:87" class="cnum">
+      <a href="11094.html#comment:87">comment:87</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T16%3A43%3A07Z&amp;precision=second" title="2015-02-17T16:43:07Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'master' into 11094_eradicate_coverity_issues_in_appwindow
+</p>
+<p>
+Refs <a class="closed ticket" href="11094.html" title="Eradicate Coverity issues in ApplicationWindow.cpp (closed: fixed)">#11094</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ce2d241051bd08ef5e6749a3a08092125f0b665e" title="ce2d241051bd08ef5e6749a3a08092125f0b665e">ce2d241051bd08ef5e6749a3a08092125f0b665e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-88">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:88" class="cnum">
+      <a href="11094.html#comment:88">comment:88</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T16%3A43%3A27Z&amp;precision=second" title="2015-02-17T16:43:27Z in Timeline">6 years</a> ago by Harry Jeffery
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This is actually the exact same merge conflict, but in reverse, as a result of <a class="closed ticket" href="103.html" title="enhancement: Create a virtual (or effective) detector class (closed: fixed)">#103</a> being reverted.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-89">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:89" class="cnum">
+      <a href="11094.html#comment:89">comment:89</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T16%3A49%3A18Z&amp;precision=second" title="2015-02-17T16:49:18Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="224.html" title="enhancement: MONITOR_UNWRAP algorithm (closed: duplicate)">#224</a> from mantidproject/11094_eradicate_coverity_issues_in_appwindow
+</p>
+<p>
+Eradicate coverity issues in ApplicationWindow.cpp
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/f5517ac9ed92f6bf2b231b402b64a01119ca41fd"><span class="icon">​</span>f5517ac9ed92f6bf2b231b402b64a01119ca41fd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-90">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:90" class="cnum">
+      <a href="11094.html#comment:90">comment:90</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A23%3A11%2B01%3A00&amp;precision=second" title="2015-06-04T04:23:11+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11933"><span class="icon">​</span>11933</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11094?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11094?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11094?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7011 (SelectCellOfType and SelectCellOfForm change HKLs incorrectly in some cases.)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7010.html" title="Ticket #7010" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7011?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7011?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7011?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7012.html" title="Ticket #7012" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7011, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7010.html" title="Ticket #7010">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="7012.html" title="Ticket #7012">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7011.html">Ticket #7011</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T04%3A18%3A44%2B01%3A00&amp;precision=second" title="2013-05-07T04:18:44+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A37%3A40%2B01%3A00&amp;precision=second" title="2015-06-04T01:37:40+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">SelectCellOfType and SelectCellOfForm change HKLs incorrectly in some cases.</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Dennis+Mikkelson">Dennis Mikkelson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Dennis+Mikkelson">Dennis Mikkelson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=blocker">blocker</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.5.html">Release 2.5</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              petersonpf@…, owen.arnold@…, mikkelsonr@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Andrei Savici
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Xiaoping reported a problem with the conventional cell indexing for a sample.  The problem was traced to an incorrect transformation applied to the HKLs in this case.  The most robust fix is to actually re-index the peaks with the new UB.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/7011/SelectCellBugTest.peaks.html" title="View attachment">SelectCellBugTest.peaks</a><a href="../raw-attachment/ticket/7011/SelectCellBugTest.peaks" class="trac-rawlink" title="Download">​</a>
+       (<span title="86242 bytes">84.2 KB</span>) -
+      added by <em>Dennis Mikkelson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T04%3A20%3A21%2B01%3A00&amp;precision=second" title="2013-05-07T04:20:21+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                The problem occurs with this peaks file.
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T04%3A20%3A21%2B01%3A00&amp;precision=second" title="2013-05-07T04:20:21+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7011/SelectCellBugTest.peaks.html"><em>SelectCellBugTest.peaks</em></a><a href="../raw-attachment/ticket/7011/SelectCellBugTest.peaks" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The problem occurs with this peaks file.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7011.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T04%3A33%3A42%2B01%3A00&amp;precision=second" title="2013-05-07T04:33:42+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+RE 7011 Fixes select cell bug
+</p>
+<p>
+The SelectCellOfType and SelectCellWithForm algorithms now actually
+re-index the peaks with the new UB matrix, if the Apply parameter is
+true.  Previously, a transformation was applied to the previously
+calculated hkl values, however, in some cases the transformation
+applied was not correct.
+</p>
+<p>
+refs <a class="closed ticket" href="7011.html" title="enhancement: SelectCellOfType and SelectCellOfForm change HKLs incorrectly in some ... (closed: fixed)">#7011</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/94011033a1b5a48f5533511485782e1818b7577a" title="94011033a1b5a48f5533511485782e1818b7577a">94011033a1b5a48f5533511485782e1818b7577a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7011.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T04%3A43%3A37%2B01%3A00&amp;precision=second" title="2013-05-07T04:43:37+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is fixed by the modifications to the following two files in branch bugfix/7011<span class="underline">select_cell_bug:
+</span></p>
+<p>
+Framework/Crystal/src/SelectCellOfType.cpp
+Framework/Crystal/src/SelectCellWithForm.cpp
+</p>
+<p>
+Unfortunately, I currently can't check them in develop, since after checking out the current develop branch I get the error:
+git merge --no-ff bugfix/7011_select_cell_bug
+Auto-merging Code/Mantid/CMakeLists.txt
+Auto-merging Code/Mantid/Framework/Crystal/src/SelectCellOfType.cpp
+Auto-merging Code/Mantid/Framework/Crystal/src/SelectCellWithForm.cpp
+Auto-merging Code/Mantid/MantidPlot/src/ApplicationWindow.cpp
+Auto-merging Code/Mantid/MantidPlot/src/Mantid/MantidUI.cpp
+Auto-merging Code/Mantid/docs/qtassistant/CMakeLists.txt
+Auto-merging Code/Mantid/docs/qtassistant/mediawiki.py
+CONFLICT (content): Merge conflict in Code/Mantid/docs/qtassistant/mediawiki.py
+Automatic merge failed; fix conflicts and then commit the result.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="7011.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T04%3A57%3A51%2B01%3A00&amp;precision=second" title="2013-05-07T04:57:51+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+To test
+</p>
+<ol><li>load the attached file: SelectCellBugTest.peaks into a peaks workspace using LoadIsawPeaks.  
+</li></ol><ol start="2"><li>Run FindUBUsingFFT with MinD = 4, MaxD = 15, Tolerance = 0.12 on the peaks workspace to get a UB set corresponding to a Niggli reduced cell.
+</li></ol><ol start="3"><li>Run IndexPeaks, with Tolerance = 0.12 and Round HKL false.  The first peak in the peaks workspace should index as 1,-3,-6.
+</li></ol><ol start="4"><li>Run SelectCellOfType with CellType = Tetragonal and Centering = I, Apply = True, Tolerance = 0.12.  If the first peak is now indexed as -1,3,-10, the problem is fixed.
+</li></ol><ol start="5"><li>To test SelectCellWithForm, repeat steps 2 and 3, then run SelectCellWithForm with FormNumber = 15, Apply = True and Tolerance = 0.12.  The first peak should again be indexed as -1,3,-10.
+</li></ol><p>
+Prior to fixing this problem, the first peak was incorrectly indexed as -1,3,14 by both SelectCellOfType and SelectCelWithForm.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="7011.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T05%3A52%3A28%2B01%3A00&amp;precision=second" title="2013-05-07T05:52:28+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+RE 7011 Fixes select cell bug
+</p>
+<p>
+The SelectCellOfType and SelectCellWithForm algorithms now actually
+re-index the peaks with the new UB matrix, if the Apply parameter is
+true.  Previously, a transformation was applied to the previously
+calculated hkl values, however, in some cases the transformation
+applied was not correct.
+</p>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="7011.html" title="enhancement: SelectCellOfType and SelectCellOfForm change HKLs incorrectly in some ... (closed: fixed)">#7011</a> 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2fae3e4398b769699dd989d195df8035a1f39952" title="2fae3e4398b769699dd989d195df8035a1f39952">2fae3e4398b769699dd989d195df8035a1f39952</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="7011.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T16%3A37%3A05%2B01%3A00&amp;precision=second" title="2013-05-07T16:37:05+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+RE 7011 Fixes select cell bug
+</p>
+<p>
+The SelectCellOfType and SelectCellWithForm algorithms now actually
+re-index the peaks with the new UB matrix, if the Apply parameter is
+true.  Previously, a transformation was applied to the previously
+calculated hkl values, however, in some cases the transformation
+applied was not correct.
+</p>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="7011.html" title="enhancement: SelectCellOfType and SelectCellOfForm change HKLs incorrectly in some ... (closed: fixed)">#7011</a> 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2fae3e4398b769699dd989d195df8035a1f39952" title="2fae3e4398b769699dd989d195df8035a1f39952">2fae3e4398b769699dd989d195df8035a1f39952</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="7011.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T16%3A57%3A28%2B01%3A00&amp;precision=second" title="2013-05-07T16:57:28+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This bug is fixed in branch bugfix/7011_select_cell_bug.  Instructions for testing using the file attached to this ticket are in the trac comment from 12 hours previous to this comment.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="7011.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T20%3A17%3A19%2B01%3A00&amp;precision=second" title="2013-05-07T20:17:19+01:00 in Timeline">7 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Andrei Savici</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="7011.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T20%3A30%3A39%2B01%3A00&amp;precision=second" title="2013-05-07T20:30:39+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+RE 7011 Fixes select cell bug
+</p>
+<p>
+The SelectCellOfType and SelectCellWithForm algorithms now actually
+re-index the peaks with the new UB matrix, if the Apply parameter is
+true.  Previously, a transformation was applied to the previously
+calculated hkl values, however, in some cases the transformation
+applied was not correct.
+</p>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="7011.html" title="enhancement: SelectCellOfType and SelectCellOfForm change HKLs incorrectly in some ... (closed: fixed)">#7011</a> 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2fae3e4398b769699dd989d195df8035a1f39952" title="2fae3e4398b769699dd989d195df8035a1f39952">2fae3e4398b769699dd989d195df8035a1f39952</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="7011.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-07T20%3A33%3A33%2B01%3A00&amp;precision=second" title="2013-05-07T20:33:33+01:00 in Timeline">7 years</a> ago by Andrei Savici
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7011.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-08T10%3A29%3A47%2B01%3A00&amp;precision=second" title="2013-05-08T10:29:47+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+RE 7011 Fixes select cell bug
+</p>
+<p>
+The SelectCellOfType and SelectCellWithForm algorithms now actually
+re-index the peaks with the new UB matrix, if the Apply parameter is
+true.  Previously, a transformation was applied to the previously
+calculated hkl values, however, in some cases the transformation
+applied was not correct.
+</p>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="7011.html" title="enhancement: SelectCellOfType and SelectCellOfForm change HKLs incorrectly in some ... (closed: fixed)">#7011</a> 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2fae3e4398b769699dd989d195df8035a1f39952" title="2fae3e4398b769699dd989d195df8035a1f39952">2fae3e4398b769699dd989d195df8035a1f39952</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7011.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-05-16T22%3A40%3A38%2B01%3A00&amp;precision=second" title="2013-05-16T22:40:38+01:00 in Timeline">7 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+RE 7011 Fixes select cell bug
+</p>
+<p>
+The SelectCellOfType and SelectCellWithForm algorithms now actually
+re-index the peaks with the new UB matrix, if the Apply parameter is
+true.  Previously, a transformation was applied to the previously
+calculated hkl values, however, in some cases the transformation
+applied was not correct.
+</p>
+<blockquote>
+<p>
+refs <a class="closed ticket" href="7011.html" title="enhancement: SelectCellOfType and SelectCellOfForm change HKLs incorrectly in some ... (closed: fixed)">#7011</a> 
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2fae3e4398b769699dd989d195df8035a1f39952" title="2fae3e4398b769699dd989d195df8035a1f39952">2fae3e4398b769699dd989d195df8035a1f39952</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7011.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T01%3A37%3A40%2B01%3A00&amp;precision=second" title="2015-06-04T01:37:40+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/7857"><span class="icon">​</span>7857</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7011?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7011?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7011?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

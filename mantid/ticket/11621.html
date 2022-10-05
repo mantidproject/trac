@@ -1,0 +1,539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11621 (ISIS direct reduction does not remove backgound properly if workspace is not normalized)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11620.html" title="Ticket #11620" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11621?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11621?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11621?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11622.html" title="Ticket #11622" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11621, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11620.html" title="Ticket #11620">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="11622.html" title="Ticket #11622">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11621.html">Ticket #11621</a>
+          <span class="status">(verify: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T21%3A21%3A18%2B01%3A00&amp;precision=second" title="2015-04-22T21:21:18+01:00 in Timeline">5 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A43%3A31%2B01%3A00&amp;precision=second" title="2015-06-04T04:43:31+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">ISIS direct reduction does not remove backgound properly if workspace is not normalized</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Alex+Buts">Alex Buts</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Alex+Buts">Alex Buts</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="milestone" href="../milestone/Release&#32;3.5.html">Release 3.5</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Direct+Inelastic">Direct Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2015-04-22 20:56:42.531793+00:00">
+        (last modified by Alex Buts)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/11621?action=diff&amp;version=1">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Merlin script below fails. Its obvious that the reason for that is missing monitor workspace necessary for "on-demand" normalization. 
+</p>
+<p>
+Necessary and easy to fix.
+</p>
+<pre class="wiki">""" Sample MER reduction script, to run on CEPS with MANTID 3.3 (slow CEPS output) """ 
+# Two rows necessary to run script outside of the mantid. You need also set up 
+# appropriate python path-es
+import os,sys
+import shutil
+os.environ["PATH"] = r"c:/Mantid/Code/builds/br_master/bin/Release;"+os.environ["PATH"]
+from mantid import *
+from Direct.ReductionWrapper import *
+# this exact namd is necessary for web services to work until we implement factory
+class MERLINReduction(ReductionWrapper):
+#------------------------------------------------------------------------------------#
+   @MainProperties
+   def def_main_properties(self):
+       """ Define main properties used in reduction. These are the property 
+           a user usually wants to change
+       """ 
+       prop = {}
+
+       ei=[50.1, 21.9,12.2] #[150,64,36] # multiple energies provided in the data file
+       ebin=[-0.25,0.005,0.85]    #binning of the energy for the spe file. 
+       # if energy is specified as a list (even with single value e.g. ei=[81])
+       # The numbers are treated as a fraction of ei [from ,step, to ]. If energy is 
+       # a number, energy binning assumed to be absolute (e_min, e_step,e_max)
+       #
+       prop['incident_energy'] = ei
+       prop['energy_bins'] = ebin
+       #
+       # the range of files to reduce. This range ignored when deployed from autoreduction,
+       # unless you going to sum these files. 
+       # The range of numbers or run number is used when you run reduction from PC.
+       prop['sample_run'] = 24207 #range(24191,24193) # 'MER23700.n001'
+       prop['wb_run'] = '23684.raw'
+       #
+       prop['sum_runs'] = False # set to true to sum everything provided to sample_run
+       #                        # list
+  
+       # Absolute units reduction properties. Set prop['monovan_run']=None to do relative units
+       prop['monovan_run'] = None # vanadium run in the same configuration as your sample
+       #prop['sample_mass'] = 9 # mass of your sample 
+       #prop['sample_rmm'] = 496.4 # molecular weight of scatterers in your sample
+
+       return prop
+#------------------------------------------------------------------------------------#
+   @AdvancedProperties
+   def def_advanced_properties(self):
+      """  Set up advanced properties, describing reduction.
+           These are the properties, usually provided by an instrument 
+           scientist
+            
+           separation between simple and advanced properties depends
+           on scientist, experiment and user.   All are necessary for reduction 
+           to work properly
+      """
+      prop = {}
+      prop['map_file'] = 'rings_143.map'
+      prop['det_cal_file'] = 'det_corr_143.dat' #'det_corrected7.nxs - testing'
+      prop['bleed'] = False
+      prop['norm_method']='monitor-1'
+      prop['detector_van_range']=[40,55]
+      prop['background_range'] = [18000,19000] # TOF range for the calculating flat background
+      prop['hardmaskOnly']='MER23698.msk' # diag does not work well on MER. At present only use a hard mask RIB has created
+      #prop['hard_mask_file'] = "Bjorn_mask.msk"
+
+      prop['check_background']=True
+      #prop['ei-mon2-spec']=69641
+      #prop[fix_ei]=True
+      
+
+      prop['save_format'] = 'nxs' #'nxspe' #nxs,nxspe'
+       # if two input files with the same name and  different extension found, what to prefer. 
+      prop['data_file_ext']='.nxs' # for MER it may be choice between event and histo mode if 
+      # raw file is written in histo, and nxs -- in event mode
+      # Absolute units: map file to calculate monovan integrals                                                                      
+      prop['monovan_mapfile'] = 'rings_143.map'
+      prop['vanadium-mass']=7.85 # check this
+      # change this to correct value and verify that motor_log_names refers correct and existing 
+      # log name for crystal rotation to write correct psi value into nxspe files
+      prop['motor_offset']=None
+      #
+      prop['monovan_lo_frac']=-0.4
+      prop['monovan_hi_frac']= 0.4
+      #RAE added
+      prop['bleed_maxrate']=0.005
+      
+      return prop
+      #
+#------------------------------------------------------------------------------------#
+   @iliad
+   def reduce(self,input_file=None,output_directory=None):
+      """ Method executes reduction over single file
+
+          Overload only if custom reduction is needed or
+          special features are requested
+      """
+      results = ReductionWrapper.reduce(self,input_file,output_directory)
+      #
+      #run_num = PropertyManager.sample_run.run_number() 
+      #energies = self.reducer.prop_man.incident_energy
+      #for ind,res in enumerate(results):
+      #      ei = energies[ind]
+      #      filename = "LET{0}_{1:&lt;3.2f}meV.nxspe".format(run_num ,ei)
+      #      file = os.path.join('/stagingarea',filename)
+      #      print 'Saving file to {0}'.format(file)#
+
+      #      SaveNexus(res,Filename = file)
+      #      t_folder = config['defaultsave.directory']
+      #      targ_path = os.path.join(t_folder,filename)
+      #      shutil.move(file,targ_path)     
+      return results
+   #
+   #
+   def set_custom_output_filename(self):
+      """ define custom name of output files if standard one is not satisfactory 
+          In addition to that, example of accessing reduction properties 
+          Changing them if necessary
+      """ 
+      def custom_name(prop_man):
+          """ sample function which builds filename from 
+              incident energy and run number and adds some auxiliary information 
+              to it.
+          """ 
+          # Note -- properties have the same names  as the list of advanced and 
+          # main properties
+          ei = PropertyManager.incident_energy.get_current()
+          # sample run is more then just list of runs, so we use 
+          # the formalization below to access its methods
+          run_num = PropertyManager.sample_run.run_number()
+          name = "MER{0}atEi{1:&lt;3.2f}meV_One2One".format(run_num ,ei)
+          return name
+       
+      # Uncomment this to use custom filename function
+      # Note: the properties are stored in prop_man class accessed as
+      # below. 
+      return lambda : custom_name(self.reducer.prop_man)
+      # use this method to use standard file name generating function
+      #return None
+   #
+   def validation_file_place(self):
+      """Redefine this to the place, where validation file, used in conjunction with
+         'validate_run' property, located. Here it defines the place to this script folder.
+          but if this function is disabled, by default it looks for/places it 
+          in a default save directory"""
+      return os.path.split(os.path.realpath(__file__))[0]
+   
+   def __init__(self,web_var=None):
+       """ sets properties defaults for the instrument with Name"""
+       ReductionWrapper.__init__(self,'MER',web_var)
+#
+if __name__ == "__main__":
+#------------------------------------------------------------------------------------#
+# SECTION USED TO RUN REDUCTION FROM MANTID SCRIPT WINDOW #
+#------------------------------------------------------------------------------------#
+##### Here one sets up folders where to find input data and where to save results ####
+    # It can be done here or from Mantid GUI:
+    #      File-&gt;Manage user directory -&gt;Browse to directory
+    # Folder where map and mask files are located:
+    map_mask_dir = r'c:\Users\wkc26243\Documents\work\InstrumentFiles\merlin' #'/usr/local/mprogs/InstrumentFiles/merlin'
+    config.appendDataSearchDir(map_mask_dir)
+    # folder where input data can be found
+    data_dir = r'd:\Data\Mantid_Testing\15_04_21\data'
+    config.appendDataSearchDir(data_dir)
+    config.appendDataSearchDir(map_mask_dir)
+    # auxiliary folder with results
+    #ref_data_dir = 'd:/Data/MantidSystemTests/Data' 
+    # Set input search path to values, specified above
+    #config.setDataSearchDirs('{0};{1};{2}'.format(data_dir,map_mask_dir,ref_data_dir))
+    # use appendDataSearch directory to add more locations to existing Mantid 
+    # data search path
+    #config.appendDataSearchDir('d:/Data/Mantid_GIT/Test/AutoTestData')
+    # folder to save resulting spe/nxspe files.
+    config['defaultsave.directory'] = r'd:\Data\Mantid_Testing\15_04_21'
+
+###### Initialize reduction class above and set up reduction properties.        ######
+######  Note no web_var in constructor.(will be irrelevant if factory is implemented)
+    rd = MERLINReduction()
+    # set up advanced and main properties
+    rd.def_advanced_properties()
+    rd.def_main_properties()
+#### uncomment rows below to generate web variables and save then to transfer to   ###
+    ## web services.
+    run_dir = os.path.dirname(os.path.realpath(__file__))
+    file = os.path.join(run_dir,'reduce_vars.py')
+    rd.save_web_variables(file)
+
+#### Set up time interval (sec) for reducer to check for input data file.         ####
+    #  If data file is not present and this value is 0,reduction fails 
+    #  if this value &gt;0 the reduction wait until file appears on the data 
+    #  search path checking regularly after time interval specified below.
+    rd.wait_for_file = 0  # waiting time interval (in sec)
+   
+### Define a run number to validate reduction against future changes    #############
+    # After reduction works well and all settings are done and verified, 
+    # take a run number with good reduced results and build validation
+    # for this result. 
+    # Then place the validation run together with this reduction script.
+    # Next time, the script will run reduction and compare the reduction results against
+    # the results obtained earlier.
+    #rd.validate_run_number = 21968  # Enabling this property disables normal reduction
+    # and forces reduction to reduce run specified here and compares results against
+    # validation file, processed earlier or calculate this file if run for the first time.
+    #This would ensure that reduction script have not changed,
+    #allow to identify the reason for changes if it was changed 
+    # and would allow to recover the script,used to produce initial reduction
+    #if changes are unacceptable.
+
+####get reduction parameters from properties above, override what you want locally ###
+   # and run reduction. Overriding would have form:
+   # rd.reducer.prop_man.property_name (from the dictionary above) = new value e.g. 
+   # rd.reducer.prop_man.energy_bins = [-40,2,40]
+   # or 
+   ## rd.reducer.prop_man.sum_runs = False
+   # 
+    
+    rd.run_reduction()
+
+</pre>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11621.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T21%3A56%3A42%2B01%3A00&amp;precision=second" title="2015-04-22T21:56:42+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li><li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/11621?action=diff&amp;version=1">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11621.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-22T22%3A09%3A47%2B01%3A00&amp;precision=second" title="2015-04-22T22:09:47+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+fixed as PR <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/637"><span class="icon">​</span>https://github.com/mantidproject/mantid/pull/637</a>
+</p>
+<p>
+A tester may try to run script taking files from archives and map/masks from 
+<a class="ext-link" href="https://svn.isis.rl.ac.uk/InstrumentFiles/trunk/MERLIN"><span class="icon">​</span>https://svn.isis.rl.ac.uk/InstrumentFiles/trunk/MERLIN</a> but I've done that and it works. 
+</p>
+<p>
+Ideally it would be nice to systest the change, but it will substantially increase build time for everybody with very little gain, as the changes are simple. 
+</p>
+<p>
+I think, a tester can accept changes after code review if existing systests for direct inelastic pass. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11621.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-24T15%3A59%3A42%2B01%3A00&amp;precision=second" title="2015-04-24T15:59:42+01:00 in Timeline">5 years</a> ago by Alex Buts
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11621.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A43%3A31%2B01%3A00&amp;precision=second" title="2015-06-04T04:43:31+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/12459"><span class="icon">​</span>12459</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11621?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11621?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11621?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

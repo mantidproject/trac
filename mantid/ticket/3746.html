@@ -1,0 +1,588 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #3746 (Segfault relating to InstrumentView and possibly masking?)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="3745.html" title="Ticket #3745" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3746?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3746?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3746?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="3747.html" title="Ticket #3747" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 3746, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="3745.html" title="Ticket #3745">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="3747.html" title="Ticket #3747">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="3746.html">Ticket #3746</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-19T17%3A21%3A57%2B01%3A00&amp;precision=second" title="2011-09-19T17:21:57+01:00 in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A22%3A15%2B01%3A00&amp;precision=second" title="2015-06-03T23:22:15+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Segfault relating to InstrumentView and possibly masking?</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Roman+Tolchenov">Roman Tolchenov</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.0.html">Release 2.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Michael Reuter
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Steps to reproduce:
+</p>
+<ul><li>LoadEventNexus('CNCS_7860_event.nxs', 'cncs')
+</li><li>Right-click workspace and choose instrument view
+</li><li>Go to mask tab
+</li><li>Mask out some detectors
+</li><li>Run LoadEventNexus with the same file and output workspace name again.
+</li><li>While LoadEventNexus, AFTER it has deleted the original workspace but BEFORE it has finished and replaced the workspace in the mantid workspace list, CLICK on where the workspace USED to be.
+<ul><li>I sometimes have to do the steps twice, but I didn't get it to crash without clicking on that spot.
+</li></ul></li><li>Segfault.
+</li></ul><p>
+Weird, I know. This is on Ubuntu 11.04
+</p>
+<pre class="wiki">Thread [7] (Suspended: Signal 'SIGSEGV' received. Description: Segmentation fault.)	
+	40 glIsList()  0x00007ffff0cd7f49	
+	39 Mantid::Geometry::CacheGeometryRenderer::~CacheGeometryRenderer() CacheGeometryRenderer.cpp:32 0x00007ffff74082f1	
+	38 Mantid::Geometry::CacheGeometryHandler::~CacheGeometryHandler() CacheGeometryHandler.cpp:34 0x00007ffff7407c35	
+	37 Mantid::Geometry::CacheGeometryHandler::~CacheGeometryHandler() CacheGeometryHandler.cpp:35 0x00007ffff7407c9c	
+	36 boost::checked_delete&lt;Mantid::Geometry::CacheGeometryHandler&gt;() checked_delete.hpp:34 0x00007ffff73e5440	
+	35 boost::detail::sp_counted_impl_p&lt;Mantid::Geometry::CacheGeometryHandler&gt;::dispose() sp_counted_impl.hpp:78 0x00007ffff73e959c	
+	34 boost::detail::sp_counted_base::release() sp_counted_base_gcc_x86.hpp:145 0x0000000000692fec	
+	33 boost::detail::shared_count::~shared_count() shared_count.hpp:217 0x0000000000693065	
+	32 boost::shared_ptr&lt;Mantid::Geometry::GeometryHandler&gt;::~shared_ptr() shared_ptr.hpp:169 0x00007ffff73e2a0c	
+	31 Mantid::Geometry::Object::~Object() Object.cpp:120 0x00007ffff73dabcb	
+	30 Mantid::API::Sample::~Sample() Sample.h:57 0x00007ffff6d724c1	
+	29 boost::checked_delete&lt;Mantid::API::Sample&gt;() checked_delete.hpp:34 0x00007ffff6d7254f	
+	28 boost::detail::sp_counted_impl_p&lt;Mantid::API::Sample&gt;::dispose() sp_counted_impl.hpp:78 0x00007ffff6d74618	
+	27 boost::detail::sp_counted_base::release() sp_counted_base_gcc_x86.hpp:145 0x0000000000692fec	
+	26 boost::detail::shared_count::~shared_count() shared_count.hpp:217 0x0000000000693065	
+	25 boost::shared_ptr&lt;Mantid::API::Sample&gt;::~shared_ptr() shared_ptr.hpp:169 0x00007ffff6d6da4a	
+	24 Mantid::Kernel::cow_ptr&lt;Mantid::API::Sample&gt;::~cow_ptr() cow_ptr.h:136 0x00007ffff6d6dabc	
+	23 Mantid::API::ExperimentInfo::~ExperimentInfo() ExperimentInfo.cpp:50 0x00007ffff6d67e0f	
+	22 Mantid::API::MatrixWorkspace::~MatrixWorkspace() MatrixWorkspace.cpp:57 0x00007ffff6db8c58	
+	21 Mantid::API::IEventWorkspace::~IEventWorkspace() IEventWorkspace.h:39 0x00007fffd679da65	
+	20 Mantid::DataObjects::EventWorkspace::~EventWorkspace() EventWorkspace.cpp:42 0x00007fffd67999b6	
+	19 Mantid::DataObjects::EventWorkspace::~EventWorkspace() EventWorkspace.cpp:53 0x00007fffd6799a20	
+	18 boost::checked_delete&lt;Mantid::DataObjects::EventWorkspace&gt;() checked_delete.hpp:34 0x00007fffd67a6b98	
+	17 boost::detail::sp_counted_impl_p&lt;Mantid::DataObjects::EventWorkspace&gt;::dispose() sp_counted_impl.hpp:78 0x00007fffd67a6c20	
+	16 boost::detail::sp_counted_base::release() sp_counted_base_gcc_x86.hpp:145 0x0000000000692fec	
+	15 boost::detail::shared_count::~shared_count() shared_count.hpp:217 0x0000000000693065	
+	14 boost::shared_ptr&lt;Mantid::API::IEventWorkspace&gt;::~shared_ptr() shared_ptr.hpp:169 0x0000000000931326	
+	13 Mantid::Kernel::PropertyWithValue&lt;boost::shared_ptr&lt;Mantid::API::IEventWorkspace&gt; &gt;::operator=() PropertyWithValue.h:351 0x00007ffff6e2b2f4	
+	12 Mantid::API::WorkspaceProperty&lt;Mantid::API::IEventWorkspace&gt;::operator=() WorkspaceProperty.h:115 0x00007ffff6e25459	
+	11 Mantid::Kernel::IPropertyManager::setProperty&lt;boost::shared_ptr&lt;Mantid::API::IEventWorkspace&gt; &gt;() IPropertyManager.h:101 0x00007fffd4f54d95	
+	10 Mantid::DataHandling::LoadEventNexus::exec() LoadEventNexus.cpp:770 0x00007fffd4f4a740	
+	9 Mantid::API::Algorithm::execute() Algorithm.cpp:300 0x00007ffff6d15b4f	
+	8 Mantid::API::Algorithm::executeAsyncImpl() Algorithm.cpp:1214 0x00007ffff6d1b1e2	
+	7 Mantid::API::AlgorithmProxy::executeAsyncImpl() AlgorithmProxy.cpp:215 0x00007ffff6d487bb	
+	6 Poco::ActiveRunnable&lt;bool, Poco::Void, Mantid::API::AlgorithmProxy&gt;::run() ActiveRunnable.h:85 0x00007ffff6d4aa40	
+	5 Poco::PooledThread::run() ThreadPool.cpp:203 0x00007fffef054185	
+	4 Poco::ThreadImpl::runnableEntry() Thread_POSIX.cpp:345 0x00007fffef050cbd	
+	3 start_thread() pthread_create.c:304 0x00007fffecfded8c	
+	2 clone() clone.S:112 0x00007fffed2dc04d	
+	1 &lt;symbol is not available&gt; 0x0000000000000000	
+</pre>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="3746.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-20T09%3A44%3A31%2B01%3A00&amp;precision=second" title="2011-09-20T09:44:31+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li><li>
+      <strong>Owner</strong>
+        changed from <em>Nick Draper</em> to <em>Roman Tolchenov</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Fix if fast and safe, otherwise move to iteration 31
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="3746.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-20T11%3A44%3A17%2B01%3A00&amp;precision=second" title="2011-09-20T11:44:17+01:00 in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 30</em> to <em>Iteration 31</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Observed segfault on rhel5 but not on Windows7 or Ubuntu10.04. Without clicking it happens 100% on the 3rd run of LoadEventNexus. I don't have a quick solution.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="3746.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-11T16%3A21%3A07Z&amp;precision=second" title="2011-11-11T16:21:07Z in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="3746.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-14T14%3A16%3A50Z&amp;precision=second" title="2011-11-14T14:16:50Z in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="3746.html" title="defect: Segfault relating to InstrumentView and possibly masking? (closed: fixed)">#3746</a>. A quick fix prventing calling a gl command outside OpenGL 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ff67170b581782d75c6ef97834c3e13e1220589e" title="ff67170b581782d75c6ef97834c3e13e1220589e">ff67170b581782d75c6ef97834c3e13e1220589e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="3746.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-14T14%3A58%3A26Z&amp;precision=second" title="2011-11-14T14:58:26Z in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="3746.html" title="defect: Segfault relating to InstrumentView and possibly masking? (closed: fixed)">#3746</a>. Something didn't work with SingletonHolder. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9cd26bc3ea47cac1ac040cba29f63ed71515849d" title="9cd26bc3ea47cac1ac040cba29f63ed71515849d">9cd26bc3ea47cac1ac040cba29f63ed71515849d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="3746.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-14T16%3A29%3A02Z&amp;precision=second" title="2011-11-14T16:29:02Z in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="3746.html" title="defect: Segfault relating to InstrumentView and possibly masking? (closed: fixed)">#3746</a>. Using Singleton was a bad idea. Reverting. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1bc34d7f8ff6ad29d17b077a3b30ce6860a4ac79" title="1bc34d7f8ff6ad29d17b077a3b30ce6860a4ac79">1bc34d7f8ff6ad29d17b077a3b30ce6860a4ac79</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="3746.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-14T19%3A16%3A28Z&amp;precision=second" title="2011-11-14T19:16:28Z in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="3746.html" title="defect: Segfault relating to InstrumentView and possibly masking? (closed: fixed)">#3746</a>. A quick fix prventing calling a gl command outside OpenGL 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ff67170b581782d75c6ef97834c3e13e1220589e" title="ff67170b581782d75c6ef97834c3e13e1220589e">ff67170b581782d75c6ef97834c3e13e1220589e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="3746.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-14T19%3A16%3A28Z&amp;precision=second" title="2011-11-14T19:16:28Z in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="3746.html" title="defect: Segfault relating to InstrumentView and possibly masking? (closed: fixed)">#3746</a>. Something didn't work with SingletonHolder. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9cd26bc3ea47cac1ac040cba29f63ed71515849d" title="9cd26bc3ea47cac1ac040cba29f63ed71515849d">9cd26bc3ea47cac1ac040cba29f63ed71515849d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="3746.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-14T19%3A16%3A30Z&amp;precision=second" title="2011-11-14T19:16:30Z in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="3746.html" title="defect: Segfault relating to InstrumentView and possibly masking? (closed: fixed)">#3746</a>. Using Singleton was a bad idea. Reverting. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1bc34d7f8ff6ad29d17b077a3b30ce6860a4ac79" title="1bc34d7f8ff6ad29d17b077a3b30ce6860a4ac79">1bc34d7f8ff6ad29d17b077a3b30ce6860a4ac79</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="3746.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-15T13%3A03%3A03Z&amp;precision=second" title="2011-11-15T13:03:03Z in Timeline">9 years</a> ago by Roman Tolchenov
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The last commit message was lost. I removed display lists from the renderers in Geometry. It is done to remove opengl commands from destructors. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="3746.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-09T20%3A55%3A23Z&amp;precision=second" title="2012-01-09T20:55:23Z in Timeline">9 years</a> ago by Michael Reuter
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Michael Reuter</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="3746.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-09T21%3A05%3A33Z&amp;precision=second" title="2012-01-09T21:05:33Z in Timeline">9 years</a> ago by Michael Reuter
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I tried this on Mac, RHEL6 and Windows 7 and I can't get it to crash via the mechanism described, so it must be fixed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="3746.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A22%3A15%2B01%3A00&amp;precision=second" title="2015-06-03T23:22:15+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/4593"><span class="icon">​</span>4593</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3746?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3746?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3746?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

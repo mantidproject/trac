@@ -1,0 +1,650 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #2562 (SEGFAULT: When closing the python script window while a script is running.)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="2561.html" title="Ticket #2561" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/2562?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/2562?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/2562?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="2563.html" title="Ticket #2563" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 2562, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="2561.html" title="Ticket #2561">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="2563.html" title="Ticket #2563">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="2562.html">Ticket #2562</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-02-28T19%3A39%3A19Z&amp;precision=second" title="2011-02-28T19:39:19Z in Timeline">10 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A51%3A52%2B01%3A00&amp;precision=second" title="2015-06-03T22:51:52+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">SEGFAULT: When closing the python script window while a script is running.</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Janik+Zikovsky">Janik Zikovsky</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Martyn+Gigg">Martyn Gigg</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Iteration&#32;28.html">Iteration 28</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              doucetm@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Owen Arnold
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <ul><li>Open a script window.
+</li><li>Load a script
+</li><li>Start it.
+</li><li>Close the window using the X in the corner before the script ends.
+</li></ul><p>
+Stack trace: 
+</p>
+<pre class="wiki">Thread [1] (Suspended: Signal 'SIGSEGV' received. Description: Segmentation fault.)	
+	73 PyObject_RichCompare() object.c:946 0x00007ffff3403f41	
+	72 PyObject_RichCompareBool() object.c:1001 0x00007ffff34042ad	
+	71 lookdict() dictobject.c:319 0x00007ffff33fdfe1	
+	70 PyDict_GetItem() dictobject.c:658 0x00007ffff33fec62	
+	69 PySymtable_Lookup() symtable.c:289 0x00007ffff3486f37	
+	68 compiler_enter_scope() compile.c:453 0x00007ffff34691d1	
+	67 compiler_mod() compile.c:1203 0x00007ffff346f284	
+	66 PyAST_Compile() compile.c:288 0x00007ffff346f284	
+	65 Py_CompileStringFlags() pythonrun.c:1408 0x00007ffff348377f	
+	64 PythonScript::compile() PythonScript.cpp:164 0x0000000000887f28	
+	63 PythonScript::exec() PythonScript.cpp:305 0x0000000000888e51	
+	62 PythonScript::updatePath() PythonScript.cpp:110 0x0000000000887c40	
+	61 ScriptManagerWidget::closeTabAtIndex() ScriptManagerWidget.cpp:1065 0x00000000008b91f0	
+	60 ScriptManagerWidget::closeAllTabs() ScriptManagerWidget.cpp:433 0x00000000008b5c24	
+	59 ScriptingWindow::closeEvent() ScriptingWindow.cpp:355 0x00000000008b230c	
+	58 QWidget::event()  0x00007ffff4f9c080	
+	57 QMainWindow::event()  0x00007ffff538341b	
+	56 QApplicationPrivate::notify_helper()  0x00007ffff4f45fdc	
+	55 QApplication::notify()  0x00007ffff4f4baed	
+	54 MantidApplication::notify() MantidApplication.cpp:25 0x000000000099794f	
+	53 QCoreApplication::notifyInternal()  0x00007ffff42a4cdc	
+	52 QWidgetPrivate::close_helper()  0x00007ffff4f9fbe1	
+	51 QApplication::x11ClientMessage()  0x00007ffff4fbd076	
+	50 QApplication::x11ProcessEvent()  0x00007ffff4fcd346	
+	49 &lt;symbol is not available&gt; 0x00007ffff4ff90e2	
+	48 g_main_context_dispatch()  0x00007fffecb05342	
+	47 &lt;symbol is not available&gt; 0x00007fffecb092a8	
+	46 g_main_context_iteration()  0x00007fffecb0945c	
+	45 QEventDispatcherGlib::processEvents()  0x00007ffff42d1193	
+	44 &lt;symbol is not available&gt; 0x00007ffff4ff8a4e	
+	43 QCoreApplication::processEvents()  0x00007ffff42a802f	
+	42 MantidUI::runAlgorithmAsync_PyCallback() MantidUI.cpp:1708 0x00000000009d044f	
+	41 meth_MantidUI_runAlgorithmAsync_PyCallback() sipqtipart0.cpp:1773 0x0000000000a5179b	
+	40 call_function() ceval.c:3750 0x00007ffff3463b70	
+	39 PyEval_EvalFrameEx() ceval.c:2412 0x00007ffff3463b70	
+	38 PyEval_EvalCodeEx() ceval.c:3000 0x00007ffff34658b0	
+	37 fast_function() ceval.c:3846 0x00007ffff3463beb	
+	36 call_function() ceval.c:3771 0x00007ffff3463beb	
+	35 PyEval_EvalFrameEx() ceval.c:2412 0x00007ffff3463beb	
+	34 PyEval_EvalCodeEx() ceval.c:3000 0x00007ffff34658b0	
+	33 PyEval_EvalCode() ceval.c:541 0x00007ffff3465982	
+	32 PythonScript::executeScript() PythonScript.cpp:382 0x0000000000889177	
+	31 PythonScript::exec() PythonScript.cpp:339 0x0000000000888fdf	
+	30 ScriptManagerWidget::runScriptCode() ScriptManagerWidget.cpp:574 0x00000000008b63c6	
+	29 ScriptManagerWidget::executeAll() ScriptManagerWidget.cpp:496 0x00000000008b5ee1	
+	28 ScriptManagerWidget::execute() ScriptManagerWidget.cpp:473 0x00000000008b5dd9	
+	27 ScriptManagerWidget::qt_metacall() moc_ScriptManagerWidget.cxx:161 0x0000000000acc79e	
+	26 QMetaObject::activate()  0x00007ffff42bcb27	
+	25 QAction::activated()  0x00007ffff4f3e7b1	
+	24 QAction::activate()  0x00007ffff4f3ff71	
+	23 QAction::event()  0x00007ffff4f42257	
+	22 QApplicationPrivate::notify_helper()  0x00007ffff4f45fdc	
+	21 QApplication::notify()  0x00007ffff4f4baed	
+	20 MantidApplication::notify() MantidApplication.cpp:25 0x000000000099794f	
+	19 QCoreApplication::notifyInternal()  0x00007ffff42a4cdc	
+	18 &lt;symbol is not available&gt; 0x00007ffff4f817d6	
+	17 &lt;symbol is not available&gt; 0x00007ffff4f835e7	
+	16 QApplication::notify()  0x00007ffff4f4d6e4	
+	15 MantidApplication::notify() MantidApplication.cpp:25 0x000000000099794f	
+	14 QCoreApplication::notifyInternal()  0x00007ffff42a4cdc	
+	13 &lt;symbol is not available&gt; 0x00007ffff4ff34ba	
+	12 &lt;symbol is not available&gt; 0x00007ffff4ff5ac0	
+	11 QApplication::x11ProcessEvent()  0x00007ffff4fcccb4	
+	10 &lt;symbol is not available&gt; 0x00007ffff4ff90e2	
+	9 g_main_context_dispatch()  0x00007fffecb05342	
+	8 &lt;symbol is not available&gt; 0x00007fffecb092a8	
+	7 g_main_context_iteration()  0x00007fffecb0945c	
+	6 QEventDispatcherGlib::processEvents()  0x00007ffff42d1193	
+	5 &lt;symbol is not available&gt; 0x00007ffff4ff8a4e	
+	4 QEventLoop::processEvents()  0x00007ffff42a3a02	
+	3 QEventLoop::exec()  0x00007ffff42a3dec	
+	2 QCoreApplication::exec()  0x00007ffff42a7ebb	
+	1 main() main.cpp:175 0x00000000007ecebf	
+</pre>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="2562.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-01T00%3A03%3A50Z&amp;precision=second" title="2011-03-01T00:03:50Z in Timeline">10 years</a> ago by Mathieu Doucet
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>doucetm@…</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Probably related to <a class="closed ticket" href="2556.html" title="defect: MantidPlot: scripting window can crash Mantid if a python script is ... (closed: fixed)">#2556</a>. I looked into it and couldn't find the problem. I did notice that python scripting in qtiplot has changed a bit since we forked.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="2562.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-11T12%3A17%3A21Z&amp;precision=second" title="2011-03-11T12:17:21Z in Timeline">10 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        set to <em>Martyn Gigg</em>
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="2562.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-21T13%3A29%3A19Z&amp;precision=second" title="2011-03-21T13:29:19Z in Timeline">10 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="2562.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-21T13%3A31%3A23Z&amp;precision=second" title="2011-03-21T13:31:23Z in Timeline">10 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10164]</a>) Refs <a class="closed ticket" href="2562.html" title="defect: SEGFAULT: When closing the python script window while a script is running. (closed: fixed)">#2562</a>. Fixed crash when closing the scripting window by removing the 'cross' buutton. The window can still be hidden but now the only thing that can close it is the application itself. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="2562.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-22T11%3A39%3A46Z&amp;precision=second" title="2011-03-22T11:39:46Z in Timeline">10 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[10192]</a>) Refs <a class="closed ticket" href="2562.html" title="defect: SEGFAULT: When closing the python script window while a script is running. (closed: fixed)">#2562</a> <a class="closed ticket" href="2556.html" title="defect: MantidPlot: scripting window can crash Mantid if a python script is ... (closed: fixed)">#2556</a>. Should fix problems with scripting window interaction when other things are runnning. The GIL needs aquiring so that Pythn can switch between different running sections, i.e. a Python algorithm from the GUI and a script. Annoying small local changes seems to have had quite an impact.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="2562.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-03-22T11%3A40%3A56Z&amp;precision=second" title="2011-03-22T11:40:56Z in Timeline">10 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="2562.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-26T14%3A17%3A59%2B01%3A00&amp;precision=second" title="2011-04-26T14:17:59+01:00 in Timeline">9 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Owen Arnold</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="2562.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-26T14%3A33%3A43%2B01%3A00&amp;precision=second" title="2011-04-26T14:33:43+01:00 in Timeline">9 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Tested on windows. Nightly build of MantidPlot 26/04/2011. Close script window option is still available despite <a class="missing changeset" title="No default repository defined">[10164]</a> changeset.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="2562.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-04-27T08%3A35%3A26%2B01%3A00&amp;precision=second" title="2011-04-27T08:35:26+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 28</em> to <em>Iteration 29</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets at the end of iteration 28
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="2562.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-05-03T08%3A17%3A35%2B01%3A00&amp;precision=second" title="2011-05-03T08:17:35+01:00 in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="2562.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-05-03T08%3A18%3A45%2B01%3A00&amp;precision=second" title="2011-05-03T08:18:45+01:00 in Timeline">9 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The close button can't seem to be removed easily on Windows. The more important thing regarding crashing when running should be fixed though and should be tested.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="2562.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-05-03T09%3A23%3A17%2B01%3A00&amp;precision=second" title="2011-05-03T09:23:17+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 29</em> to <em>Iteration 28</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="2562.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-05-03T11%3A46%3A48%2B01%3A00&amp;precision=second" title="2011-05-03T11:46:48+01:00 in Timeline">9 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="2562.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-05-03T12%3A11%3A08%2B01%3A00&amp;precision=second" title="2011-05-03T12:11:08+01:00 in Timeline">9 years</a> ago by Owen Arnold
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Doesn't SEGFAULT. GUI is inactive until python task completed on GUI thread and system may therefore offer to close the program.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="2562.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T22%3A51%3A52%2B01%3A00&amp;precision=second" title="2015-06-03T22:51:52+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/3409"><span class="icon">​</span>3409</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/2562?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/2562?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/2562?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1705 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #5401 (Update HDF5 libraries and integrate into CMake)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="5400.html" title="Ticket #5400" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5401?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5401?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5401?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="5402.html" title="Ticket #5402" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 5401, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="5400.html" title="Ticket #5400">Previous Ticket</a></span></li><li><span><a class="next" href="5402.html" title="Ticket #5402">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/5401.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="5401.html">Ticket #5401</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-24T04%3A22%3A48%2B01%3A00&amp;precision=second" title="2012-05-24T04:22:48+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A30%3A56%2B01%3A00&amp;precision=second" title="2015-06-04T00:30:56+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Update HDF5 libraries and integrate into CMake</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Stuart+Campbell">Stuart Campbell</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Stuart+Campbell">Stuart Campbell</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.4.html">Release 2.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              taylorrj@…, borreguero@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="5146.html" title="Algorithm to read Sassena output">#5146</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <ul><li>Update the HDF5 3rd party files that we ship for Windows and Mac.
+</li><li>Update CMake to find these libraries.
+</li></ul><p>
+For Linux we will use the system installed hdf5.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="5401.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-24T04%3A23%3A44%2B01%3A00&amp;precision=second" title="2012-05-24T04:23:44+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Cc</strong>
+        <em>taylorrj@…</em>, <em>borreguero@…</em> added
+    </li><li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="5401.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-07T20%3A09%3A55%2B01%3A00&amp;precision=second" title="2012-06-07T20:09:55+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake settings file for Windows.
+</p>
+<p>
+Defines where the binaries are. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/837155f502540377c03a9d66d31c97d43f30dfa4" title="837155f502540377c03a9d66d31c97d43f30dfa4">837155f502540377c03a9d66d31c97d43f30dfa4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="5401.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-07T20%3A18%3A33%2B01%3A00&amp;precision=second" title="2012-06-07T20:18:33+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake HDF5 settings file for Mac OS X.
+</p>
+<p>
+Defines where the libraries are for Mac. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/488141316526f5c11f101aa0108bd9479f8a4995" title="488141316526f5c11f101aa0108bd9479f8a4995">488141316526f5c11f101aa0108bd9479f8a4995</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="5401.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-07T20%3A18%3A33%2B01%3A00&amp;precision=second" title="2012-06-07T20:18:33+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake config file for HDF5
+</p>
+<p>
+This will be used on Mac/Windows to find the HDF5 libs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b352539d96eb8136928c725aa675c7d3dfc1c57d" title="b352539d96eb8136928c725aa675c7d3dfc1c57d">b352539d96eb8136928c725aa675c7d3dfc1c57d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="5401.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-07T20%3A26%3A11%2B01%3A00&amp;precision=second" title="2012-06-07T20:26:11+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake HDF5 settings file for Mac OS X.
+</p>
+<p>
+Defines where the libraries are for Mac. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/271c3c740a8fa913836e63a12ad9a59ac0879eb4" title="271c3c740a8fa913836e63a12ad9a59ac0879eb4">271c3c740a8fa913836e63a12ad9a59ac0879eb4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="5401.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-07T20%3A26%3A11%2B01%3A00&amp;precision=second" title="2012-06-07T20:26:11+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake config file for HDF5
+</p>
+<p>
+This will be used on Mac/Windows to find the HDF5 libs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6d11b3fab8838828b0af85b9391f40ad32e835d4" title="6d11b3fab8838828b0af85b9391f40ad32e835d4">6d11b3fab8838828b0af85b9391f40ad32e835d4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="5401.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-07T20%3A27%3A25%2B01%3A00&amp;precision=second" title="2012-06-07T20:27:25+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. removed debug statement 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ffbf268433e0b9d6089ed00d46761944fbc338d" title="6ffbf268433e0b9d6089ed00d46761944fbc338d">6ffbf268433e0b9d6089ed00d46761944fbc338d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="5401.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-07T21%3A30%3A47%2B01%3A00&amp;precision=second" title="2012-06-07T21:30:47+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Logic to find HDF5
+</p>
+<p>
+Commented out for now. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4e897e4e98c3acd5aa367750f311c802e3bacebc" title="4e897e4e98c3acd5aa367750f311c802e3bacebc">4e897e4e98c3acd5aa367750f311c802e3bacebc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="5401.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-07T21%3A50%3A14%2B01%3A00&amp;precision=second" title="2012-06-07T21:50:14+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>.  Correct typo in syntax.
+</p>
+<p>
+Forgot the () on the ELSE statement. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/675c6c30f2b149c71ca6f3b48fe8772bff161bfe" title="675c6c30f2b149c71ca6f3b48fe8772bff161bfe">675c6c30f2b149c71ca6f3b48fe8772bff161bfe</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="5401.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T16%3A56%3A56%2B01%3A00&amp;precision=second" title="2012-06-13T16:56:56+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake settings file for Windows.
+</p>
+<p>
+Defines where the binaries are. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/837155f502540377c03a9d66d31c97d43f30dfa4" title="837155f502540377c03a9d66d31c97d43f30dfa4">837155f502540377c03a9d66d31c97d43f30dfa4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="5401.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T16%3A56%3A57%2B01%3A00&amp;precision=second" title="2012-06-13T16:56:57+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake HDF5 settings file for Mac OS X.
+</p>
+<p>
+Defines where the libraries are for Mac. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/271c3c740a8fa913836e63a12ad9a59ac0879eb4" title="271c3c740a8fa913836e63a12ad9a59ac0879eb4">271c3c740a8fa913836e63a12ad9a59ac0879eb4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="5401.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T16%3A56%3A58%2B01%3A00&amp;precision=second" title="2012-06-13T16:56:58+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake config file for HDF5
+</p>
+<p>
+This will be used on Mac/Windows to find the HDF5 libs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6d11b3fab8838828b0af85b9391f40ad32e835d4" title="6d11b3fab8838828b0af85b9391f40ad32e835d4">6d11b3fab8838828b0af85b9391f40ad32e835d4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="5401.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T16%3A56%3A58%2B01%3A00&amp;precision=second" title="2012-06-13T16:56:58+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. removed debug statement 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ffbf268433e0b9d6089ed00d46761944fbc338d" title="6ffbf268433e0b9d6089ed00d46761944fbc338d">6ffbf268433e0b9d6089ed00d46761944fbc338d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="5401.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T16%3A57%3A00%2B01%3A00&amp;precision=second" title="2012-06-13T16:57:00+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Logic to find HDF5
+</p>
+<p>
+Commented out for now. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4e897e4e98c3acd5aa367750f311c802e3bacebc" title="4e897e4e98c3acd5aa367750f311c802e3bacebc">4e897e4e98c3acd5aa367750f311c802e3bacebc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="5401.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T16%3A57%3A00%2B01%3A00&amp;precision=second" title="2012-06-13T16:57:00+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>.  Correct typo in syntax.
+</p>
+<p>
+Forgot the () on the ELSE statement. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/675c6c30f2b149c71ca6f3b48fe8772bff161bfe" title="675c6c30f2b149c71ca6f3b48fe8772bff161bfe">675c6c30f2b149c71ca6f3b48fe8772bff161bfe</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="5401.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T18%3A06%3A15%2B01%3A00&amp;precision=second" title="2012-06-13T18:06:15+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake settings file for Windows.
+</p>
+<p>
+Defines where the binaries are. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/837155f502540377c03a9d66d31c97d43f30dfa4" title="837155f502540377c03a9d66d31c97d43f30dfa4">837155f502540377c03a9d66d31c97d43f30dfa4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="5401.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T18%3A06%3A16%2B01%3A00&amp;precision=second" title="2012-06-13T18:06:16+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake HDF5 settings file for Mac OS X.
+</p>
+<p>
+Defines where the libraries are for Mac. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/271c3c740a8fa913836e63a12ad9a59ac0879eb4" title="271c3c740a8fa913836e63a12ad9a59ac0879eb4">271c3c740a8fa913836e63a12ad9a59ac0879eb4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="5401.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T18%3A06%3A16%2B01%3A00&amp;precision=second" title="2012-06-13T18:06:16+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake config file for HDF5
+</p>
+<p>
+This will be used on Mac/Windows to find the HDF5 libs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6d11b3fab8838828b0af85b9391f40ad32e835d4" title="6d11b3fab8838828b0af85b9391f40ad32e835d4">6d11b3fab8838828b0af85b9391f40ad32e835d4</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="5401.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T18%3A06%3A17%2B01%3A00&amp;precision=second" title="2012-06-13T18:06:17+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. removed debug statement 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6ffbf268433e0b9d6089ed00d46761944fbc338d" title="6ffbf268433e0b9d6089ed00d46761944fbc338d">6ffbf268433e0b9d6089ed00d46761944fbc338d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="5401.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T18%3A06%3A19%2B01%3A00&amp;precision=second" title="2012-06-13T18:06:19+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Logic to find HDF5
+</p>
+<p>
+Commented out for now. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4e897e4e98c3acd5aa367750f311c802e3bacebc" title="4e897e4e98c3acd5aa367750f311c802e3bacebc">4e897e4e98c3acd5aa367750f311c802e3bacebc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="5401.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T18%3A06%3A19%2B01%3A00&amp;precision=second" title="2012-06-13T18:06:19+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>.  Correct typo in syntax.
+</p>
+<p>
+Forgot the () on the ELSE statement. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/675c6c30f2b149c71ca6f3b48fe8772bff161bfe" title="675c6c30f2b149c71ca6f3b48fe8772bff161bfe">675c6c30f2b149c71ca6f3b48fe8772bff161bfe</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="5401.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-20T16%3A03%3A12%2B01%3A00&amp;precision=second" title="2012-06-20T16:03:12+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake HDF5 settings file for Mac OS X.
+</p>
+<p>
+Defines where the libraries are for Mac. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/488141316526f5c11f101aa0108bd9479f8a4995" title="488141316526f5c11f101aa0108bd9479f8a4995">488141316526f5c11f101aa0108bd9479f8a4995</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="5401.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-20T16%3A03%3A12%2B01%3A00&amp;precision=second" title="2012-06-20T16:03:12+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake config file for HDF5
+</p>
+<p>
+This will be used on Mac/Windows to find the HDF5 libs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b352539d96eb8136928c725aa675c7d3dfc1c57d" title="b352539d96eb8136928c725aa675c7d3dfc1c57d">b352539d96eb8136928c725aa675c7d3dfc1c57d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="5401.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A38%3A22%2B01%3A00&amp;precision=second" title="2012-07-30T08:38:22+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake HDF5 settings file for Mac OS X.
+</p>
+<p>
+Defines where the libraries are for Mac. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/488141316526f5c11f101aa0108bd9479f8a4995" title="488141316526f5c11f101aa0108bd9479f8a4995">488141316526f5c11f101aa0108bd9479f8a4995</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="5401.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T08%3A38%3A23%2B01%3A00&amp;precision=second" title="2012-07-30T08:38:23+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. CMake config file for HDF5
+</p>
+<p>
+This will be used on Mac/Windows to find the HDF5 libs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b352539d96eb8136928c725aa675c7d3dfc1c57d" title="b352539d96eb8136928c725aa675c7d3dfc1c57d">b352539d96eb8136928c725aa675c7d3dfc1c57d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="5401.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-06T14%3A47%3A00%2B01%3A00&amp;precision=second" title="2012-08-06T14:47:00+01:00 in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Still waiting for NeXus to update
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="5401.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T13%3A43%3A50%2B01%3A00&amp;precision=second" title="2012-08-10T13:43:50+01:00 in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.2</em> to <em>Release 2.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved at the end of release 2.2
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="5401.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-30T09%3A19%3A03Z&amp;precision=second" title="2012-10-30T09:19:03Z in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.3</em> to <em>Release 2.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+moved to Release 2.4
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="5401.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-19T19%3A25%3A53Z&amp;precision=second" title="2012-12-19T19:25:53Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Update hdf5 config for include dirs
+</p>
+<p>
+There has been a change in the CMake variable used.
+It has changed from HDF5_INCLUDE_DIR to
+HDF5_INCLUDE_DIRS 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/eaa81f7451a5072cb2e356ba919bac71987381f0" title="eaa81f7451a5072cb2e356ba919bac71987381f0">eaa81f7451a5072cb2e356ba919bac71987381f0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="5401.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-19T19%3A33%3A51Z&amp;precision=second" title="2012-12-19T19:33:51Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Adding HDF5 1.8.9 libraries for mac. refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>
+</p>
+<p>
+Includes C, HL, C++, C++ HL APIs 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/30137e58c5634e23f8bd33c89cb4dab6088bc140" title="30137e58c5634e23f8bd33c89cb4dab6088bc140">30137e58c5634e23f8bd33c89cb4dab6088bc140</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="5401.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-19T21%3A44%3A30Z&amp;precision=second" title="2012-12-19T21:44:30Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Updated Win64 libs for HDF5 1.8.9 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b49359e3089121e8213f7b227fcf5f73ce88e875" title="b49359e3089121e8213f7b227fcf5f73ce88e875">b49359e3089121e8213f7b227fcf5f73ce88e875</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="5401.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-19T22%3A04%3A22Z&amp;precision=second" title="2012-12-19T22:04:22Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Updated win32 libs for HDF5 1.8.9 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/01987231234f856cad46a81d5a4cb0c9387da123" title="01987231234f856cad46a81d5a4cb0c9387da123">01987231234f856cad46a81d5a4cb0c9387da123</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="5401.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-19T22%3A13%3A03Z&amp;precision=second" title="2012-12-19T22:13:03Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Updated Windows specific HDF5 config
+</p>
+<p>
+Removed options for all build types but release, since we don't have
+the debug libs in 3rd party anyway. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2841ccc46ca8f522eb4e08a0dd31bc9457b411a6" title="2841ccc46ca8f522eb4e08a0dd31bc9457b411a6">2841ccc46ca8f522eb4e08a0dd31bc9457b411a6</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="5401.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-19T22%3A19%3A03Z&amp;precision=second" title="2012-12-19T22:19:03Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Add compilation against HDF5 libs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2a43ed27a04c80c99a0f0f3ed944df0a0d8e7f5e" title="2a43ed27a04c80c99a0f0f3ed944df0a0d8e7f5e">2a43ed27a04c80c99a0f0f3ed944df0a0d8e7f5e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="5401.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-19T22%3A24%3A40Z&amp;precision=second" title="2012-12-19T22:24:40Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Removing HL component reference
+</p>
+<p>
+Removing finding the HL component explicitly as some older linux
+distros don't seem to include it! 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/58628456e9b30fb8601a20408b227a6626461f85" title="58628456e9b30fb8601a20408b227a6626461f85">58628456e9b30fb8601a20408b227a6626461f85</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="5401.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-19T22%3A38%3A13Z&amp;precision=second" title="2012-12-19T22:38:13Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Remove unneeded file 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7b9c38b9036b1135beba47ad5ce11aeb85f17c05" title="7b9c38b9036b1135beba47ad5ce11aeb85f17c05">7b9c38b9036b1135beba47ad5ce11aeb85f17c05</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="5401.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-20T14%3A32%3A21Z&amp;precision=second" title="2012-12-20T14:32:21Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Re-enable HL component
+</p>
+<p>
+CMake 2.8.5 or greater is required in order for this to work. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a525326ef6c25419ae6605271434e66166833985" title="a525326ef6c25419ae6605271434e66166833985">a525326ef6c25419ae6605271434e66166833985</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="5401.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-20T16%3A30%3A54Z&amp;precision=second" title="2012-12-20T16:30:54Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>5146</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="5401.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-20T17%3A12%3A14Z&amp;precision=second" title="2012-12-20T17:12:14Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a> &amp; <a class="closed ticket" href="5146.html" title="enhancement: Algorithm to read Sassena output (closed: fixed)">#5146</a>. Added LoadSassena to build
+</p>
+<p>
+Enable LoadSassena and unit test on all platforms. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b48c1c458cbc13199ba1b09162da1ba7a1c1751a" title="b48c1c458cbc13199ba1b09162da1ba7a1c1751a">b48c1c458cbc13199ba1b09162da1ba7a1c1751a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="5401.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-20T19%3A16%3A14Z&amp;precision=second" title="2012-12-20T19:16:14Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Add Win64 specific HDF5 includes 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/97f2632278052941a90e542b625aff7fbf88c986" title="97f2632278052941a90e542b625aff7fbf88c986">97f2632278052941a90e542b625aff7fbf88c986</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="5401.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-12-20T19%3A22%3A35Z&amp;precision=second" title="2012-12-20T19:22:35Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Remove unused hdf5 windows header 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/787eded9846a0930cb27b6de7ba30a2c19003d4c" title="787eded9846a0930cb27b6de7ba30a2c19003d4c">787eded9846a0930cb27b6de7ba30a2c19003d4c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="5401.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-08T21%3A16%3A37Z&amp;precision=second" title="2013-01-08T21:16:37Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="5401.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-09T16%3A01%3A35Z&amp;precision=second" title="2013-01-09T16:01:35Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Update hdf5 config for include dirs
+</p>
+<p>
+There has been a change in the CMake variable used.
+It has changed from HDF5_INCLUDE_DIR to
+HDF5_INCLUDE_DIRS 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa1d39d5079bce2ec246fd5bdf43d5045906b2c0" title="fa1d39d5079bce2ec246fd5bdf43d5045906b2c0">fa1d39d5079bce2ec246fd5bdf43d5045906b2c0</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="5401.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-09T16%3A01%3A35Z&amp;precision=second" title="2013-01-09T16:01:35Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Updated Windows specific HDF5 config
+</p>
+<p>
+Removed options for all build types but release, since we don't have
+the debug libs in 3rd party anyway. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/90ddc27a19a118094ca7ac066a848e27fae5363d" title="90ddc27a19a118094ca7ac066a848e27fae5363d">90ddc27a19a118094ca7ac066a848e27fae5363d</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="5401.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-09T16%3A01%3A35Z&amp;precision=second" title="2013-01-09T16:01:35Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Add compilation against HDF5 libs. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5828d7489bfd63184be9a3323f90884c2f774278" title="5828d7489bfd63184be9a3323f90884c2f774278">5828d7489bfd63184be9a3323f90884c2f774278</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="5401.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-09T16%3A01%3A35Z&amp;precision=second" title="2013-01-09T16:01:35Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Removing HL component reference
+</p>
+<p>
+Removing finding the HL component explicitly as some older linux
+distros don't seem to include it! 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/62734ddd702430b6e4903dcaff0c88b5217af112" title="62734ddd702430b6e4903dcaff0c88b5217af112">62734ddd702430b6e4903dcaff0c88b5217af112</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="5401.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-09T16%3A01%3A35Z&amp;precision=second" title="2013-01-09T16:01:35Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Remove unneeded file 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d57dca2c1966b73662476e1bef0c762f0da9b519" title="d57dca2c1966b73662476e1bef0c762f0da9b519">d57dca2c1966b73662476e1bef0c762f0da9b519</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="5401.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-09T16%3A01%3A36Z&amp;precision=second" title="2013-01-09T16:01:36Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a>. Re-enable HL component
+</p>
+<p>
+CMake 2.8.5 or greater is required in order for this to work. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f98de8d941f6912f80413716ad2868322102902f" title="f98de8d941f6912f80413716ad2868322102902f">f98de8d941f6912f80413716ad2868322102902f</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="5401.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-09T16%3A01%3A36Z&amp;precision=second" title="2013-01-09T16:01:36Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a> &amp; <a class="closed ticket" href="5146.html" title="enhancement: Algorithm to read Sassena output (closed: fixed)">#5146</a>. Added LoadSassena to build
+</p>
+<p>
+Enable LoadSassena and unit test on all platforms. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1c85837192eace78f2fb0923a0319224ba2439f8" title="1c85837192eace78f2fb0923a0319224ba2439f8">1c85837192eace78f2fb0923a0319224ba2439f8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="5401.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-18T20%3A21%3A03Z&amp;precision=second" title="2013-01-18T20:21:03Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="5401.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-18T20%3A21%3A11Z&amp;precision=second" title="2013-01-18T20:21:11Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="5401.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-18T20%3A24%3A38Z&amp;precision=second" title="2013-01-18T20:24:38Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove version numbers from library names.
+</p>
+<p>
+For some reason compiling HDF5 using CMake on OSX 10.6 fails.
+The autotools build works ok though.  But it results in
+different library filenames. i.e. without the version number.
+</p>
+<p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2cb8207f2cb9a34fa2997ffd0d56048c9103cbf1" title="2cb8207f2cb9a34fa2997ffd0d56048c9103cbf1">2cb8207f2cb9a34fa2997ffd0d56048c9103cbf1</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="5401.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-18T20%3A29%3A22Z&amp;precision=second" title="2013-01-18T20:29:22Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="5401.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-21T18%3A14%3A21Z&amp;precision=second" title="2013-01-21T18:14:21Z in Timeline">8 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove version numbers from library names.
+</p>
+<p>
+For some reason compiling HDF5 using CMake on OSX 10.6 fails.
+The autotools build works ok though.  But it results in
+different library filenames. i.e. without the version number.
+</p>
+<p>
+refs <a class="closed ticket" href="5401.html" title="enhancement: Update HDF5 libraries and integrate into CMake (closed: fixed)">#5401</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02dbd2dac625c8b9eb1c6cb0ed09c3c2964dd450" title="02dbd2dac625c8b9eb1c6cb0ed09c3c2964dd450">02dbd2dac625c8b9eb1c6cb0ed09c3c2964dd450</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="5401.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-30T09%3A17%3A29Z&amp;precision=second" title="2013-01-30T09:17:29Z in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="5401.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-30T09%3A24%3A02Z&amp;precision=second" title="2013-01-30T09:24:02Z in Timeline">8 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Looks fine. Updated libraries appear where they are expected. 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="5401.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A30%3A56%2B01%3A00&amp;precision=second" title="2015-06-04T00:30:56+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/6247"><span class="icon">​</span>6247</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5401?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5401?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5401?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

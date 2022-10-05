@@ -1,0 +1,1366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #10996 (Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="10995.html" title="Ticket #10995" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10996?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10996?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/10996?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="10997.html" title="Ticket #10997" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 10996, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="10995.html" title="Ticket #10995">Previous Ticket</a></span></li><li><span><a class="next" href="10997.html" title="Ticket #10997">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/10996.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="10996.html">Ticket #10996</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-30T07%3A38%3A07Z&amp;precision=second" title="2015-01-30T07:38:07Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A19%3A30%2B01%3A00&amp;precision=second" title="2015-06-04T04:19:30+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Michael+Wedel">Michael Wedel</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Michael+Wedel">Michael Wedel</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Diffraction">Diffraction</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~POLDI">POLDI</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="11104.html" title="IPeakFunction should have intensity/setIntensity methods">#11104</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Federico M Pouzols
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+In its current form with all the parameter transformations it will be very hard (or impossible) to replace the profile function that is used in PoldiSpectrumDomainFunction. After some experiments I came to the conclusion that there's an equivalent way of calculation the function that does not require any parameter transformation. This means that PoldiSpectrumDomainFunction can be seen as a wrapper for an IPeakFunction, which makes it possible to finally use other profile functions and easily add others (which are then general and not limited to POLDI).
+</p>
+<p>
+In the scope of this ticket I would like to implement those changes.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="10996.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-30T07%3A41%3A02Z&amp;precision=second" title="2015-01-30T07:41:02Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Alternative approach for calculation of POLDI 2D-spectrum
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/06a6c1b655727389fd3d7e01b4a409966fc5f2d5" title="06a6c1b655727389fd3d7e01b4a409966fc5f2d5">06a6c1b655727389fd3d7e01b4a409966fc5f2d5</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="10996.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-30T12%3A36%3A19Z&amp;precision=second" title="2015-01-30T12:36:19Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Removing comments, debug output, adjusting unit test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0b60fd5b9f73903c94d458c52cf133752b4bf635" title="0b60fd5b9f73903c94d458c52cf133752b4bf635">0b60fd5b9f73903c94d458c52cf133752b4bf635</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="10996.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-01-30T17%3A26%3A57Z&amp;precision=second" title="2015-01-30T17:26:57Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Checkpointing work.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b08cc36603edf966c75ad25d87e0496eb57e5295" title="b08cc36603edf966c75ad25d87e0496eb57e5295">b08cc36603edf966c75ad25d87e0496eb57e5295</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="10996.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T15%3A30%3A43Z&amp;precision=second" title="2015-02-13T15:30:43Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Added test function (area based gaussian)
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b64ae3331156ad29d6011a1a651abb22b010f5fc" title="b64ae3331156ad29d6011a1a651abb22b010f5fc">b64ae3331156ad29d6011a1a651abb22b010f5fc</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="10996.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-13T15%3A30%3A43Z&amp;precision=second" title="2015-02-13T15:30:43Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Adding local jacobian to handle derivatives.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4e10784fcfe66a6d9e42a1503d105fc568e43224" title="4e10784fcfe66a6d9e42a1503d105fc568e43224">4e10784fcfe66a6d9e42a1503d105fc568e43224</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="10996.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T09%3A51%3A06Z&amp;precision=second" title="2015-02-17T09:51:06Z in Timeline">6 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="10996.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-17T12%3A55%3A14Z&amp;precision=second" title="2015-02-17T12:55:14Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>11104</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="10996.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A11%3A32Z&amp;precision=second" title="2015-02-18T08:11:32Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Format correction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0d6e5dd35ddd7c687a9c5cda3faa2d626106adb6" title="0d6e5dd35ddd7c687a9c5cda3faa2d626106adb6">0d6e5dd35ddd7c687a9c5cda3faa2d626106adb6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="10996.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A11%3A32Z&amp;precision=second" title="2015-02-18T08:11:32Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. factoring out profile function
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0fdf943206d55b0752647b3765347542a59b290d" title="0fdf943206d55b0752647b3765347542a59b290d">0fdf943206d55b0752647b3765347542a59b290d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="10996.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A11%3A32Z&amp;precision=second" title="2015-02-18T08:11:32Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Removing AreaGaussian
+</p>
+<p>
+This is no longer required and is removed.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6b88ed7fdc0a2310fe60bde3b58ff21d36c7f993" title="6b88ed7fdc0a2310fe60bde3b58ff21d36c7f993">6b88ed7fdc0a2310fe60bde3b58ff21d36c7f993</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="10996.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A11%3A32Z&amp;precision=second" title="2015-02-18T08:11:32Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Removing debugging statements
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2c91349ad7de58a6667d49fcfc116c5fd75bf96f" title="2c91349ad7de58a6667d49fcfc116c5fd75bf96f">2c91349ad7de58a6667d49fcfc116c5fd75bf96f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="10996.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A11%3A32Z&amp;precision=second" title="2015-02-18T08:11:32Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Fixing PoldiFitPeaks2DTest
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c75cfb170d01bc20bb665eda68c89a97f13fc490" title="c75cfb170d01bc20bb665eda68c89a97f13fc490">c75cfb170d01bc20bb665eda68c89a97f13fc490</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="10996.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A11%3A32Z&amp;precision=second" title="2015-02-18T08:11:32Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Remove actualFunction from PoldiSpectrumDomainFunction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d0268f96eef1422abf57e38899945eff318aeefd" title="d0268f96eef1422abf57e38899945eff318aeefd">d0268f96eef1422abf57e38899945eff318aeefd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="10996.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-18T08%3A32%3A37Z&amp;precision=second" title="2015-02-18T08:32:37Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Fix PoldiSpectrumDomainFunctionTest
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bd126a3c35f29b5f71910c931f548856249d1a14" title="bd126a3c35f29b5f71910c931f548856249d1a14">bd126a3c35f29b5f71910c931f548856249d1a14</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="10996.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T13%3A53%3A33Z&amp;precision=second" title="2015-02-20T13:53:33Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Replacing peak integration with new intensity methods of IPeakFunction
+</p>
+<p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b17e83d92780c9834f6048cd15d0f86b40177465" title="b17e83d92780c9834f6048cd15d0f86b40177465">b17e83d92780c9834f6048cd15d0f86b40177465</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="10996.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T13%3A53%3A33Z&amp;precision=second" title="2015-02-20T13:53:33Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Cleaning up PoldiSpectrumDomainFunction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2a63581662114f61d0cf7aed39e30d4e1cdeb6e7" title="2a63581662114f61d0cf7aed39e30d4e1cdeb6e7">2a63581662114f61d0cf7aed39e30d4e1cdeb6e7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="10996.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T13%3A53%3A34Z&amp;precision=second" title="2015-02-20T13:53:34Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Adding unit tests for LocalJacobian
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5a1ac75297384f497cc2c29841e19b4299e23758" title="5a1ac75297384f497cc2c29841e19b4299e23758">5a1ac75297384f497cc2c29841e19b4299e23758</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="10996.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T13%3A53%3A34Z&amp;precision=second" title="2015-02-20T13:53:34Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Providing fallback peak profile
+</p>
+<p>
+When PoldiPeakCollection has no profile function set, the one provided to PoldiFitPeaks2D should be used.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c44d496b258d714301e97b4379888e2ff3786720" title="c44d496b258d714301e97b4379888e2ff3786720">c44d496b258d714301e97b4379888e2ff3786720</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="10996.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T15%3A27%3A06Z&amp;precision=second" title="2015-02-20T15:27:06Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Adjusting system test for POLDIFitPeaks2D
+</p>
+<p>
+Since intensity calculation changed slightly, it's not so useful to compare those. Instead a fit is performed and it's checked whether the fitted parameters are within acceptable ranges.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a3e51c4ffabb983ffa418aa9dab791112acb8e8e" title="a3e51c4ffabb983ffa418aa9dab791112acb8e8e">a3e51c4ffabb983ffa418aa9dab791112acb8e8e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="10996.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T15%3A30%3A44Z&amp;precision=second" title="2015-02-20T15:30:44Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Actually using fallback profile
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/14eaf02a3098262fff5c0431b654bee1de489657" title="14eaf02a3098262fff5c0431b654bee1de489657">14eaf02a3098262fff5c0431b654bee1de489657</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="10996.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T15%3A30%3A45Z&amp;precision=second" title="2015-02-20T15:30:45Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Removing unused code from PoldiTimeTransformer
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1177aef436748274e707bc7e0c97fb1b19dae322" title="1177aef436748274e707bc7e0c97fb1b19dae322">1177aef436748274e707bc7e0c97fb1b19dae322</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="10996.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T17%3A47%3A04Z&amp;precision=second" title="2015-02-20T17:47:04Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/270"><span class="icon">​</span>pull request #270</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="10996.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-20T18%3A13%3A43Z&amp;precision=second" title="2015-02-20T18:13:43Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="10996.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-21T08%3A26%3A48Z&amp;precision=second" title="2015-02-21T08:26:48Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="10996.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-23T07%3A59%3A44Z&amp;precision=second" title="2015-02-23T07:59:44Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Testing information</strong>
+Make sure the modified system test for PoldiFitPeaks2D passes. For manual testing you can try the usage examples of PoldiFitPeaks2D to see if they give reasonable results. To test the new feature, you could add the <tt>PeakProfilFunction</tt>-parameter to the algorithm call, for example with Lorentzian (assuming you already executed the usage example):
+</p>
+<p>
+<tt></tt>`
+PoldiFitPeaks2D(InputWorkspace=truncated_6904,
+</p>
+<blockquote>
+<p>
+PoldiPeakWorkspace="peaks_refined_6904",
+PeakProfileFunction="Lorentzian",
+OutputWorkspace="simulated_6904",
+RefinedPoldiPeakWorkspace="peaks_fit_2d_6904",
+Calculated1DSpectrum="simulated_1d_6904",
+LinearBackgroundParameter=0.01)
+</p>
+</blockquote>
+<p>
+<tt></tt>`
+</p>
+<p>
+In this case the spectrum has much higher values and in the 1D spectrum the Lorentzian peaks are nicely visible.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="10996.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-23T08%3A13%3A53Z&amp;precision=second" title="2015-02-23T08:13:53Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/16"><span class="icon">​</span>pull request #16</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="10996.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-23T08%3A33%3A26Z&amp;precision=second" title="2015-02-23T08:33:26Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Correcting unit test
+</p>
+<p>
+The unit test for the derivative was disabled, re-enabled it.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dede5b36681e67aa1f6257919bf62b4c574c80ac" title="dede5b36681e67aa1f6257919bf62b4c574c80ac">dede5b36681e67aa1f6257919bf62b4c574c80ac</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="10996.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-25T09%3A26%3A14Z&amp;precision=second" title="2015-02-25T09:26:14Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Federico M Pouzols</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="10996.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-25T11%3A07%3A16Z&amp;precision=second" title="2015-02-25T11:07:16Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+All looks perfect to me and the examples seem to work well. But I found an issue in one POLDI system test. POLDIFitPeaks2DTest fails with this error:
+</p>
+<p>
+<tt></tt>`
+</p>
+<blockquote>
+<p>
+File "&lt;string&gt;", line 1, in &lt;module&gt;
+File "/home/fedemp/mantid-repos/systemtests/StressTestFramework/stresstesting.py", line 194, in execute
+</p>
+<blockquote>
+<p>
+self.runTest()
+</p>
+</blockquote>
+<p>
+File "/home/fedemp/mantid-repos/systemtests/SystemTests/AnalysisTests/POLDIFitPeaks2DTest.py", line 15, in runTest
+</p>
+<blockquote>
+<p>
+self.analyseResults(dataFiles)
+</p>
+</blockquote>
+<p>
+File "/home/fedemp/mantid-repos/systemtests/SystemTests/AnalysisTests/POLDIFitPeaks2DTest.py", line 56, in analyseResults
+</p>
+<blockquote>
+<p>
+self.assertTrue(np.all(absDiff &lt; 7e-4))
+</p>
+</blockquote>
+<p>
+File "/usr/lib/python2.7/unittest/case.py", line 422, in assertTrue
+</p>
+<blockquote>
+<p>
+raise self.failureException(msg)
+</p>
+</blockquote>
+</blockquote>
+<p>
+AssertionError: False is not true
+<tt></tt>`
+</p>
+<p>
+Can you check if you also get this issue. It looks like a small numerical difference could have broken the test, but it could be something local here. For me, there are values in absDiff that are definitely bigger than the 7e-4, and one of them is as big as 0.42630710526.
+</p>
+<p>
+Otherwise I think this is ready to be merged.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="10996.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-25T12%3A19%3A21Z&amp;precision=second" title="2015-02-25T12:19:21Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This is still the old system test. I modified it, because the intensity calculation is a bit different now and it simply does not give the same intensities anymore. For the new system test there is also a pull request, it's this one: <a class="ext-link" href="https://github.com/mantidproject/systemtests/pull/16"><span class="icon">​</span>https://github.com/mantidproject/systemtests/pull/16</a>. Sorry for not making it more prominent in the testing comment.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="10996.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-25T12%3A32%3A02Z&amp;precision=second" title="2015-02-25T12:32:02Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Ops, sorry I had missed this parallel branch. When I use this modified test with PR <a class="closed ticket" href="10996.html#270" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#270</a>(<a class="ext-link" href="https://github.com/mantidproject/mantid/pull/270"><span class="icon">​</span>https://github.com/mantidproject/mantid/pull/270</a>) I get what appears to be an approximation issue:
+</p>
+<p>
+<tt></tt>`
+</p>
+<blockquote>
+<p>
+File "&lt;string&gt;", line 1, in &lt;module&gt;
+File "/home/fedemp/mantid-repos/systemtests/StressTestFramework/stresstesting.py", line 194, in execute
+</p>
+<blockquote>
+<p>
+self.runTest()
+</p>
+</blockquote>
+<p>
+File "/home/fedemp/mantid-repos/systemtests/SystemTests/AnalysisTests/POLDIFitPeaks2DTest.py", line 15, in runTest
+</p>
+<blockquote>
+<p>
+self.analyseResults(dataFiles)
+</p>
+</blockquote>
+<p>
+File "/home/fedemp/mantid-repos/systemtests/SystemTests/AnalysisTests/POLDIFitPeaks2DTest.py", line 67, in analyseResults
+</p>
+<blockquote>
+<p>
+self.assertLessThan(np.fabs(value - reference), error)
+</p>
+</blockquote>
+<p>
+File "/home/fedemp/mantid-repos/systemtests/StressTestFramework/stresstesting.py", line 402, in assertLessThan
+</p>
+<blockquote>
+<p>
+raise Exception(msg)
+</p>
+</blockquote>
+</blockquote>
+<p>
+Exception: Expected 7.1583e-05 &lt; 6.9e-05 
+<tt></tt>`
+</p>
+<p>
+When I enable the debug print I see this:
+<tt></tt>`
+0 d 0.153846153851 1.108644
+0 FWHM (rel.) 0.256706666667 0.002475747
+0 Intensity 0.42762694823 3286.152
+1 d 0.333333333331 1.637539
+1 FWHM (rel.) 1.03743478261 0.002516417
+<tt></tt>`
+</p>
+<p>
+It looks perfectly acceptable to me to have an approximation error in the 6th digit when using single precision. I'm not sure what Python (in different versions) may be doing here, especially when it casts the values as strings to floats. It these number above look good to you maybe the solution could be to increase a bit the error threshold and/or use double precision.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="10996.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-25T13%3A40%3A07Z&amp;precision=second" title="2015-02-25T13:40:07Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Removing FWHM from test until <a class="new ticket" href="10515.html" title="Fitting result changes depending on log level (new)">#10515</a> is solved.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4ed667abbc93314d0b87737c49e22e3673e7c388" title="4ed667abbc93314d0b87737c49e22e3673e7c388">4ed667abbc93314d0b87737c49e22e3673e7c388</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="10996.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-27T06%3A53%3A11Z&amp;precision=second" title="2015-02-27T06:53:11Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="10996.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-27T12%3A17%3A33Z&amp;precision=second" title="2015-02-27T12:17:33Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="10996.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-27T14%3A09%3A25Z&amp;precision=second" title="2015-02-27T14:09:25Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Updating PoldiAnalyseResiduals doctest
+</p>
+<p>
+Because of different intensity calculation, the residuals are of course also slightly different, I forgot about that before.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e079688d63d2b47ce0fa5527c9c70f86976fde5a" title="e079688d63d2b47ce0fa5527c9c70f86976fde5a">e079688d63d2b47ce0fa5527c9c70f86976fde5a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="10996.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-04T09%3A12%3A40Z&amp;precision=second" title="2015-03-04T09:12:40Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Small fix to FunctionParameterDecorator
+</p>
+<p>
+Forwarding of active parameters was not implemented.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c46c8a63fc16d15ca9b95a36d85b218c8d8a2ccd" title="c46c8a63fc16d15ca9b95a36d85b218c8d8a2ccd">c46c8a63fc16d15ca9b95a36d85b218c8d8a2ccd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="10996.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-04T09%3A12%3A40Z&amp;precision=second" title="2015-03-04T09:12:40Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. PoldiSpectrumDomainFunction uses FunctionParameterDecorator
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/714929fbd84a9cfddf4ba4a31af74d9d9caf0370" title="714929fbd84a9cfddf4ba4a31af74d9d9caf0370">714929fbd84a9cfddf4ba4a31af74d9d9caf0370</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="10996.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-05T09%3A08%3A22Z&amp;precision=second" title="2015-03-05T09:08:22Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Adjusting unit test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9c5e78c120fc7e3bc8c2e0fceacd8c360bbadc7e" title="9c5e78c120fc7e3bc8c2e0fceacd8c360bbadc7e">9c5e78c120fc7e3bc8c2e0fceacd8c360bbadc7e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="10996.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-05T16%3A01%3A29Z&amp;precision=second" title="2015-03-05T16:01:29Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Adjusting unit test for PeakParameterFunction
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5152fbccf20353beaf343d6a49c539b469a80a90" title="5152fbccf20353beaf343d6a49c539b469a80a90">5152fbccf20353beaf343d6a49c539b469a80a90</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="10996.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-05T16%3A01%3A29Z&amp;precision=second" title="2015-03-05T16:01:29Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="10996.html" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#10996</a>. Fixing system test for PoldiFitPeaks2D
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5924fced90f869d942bdce23585a7efe777121e3" title="5924fced90f869d942bdce23585a7efe777121e3">5924fced90f869d942bdce23585a7efe777121e3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="10996.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-05T16%3A09%3A26Z&amp;precision=second" title="2015-03-05T16:09:26Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+PoldiSpectrumDomainFunction has been updated to use changes from ticket <a class="closed ticket" href="10996.html#11102" title="Refactor PoldiSpectrumDomainFunction to use arbitrary profile functions (closed: fixed)">#11102</a>(<a class="ext-link" href="11102.html"><span class="icon">​</span>http://trac.mantidproject.org/mantid/ticket/11102</a>), so that wrapping of the peak function is simpler. This is just an implementation detail, it does not change the testing information.
+</p>
+<p>
+Additionally, the system test has been updated, so the systemtests pull request is obsolete.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="10996.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-05T22%3A05%3A29Z&amp;precision=second" title="2015-03-05T22:05:29Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Jenkins retest this please
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="10996.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-06T08%3A32%3A54Z&amp;precision=second" title="2015-03-06T08:32:54Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+All is good after the system tests transition to the main repo.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="10996.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-06T08%3A33%3A02Z&amp;precision=second" title="2015-03-06T08:33:02Z in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="270.html" title="enhancement: Create a CropWorkspace algorithm (closed: fixed)">#270</a> from mantidproject/feature/10996_refactor_poldi_spectrum_domain_function
+</p>
+<p>
+Refactor PoldiSpectrumDomainFunction to use arbitrary peak profile functions
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/a70d395ad6a79d86a02b25a4f385a14efbc3ab7f"><span class="icon">​</span>a70d395ad6a79d86a02b25a4f385a14efbc3ab7f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="10996.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-06T08%3A34%3A24Z&amp;precision=second" title="2015-03-06T08:34:24Z in Timeline">6 years</a> ago by Michael Wedel
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+System test is in main repo now, so I'm closing this pull request.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="10996.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A19%3A30%2B01%3A00&amp;precision=second" title="2015-06-04T04:19:30+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11835"><span class="icon">​</span>11835</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10996?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10996?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/10996?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

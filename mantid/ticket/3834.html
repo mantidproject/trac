@@ -1,0 +1,446 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #3834 (Crash when setting MultiThreaded.MaxCores to &gt; number of machine cores)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="3833.html" title="Ticket #3833" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3834?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3834?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3834?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="3835.html" title="Ticket #3835" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 3834, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="3833.html" title="Ticket #3833">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="3835.html" title="Ticket #3835">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="3834.html">Ticket #3834</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-22T20%3A55%3A42%2B01%3A00&amp;precision=second" title="2011-09-22T20:55:42+01:00 in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A25%3A54%2B01%3A00&amp;precision=second" title="2015-06-03T23:25:54+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Crash when setting MultiThreaded.MaxCores to &gt; number of machine cores</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Russell+Taylor">Russell Taylor</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Russell+Taylor">Russell Taylor</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=minor">minor</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.0.html">Release 2.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Vickie Lynch
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Witnessed when working with WISH data on both my Mac (2 cores) and PC (12 cores). In the former case it crashes (100% of the time) when MultiThreaded.MaxCores is 3 or greater, in the latter case if it's 14 or more.
+</p>
+<p>
+MultiThreaded.MaxCores is used in Mantid to call the OpenMP omp_set_num_threads directive. In principle, it should be possible to have more threads than cores, so I don't know why it suddenly crashes when this threshold is breached when we've never (afaik) seen a problem in this part of the code otherwise. One suggestion has been whether it's to do with the stack size, but a quick play with setting the OMP_STACKSIZE environment variable had no apparent effect.
+</p>
+<p>
+The obvious and easy solution is to prevent the setting of the number of threads to greater than the number of processors.
+</p>
+<p>
+Linux stack trace:
+</p>
+<pre class="wiki">boost::detail::sp_counted_base::use_count() at sp_counted_base_gcc_x86.hpp:165 0x997c20	
+boost::detail::shared_count::use_count() at shared_count.hpp:269 0x997c4d	
+boost::detail::shared_count::unique() at shared_count.hpp:274 0x7ffff7c2d5fa	
+boost::shared_ptr&lt;Mantid::Geometry::Detector&gt;::unique() at shared_ptr.hpp:432 0x7ffff755bbd4	
+Mantid::Geometry::ComponentPool&lt;Mantid::Geometry::Detector&gt;::getIndexInCache() at ParComponentFactory.cpp:78 0x7ffff755b2ac	
+Mantid::Geometry::ComponentPool&lt;Mantid::Geometry::Detector&gt;::create() at ParComponentFactory.cpp:46 0x7ffff755ab96	
+Mantid::Geometry::ParComponentFactory::createDetector() at ParComponentFactory.cpp:118 0x7ffff755a1de	
+Mantid::Geometry::Instrument::getDetector() at Instrument.cpp:412 0x7ffff74ef755	
+Mantid::Geometry::Instrument::getDetectors() at Instrument.cpp:481 0x7ffff74efe7c	
+Mantid::API::MatrixWorkspace::getDetector() at MatrixWorkspace.cpp:734 0x7ffff6f9ead5	
+Mantid::Algorithms::ConvertUnits::convertViaTOF() at ConvertUnits.cpp:422 0x7fffdeaa4685	
+</pre><p>
+Mac stack trace:
+</p>
+<pre class="wiki">Thread 8 Crashed:
+0   libMantidGeometry.dylib       	0x0000000100f6ec39 Mantid::Geometry::ParComponentFactory::createDetector(Mantid::Geometry::IDetector const*, Mantid::Geometry::ParameterMap const*) + 713
+1   libMantidGeometry.dylib       	0x0000000100f20b52 Mantid::Geometry::Instrument::getDetectors(std::set&lt;int, std::less&lt;int&gt;, std::allocator&lt;int&gt; &gt; const&amp;) const + 178
+2   libMantidAPI.dylib            	0x0000000101294573 Mantid::API::MatrixWorkspace::getDetector(unsigned long) const + 803
+3   libMantidAlgorithms.dylib     	0x00000001192cbedc Mantid::Algorithms::ConvertUnits::convertViaTOF(boost::shared_ptr&lt;Mantid::Kernel::Unit const&gt;, boost::shared_ptr&lt;Mantid::API::MatrixWorkspace&gt;) + 5052
+4   libiomp5.dylib                	0x0000000104d45b53 __kmp_invoke_microtask + 147
+5   libiomp5.dylib                	0x0000000104d26195 __kmpc_invoke_task_func + 181
+6   libiomp5.dylib                	0x0000000104d2204a __kmp_launch_thread + 490
+7   libiomp5.dylib                	0x0000000104d45f5d __kmp_launch_worker(void*) + 333
+8   libSystem.B.dylib             	0x00007fff83bdcfd6 _pthread_start + 331
+9   libSystem.B.dylib             	0x00007fff83bdce89 thread_start + 13
+</pre>
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="3834.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-22T22%3A16%3A48%2B01%3A00&amp;precision=second" title="2011-09-22T22:16:48+01:00 in Timeline">9 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+I think I've figured out what's going on. ParComponentFactory initialises its g_detPool static variable based on the maximum number of threads. This happens before whatever value is in MultiThreaded.MaxCores is set. When ComponentPool::getIndexInCache() then accesses things based on the (new) max number of threads, things go bad.
+</p>
+<p>
+I spotted this when I noticed that if you set the number of threads via the OMP_NUM_THREADS environment variable, then things are fine.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="3834.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-26T00%3A16%3A35%2B01%3A00&amp;precision=second" title="2011-09-26T00:16:35+01:00 in Timeline">9 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li><li>
+      <strong>Owner</strong>
+        set to <em>Russell Taylor</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="3834.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-26T15%3A23%3A10%2B01%3A00&amp;precision=second" title="2011-09-26T15:23:10+01:00 in Timeline">9 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[14890]</a>:
+</p>
+<div class="message"><p>
+Indentation fixes only - no code changed. Re <a class="closed ticket" href="3834.html" title="defect: Crash when setting MultiThreaded.MaxCores to &gt; number of machine cores (closed: fixed)">#3834</a>.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="3834.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-26T17%3A17%3A41%2B01%3A00&amp;precision=second" title="2011-09-26T17:17:41+01:00 in Timeline">9 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[14897]</a>:
+</p>
+<div class="message"><p>
+Fix potential crash if number of OpenMP threads is increased above default via MultiThreaded.MaxCores in properties file. No performance impact seen on the 'usual' case (threads=number of processors). Re <a class="closed ticket" href="3834.html" title="defect: Crash when setting MultiThreaded.MaxCores to &gt; number of machine cores (closed: fixed)">#3834</a>.<br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="3834.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-26T21%3A38%3A43%2B01%3A00&amp;precision=second" title="2011-09-26T21:38:43+01:00 in Timeline">9 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+To test: 
+</p>
+<ul><li>Set the MultiThreaded.MaxCores property to something larger than your number of physical processors
+</li><li>Load a WISH data file (or any one that will end up with parameterized detectors - LOQ's another, I think)
+</li><li>Run ConvertUnits to, e.g., wavelength
+</li><li>Before the fix, this was a guaranteed crash
+</li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="3834.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-10T18%3A56%3A14Z&amp;precision=second" title="2012-01-10T18:56:14Z in Timeline">9 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Vickie Lynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="3834.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-10T18%3A59%3A15Z&amp;precision=second" title="2012-01-10T18:59:15Z in Timeline">9 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I set MultiThreaded.MaxCores = 100 and ConvertUnits worked for WISH00017986.  I have only 8 cores.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="3834.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A25%3A54%2B01%3A00&amp;precision=second" title="2015-06-03T23:25:54+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/4683"><span class="icon">​</span>4683</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3834?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3834?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3834?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

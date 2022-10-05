@@ -1,0 +1,613 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8443 (Avoid having many singletons for SANS reduction)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8442.html" title="Ticket #8442" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8443?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8443?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8443?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8444.html" title="Ticket #8444" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8443, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8442.html" title="Ticket #8442">Previous Ticket</a></span></li><li><span><a class="next" href="8444.html" title="Ticket #8444">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8443.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8443.html">Ticket #8443</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-14T14%3A21%3A42Z&amp;precision=second" title="2013-11-14T14:21:42Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A36%3A56%2B01%3A00&amp;precision=second" title="2015-06-04T02:36:56+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Avoid having many singletons for SANS reduction</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Gesner+Passos">Gesner Passos</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Gesner+Passos">Gesner Passos</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.1.html">Release 3.1</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=SANS">SANS</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="8435.html" title="SANS Redesign Load Data">#8435</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="8444.html" title="Improve the way we do reduction of multi period data">#8444</a>, <a class="closed ticket" href="8455.html" title="Correct SampleGeomCor to not use protected members of ISISReducer">#8455</a>, <a class="assigned ticket" href="8470.html" title="Get rid of recreation of singletons in SANS">#8470</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Peter Parker
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+I really do not like the fact that we have 'many' singletons for performing the
+sans reduction. For example, to reduce both banks it will do the following: 
+</p>
+<ul><li>Reduce rear sample, 
+</li><li>create a new singleton
+</li><li>reducer rear can, 
+</li><li>finalize reduction rear
+</li><li>create new singleton
+</li><li>reduce front sample 
+</li><li>create new singleton
+</li><li>reduce front can
+</li><li>finalize reduction front. 
+</li></ul><p>
+I suggest removing this thing, to have a single singleton for the whole life of the SANS reduction.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8443.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-14T14%3A22%3A12Z&amp;precision=second" title="2013-11-14T14:22:12Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>8435</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8443.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-14T14%3A23%3A35Z&amp;precision=second" title="2013-11-14T14:23:35Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8444</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8443.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-15T10%3A42%3A07Z&amp;precision=second" title="2013-11-15T10:42:07Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8455</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8443.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-18T14%3A33%3A21Z&amp;precision=second" title="2013-11-18T14:33:21Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+re <a class="closed ticket" href="8443.html" title="enhancement: Avoid having many singletons for SANS reduction (closed: fixed)">#8443</a>: SANS reduce CAN does not create new singleton
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/52975a3c701d64c5be88802a206f7df9e313cabb" title="52975a3c701d64c5be88802a206f7df9e313cabb">52975a3c701d64c5be88802a206f7df9e313cabb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8443.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-18T14%3A33%3A22Z&amp;precision=second" title="2013-11-18T14:33:22Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+re <a class="closed ticket" href="8443.html" title="enhancement: Avoid having many singletons for SANS reduction (closed: fixed)">#8443</a>: Correct dealing with transmission names
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4c93a275685e90d3bbf6fb10bf86bf1ad7aa79c2" title="4c93a275685e90d3bbf6fb10bf86bf1ad7aa79c2">4c93a275685e90d3bbf6fb10bf86bf1ad7aa79c2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8443.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-18T14%3A33%3A35Z&amp;precision=second" title="2013-11-18T14:33:35Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+re <a class="closed ticket" href="8443.html" title="enhancement: Avoid having many singletons for SANS reduction (closed: fixed)">#8443</a>, re <a class="closed ticket" href="8461.html" title="defect: Error in seek centre SANS (closed: fixed)">#8461</a>: Update SystemTests for the fix of search centre
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/48356ca3deafb3d3a599f4425d5c6c7f52bf2a10" title="48356ca3deafb3d3a599f4425d5c6c7f52bf2a10">48356ca3deafb3d3a599f4425d5c6c7f52bf2a10</a>
+</p>
+<p>
+real link: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/48356ca3deafb3d3a599f4425d5c6c7f52bf2a10"><span class="icon">​</span>https://github.com/mantidproject/systemtests/commit/48356ca3deafb3d3a599f4425d5c6c7f52bf2a10</a>
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-18T14%3A45%3A27Z&amp;precision=second" title="2013-11-18T14:45:27Z in Timeline">7 years</a> ago
+                      by Gesner Passos
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8443?cversion=0&amp;cnum_hist=6#comment:6">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8443?action=comment-diff&amp;cnum=6&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8443.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-18T14%3A41%3A39Z&amp;precision=second" title="2013-11-18T14:41:39Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8470</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8443.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-18T14%3A50%3A15Z&amp;precision=second" title="2013-11-18T14:50:15Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+As a side effect of removing the creation of singletons we found a bug inside the search centre procedure <a class="closed ticket" href="8461.html" title="defect: Error in seek centre SANS (closed: fixed)">#8461</a>. For this reason the system test was forced to be updated ( <a href="8443.html#comment:12" title="Comment 12 for Ticket #8443">comment:12</a> ). 
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8443.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-18T14%3A50%3A27Z&amp;precision=second" title="2013-11-18T14:50:27Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+What is proposed here avoid the creation of the new singleton internally when reducing the can data. So, internally, the isis_reducer does not 'recreate' itself. But, others (ISISCommandInterface and centre_finder) still uses the creation of new singletons to process their functions. 
+</p>
+<p>
+For time constrains, it will not be dealt with here. It will be let to another ticket <a class="assigned ticket" href="8470.html" title="enhancement: Get rid of recreation of singletons in SANS (assigned)">#8470</a>. So, I can focus on <a class="closed ticket" href="8444.html" title="enhancement: Improve the way we do reduction of multi period data (closed: fixed)">#8444</a> earlier.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8443.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-18T15%3A04%3A18Z&amp;precision=second" title="2013-11-18T15:04:18Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Tester: 
+</p>
+<ul><li>Code review: If you are able to spot anything that could be dangerous, in avoiding the creation of the singleton, please present it to me.
+</li><li>Systemtests must be in sane condition. 
+</li><li>Follow the steps provided <a class="ext-link" href="8435.html#comment:15"><span class="icon">​</span>here</a> to perform a normal reduction and check that everything is going ok using the GUI interface.
+</li><li>Move to the Geometry Tab and run the search centre. 
+</li><li>Check the history of Up. Make sure that the problem reported in <a class="closed ticket" href="8461.html" title="defect: Error in seek centre SANS (closed: fixed)">#8461</a> is sorted, i.e., you must find the following history: 
+<pre class="wiki">RebinToWorkspace(WorkspaceToRebin='22041_trans_can_1.5_12.5',WorkspaceToMatch='centre',OutputWorkspace='CalculateNorm_loaded_temp') 
+
+Multiply(LHSWorkspace='CalculateNorm_loaded_temp',RHSWorkspace='Q_WAVE_conversion_temp',OutputWorkspace='Q_WAVE_conversion_temp') 
+
+Q1D(DetBankWorkspace='Up_can',OutputWorkspace='Up_can',OutputBinning='0.001,0.001,0.0126,-0.08,0.2',WavelengthAdj='Q_WAVE_conversion_temp',AccountForGravity='1')
+</pre></li></ul>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8443.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-22T15%3A43%3A30Z&amp;precision=second" title="2013-11-22T15:43:30Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8443.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-22T15%3A43%3A57Z&amp;precision=second" title="2013-11-22T15:43:57Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Parker</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8443.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-26T13%3A54%3A02Z&amp;precision=second" title="2013-11-26T13:54:02Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8443_many_singletons'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/a8ad0a4560af4cbf3315cb90fda31849475b713b"><span class="icon">​</span>a8ad0a4560af4cbf3315cb90fda31849475b713b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8443.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-26T13%3A55%3A38Z&amp;precision=second" title="2013-11-26T13:55:38Z in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/bugfix/8443_many_singletons'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/4fa79cc43e0bafc23d35bc0975fc9473aa41659c"><span class="icon">​</span>4fa79cc43e0bafc23d35bc0975fc9473aa41659c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8443.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-26T14%3A19%3A20Z&amp;precision=second" title="2013-11-26T14:19:20Z in Timeline">7 years</a> ago by Gesner Passos
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/8443_many_singletons' into feature/8455_correct_sample_geom_cor
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/d6e9fa02184bc547c79d320e5108488da601bc31"><span class="icon">​</span>d6e9fa02184bc547c79d320e5108488da601bc31</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8443.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A36%3A56%2B01%3A00&amp;precision=second" title="2015-06-04T02:36:56+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9287"><span class="icon">​</span>9287</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8443?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8443?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8443?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+PRINT if starting a new 4m mask use the new DIRECT_6958_4m_09Aug11.dat file 
+! L1=L2=4m, A1=20, A2=8  SANS/LARGE
+MASK/CLEAR
+MASK/CLEAR/TIME
+L/WAV 1.75 16.5 0.05/LOG
+! strong scatter
+!L/Q .004 1. .08/LOG
+PRINT some WIDE Q bins for weak signals
+! weak scatter
+L/Q 0.004, 0.001, 0.01, -0.15, 1.0
+L/QXY 0 0.025 .005/lin
+! note increase lower time limit here
+BACK/MON/TIMES 85000 98000
+DET/REAR
+GRAVITY/ON
+mask h0
+mask h190>h191
+mask v0
+mask v191
+! dead wire near top
+mask h156>h159
+! spot on rhs beam stop at 11m
+! mask h57>h66+v134>v141
+!
+mask/time 13000 15250
+!mask/time 5000 19200
+!
+L/R 41 -1 3
+!L/SP 1 36864
+!MON/LENGTH=17.937 2
+!
+! 6 May direct beam improves overlap (based on polymer std)
+MON/DIRECT=DIRECT_RUN524_4m_06May11.dat
+MON/TRANS/SPECTRUM=2/INTERPOLATE
+!  set monitor 2 to interpolate
+! PRINT  scale not sorted yet !!
+MON/SPECTRUM=2/INTERPOLATE
+FIT/TRANS/LOG 1.75 16.5
+!
+! 29/07/11 this centre found from gw20 9528
+set centre 175.6 -168.8
+!
+! 29/07/11 gdw20 9528
+set scales 0.1845 1.0 1.0 1.0 1.0
+! correction to actual sample position, measured 115 before shutter, notionally 81mm before shutter
+SAMPLE/OFFSET -34
+! Correction to SANS2D encoders in mm 
+DET/CORR REAR X -16.0
+DET/CORR REAR Z 58.0
+DET/CORR FRONT X -44.0
+DET/CORR FRONT Y -20.0
+DET/CORR FRONT Z 47.0
+DET/CORR FRONT ROT 0.0
+!
+!! 29/07/11 MASKSANS2D.112H_4m_Lu stop flow (scale gdw with changer, offset above for stop flow) 

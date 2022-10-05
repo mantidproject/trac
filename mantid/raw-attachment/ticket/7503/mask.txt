@@ -1,0 +1,75 @@
+! LNX test
+MASK/CLEAR
+MASK/CLEAR/TIME
+PRINT chopper phase 99.8, max wav @ 6m is ~15.6
+L/WAV 1.75 15.6 .25/LIN
+PRINT 5% wavebins
+! strong scatter
+L/Q .004 .8 .08/LOG
+!L/Q .003,.001,.013,-.08,1.0
+PRINT change Q bins if have weak scatter
+! weak scatter
+!L/Q 0.0025, 0.001, 0.01, -0.16, 1.0
+L/QXY 0 0.15 .002/lin
+! note increase lower time limit here
+!BACK/MON/TIMES 85000 98000
+BACK/M2 80000 98000
+!BACK/M3 86000 98000
+BACK/M4 0 5000 
+DET/REAR
+GRAVITY/ON
+mask h0
+mask h190>h191
+mask v0
+mask v191
+! dead wire near top
+!mask h156>h159
+! spot on rhs beam stop at 11m
+! mask h57>h66+v134>v141
+!
+!mask/time 14500 16000
+!mask/time 5000 19200
+!masking off beamstop arm
+! use this line for GISANS at 0.28o
+!mask/line 12 19 0 0.030
+!mask/rear h73>h79+v92>v98
+! use this line for GISANS at 0.56o
+mask/line 12 19 0 0.0599
+mask/rear h83>h89+v92>v98
+!mask/line 12 19
+!
+L/R 20 -1 3
+!L/SP 1 36864
+!MON/LENGTH=17.937 2
+!
+!MON/DIRECT=DIRECT_TRY_3.DAT
+MON/DIRECT=DIRECT_9672_6m_09Aug11.dat
+MON/TRANS/SPECTRUM=2/INTERPOLATE
+!  set monitor 2 to interpolate
+!PRINT  scale not sorted yet !!
+TRANS/TRANSPEC=4/SHIFT=-70
+MON/SPECTRUM=2/INTERPOLATE
+FIT/TRANS/LOG 1.75 15.6
+! 09/12/11 this centre found from GDW20 11380, 1.75-15.6ang, gravity on
+!this is the centre for when in transmission mode
+!set centre  -4.9 -165.16
+!this is the centre when in GISANS mode when at 0.56o
+set centre 5 -110
+!use this centre for 0.28o
+!set centre 5 -135
+PRINT look into changing mask of bs arm real centre is 5, -135
+!set centre -2 -100
+!
+! 17/12/12 scale found using GDW20 16611, A2=12mm but A1=20x4 for Gisans mode
+set scales 0.1238 1.0 1.0 1.0 1.0
+! correction to actual sample position, measured 28 before shutter, notionally 81mm before shutter
+SAMPLE/OFFSET -121.5
+! Correction to SANS2D encoders in mm 
+DET/CORR REAR X -16.0
+DET/CORR REAR Z 47.0
+DET/CORR FRONT X -44.0
+DET/CORR FRONT Y -20.0
+DET/CORR FRONT Z 47.0
+DET/CORR FRONT ROT 0.0
+!
+!! 23/07/13 MASKSANS2D.132D_6m_GISANS Dalgliesh & Rogers, REAR (ie ex front) only 

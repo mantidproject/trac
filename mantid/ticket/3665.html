@@ -1,0 +1,769 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #3665 (Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify plane normals.)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="3664.html" title="Ticket #3664" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3665?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3665?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/3665?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="3666.html" title="Ticket #3666" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 3665, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="3664.html" title="Ticket #3664">Previous Ticket</a></span></li><li class="last"><span><a class="next" href="3666.html" title="Ticket #3666">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="3665.html">Ticket #3665</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-02T17%3A02%3A26%2B01%3A00&amp;precision=second" title="2011-09-02T17:02:26+01:00 in Timeline">9 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A12%3A12%2B01%3A00&amp;precision=second" title="2015-06-03T23:12:12+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify plane normals.</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Dennis+Mikkelson">Dennis Mikkelson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Dennis+Mikkelson">Dennis Mikkelson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;2.0.html">Release 2.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Mantid">Mantid</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Vickie Lynch
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Currently, the FindUB_UsingMinMaxD method tests r*Dir for a large number of r values, to search for the minimum r value that indexes peaks in a possible plane normal direction.  This works fairly well for a small number of peaks, but is quite expensive for a large number of peaks.  The Rossmann approach of using a 1D FFT of projected Q-values may work better for a large number of peaks.  
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="3665.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-19T10%3A30%3A43%2B01%3A00&amp;precision=second" title="2011-09-19T10:30:43+01:00 in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 30</em> to <em>Iteration 31</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Bulk move of tickets to iteration 31 at the iteration 30 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="3665.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-24T00%3A52%3A07%2B01%3A00&amp;precision=second" title="2011-09-24T00:52:07+01:00 in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[14879]</a>:
+</p>
+<div class="message"><p>
+Added method IndexingUtils::GetMagFFT() and test.<br />
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a><br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="3665.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-09-24T01%3A02%3A23%2B01%3A00&amp;precision=second" title="2011-09-24T01:02:23+01:00 in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[14880]</a>:
+</p>
+<div class="message"><p>
+Use #define to set array size to avoid<br />
+error on Windows.<br />
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a><br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="3665.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-10-05T19%3A04%3A07%2B01%3A00&amp;precision=second" title="2011-10-05T19:04:07+01:00 in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[15107]</a>:
+</p>
+<div class="message"><p>
+Added methods GetFirstMaxIndex() and FormUB_From_abc_Vectors()<br />
+to better modularize the computation.  GetFirstMaxIndex() is<br />
+needed for FFT based indexing.<br />
+Now check for zero vector in GetIndexedPeaks_1D().<br />
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a><br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="3665.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-10-14T21%3A30%3A45%2B01%3A00&amp;precision=second" title="2011-10-14T21:30:45+01:00 in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[15355]</a>:
+</p>
+<div class="message"><p>
+Reduced threshold to 1e-12 for the determinant of UB<br />
+in CheckUB() method.<br />
+Minor fix for documentation. <br />
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a><br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="3665.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-10-14T22%3A13%3A44%2B01%3A00&amp;precision=second" title="2011-10-14T22:13:44+01:00 in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+In <a class="missing changeset" title="No default repository defined">[15359]</a>:
+</p>
+<div class="message"><p>
+Updating IndexingUtilsTest to correspond to <br />
+modified IndexingUtils::CheckUB().<br />
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a><br />
+</p>
+</div>
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="3665.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-23T19%3A09%3A31Z&amp;precision=second" title="2011-11-23T19:09:31Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added method NumberIndexed_1D() to IndexingUtils.
+</p>
+<p>
+Added support method and corresponding test for FFT based
+auto-indexing.
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5d8d6fea8e204051696d0614135e745cd49233ae" title="5d8d6fea8e204051696d0614135e745cd49233ae">5d8d6fea8e204051696d0614135e745cd49233ae</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="3665.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-25T06%3A21%3A00Z&amp;precision=second" title="2011-11-25T06:21:00Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added method DiscardDuplicates() to IndexingUtils.
+</p>
+<p>
+Added support method and corresponding test for FFT based
+auto-indexing.
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2c41d233c3a64a9d8543939465571cb711aba56e" title="2c41d233c3a64a9d8543939465571cb711aba56e">2c41d233c3a64a9d8543939465571cb711aba56e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="3665.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-26T01%3A47%3A17Z&amp;precision=second" title="2011-11-26T01:47:17Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added method FFTScanFor_Directions() to Indexing Utils.
+</p>
+<p>
+Adding support method and corresponding test for FFT based
+auto-indexing.
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c7b2d1e0b419cf769580742de043617b118f871c" title="c7b2d1e0b419cf769580742de043617b118f871c">c7b2d1e0b419cf769580742de043617b118f871c</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="3665.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-26T02%3A20%3A28Z&amp;precision=second" title="2011-11-26T02:20:28Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added method NumberIndexed_3D() to IndexingUtils.
+</p>
+<p>
+Adding support method and corresponding test for FFT based
+auto-indexing.
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/19aa6e79c77ee1184d0e129c3584c5319bc45c68" title="19aa6e79c77ee1184d0e129c3584c5319bc45c68">19aa6e79c77ee1184d0e129c3584c5319bc45c68</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="3665.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-26T03%3A32%3A10Z&amp;precision=second" title="2011-11-26T03:32:10Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added method FormUB_From_abc_Vectors() using minimum volume.
+</p>
+<p>
+Adding support method and corresponding test for FFT based
+auto-indexing.
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c137c34543dc2acfb0978262f53e99c0d7673731" title="c137c34543dc2acfb0978262f53e99c0d7673731">c137c34543dc2acfb0978262f53e99c0d7673731</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="3665.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-27T04%3A41%3A28Z&amp;precision=second" title="2011-11-27T04:41:28Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Added method Find_UB() that uses FFTs to identify possible a,b,c vectors.
+</p>
+<p>
+Adding support method and corresponding test for FFT based
+auto-indexing.
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/93535fa3286083cdb1072d24214a8ae62d5f1663" title="93535fa3286083cdb1072d24214a8ae62d5f1663">93535fa3286083cdb1072d24214a8ae62d5f1663</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="3665.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-11-28T01%3A44%3A24Z&amp;precision=second" title="2011-11-28T01:44:24Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Adding FindUBUsingFFT algorithm and test.
+</p>
+<p>
+This is the algorithm "wrapper" around the IndexingUtils::FindUB
+method that uses FFTs to find a UB matrix, given a list of peaks
+and bounds on the lattice parameters.  This could probably replace
+the FindUBUsingMinMaxD algorithm, after a trial period in the
+"real world".
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a4aee26387261c21fdffd61f2b4ef802bbf00c7b" title="a4aee26387261c21fdffd61f2b4ef802bbf00c7b">a4aee26387261c21fdffd61f2b4ef802bbf00c7b</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="3665.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2011-12-01T04%3A05%3A23Z&amp;precision=second" title="2011-12-01T04:05:23Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+UB returned by FFT based indexing will now be right handed.
+</p>
+<p>
+The real space unit cell vectors a,b,c corresponding to the
+UB constructed will now always form a right handed coordinate
+system.
+refs <a class="closed ticket" href="3665.html" title="enhancement: Modify the underlying FindUB_UsingMinMaxD method to use FFTs to identify ... (closed: fixed)">#3665</a> 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6fe292a84e92270f2f996ed77a4cbba6234fd1a9" title="6fe292a84e92270f2f996ed77a4cbba6234fd1a9">6fe292a84e92270f2f996ed77a4cbba6234fd1a9</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="3665.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-09T09%3A42%3A59Z&amp;precision=second" title="2012-01-09T09:42:59Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 32</em> to <em>Iteration 33</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to iteration 33 at iteration 32 code freeze
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="3665.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-10T15%3A20%3A15Z&amp;precision=second" title="2012-01-10T15:20:15Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="3665.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-10T15%3A24%3A01Z&amp;precision=second" title="2012-01-10T15:24:01Z in Timeline">9 years</a> ago by Dennis Mikkelson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This functionality has been added via a new algorithm FindUBUsingFFT, and underlying support code.  The original algorithm, FindUBUsingMinMaxD is still present but may not be needed in the future, since the FindUBUsingFFT algorithm generally works better.  
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="3665.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-11T11%3A12%3A25Z&amp;precision=second" title="2012-01-11T11:12:25Z in Timeline">9 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 33</em> to <em>Iteration 32</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="3665.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-12T14%3A01%3A21Z&amp;precision=second" title="2012-01-12T14:01:21Z in Timeline">9 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Vickie Lynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="3665.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-01-12T14%3A02%3A45Z&amp;precision=second" title="2012-01-12T14:02:45Z in Timeline">9 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Tested with 500 peaks and it runs in 2 seconds with correct lattice parameters.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="3665.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T23%3A12%3A12%2B01%3A00&amp;precision=second" title="2015-06-03T23:12:12+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/4512"><span class="icon">​</span>4512</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3665?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3665?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/3665?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

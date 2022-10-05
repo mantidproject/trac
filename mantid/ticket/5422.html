@@ -1,0 +1,2272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #5422 (Indirect Load ASCII - Implement New Interface)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="5421.html" title="Ticket #5421" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5422?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5422?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/5422?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="5423.html" title="Ticket #5423" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 5422, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="5421.html" title="Ticket #5421">Previous Ticket</a></span></li><li><span><a class="next" href="5423.html" title="Ticket #5423">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/5422.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="5422.html">Ticket #5422</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-28T10%3A13%3A21%2B01%3A00&amp;precision=second" title="2012-05-28T10:13:21+01:00 in Timeline">8 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A31%3A48%2B01%3A00&amp;precision=second" title="2015-06-04T00:31:48+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Indirect Load ASCII - Implement New Interface</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Peter+Parker">Peter Parker</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.0.html">Release 3.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~C2E">C2E</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="7851.html" title="[Indirect] ForCE is broken">#7851</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2013-09-04 14:47:34.821573+00:00">
+        (last modified by Samuel Jackson)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/5422?action=diff&amp;version=28">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+Following on from some of the files added as part of <a class="closed ticket" href="5172.html" title="enhancement: Indirect - New Scripts From Spencer (closed: fixed)">#5172</a>, integrate ForCE functionality into an extra tab for the C2E interface.
+</p>
+<p>
+Updated ticket instructions from Spencer:
+</p>
+<blockquote class="citation">
+<p>
+Replace the Python algorithm ForCe with a new interface.
+</p>
+<ol><li>Read Facilities.xml and for Facility != ISIS or SNS, get instruments where technique is Spectroscopy and Indirect. Use that list for drop-down menu for Instrument
+</li><li>Drop-down menu for File extension with options asc &amp; inx
+</li><li>Drop-down menu for Analyser - only 'silicon' at present
+</li><li>Drop-down menu for Reflection - only '111' at present
+</li><li>Input box with Browse for selected extension &amp; beginning with '&lt;Instrument&gt;_'
+</li><li>Option boxes for: Reject Zero &amp; Use Map
+</li><li>Options for Verbose, Save &amp; Plot (drop-down menu).
+</li></ol><p>
+When tested &amp; OK  the Py alg ForCE can be removed
+</p>
+</blockquote>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/5422/IN10_Definition.xml.html" title="View attachment">IN10_Definition.xml</a><a href="../raw-attachment/ticket/5422/IN10_Definition.xml" class="trac-rawlink" title="Download">​</a>
+       (<span title="3072 bytes">3.0 KB</span>) -
+      added by <em>Peter Parker</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-28T15%3A37%3A57%2B01%3A00&amp;precision=second" title="2012-05-28T15:37:57+01:00 in Timeline">8 years</a> ago.
+  </dt>
+              <dt>
+    <a href="../attachment/ticket/5422/IN10_P3OT_350K.inx.html" title="View attachment">IN10_P3OT_350K.inx</a><a href="../raw-attachment/ticket/5422/IN10_P3OT_350K.inx" class="trac-rawlink" title="Download">​</a>
+       (<span title="74739 bytes">73.0 KB</span>) -
+      added by <em>Peter Parker</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-28T15%3A38%3A16%2B01%3A00&amp;precision=second" title="2012-05-28T15:38:16+01:00 in Timeline">8 years</a> ago.
+  </dt>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="5422.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-28T15%3A37%3A33%2B01%3A00&amp;precision=second" title="2012-05-28T15:37:33+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Currently there is an issue when running ForCE on Spencer's Win7 machine - with both 32bit and 64bit versions of Mantid.
+</p>
+<p>
+To test ForCE, save the attached files into Mantid's Default Save Directory and make sure that the same folder is listed as one of Mantid's Data Search Directories.  Then run the following in a Python console window:
+</p>
+<div class="code"><pre>ForCE<span class="p">(</span>Mode<span class="o">=</span><span class="s">"INX"</span><span class="p">,</span> Instrument<span class="o">=</span><span class="s">"IN10"</span><span class="p">,</span> RunName<span class="o">=</span><span class="s">"P3OT_350K"</span><span class="p">,</span> RejectZero<span class="o">=</span><span class="bp">False</span><span class="p">,</span> 
+   UseMap<span class="o">=</span><span class="bp">False</span><span class="p">,</span> Verbose<span class="o">=</span><span class="bp">True</span><span class="p">,</span> Save<span class="o">=</span><span class="bp">True</span><span class="p">,</span> Plot<span class="o">=</span><span class="s">"Both"</span><span class="p">)</span>
+</pre></div>
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-28T15%3A37%3A57%2B01%3A00&amp;precision=second" title="2012-05-28T15:37:57+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/5422/IN10_Definition.xml.html"><em>IN10_Definition.xml</em></a><a href="../raw-attachment/ticket/5422/IN10_Definition.xml" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-28T15%3A38%3A16%2B01%3A00&amp;precision=second" title="2012-05-28T15:38:16+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/5422/IN10_P3OT_350K.inx.html"><em>IN10_P3OT_350K.inx</em></a><a href="../raw-attachment/ticket/5422/IN10_P3OT_350K.inx" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="5422.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-28T15%3A47%3A41%2B01%3A00&amp;precision=second" title="2012-05-28T15:47:41+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Some temporary debug statements ...
+</p>
+<p>
+... that are to be removed later.  These will help diagnose the problem on
+Spencer's machine. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d9f6445122e05f334a3dfccf936df320ae68e7fc" title="d9f6445122e05f334a3dfccf936df320ae68e7fc">d9f6445122e05f334a3dfccf936df320ae68e7fc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="5422.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-29T15%3A00%3A02%2B01%3A00&amp;precision=second" title="2012-05-29T15:00:02+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Some temporary debug statements ...
+</p>
+<p>
+... that are to be removed later.  These will help diagnose the problem on
+Spencer's machine. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d9f6445122e05f334a3dfccf936df320ae68e7fc" title="d9f6445122e05f334a3dfccf936df320ae68e7fc">d9f6445122e05f334a3dfccf936df320ae68e7fc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="5422.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T08%3A58%3A45%2B01%3A00&amp;precision=second" title="2012-05-30T08:58:45+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - One more temp debug statement.
+</p>
+<p>
+Strings::getFile seems to return nothing, so need to check the file path. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1280ff05cd92117306d71347695e8cce87075e11" title="1280ff05cd92117306d71347695e8cce87075e11">1280ff05cd92117306d71347695e8cce87075e11</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="5422.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A56%3A38%2B01%3A00&amp;precision=second" title="2012-05-30T15:56:38+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Some temporary debug statements ...
+</p>
+<p>
+... that are to be removed later.  These will help diagnose the problem on
+Spencer's machine. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d9f6445122e05f334a3dfccf936df320ae68e7fc" title="d9f6445122e05f334a3dfccf936df320ae68e7fc">d9f6445122e05f334a3dfccf936df320ae68e7fc</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="5422.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-05-30T15%3A56%3A55%2B01%3A00&amp;precision=second" title="2012-05-30T15:56:55+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - One more temp debug statement.
+</p>
+<p>
+Strings::getFile seems to return nothing, so need to check the file path. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1280ff05cd92117306d71347695e8cce87075e11" title="1280ff05cd92117306d71347695e8cce87075e11">1280ff05cd92117306d71347695e8cce87075e11</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="5422.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-11T16%3A27%3A48%2B01%3A00&amp;precision=second" title="2012-06-11T16:27:48+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Remove debug statements. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/59d323b462f79211e8515f5480eac60104e473f8" title="59d323b462f79211e8515f5480eac60104e473f8">59d323b462f79211e8515f5480eac60104e473f8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="5422.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T16%3A57%3A49%2B01%3A00&amp;precision=second" title="2012-06-13T16:57:49+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Remove debug statements. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/59d323b462f79211e8515f5480eac60104e473f8" title="59d323b462f79211e8515f5480eac60104e473f8">59d323b462f79211e8515f5480eac60104e473f8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="5422.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T18%3A04%3A42%2B01%3A00&amp;precision=second" title="2012-06-13T18:04:42+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - One more temp debug statement.
+</p>
+<p>
+Strings::getFile seems to return nothing, so need to check the file path. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1280ff05cd92117306d71347695e8cce87075e11" title="1280ff05cd92117306d71347695e8cce87075e11">1280ff05cd92117306d71347695e8cce87075e11</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="5422.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-06-13T18%3A07%3A07%2B01%3A00&amp;precision=second" title="2012-06-13T18:07:07+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Remove debug statements. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/59d323b462f79211e8515f5480eac60104e473f8" title="59d323b462f79211e8515f5480eac60104e473f8">59d323b462f79211e8515f5480eac60104e473f8</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="5422.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T10%3A27%3A50%2B01%3A00&amp;precision=second" title="2012-07-30T10:27:50+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Add ILL facility to Facilities.xml.
+</p>
+<p>
+Along with entries for IN5, IN6, IN10 and IN16. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706" title="81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706">81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="5422.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T10%3A36%3A39%2B01%3A00&amp;precision=second" title="2012-07-30T10:36:39+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Need IDFs for any declared insts in Facilities.xml.
+</p>
+<p>
+Revert "Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Add ILL facility to Facilities.xml."
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706" title="81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706">81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37c1f2390082db96e100ccd8745e5b7d6d4b079e" title="37c1f2390082db96e100ccd8745e5b7d6d4b079e">37c1f2390082db96e100ccd8745e5b7d6d4b079e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="5422.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A12%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:12+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Add ILL facility to Facilities.xml.
+</p>
+<p>
+Along with entries for IN5, IN6, IN10 and IN16. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706" title="81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706">81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="5422.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-07-30T23%3A03%3A13%2B01%3A00&amp;precision=second" title="2012-07-30T23:03:13+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Need IDFs for any declared insts in Facilities.xml.
+</p>
+<p>
+Revert "Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Add ILL facility to Facilities.xml."
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706" title="81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706">81dd6d0ec5fd9e6d4cb91215e00694ed4ef3e706</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37c1f2390082db96e100ccd8745e5b7d6d4b079e" title="37c1f2390082db96e100ccd8745e5b7d6d4b079e">37c1f2390082db96e100ccd8745e5b7d6d4b079e</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="5422.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-03T18%3A15%3A55%2B01%3A00&amp;precision=second" title="2012-08-03T18:15:55+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Reinstate Facilities.xml changes for ILL and add IDFs.
+</p>
+<p>
+Revert "Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Need IDFs for any declared insts in Facilities.xml."
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37c1f2390082db96e100ccd8745e5b7d6d4b079e" title="37c1f2390082db96e100ccd8745e5b7d6d4b079e">37c1f2390082db96e100ccd8745e5b7d6d4b079e</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1649415cb3585b9dc9e15399a67ccdf20edda27a" title="1649415cb3585b9dc9e15399a67ccdf20edda27a">1649415cb3585b9dc9e15399a67ccdf20edda27a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="5422.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-10T13%3A43%3A52%2B01%3A00&amp;precision=second" title="2012-08-10T13:43:52+01:00 in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.2</em> to <em>Release 2.3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved at the end of release 2.2
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="5422.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-14T19%3A44%3A51%2B01%3A00&amp;precision=second" title="2012-08-14T19:44:51+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Reinstate Facilities.xml changes for ILL and add IDFs.
+</p>
+<p>
+Revert "Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> - Need IDFs for any declared insts in Facilities.xml."
+</p>
+<p>
+This reverts commit <a class="changeset" href="https://github.com/mantidproject/mantid/commit/37c1f2390082db96e100ccd8745e5b7d6d4b079e" title="37c1f2390082db96e100ccd8745e5b7d6d4b079e">37c1f2390082db96e100ccd8745e5b7d6d4b079e</a>. 
+</p>
+<blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1649415cb3585b9dc9e15399a67ccdf20edda27a" title="1649415cb3585b9dc9e15399a67ccdf20edda27a">1649415cb3585b9dc9e15399a67ccdf20edda27a</a>
+</p>
+</blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="5422.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-24T09%3A03%3A53%2B01%3A00&amp;precision=second" title="2012-08-24T09:03:53+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Update</strong>:
+</p>
+<p>
+This is an ongoing ticket.  The ForCE algorithm is currently bundled along with Mantid in the Workflow-&gt;MIDAS category so that it may be tested by users before being implemented as a tab.
+</p>
+<p>
+To proceed we need more feedback from Spencer (and the users), as well as clarification about what the final tab should look like and what functionality should be on offer.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="5422.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-08-24T11%3A29%3A06%2B01%3A00&amp;precision=second" title="2012-08-24T11:29:06+01:00 in Timeline">8 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Keywords</strong>
+        <em>C2E</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="5422.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2012-10-28T11%3A39%3A01Z&amp;precision=second" title="2012-10-28T11:39:01Z in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.3</em> to <em>Release 2.4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to milestone 2.4
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="5422.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-01-28T09%3A23%3A10Z&amp;precision=second" title="2013-01-28T09:23:10Z in Timeline">8 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.4</em> to <em>Release 2.5</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved at the code freeze for release 2.4
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="5422.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-04-29T10%3A49%3A44%2B01%3A00&amp;precision=second" title="2013-04-29T10:49:44+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.5</em> to <em>Release 2.6</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to <a class="missing changeset" title="No default repository defined">r2</a>.6 at the end of <a class="missing changeset" title="No default repository defined">r2</a>.5
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="5422.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-24T09%3A53%3A08%2B01%3A00&amp;precision=second" title="2013-07-24T09:53:08+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Mantid</em> to <em>Framework</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="5422.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-07-26T14%3A54%3A59%2B01%3A00&amp;precision=second" title="2013-07-26T14:54:59+01:00 in Timeline">7 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Release 2.6</em> to <em>Backlog</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved to backlog at the code freeze for R2.6
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="5422.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-01T12%3A07%3A14%2B01%3A00&amp;precision=second" title="2013-08-01T12:07:14+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        changed from <em>Peter Parker</em> to <em>Samuel Jackson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="5422.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-01T15%3A59%3A37%2B01%3A00&amp;precision=second" title="2013-08-01T15:59:37+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Component</strong>
+        changed from <em>Framework</em> to <em>Indirect Inelastic</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="5422.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-08-07T11%3A16%3A47%2B01%3A00&amp;precision=second" title="2013-08-07T11:16:47+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.0</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="5422.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-04T15%3A47%3A34%2B01%3A00&amp;precision=second" title="2013-09-04T15:47:34+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/5422?action=diff&amp;version=28">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="5422.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-26T12%3A08%3A50%2B01%3A00&amp;precision=second" title="2013-09-26T12:08:50+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Added UI and py routines for Indirect Foreign.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b2e5a799c384460fe058debb05a152de6b7fd8d2" title="b2e5a799c384460fe058debb05a152de6b7fd8d2">b2e5a799c384460fe058debb05a152de6b7fd8d2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="5422.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-26T12%3A08%3A51%2B01%3A00&amp;precision=second" title="2013-09-26T12:08:51+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Added base classes for Indirect Foreign.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b1126fe2460da1fd8d4a887b7c04d27e1c81b600" title="b1126fe2460da1fd8d4a887b7c04d27e1c81b600">b1126fe2460da1fd8d4a887b7c04d27e1c81b600</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="5422.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-26T12%3A08%3A51%2B01%3A00&amp;precision=second" title="2013-09-26T12:08:51+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Added concrete tabs for Indirect Foreign.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/13ac6eb7f4032677b154ac6c9cfebcc0d8abec75" title="13ac6eb7f4032677b154ac6c9cfebcc0d8abec75">13ac6eb7f4032677b154ac6c9cfebcc0d8abec75</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="5422.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-26T12%3A10%3A56%2B01%3A00&amp;precision=second" title="2013-09-26T12:10:56+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/5422_indirect_foreign' into develop
+</p>
+<p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a>
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/CustomInterfaces/CMakeLists.txt
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a2b9e6114d59985dc48cd6086478ae4223b9309c" title="a2b9e6114d59985dc48cd6086478ae4223b9309c">a2b9e6114d59985dc48cd6086478ae4223b9309c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="5422.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-26T14%3A32%3A09%2B01%3A00&amp;precision=second" title="2013-09-26T14:32:09+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>7851</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="5422.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A30%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:30+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Updated GUI files extensions.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3e2e096f5baca53e56bb5a04ce0f7f298431c926" title="3e2e096f5baca53e56bb5a04ce0f7f298431c926">3e2e096f5baca53e56bb5a04ce0f7f298431c926</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="5422.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A30%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:30+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Adding and updating IPFs for Indirect Foreign.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/067412af179a18c9040b89ebb0c601f1c4e8c1d8" title="067412af179a18c9040b89ebb0c601f1c4e8c1d8">067412af179a18c9040b89ebb0c601f1c4e8c1d8</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="5422.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A30%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:30+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Correcting Syntax.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ca8ead5a80398ba6f21c31c82f748cae88f8b5b4" title="ca8ead5a80398ba6f21c31c82f748cae88f8b5b4">ca8ead5a80398ba6f21c31c82f748cae88f8b5b4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="5422.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A30%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:30+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Re-added ILL instruments to Mantid.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ab1ba37b7479c10310b45c3aba49ed8b02c40f83" title="ab1ba37b7479c10310b45c3aba49ed8b02c40f83">ab1ba37b7479c10310b45c3aba49ed8b02c40f83</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="5422.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A30%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:30+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Adding definition file for IN13.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5197612f0d20f8790bb5f57d022d17dcc4b849be" title="5197612f0d20f8790bb5f57d022d17dcc4b849be">5197612f0d20f8790bb5f57d022d17dcc4b849be</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="5422.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A31%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:31+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Update ForCE to use load analysers and reflections.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/46eae78f21fc466d474b1a6be36190fdc1837c27" title="46eae78f21fc466d474b1a6be36190fdc1837c27">46eae78f21fc466d474b1a6be36190fdc1837c27</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="5422.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A31%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:31+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Update location of help page.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/84f411836b5e053016339a60b58d32e36f893a5b" title="84f411836b5e053016339a60b58d32e36f893a5b">84f411836b5e053016339a60b58d32e36f893a5b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="5422.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A31%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:31+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Finished up ForCE implementation.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9135d3cecefcedecba81cca8ff63564d1ed48d74" title="9135d3cecefcedecba81cca8ff63564d1ed48d74">9135d3cecefcedecba81cca8ff63564d1ed48d74</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-42">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:42" class="cnum">
+      <a href="5422.html#comment:42">comment:42</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A31%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:31+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Implemented MolDyn and updated ForCE.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ffb8debe002e6e9421f2bb9949e32284eca38df9" title="ffb8debe002e6e9421f2bb9949e32284eca38df9">ffb8debe002e6e9421f2bb9949e32284eca38df9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-43">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:43" class="cnum">
+      <a href="5422.html#comment:43">comment:43</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A31%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:31+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Updating scripts to support run numbers.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6b18adaeaa790968e220f367a04ea0fc7f5dde78" title="6b18adaeaa790968e220f367a04ea0fc7f5dde78">6b18adaeaa790968e220f367a04ea0fc7f5dde78</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-44">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:44" class="cnum">
+      <a href="5422.html#comment:44">comment:44</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A36%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:36+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Updating system tests for indirect force.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/36a6f8d4f2d3e87f8d7852318d141746be0e9149" title="36a6f8d4f2d3e87f8d7852318d141746be0e9149">36a6f8d4f2d3e87f8d7852318d141746be0e9149</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-45">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:45" class="cnum">
+      <a href="5422.html#comment:45">comment:45</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A37%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:37+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> remove parameter map checking in system test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ee6647a6697bec44d21573b00e1128e14e41b453" title="ee6647a6697bec44d21573b00e1128e14e41b453">ee6647a6697bec44d21573b00e1128e14e41b453</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-46">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:46" class="cnum">
+      <a href="5422.html#comment:46">comment:46</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-30T16%3A23%3A37%2B01%3A00&amp;precision=second" title="2013-09-30T16:23:37+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Remove fortran dependency code.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/dc7e58024e8b2bf3d067e6f3db58d63bab7be765" title="dc7e58024e8b2bf3d067e6f3db58d63bab7be765">dc7e58024e8b2bf3d067e6f3db58d63bab7be765</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-47">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:47" class="cnum">
+      <a href="5422.html#comment:47">comment:47</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-01T09%3A18%3A36%2B01%3A00&amp;precision=second" title="2013-10-01T09:18:36+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Change IN16 parameters date attribute to valid-from
+</p>
+<p>
+The schema only uses valid-from and doesn't understand date.
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/634d0090d3b0e91218375dcc8758e7b4792d8457" title="634d0090d3b0e91218375dcc8758e7b4792d8457">634d0090d3b0e91218375dcc8758e7b4792d8457</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-48">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:48" class="cnum">
+      <a href="5422.html#comment:48">comment:48</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-02T10%3A36%3A42%2B01%3A00&amp;precision=second" title="2013-10-02T10:36:42+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>[C2E] ForCE - Implement New Tab</em> to <em>[C2E] ForCE - Implement New Interface</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-49">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:49" class="cnum">
+      <a href="5422.html#comment:49">comment:49</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-02T12%3A35%3A14%2B01%3A00&amp;precision=second" title="2013-10-02T12:35:14+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+A warning here: The two new algorithms MolDynAscii &amp; MolDynLoad are written using the old Python API and will not work when merged to master.
+</p>
+<p>
+This needs to be fixed.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-50">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:50" class="cnum">
+      <a href="5422.html#comment:50">comment:50</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T08%3A52%3A35%2B01%3A00&amp;precision=second" title="2013-10-03T08:52:35+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Updated to load IN13 files.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f1a7389c09c29d7f00aa51047a724b3fe5a50157" title="f1a7389c09c29d7f00aa51047a724b3fe5a50157">f1a7389c09c29d7f00aa51047a724b3fe5a50157</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-51">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:51" class="cnum">
+      <a href="5422.html#comment:51">comment:51</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T08%3A52%3A35%2B01%3A00&amp;precision=second" title="2013-10-03T08:52:35+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> remove wrapper algorithms from source.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5f54c676b44279a04ccc5395b0aef07c5ff80153" title="5f54c676b44279a04ccc5395b0aef07c5ff80153">5f54c676b44279a04ccc5395b0aef07c5ff80153</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-52">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:52" class="cnum">
+      <a href="5422.html#comment:52">comment:52</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T08%3A52%3A36%2B01%3A00&amp;precision=second" title="2013-10-03T08:52:36+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Changed name of interface, tabs and code.
+</p>
+<p>
+Note that ForCE is now IndirectNeutron.
+MolDyn is now IndirectMolDyn
+IndirectForeign is now IndirectLoadAscii
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d35b62f50f04b0e28b4428f2f8866d04b092be5b" title="d35b62f50f04b0e28b4428f2f8866d04b092be5b">d35b62f50f04b0e28b4428f2f8866d04b092be5b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-53">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:53" class="cnum">
+      <a href="5422.html#comment:53">comment:53</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T08%3A52%3A36%2B01%3A00&amp;precision=second" title="2013-10-03T08:52:36+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Remove ISIS instruments from being listed.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/750b4d767bbe3d21224965557e7396db117c945d" title="750b4d767bbe3d21224965557e7396db117c945d">750b4d767bbe3d21224965557e7396db117c945d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-54">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:54" class="cnum">
+      <a href="5422.html#comment:54">comment:54</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T08%3A52%3A41%2B01%3A00&amp;precision=second" title="2013-10-03T08:52:41+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Added system test for IndirectForce IN13.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fec69d679d70a5354cb7459c5da48b917d4472bb" title="fec69d679d70a5354cb7459c5da48b917d4472bb">fec69d679d70a5354cb7459c5da48b917d4472bb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-55">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:55" class="cnum">
+      <a href="5422.html#comment:55">comment:55</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T08%3A52%3A41%2B01%3A00&amp;precision=second" title="2013-10-03T08:52:41+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Added system test for MolDyn.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cf98b57eccf935e8cb300b9dc485855abd4539e3" title="cf98b57eccf935e8cb300b9dc485855abd4539e3">cf98b57eccf935e8cb300b9dc485855abd4539e3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-56">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:56" class="cnum">
+      <a href="5422.html#comment:56">comment:56</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T08%3A52%3A41%2B01%3A00&amp;precision=second" title="2013-10-03T08:52:41+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Updated files to follow more consistent naming.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4b5fc8f25ca7ac80efb0945ef610543306e16c93" title="4b5fc8f25ca7ac80efb0945ef610543306e16c93">4b5fc8f25ca7ac80efb0945ef610543306e16c93</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-57">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:57" class="cnum">
+      <a href="5422.html#comment:57">comment:57</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T08%3A57%3A54%2B01%3A00&amp;precision=second" title="2013-10-03T08:57:54+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/5422_indirect_foreign' into develop
+</p>
+<p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Fixed conflicts in CMakeLists
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Mantid/MantidQt/CustomInterfaces/CMakeLists.txt
+</p>
+</blockquote>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bf304d81a632f5bf8bf59e79615e5879bbd0ad63" title="bf304d81a632f5bf8bf59e79615e5879bbd0ad63">bf304d81a632f5bf8bf59e79615e5879bbd0ad63</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-58">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:58" class="cnum">
+      <a href="5422.html#comment:58">comment:58</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T15%3A13%3A21%2B01%3A00&amp;precision=second" title="2013-10-03T15:13:21+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Missed changing an import
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/02e84619632e64d1e2e2c09fd0cea64c4922d268" title="02e84619632e64d1e2e2c09fd0cea64c4922d268">02e84619632e64d1e2e2c09fd0cea64c4922d268</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-59">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:59" class="cnum">
+      <a href="5422.html#comment:59">comment:59</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T15%3A13%3A21%2B01%3A00&amp;precision=second" title="2013-10-03T15:13:21+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Changed import name.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/9cc6392629cbb79ced89177fc9511de8597a1c67" title="9cc6392629cbb79ced89177fc9511de8597a1c67">9cc6392629cbb79ced89177fc9511de8597a1c67</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-60">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:60" class="cnum">
+      <a href="5422.html#comment:60">comment:60</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T15%3A13%3A21%2B01%3A00&amp;precision=second" title="2013-10-03T15:13:21+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Add notification to change default user directory.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e9fb4bededb30615fead6dd338806b5cc00a4cc2" title="e9fb4bededb30615fead6dd338806b5cc00a4cc2">e9fb4bededb30615fead6dd338806b5cc00a4cc2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-61">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:61" class="cnum">
+      <a href="5422.html#comment:61">comment:61</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T15%3A13%3A21%2B01%3A00&amp;precision=second" title="2013-10-03T15:13:21+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Update header files to follow convention.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d9f463115d0c8b200c43adc80ec67ed5cb3b774e" title="d9f463115d0c8b200c43adc80ec67ed5cb3b774e">d9f463115d0c8b200c43adc80ec67ed5cb3b774e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-62">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:62" class="cnum">
+      <a href="5422.html#comment:62">comment:62</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T15%3A19%3A52%2B01%3A00&amp;precision=second" title="2013-10-03T15:19:52+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> adding news files to banned list.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/55d813846eb2c490c81b16223eba8874e1d18475" title="55d813846eb2c490c81b16223eba8874e1d18475">55d813846eb2c490c81b16223eba8874e1d18475</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-63">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:63" class="cnum">
+      <a href="5422.html#comment:63">comment:63</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-03T19%3A16%3A28%2B01%3A00&amp;precision=second" title="2013-10-03T19:16:28+01:00 in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a>. Another file to skip trying to load.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/cb79c37d11e452b75a2fc2ddef41f90d57a422eb" title="cb79c37d11e452b75a2fc2ddef41f90d57a422eb">cb79c37d11e452b75a2fc2ddef41f90d57a422eb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-64">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:64" class="cnum">
+      <a href="5422.html#comment:64">comment:64</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-08T11%3A46%3A58%2B01%3A00&amp;precision=second" title="2013-10-08T11:46:58+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>[C2E] ForCE - Implement New Interface</em> to <em>Indirect Load ASCII - Implement New Interface</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-65">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:65" class="cnum">
+      <a href="5422.html#comment:65">comment:65</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-08T11%3A53%3A07%2B01%3A00&amp;precision=second" title="2013-10-08T11:53:07+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+<strong>To Tester</strong>
+</p>
+<p>
+A new interface has been created for the indirect data analysis team called Indirect Load ASCII. You can find it in the interfaces menu. The interface consists of two tabs one for loading .asc and .inx files and one for .dat and .cdl files.
+</p>
+<p>
+I've written some (very) basic instructions on how to use the interface on the wiki at: <a href="http://www.mantidproject.org/Indirect:Indirect_Load_ASCII">http://www.mantidproject.org/Indirect:Indirect_Load_ASCII</a>
+</p>
+<p>
+You can find some files to use for testing in the data folder in the system tests repo.
+</p>
+<p>
+Generally just check that the interface works and that nothing obvious breaks.
+</p>
+<p>
+<strong>Note:</strong> both the <strong>system tests</strong> and <strong>main branch</strong> need merging for this ticket.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-08T14%3A03%3A11%2B01%3A00&amp;precision=second" title="2013-10-08T14:03:11+01:00 in Timeline">7 years</a> ago
+                      by Samuel Jackson
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/5422?cversion=0&amp;cnum_hist=65#comment:65">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/5422?action=comment-diff&amp;cnum=65&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-66">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:66" class="cnum">
+      <a href="5422.html#comment:66">comment:66</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-08T11%3A58%3A16%2B01%3A00&amp;precision=second" title="2013-10-08T11:58:16+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-67">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:67" class="cnum">
+      <a href="5422.html#comment:67">comment:67</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-08T11%3A59%3A01%2B01%3A00&amp;precision=second" title="2013-10-08T11:59:01+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Missed changing wiki URL.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f11f648a18245d2c4222a91d00a129988c994554" title="f11f648a18245d2c4222a91d00a129988c994554">f11f648a18245d2c4222a91d00a129988c994554</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-68">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:68" class="cnum">
+      <a href="5422.html#comment:68">comment:68</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-08T11%3A59%3A46%2B01%3A00&amp;precision=second" title="2013-10-08T11:59:46+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-69">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:69" class="cnum">
+      <a href="5422.html#comment:69">comment:69</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-11T13%3A21%3A28%2B01%3A00&amp;precision=second" title="2013-10-11T13:21:28+01:00 in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Parker</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-70">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:70" class="cnum">
+      <a href="5422.html#comment:70">comment:70</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-11T15%3A09%3A33%2B01%3A00&amp;precision=second" title="2013-10-11T15:09:33+01:00 in Timeline">7 years</a> ago by Peter Parker
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Couple of issues:
+</p>
+<ul><li>As discussed, using <tt>[System Tests]/Data/IN10_P3OT_350K.inx</tt> in the Neutron tab with Reject Zero ticked causes the error "<tt>TypeError: 'float' object has no attribute '__getitem__'</tt>" to occur in line 368 in <tt>Code/Mantid/scripts/Inelastic\IndirectNeutron.py</tt>.
+</li></ul><ul><li><em>Veeeery</em> minor, only mentioning it because we're reopening the ticket, but validation for the "Function Names" field of MolDyn is maybe a little off:
+<ul><li>"Fqt-total,a,Sqw-total" gives an error of "<tt>SystemExit: ERROR *** Failed to parse function stringa</tt>".  This is fine but a space between "string" and "a" would be nice.
+</li><li>"Fqt-total,Sqw-totalss" gives an error of "<tt>IndexError: list index out of range</tt>" which is not as helpful/clear as the previous error.
+</li><li>"Fqt-total, Sqw-total" also gives an error "<tt>IndexError: list index out of range</tt>".  We could easily trim the individual function names to stop this.
+</li></ul></li></ul><p>
+Otherwise, nice.  Automatic detection of instrument works, result plotting and saving works, and the input files are correctly filtered by extension.  System tests pass fine, too.
+</p>
+<p>
+I'm also a fan of splitting up the tabs into their own classes/files.  I wish more interfaces in Mantid were laid out like that.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-71">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:71" class="cnum">
+      <a href="5422.html#comment:71">comment:71</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-14T10%3A56%3A06%2B01%3A00&amp;precision=second" title="2013-10-14T10:56:06+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Corrected python script to work with inx files.
+</p>
+<p>
+Also changed the extension output from when using inx.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/375486cc5fbccd1640c7def04677ea08eb42f259" title="375486cc5fbccd1640c7def04677ea08eb42f259">375486cc5fbccd1640c7def04677ea08eb42f259</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-72">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:72" class="cnum">
+      <a href="5422.html#comment:72">comment:72</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-14T10%3A56%3A07%2B01%3A00&amp;precision=second" title="2013-10-14T10:56:07+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Added better function string parsing.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ef22608c6dd2be83d547e5a9b2fc7d892ceed74a" title="ef22608c6dd2be83d547e5a9b2fc7d892ceed74a">ef22608c6dd2be83d547e5a9b2fc7d892ceed74a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-73">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:73" class="cnum">
+      <a href="5422.html#comment:73">comment:73</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-14T10%3A56%3A07%2B01%3A00&amp;precision=second" title="2013-10-14T10:56:07+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="5422.html" title="enhancement: Indirect Load ASCII - Implement New Interface (closed: fixed)">#5422</a> Fix window resize quirk.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/95b545fd45dca43a048c9d66777194d0368848b0" title="95b545fd45dca43a048c9d66777194d0368848b0">95b545fd45dca43a048c9d66777194d0368848b0</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-74">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:74" class="cnum">
+      <a href="5422.html#comment:74">comment:74</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-14T12%3A09%3A58%2B01%3A00&amp;precision=second" title="2013-10-14T12:09:58+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-75">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:75" class="cnum">
+      <a href="5422.html#comment:75">comment:75</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-14T12%3A10%3A37%2B01%3A00&amp;precision=second" title="2013-10-14T12:10:37+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Tester:</strong> As above, but check that the additional issues listed have been resolved too.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-76">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:76" class="cnum">
+      <a href="5422.html#comment:76">comment:76</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-15T15%3A21%3A48%2B01%3A00&amp;precision=second" title="2013-10-15T15:21:48+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        changed from <em>Peter Parker</em> to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-77">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:77" class="cnum">
+      <a href="5422.html#comment:77">comment:77</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-15T15%3A33%3A19%2B01%3A00&amp;precision=second" title="2013-10-15T15:33:19+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'feature/5422_indirect_foreign' of github.com:mantidproject/mantid into feature/5422_indirect_foreign
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/982313fa074547c26ca88900901b10335a049b05"><span class="icon">​</span>982313fa074547c26ca88900901b10335a049b05</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-78">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:78" class="cnum">
+      <a href="5422.html#comment:78">comment:78</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-15T15%3A33%3A19%2B01%3A00&amp;precision=second" title="2013-10-15T15:33:19+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/5422_indirect_foreign'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/765d12a111a5a9c2d7fb0afd56c1913657d90186"><span class="icon">​</span>765d12a111a5a9c2d7fb0afd56c1913657d90186</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-79">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:79" class="cnum">
+      <a href="5422.html#comment:79">comment:79</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-15T15%3A33%3A59%2B01%3A00&amp;precision=second" title="2013-10-15T15:33:59+01:00 in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/5422_indirect_foreign'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/29c37cf847929008c66b447c427a9bad6ffd8ec1"><span class="icon">​</span>29c37cf847929008c66b447c427a9bad6ffd8ec1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-80">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:80" class="cnum">
+      <a href="5422.html#comment:80">comment:80</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T00%3A31%3A48%2B01%3A00&amp;precision=second" title="2015-06-04T00:31:48+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/6268"><span class="icon">​</span>6268</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5422?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5422?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/5422?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

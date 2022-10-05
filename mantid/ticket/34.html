@@ -1,0 +1,1033 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #34 (Create the PluginManager and allow run time addition of libraries)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="33.html" title="Ticket #33" />
+        <link rel="last" href="525.html" title="Ticket #525" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/34?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/34?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/34?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="up" href="https://trac.mantidproject.org/mantid/report/27?asc=1&amp;page=1" />
+        <link rel="next" href="35.html" title="Ticket #35" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 34, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="33.html" title="Ticket #33">Previous Ticket</a></span></li><li><a href="https://trac.mantidproject.org/mantid/report/27?asc=1&amp;page=1">Back to Query</a></li><li class="last"><span><a class="next" href="35.html" title="Ticket #35">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="34.html">Ticket #34</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-10-02T16%3A29%3A52%2B01%3A00&amp;precision=second" title="2007-10-02T16:29:52+01:00 in Timeline">13 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T21%3A50%3A16%2B01%3A00&amp;precision=second" title="2015-06-03T21:50:16+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Create the PluginManager and allow run time addition of libraries</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Nick+Draper">Nick Draper</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Matt+Clarke">Matt Clarke</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Iteration&#32;4.html">Iteration 4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component"></a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Create a PluginManager to allow the loading of shared libraries at run time.
+This will require conditional comiplation as the required calls are OS specific.
+</p>
+<p>
+Look at the following in GAUDI for inspiration
+DLLClassManager (in GAUDIsvc)
+and
+System (in GAUDIKernel) where the real code calls are hidden.
+</p>
+<p>
+The ADD explains how I want the plug in to work <a class="ext-link" href="http://svn.mantidproject.org/mantid/trunk/Documents/Design/Architecture%20Design%20Document.doc"><span class="icon">​</span>http://svn.mantidproject.org/mantid/trunk/Documents/Design/Architecture%20Design%20Document.doc</a>
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="34.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-10-12T17%3A30%3A02%2B01%3A00&amp;precision=second" title="2007-10-12T17:30:02+01:00 in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        set to <em>Matt Clarke</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="34.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-05T15%3A01%3A25Z&amp;precision=second" title="2007-11-05T15:01:25Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[206]</a>) Added stuff for DLL opening. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="34.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-05T15%3A55%3A50Z&amp;precision=second" title="2007-11-05T15:55:50Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[207]</a>) Added shared lib loading code to kernel. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="34.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-05T15%3A57%3A03Z&amp;precision=second" title="2007-11-05T15:57:03Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[208]</a>) Added shared lib loading code to kernel. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="34.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-05T16%3A11%3A53Z&amp;precision=second" title="2007-11-05T16:11:53Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[210]</a>) Remove temporary folder. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="34.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-06T11%3A04%3A23Z&amp;precision=second" title="2007-11-06T11:04:23Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[213]</a>) Fixed dllopen.cpp. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="34.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-09T11%3A52%3A58Z&amp;precision=second" title="2007-11-09T11:52:58Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 2</em> to <em>Iteration 3</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="34.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-13T15%3A06%3A43Z&amp;precision=second" title="2007-11-13T15:06:43Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[277]</a>) re <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+Added functionality in the configsvc to return the current directory
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="34.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-13T16%3A12%3A57Z&amp;precision=second" title="2007-11-13T16:12:57Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[279]</a>) Modified LibraryManager (no longer singleton. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="34.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-27T12%3A13%3A30Z&amp;precision=second" title="2007-11-27T12:13:30Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[380]</a>) Test library. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="34.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-28T15%3A33%3A03Z&amp;precision=second" title="2007-11-28T15:33:03Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[386]</a>) Adjusted DllOpen to report error information. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="34.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-11-28T16%3A59%3A48Z&amp;precision=second" title="2007-11-28T16:59:48Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[389]</a>) A few mods to LibraryManager and DllOpen. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="34.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-12-03T14%3A58%3A39Z&amp;precision=second" title="2007-12-03T14:58:39Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Code is in place, just needs better testing.
+This ideally needs the build to build into seperate libraries.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="34.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-12-03T16%3A35%3A56Z&amp;precision=second" title="2007-12-03T16:35:56Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[427]</a>) LibraryManagerTest now tries to load the MantidAlgorithms lib. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="34.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-12-05T10%3A30%3A25Z&amp;precision=second" title="2007-12-05T10:30:25Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 3</em> to <em>Iteration 4</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="34.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-12-13T16%3A37%3A42Z&amp;precision=second" title="2007-12-13T16:37:42Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[532]</a>) re <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+Add a method to allow loading of a directories worth of libraries
+tidied up DllOpen
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="34.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-12-13T16%3A46%3A30Z&amp;precision=second" title="2007-12-13T16:46:30Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[533]</a>) re <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+minor bug fix
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="34.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-12-13T17%3A14%3A15Z&amp;precision=second" title="2007-12-13T17:14:15Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[534]</a>) re <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+minor bug fix
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="34.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2007-12-14T15%3A42%3A53Z&amp;precision=second" title="2007-12-14T15:42:53Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[546]</a>) re <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+corrected seperator issues
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="34.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-10T16%3A11%3A23Z&amp;precision=second" title="2008-01-10T16:11:23Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[605]</a>) Removed LibraryManager from BoostPythonWrapper. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="34.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-11T09%3A56%3A03Z&amp;precision=second" title="2008-01-11T09:56:03Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[606]</a>) Changed LibraryManager to load all Libs in a directory. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="34.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-11T10%3A00%3A12Z&amp;precision=second" title="2008-01-11T10:00:12Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[607]</a>) Forgot some new files! Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="34.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-11T10%3A54%3A31Z&amp;precision=second" title="2008-01-11T10:54:31Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[608]</a>) Changed Framework Manager to load all libraries in a specified directory (work in progress). Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="34.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-11T11%3A19%3A30Z&amp;precision=second" title="2008-01-11T11:19:30Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[609]</a>) Too many underscores in ifndef! Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="34.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-11T11%3A48%3A12Z&amp;precision=second" title="2008-01-11T11:48:12Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[610]</a>) Moved properties file to correct location. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="34.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-11T11%3A52%3A43Z&amp;precision=second" title="2008-01-11T11:52:43Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[611]</a>) Add method for copying properties files. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="34.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-18T09%3A30%3A54Z&amp;precision=second" title="2008-01-18T09:30:54Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[622]</a>) Changed Library Manager as per Stuart's suggestions. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-28">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:28" class="cnum">
+      <a href="34.html#comment:28">comment:28</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-18T10%3A22%3A19Z&amp;precision=second" title="2008-01-18T10:22:19Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[623]</a>) Slight change to Library Manager. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-29">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:29" class="cnum">
+      <a href="34.html#comment:29">comment:29</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-24T14%3A36%3A25Z&amp;precision=second" title="2008-01-24T14:36:25Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[640]</a>) Changed FrameworkManager to a singleton. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-30">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:30" class="cnum">
+      <a href="34.html#comment:30">comment:30</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-24T14%3A38%3A54Z&amp;precision=second" title="2008-01-24T14:38:54Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[642]</a>) Changed FrameworkManager to a singleton. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-31">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:31" class="cnum">
+      <a href="34.html#comment:31">comment:31</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-24T14%3A39%3A32Z&amp;precision=second" title="2008-01-24T14:39:32Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[643]</a>) Changed FrameworkManager to a singleton. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-32">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:32" class="cnum">
+      <a href="34.html#comment:32">comment:32</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-24T14%3A40%3A09Z&amp;precision=second" title="2008-01-24T14:40:09Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[644]</a>) Changed FrameworkManager to a singleton. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-33">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:33" class="cnum">
+      <a href="34.html#comment:33">comment:33</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-24T14%3A41%3A21Z&amp;precision=second" title="2008-01-24T14:41:21Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[645]</a>) Changed FrameworkManager to a singleton. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-34">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:34" class="cnum">
+      <a href="34.html#comment:34">comment:34</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-24T14%3A43%3A29Z&amp;precision=second" title="2008-01-24T14:43:29Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[646]</a>) Changed back to using shared pointers in the map. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-35">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:35" class="cnum">
+      <a href="34.html#comment:35">comment:35</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-24T14%3A50%3A08Z&amp;precision=second" title="2008-01-24T14:50:08Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[647]</a>) Fixed main. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-36">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:36" class="cnum">
+      <a href="34.html#comment:36">comment:36</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-24T14%3A58%3A26Z&amp;precision=second" title="2008-01-24T14:58:26Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[648]</a>) Forgot to remove a std::cout that was for testing! Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-37">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:37" class="cnum">
+      <a href="34.html#comment:37">comment:37</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-29T13%3A35%3A47Z&amp;precision=second" title="2008-01-29T13:35:47Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[667]</a>) Changed link order. Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-38">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:38" class="cnum">
+      <a href="34.html#comment:38">comment:38</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-29T13%3A50%3A57Z&amp;precision=second" title="2008-01-29T13:50:57Z in Timeline">13 years</a> ago by Matt Clarke
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[668]</a>) Oops! Refs <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-39">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:39" class="cnum">
+      <a href="34.html#comment:39">comment:39</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-01-29T16%3A45%3A40Z&amp;precision=second" title="2008-01-29T16:45:40Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[670]</a>) re <a class="closed ticket" href="34.html" title="enhancement: Create the PluginManager and allow run time addition of libraries (closed: fixed)">#34</a>
+Improveed handling if properties file missing.
+Changed VS build to use dynamic loading
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-40">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:40" class="cnum">
+      <a href="34.html#comment:40">comment:40</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2008-02-05T14%3A08%3A03Z&amp;precision=second" title="2008-02-05T14:08:03Z in Timeline">13 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>closed</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-41">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:41" class="cnum">
+      <a href="34.html#comment:41">comment:41</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T21%3A50%3A16%2B01%3A00&amp;precision=second" title="2015-06-03T21:50:16+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/882"><span class="icon">​</span>882</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/34?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/34?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/34?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

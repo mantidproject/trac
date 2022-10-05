@@ -1,0 +1,17 @@
+diff --git a/Code/Mantid/MantidQt/CustomInterfaces/src/SANSRunWindow.cpp b/Code/Mantid/MantidQt/CustomInterfaces/src/SANSRunWindow.cpp
+index 2d6daa0..22c635d 100644
+--- a/Code/Mantid/MantidQt/CustomInterfaces/src/SANSRunWindow.cpp
++++ b/Code/Mantid/MantidQt/CustomInterfaces/src/SANSRunWindow.cpp
+@@ -2018,6 +2018,12 @@ QString SANSRunWindow::readUserFileGUIChanges(const States type)
+     exec_reduce += ", False";
+   }
+   exec_reduce += ")\n";
++  if ( ( m_uiForm.enableRearFlood_ck->isChecked() && (!m_uiForm.floodRearFile->isValid()) ) ||
++       ( m_uiForm.enableFrontFlood_ck->isChecked() && (!m_uiForm.floodFrontFile->isValid()) )
++       )
++    {
++      throw std::runtime_error("Invalid flood file. Please, check the path given to the Flood file in Reduction Settings tab.");       
++    }  
+   QString floodRearFile =
+     m_uiForm.enableRearFlood_ck->isChecked() ? m_uiForm.floodRearFile->getFirstFilename().trimmed() : "";
+   QString floodFrontFile =

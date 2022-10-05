@@ -1,0 +1,767 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #11126 (Reorganize remote algorithms so that they can use different job managers)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="11125.html" title="Ticket #11125" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11126?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11126?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/11126?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="11127.html" title="Ticket #11127" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 11126, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="11125.html" title="Ticket #11125">Previous Ticket</a></span></li><li><span><a class="next" href="11127.html" title="Ticket #11127">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/11126.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="11126.html">Ticket #11126</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-19T11%3A21%3A10Z&amp;precision=second" title="2015-02-19T11:21:10Z in Timeline">6 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A24%3A28%2B01%3A00&amp;precision=second" title="2015-06-04T04:24:28+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Reorganize remote algorithms so that they can use different job managers</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Federico+M+Pouzols">Federico M Pouzols</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Federico+M+Pouzols">Federico M Pouzols</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.4.html">Release 3.4</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="11064.html" title="Fit the SCARF job scheduler remote algorithm in the 'RemoteJobManager' design">#11064</a>, <a class="closed ticket" href="11122.html" title="Add unit tests for the remote algorithms">#11122</a>, <a class="closed ticket" href="11123.html" title="Add IRemoteJobManager interface">#11123</a>, <a class="closed ticket" href="11124.html" title="Add class RemoteJobManagerFactory">#11124</a>, <a class="closed ticket" href="11392.html" title="Move current content of remote algorithms and RemoteJobManager into Framework/RemoteJobManagers/MantidWebServiceAPIJobManager">#11392</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="assigned ticket" href="9277.html" title="Distributed Algorithms - Sites other than ORNL">#9277</a>, <a class="assigned ticket" href="11361.html" title="Update documentation of remote algorithms when they become general">#11361</a>, <a class="assigned ticket" href="11373.html" title="FacilityInfo: delete getRemoteJobManager and rearrange RemoteJob related stuff">#11373</a>, <a class="inprogress ticket" href="11538.html" title="Modify IMAT GUI to use remote algorithms v2 instead of SCARFTomoReconstruction">#11538</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Martyn Gigg
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+      <span class="lastmod" title="2015-03-16 16:08:29.155997+00:00">
+        (last modified by Federico M Pouzols)
+        (<a href="https://trac.mantidproject.org/mantid/ticket/11126?action=diff&amp;version=6">diff</a>)
+      </span>
+    </h3>
+    <div class="searchable">
+      <p>
+The idea is that the remote algorithms should be able to use different web service APIs or underlying mechanisms (ssh, etc.) to control remote jobs on compute resources. Examples: LSF through the IBM PAC (Platform Application Center), or SLURM.
+</p>
+<p>
+Using the design/diagram on slide 19 of <a class="ext-link" href="https://github.com/mantidproject/documents/blob/master/Presentations/SOS18/Mantid%20HPC%20Challenges.pptx"><span class="icon">​</span>https://github.com/mantidproject/documents/blob/master/Presentations/SOS18/Mantid%20HPC%20Challenges.pptx</a>:
+</p>
+<p>
+If we:
+</p>
+<ul><li>add <tt>IRemoteJobManager</tt> (<a class="closed ticket" href="11123.html" title="Add IRemoteJobManager interface (closed: fixed)">#11123</a>)
+</li><li>add <tt>RemoteJobManagerFactory</tt> (<a class="closed ticket" href="11124.html" title="Add class RemoteJobManagerFactory (closed: fixed)">#11124</a>)
+</li></ul><p>
+We could rearrange the code that is specific to the Mantid web service API (<a href="http://www.mantidproject.org/Remote_Job_Submission_API">http://www.mantidproject.org/Remote_Job_Submission_API</a>) to a class that extends <tt>IRemoteJobManager</tt>. This class could be called <tt>MantidWSAPIJobManager</tt> for example.
+This specific code includes code to submit HTTP requests currently living in <tt>RemoteJobManager</tt>, and
+code to process parameters and response codes and messages, currently living in the individual remote algorithms.
+</p>
+<p>
+This way it would be possible to have support for other web services such as those provided by the SLURM and LSF cluster schedulers / resource managers.
+</p>
+<p>
+We still need to clarify a few points, but in principle this would require moving code that currently lives in the class <tt>RemoteJobManager</tt> (HTTP requests), and the remote algorithms (all current implementations, including <tt>Authenticate</tt>, <tt>AbortRemoteJob</tt>, <tt>StartRemoteTransaction</tt>, <tt>SubmitRemoteJob</tt>, etc.).
+</p>
+<p>
+Once this is done, remote algorithms (<tt>Authenticate</tt>, <tt>SubmitRemoteJob</tt>, etc.) will just rely on methods from <tt>IRemoteJobManager</tt>. Remote algorithms will need testing at SNS (where they are currently being used in different interfaces with the Fermi cluster). These are the scripts included in the Mantid distribution that currently use remote algorithms:
+</p>
+<ul><li><a class="ext-link" href="https://github.com/mantidproject/mantid/blob/master/Code/Mantid/scripts/Interface/reduction_gui/reduction/scripter.py"><span class="icon">​</span>https://github.com/mantidproject/mantid/blob/master/Code/Mantid/scripts/Interface/reduction_gui/reduction/scripter.py</a>
+</li><li><a class="ext-link" href="https://github.com/mantidproject/mantid/blob/master/Code/Mantid/scripts/Interface/reduction_gui/widgets/cluster_status.py"><span class="icon">​</span>https://github.com/mantidproject/mantid/blob/master/Code/Mantid/scripts/Interface/reduction_gui/widgets/cluster_status.py</a>
+</li></ul><p>
+These scripts are imported/used in the following interfaces:
+</p>
+<ul><li>Diffraction -&gt; Powder Diffraction Reduction
+</li><li>Direct -&gt; DGS Reduction
+</li><li>SANS -&gt; ORNL SANS
+</li><li>Reflectometry -&gt; REFL reduction
+</li><li>Reflectometry -&gt; REFM reduction
+</li></ul><p>
+When all this works, it would then be possible to add a new specific RemoteJobManager for tomography jobs (and/or other types) on SCARF: <tt>SCARF_LSFRemoteJobManager</tt> or similar.
+</p>
+<p>
+Note: when all this is done, make sure that the algorithms do not use <tt>FacilityInfo::getRemoteJobManager()</tt> which would be then removed (<a class="assigned ticket" href="11373.html" title="FacilityInfo: delete getRemoteJobManager and rearrange RemoteJob related ... (assigned)">#11373</a>).
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="11126.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-02-19T11%3A28%3A27Z&amp;precision=second" title="2015-02-19T11:28:27Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/11126?action=diff&amp;version=1">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="11126.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T11%3A43%3A33Z&amp;precision=second" title="2015-03-02T11:43:33Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>9277</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="assigned ticket" href="9277.html" title="enhancement: Distributed Algorithms - Sites other than ORNL (assigned)">#9277</a>) Added a few blocking tickets (needed to make the RemoteJobManager generic to different web services and underlying job control mechanisms).
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="11126.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-02T15%3A04%3A17Z&amp;precision=second" title="2015-03-02T15:04:17Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>assigned</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="11126.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-13T17%3A45%3A50Z&amp;precision=second" title="2015-03-13T17:45:50Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11361</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="11126.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-16T16%3A07%3A21Z&amp;precision=second" title="2015-03-16T16:07:21Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11373</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="11126.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-16T16%3A08%3A29Z&amp;precision=second" title="2015-03-16T16:08:29Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Description</strong>
+        modified (<a href="https://trac.mantidproject.org/mantid/ticket/11126?action=diff&amp;version=6">diff</a>)
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="11126.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-18T12%3A29%3A13Z&amp;precision=second" title="2015-03-18T12:29:13Z in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>11392</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="11126.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-30T15%3A06%3A06%2B01%3A00&amp;precision=second" title="2015-03-30T15:06:06+01:00 in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11064</em> removed
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="11126.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-03-30T15%3A08%3A02%2B01%3A00&amp;precision=second" title="2015-03-30T15:08:02+01:00 in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>11064</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="11126.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-01T16%3A30%3A21%2B01%3A00&amp;precision=second" title="2015-04-01T16:30:21+01:00 in Timeline">6 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Summary</strong>
+        changed from <em>Reorganize remote algorithms so that they can use different web service APIs</em> to <em>Reorganize remote algorithms so that they can use different job managers</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="11126.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T00%3A35%3A34%2B01%3A00&amp;precision=second" title="2015-04-07T00:35:34+01:00 in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>assigned</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+new v2 of remote algorithms, re <a class="closed ticket" href="11126.html" title="Reorganize remote algorithms so that they can use different job managers (closed: fixed)">#11126</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b342af5253445e146626dcd66288f90c1197abdf" title="b342af5253445e146626dcd66288f90c1197abdf">b342af5253445e146626dcd66288f90c1197abdf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="11126.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T00%3A35%3A34%2B01%3A00&amp;precision=second" title="2015-04-07T00:35:34+01:00 in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+updated v1 tests and added v2 tests, re <a class="closed ticket" href="11126.html" title="Reorganize remote algorithms so that they can use different job managers (closed: fixed)">#11126</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/6b80a62057f2345c9be5e054b53d264a1404c0d1" title="6b80a62057f2345c9be5e054b53d264a1404c0d1">6b80a62057f2345c9be5e054b53d264a1404c0d1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="11126.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T00%3A35%3A34%2B01%3A00&amp;precision=second" title="2015-04-07T00:35:34+01:00 in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+use remote algorithms v1 in reduction gui(s), re <a class="closed ticket" href="11126.html" title="Reorganize remote algorithms so that they can use different job managers (closed: fixed)">#11126</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1cdec780e7a634dac78b99d6bd4e09dd5e20cfac" title="1cdec780e7a634dac78b99d6bd4e09dd5e20cfac">1cdec780e7a634dac78b99d6bd4e09dd5e20cfac</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="11126.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T00%3A35%3A34%2B01%3A00&amp;precision=second" title="2015-04-07T00:35:34+01:00 in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+add rst docs for the v2 remote algorithms, re <a class="closed ticket" href="11126.html" title="Reorganize remote algorithms so that they can use different job managers (closed: fixed)">#11126</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e237fe28d1d008a8e7f1a91a1b9dcd814e4586f6" title="e237fe28d1d008a8e7f1a91a1b9dcd814e4586f6">e237fe28d1d008a8e7f1a91a1b9dcd814e4586f6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="11126.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-07T00%3A53%3A19%2B01%3A00&amp;precision=second" title="2015-04-07T00:53:19+01:00 in Timeline">6 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+This is being verified as <a class="ext-link" href="https://github.com/mantidproject/mantid/pull/525"><span class="icon">​</span>pull request #525</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="11126.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-13T10%3A30%3A14%2B01%3A00&amp;precision=second" title="2015-04-13T10:30:14+01:00 in Timeline">5 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add note on v1 differences in v2 algorithms rst doc, re <a class="closed ticket" href="11126.html" title="Reorganize remote algorithms so that they can use different job managers (closed: fixed)">#11126</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/13cbaa18fda653290b06cba681d6c1ec9bc62f9e" title="13cbaa18fda653290b06cba681d6c1ec9bc62f9e">13cbaa18fda653290b06cba681d6c1ec9bc62f9e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="11126.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-14T08%3A47%3A20%2B01%3A00&amp;precision=second" title="2015-04-14T08:47:20+01:00 in Timeline">5 years</a> ago by Federico M Pouzols
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>11538</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="11126.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-24T08%3A58%3A50%2B01%3A00&amp;precision=second" title="2015-04-24T08:58:50+01:00 in Timeline">5 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Martyn Gigg</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="11126.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-24T09%3A31%3A15%2B01%3A00&amp;precision=second" title="2015-04-24T09:31:15+01:00 in Timeline">5 years</a> ago by Federico Montesino Pouzols
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+use v1 also for StartRemoteTransaction, re <a class="closed ticket" href="11126.html" title="Reorganize remote algorithms so that they can use different job managers (closed: fixed)">#11126</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7c66bb2256c5f1aa94f0f5adad8cc62dab789480" title="7c66bb2256c5f1aa94f0f5adad8cc62dab789480">7c66bb2256c5f1aa94f0f5adad8cc62dab789480</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="11126.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-24T10%3A49%3A56%2B01%3A00&amp;precision=second" title="2015-04-24T10:49:56+01:00 in Timeline">5 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This all seems okay to me now as the new versions shouldn't affect any existing code.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="11126.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-04-24T10%3A49%3A59%2B01%3A00&amp;precision=second" title="2015-04-24T10:49:59+01:00 in Timeline">5 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge pull request <a class="closed ticket" href="525.html" title="enhancement: Update MantidPlot python screenshot so that it is correct (closed: fixed)">#525</a> from mantidproject/11126_remote_algorithms_use_different_job_managers
+</p>
+<p>
+Modify remote algorithms to support different job managers (for Fermi, SCARF, etc.)
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/72029d8edbd3fbf9aa6fcbe81892d81bb96fdaec"><span class="icon">​</span>72029d8edbd3fbf9aa6fcbe81892d81bb96fdaec</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="11126.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T04%3A24%3A28%2B01%3A00&amp;precision=second" title="2015-06-04T04:24:28+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/11965"><span class="icon">​</span>11965</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11126?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11126?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/11126?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

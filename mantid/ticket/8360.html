@@ -1,0 +1,938 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8360 (Clear memory leaks in the Geometry package)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8359.html" title="Ticket #8359" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8360?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8360?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8360?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8361.html" title="Ticket #8361" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8360, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8359.html" title="Ticket #8359">Previous Ticket</a></span></li><li><span><a class="next" href="8361.html" title="Ticket #8361">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8360.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8360.html">Ticket #8360</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-11-04T17%3A09%3A03Z&amp;precision=second" title="2013-11-04T17:09:03Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A33%3A33%2B01%3A00&amp;precision=second" title="2015-06-04T02:33:33+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Clear memory leaks in the Geometry package</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Russell+Taylor">Russell Taylor</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Russell+Taylor">Russell Taylor</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Framework">Framework</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~Maintenance">Maintenance</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="8356.html" title="Clear memory leaks in the GeometryTest package">#8356</a>, <a class="closed ticket" href="8487.html" title="Fix unreleased use of POCO::XML document and nodelists in Geometry code">#8487</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Peter Peterson
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+The SNS Jenkins has a <a class="ext-link" href="https://builds.sns.gov/job/ornl_valgrind_develop"><span class="icon">​</span>valgrind job</a> which checks the Geometry code in so far as it is exercised by the unit tests.
+</p>
+<p>
+Using this job and/or valgrind runs of your own, eliminate all the leaks/errors that result from code in the Geometry package - i.e. under Framework/Geometry/inc/MantidGeometry or Framework/Geometry/src.
+</p>
+<p>
+Note that this should be done after leaks coming out of the test code have been addressed (<a class="closed ticket" href="8356.html" title="defect: Clear memory leaks in the GeometryTest package (closed: fixed)">#8356</a>).
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8360.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T19%3A59%3A35Z&amp;precision=second" title="2014-02-05T19:59:35Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>8487</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8360.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-05T20%3A00%3A03Z&amp;precision=second" title="2014-02-05T20:00:03Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Owner</strong>
+        set to <em>Russell Taylor</em>
+    </li><li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8360.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-06T15%3A00%3A11Z&amp;precision=second" title="2014-02-06T15:00:11Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8360.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-06T19%3A17%3A11Z&amp;precision=second" title="2014-02-06T19:17:11Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Add valgrind suppression file for Geometry unit tests.
+</p>
+<p>
+OpenCascade uses some kind of custom memory allocator (see for example
+<a class="ext-link" href="http://opencascade.blogspot.com/2011/06/is-my-memory-leaking-part2.html"><span class="icon">​</span>http://opencascade.blogspot.com/2011/06/is-my-memory-leaking-part2.html</a>)
+that doesn't play nicely with valgrind. I don't think that there's a real
+leak here, so we want to squash the complaints.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d02747f789932afe49bb77f68712818198d53af4" title="d02747f789932afe49bb77f68712818198d53af4">d02747f789932afe49bb77f68712818198d53af4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8360.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T16%3A02%3A17Z&amp;precision=second" title="2014-03-10T16:02:17Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Add valgrind suppression file for Geometry unit tests.
+</p>
+<p>
+OpenCascade uses some kind of custom memory allocator (see for example
+<a class="ext-link" href="http://opencascade.blogspot.com/2011/06/is-my-memory-leaking-part2.html"><span class="icon">​</span>http://opencascade.blogspot.com/2011/06/is-my-memory-leaking-part2.html</a>)
+that doesn't play nicely with valgrind. I don't think that there's a real
+leak here, so we want to squash the complaints.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/a34b0be9c42456d6a8aaa0e6ae3418b4f0558ab7" title="a34b0be9c42456d6a8aaa0e6ae3418b4f0558ab7">a34b0be9c42456d6a8aaa0e6ae3418b4f0558ab7</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8360.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T16%3A02%3A18Z&amp;precision=second" title="2014-03-10T16:02:18Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Make sure that the logging framework is shut down.
+</p>
+<p>
+This line ensures that the logging framework is fully shut down and all
+objects cleaned up after the unit tests have run. Removes a lot of
+(somewhat spurious) reported memory leaks.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1c2b5f2362190e6efcd796ff72019284fdc24abf" title="1c2b5f2362190e6efcd796ff72019284fdc24abf">1c2b5f2362190e6efcd796ff72019284fdc24abf</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8360.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T16%3A02%3A18Z&amp;precision=second" title="2014-03-10T16:02:18Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Use an std::vector rather than a C array.
+</p>
+<p>
+Doesn't leak like the old way did as it wasn't being cleaned up at all.
+I'd be surprised if there's any significant impact on performance.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/12f71525ee6bce43a81cf107eb25aa1a4b7f9178" title="12f71525ee6bce43a81cf107eb25aa1a4b7f9178">12f71525ee6bce43a81cf107eb25aa1a4b7f9178</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8360.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T16%3A02%3A18Z&amp;precision=second" title="2014-03-10T16:02:18Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Be exception-safe.
+</p>
+<p>
+Previously, the Plane objects would be leaked if setPlane threw an
+exception.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fecb73ca846f83fef7bb3656f12adf707d58072d" title="fecb73ca846f83fef7bb3656f12adf707d58072d">fecb73ca846f83fef7bb3656f12adf707d58072d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8360.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-10T16%3A02%3A18Z&amp;precision=second" title="2014-03-10T16:02:18Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Suppress reported leaks from SurfaceFactory.
+</p>
+<p>
+I don't think that these are really leaks, it's just that they are owned
+by the static SurfaceFactory instance.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ac6912b95bb498003bf8e6e4431591b368bfca0d" title="ac6912b95bb498003bf8e6e4431591b368bfca0d">ac6912b95bb498003bf8e6e4431591b368bfca0d</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8360.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-11T10%3A15%3A22Z&amp;precision=second" title="2014-03-11T10:15:22Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement copy and assignment operators for Vertex2D
+</p>
+<p>
+Refs <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d07bd8449c86fd541e6aef6c486258b2cde93157" title="d07bd8449c86fd541e6aef6c486258b2cde93157">d07bd8449c86fd541e6aef6c486258b2cde93157</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8360.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-11T10%3A15%3A22Z&amp;precision=second" title="2014-03-11T10:15:22Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement copy and assignment operators for Quadrilateral.
+</p>
+<p>
+Quadrilateral specialies ConvexPolygon to avoid heap allocations
+so the copy and assignment operators need to be aware of this.
+Refs <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f29a36a27c3b6c93f72acc48077017664dee2aff" title="f29a36a27c3b6c93f72acc48077017664dee2aff">f29a36a27c3b6c93f72acc48077017664dee2aff</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8360.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-11T10%3A15%3A22Z&amp;precision=second" title="2014-03-11T10:15:22Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix memory leaks in LaszloIntersection code.
+</p>
+<p>
+This only affected the cases where exceptions were thrown.
+Refs <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/42ae264bb3f933794c84fac33733c3460dfecee2" title="42ae264bb3f933794c84fac33733c3460dfecee2">42ae264bb3f933794c84fac33733c3460dfecee2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8360.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T14%3A53%3A18Z&amp;precision=second" title="2014-03-13T14:53:18Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Add valgrind suppression file for Geometry unit tests.
+</p>
+<p>
+OpenCascade uses some kind of custom memory allocator (see for example
+<a class="ext-link" href="http://opencascade.blogspot.com/2011/06/is-my-memory-leaking-part2.html"><span class="icon">​</span>http://opencascade.blogspot.com/2011/06/is-my-memory-leaking-part2.html</a>)
+that doesn't play nicely with valgrind. I don't think that there's a real
+leak here, so we want to squash the complaints.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/1b7beb03343a86b81dc9a89644a9dd54755680ef" title="1b7beb03343a86b81dc9a89644a9dd54755680ef">1b7beb03343a86b81dc9a89644a9dd54755680ef</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8360.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T14%3A53%3A19Z&amp;precision=second" title="2014-03-13T14:53:19Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Make sure that the logging framework is shut down.
+</p>
+<p>
+This line ensures that the logging framework is fully shut down and all
+objects cleaned up after the unit tests have run. Removes a lot of
+(somewhat spurious) reported memory leaks.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3dc4dabb9e4bd868479000c8b3fd4f862c752358" title="3dc4dabb9e4bd868479000c8b3fd4f862c752358">3dc4dabb9e4bd868479000c8b3fd4f862c752358</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8360.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T14%3A53%3A19Z&amp;precision=second" title="2014-03-13T14:53:19Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Use an std::vector rather than a C array.
+</p>
+<p>
+Doesn't leak like the old way did as it wasn't being cleaned up at all.
+I'd be surprised if there's any significant impact on performance.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c80c36ed16fab8dcfdabc47211955a7f9f5bf470" title="c80c36ed16fab8dcfdabc47211955a7f9f5bf470">c80c36ed16fab8dcfdabc47211955a7f9f5bf470</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8360.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T14%3A53%3A19Z&amp;precision=second" title="2014-03-13T14:53:19Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Be exception-safe.
+</p>
+<p>
+Previously, the Plane objects would be leaked if setPlane threw an
+exception.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/73cb6a4e77ff5adb51d468c251aec0ec0aa0dd1e" title="73cb6a4e77ff5adb51d468c251aec0ec0aa0dd1e">73cb6a4e77ff5adb51d468c251aec0ec0aa0dd1e</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8360.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T14%3A53%3A20Z&amp;precision=second" title="2014-03-13T14:53:20Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>. Suppress reported leaks from SurfaceFactory.
+</p>
+<p>
+I don't think that these are really leaks, it's just that they are owned
+by the static SurfaceFactory instance.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/602ca8662ae4a41fac51bb77e593f5911dcb2677" title="602ca8662ae4a41fac51bb77e593f5911dcb2677">602ca8662ae4a41fac51bb77e593f5911dcb2677</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8360.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T14%3A53%3A20Z&amp;precision=second" title="2014-03-13T14:53:20Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement copy and assignment operators for Vertex2D
+</p>
+<p>
+Refs <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/4757f08cba9be2f51428f657e0671e53945bd812" title="4757f08cba9be2f51428f657e0671e53945bd812">4757f08cba9be2f51428f657e0671e53945bd812</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8360.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T14%3A53%3A20Z&amp;precision=second" title="2014-03-13T14:53:20Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Implement copy and assignment operators for Quadrilateral.
+</p>
+<p>
+Quadrilateral specialies ConvexPolygon to avoid heap allocations
+so the copy and assignment operators need to be aware of this.
+Refs <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/af7f8bd90ed029f48eb8fb1a40c9473eb8817c8c" title="af7f8bd90ed029f48eb8fb1a40c9473eb8817c8c">af7f8bd90ed029f48eb8fb1a40c9473eb8817c8c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8360.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T14%3A53%3A20Z&amp;precision=second" title="2014-03-13T14:53:20Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Fix memory leaks in LaszloIntersection code.
+</p>
+<p>
+This only affected the cases where exceptions were thrown.
+Refs <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b12e386e0db17c4dc62c5ea9d74c914e536db129" title="b12e386e0db17c4dc62c5ea9d74c914e536db129">b12e386e0db17c4dc62c5ea9d74c914e536db129</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8360.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-13T15%3A42%3A12Z&amp;precision=second" title="2014-03-13T15:42:12Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge branch 'bugfix/8360_geometry_memory_leaks' into develop
+</p>
+<p>
+Conflicts:
+</p>
+<blockquote>
+<p>
+Code/Tools/Valgrind/GeometryTest.supp
+</p>
+</blockquote>
+<p>
+Re <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f8f823ad9e4ae47ad0e42e703e0528e2bc7ddf71" title="f8f823ad9e4ae47ad0e42e703e0528e2bc7ddf71">f8f823ad9e4ae47ad0e42e703e0528e2bc7ddf71</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="8360.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-14T08%3A49%3A03Z&amp;precision=second" title="2014-03-14T08:49:03Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Add null ptr check to deleteChain
+</p>
+<p>
+Refs <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b59de9edce40438e91a3719703ce96577c255acd" title="b59de9edce40438e91a3719703ce96577c255acd">b59de9edce40438e91a3719703ce96577c255acd</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-23">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:23" class="cnum">
+      <a href="8360.html#comment:23">comment:23</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-14T08%3A49%3A04Z&amp;precision=second" title="2014-03-14T08:49:04Z in Timeline">7 years</a> ago by Martyn Gigg
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Remove unnecessary deleteChain call.
+</p>
+<p>
+The code is structured so that curIntersection will never have been
+created if no overlap occurs.
+Refs <a class="closed ticket" href="8360.html" title="defect: Clear memory leaks in the Geometry package (closed: fixed)">#8360</a>
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/2b2341620c837e0062a525dd5c599443d16ca87b" title="2b2341620c837e0062a525dd5c599443d16ca87b">2b2341620c837e0062a525dd5c599443d16ca87b</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-24">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:24" class="cnum">
+      <a href="8360.html#comment:24">comment:24</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-14T21%3A31%3A38Z&amp;precision=second" title="2014-03-14T21:31:38Z in Timeline">7 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Look! No reported leaks in the Geometry unit tests!
+<a class="ext-link" href="https://builds.sns.gov/view/Static%20Analysis/job/ornl_valgrind_develop/valgrindResult/"><span class="icon">​</span>https://builds.sns.gov/view/Static%20Analysis/job/ornl_valgrind_develop/valgrindResult/</a>
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-17T20%3A16%3A59Z&amp;precision=second" title="2014-03-17T20:16:59Z in Timeline">7 years</a> ago
+                      by Russell Taylor
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8360?cversion=0&amp;cnum_hist=24#comment:24">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/8360?action=comment-diff&amp;cnum=24&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-25">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:25" class="cnum">
+      <a href="8360.html#comment:25">comment:25</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-24T15%3A04%3A28Z&amp;precision=second" title="2014-03-24T15:04:28Z in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Peter Peterson</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-26">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:26" class="cnum">
+      <a href="8360.html#comment:26">comment:26</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-03-24T18%3A06%3A35Z&amp;precision=second" title="2014-03-24T18:06:35Z in Timeline">7 years</a> ago by Peter Peterson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/bugfix/8360_geometry_memory_leaks'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/00846a22b09382d70b4191e8859e0b10712af158"><span class="icon">​</span>00846a22b09382d70b4191e8859e0b10712af158</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-27">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:27" class="cnum">
+      <a href="8360.html#comment:27">comment:27</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A33%3A33%2B01%3A00&amp;precision=second" title="2015-06-04T02:33:33+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9205"><span class="icon">​</span>9205</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8360?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8360?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8360?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+Places where ICAT queried
+ 
+  
+#Within the frontend
+
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\autoreduce_webapp\icat_communication.py (Main, everything else calls it)
+    def get_owned_instruments(self, user_number):
+        logger.debug("Calling ICATCommunication.get_owned_instruments")
+        if not isinstance(user_number, (int, long)):
+            raise TypeError("User number must be a number")
+
+        instruments = Set()
+        self._add_list_to_set(self.client.search("SELECT ins.instrument.fullName from InstrumentScientist ins WHERE ins.user.name = 'uows/" + str(user_number) + "'"), instruments)
+        return sorted(instruments)
+
+    '''
+        Checks if a user has any owned instruments and thus an instrument scientist
+    '''
+    def is_instrument_scientist(self, user_number):
+        logger.debug("Calling ICATCommunication.is_instrument_scientist")
+        if self.get_owned_instruments(user_number):
+            return True
+        return False
+
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\autoreduce_webapp\settings.py (ICAT auth in settings)
+
+
+Calling ICAT_Communication
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\autoreduce_webapp\backends.py
+
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\autoreduce_webapp\queue_processor.py
+  
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\autoreduce_webapp\tests.py
+
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\reduction_variables\tests.py
+
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\reduction_variables\views.py
+
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\reduction_viewer\models.py
+
+  * \GitHub\autoreduce\WebApp\ISIS\autoreduce_webapp\reduction_viewer\views.py
+
+
+  

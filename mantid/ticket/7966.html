@@ -1,0 +1,985 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #7966 ([Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="7965.html" title="Ticket #7965" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7966?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7966?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/7966?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="7967.html" title="Ticket #7967" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 7966, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="7965.html" title="Ticket #7965">Previous Ticket</a></span></li><li><span><a class="next" href="7967.html" title="Ticket #7967">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/7966.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="7966.html">Ticket #7966</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A33%3A07%2B01%3A00&amp;precision=second" title="2013-09-18T09:33:07+01:00 in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A17%3A12%2B01%3A00&amp;precision=second" title="2015-06-04T02:17:12+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">[Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Samuel+Jackson">Samuel Jackson</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.0.html">Release 3.0</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Indirect+Inelastic">Indirect Inelastic</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+              spencer.howells@…
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span><a class="closed ticket" href="7926.html" title="[IDA] ConvFit - Add Additional Sample Logs">#7926</a>, <a class="closed ticket" href="7965.html" title="[Bayes] QLines - change output WS to *_Workspace format">#7965</a></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="5421.html" title="[IDA] Bayes - Implement New Interface">#5421</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Vickie Lynch
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+New ticket from Spencer. Again this is to do with updating the Bayes scripts:
+</p>
+<blockquote class="citation">
+<p>
+<strong>IndirectBayes.py</strong>
+</p>
+<p>
+The routine JumpRun has been changed to use the Fit algorithm.
+</p>
+<p>
+<strong>JumpFit</strong>
+</p>
+<p>
+The output from the QLines program has been changed so that the fit &gt;parameters are in WS *_Workspace.
+The output from ConvFit is also in WS *_Workspace.
+Programs SSfit &amp; CEfit have been removed from the import section.
+</p>
+<p>
+<strong>Testing</strong>
+</p>
+<p>
+Use the file irs26176_graphite002_QLr_Workspace.nxs.
+</p>
+<p>
+<strong>JumpConvFit</strong>
+This is a new Py alg which uses as input the results from ConvFit.
+The fitting routine is the same as JumpFit.
+</p>
+<p>
+<strong>Testing</strong>
+</p>
+<p>
+Use the file irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.nxs.
+</p>
+<p>
+When verified, the Fortran programs SSfit_win*.pyd &amp; CEfit_win*.pyd can be removed from the system.
+</p>
+</blockquote>
+
+    </div>
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/7966/IndirectBayes.py.html" title="View attachment">IndirectBayes.py</a><a href="../raw-attachment/ticket/7966/IndirectBayes.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="29265 bytes">28.6 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A34%3A30%2B01%3A00&amp;precision=second" title="2013-09-18T09:34:30+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Updated version of IndirectBayes
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/7966/JumpFit.py.html" title="View attachment">JumpFit.py</a><a href="../raw-attachment/ticket/7966/JumpFit.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="3841 bytes">3.8 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A35%3A02%2B01%3A00&amp;precision=second" title="2013-09-18T09:35:02+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Updated version of JumpFit wrapper algorithm
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/7966/JumpConvFit.py.html" title="View attachment">JumpConvFit.py</a><a href="../raw-attachment/ticket/7966/JumpConvFit.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="3910 bytes">3.8 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A35%3A29%2B01%3A00&amp;precision=second" title="2013-09-18T09:35:29+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                New JumpConvFit wrapper algorithm (for use with testing)
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/7966/irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.nxs.html" title="View attachment">irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.nxs</a><a href="../raw-attachment/ticket/7966/irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="34962 bytes">34.1 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A35%3A55%2B01%3A00&amp;precision=second" title="2013-09-18T09:35:55+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Reference result for JumpConvFit
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/7966/irs26176_graphite002_QLr_Workspace.nxs.html" title="View attachment">irs26176_graphite002_QLr_Workspace.nxs</a><a href="../raw-attachment/ticket/7966/irs26176_graphite002_QLr_Workspace.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="57167 bytes">55.8 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A36%3A16%2B01%3A00&amp;precision=second" title="2013-09-18T09:36:16+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Reference result for JumpFit
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/7966/irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.2.nxs.html" title="View attachment">irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.2.nxs</a><a href="../raw-attachment/ticket/7966/irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.2.nxs" class="trac-rawlink" title="Download">​</a>
+       (<span title="44976 bytes">43.9 KB</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-20T13%3A43%3A29%2B01%3A00&amp;precision=second" title="2013-09-20T13:43:29+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Reference result for JumpConvFit
+              </dd>
+              <dt>
+    <a href="../attachment/ticket/7966/test_JumpFit.py.html" title="View attachment">test_JumpFit.py</a><a href="../raw-attachment/ticket/7966/test_JumpFit.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="321 bytes">321 bytes</span>) -
+      added by <em>Samuel Jackson</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-23T15%3A38%3A28%2B01%3A00&amp;precision=second" title="2013-10-23T15:38:28+01:00 in Timeline">7 years</a> ago.
+  </dt>
+              <dd>
+                Testing script for JumpFit
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A34%3A30%2B01%3A00&amp;precision=second" title="2013-09-18T09:34:30+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7966/IndirectBayes.py.html"><em>IndirectBayes.py</em></a><a href="../raw-attachment/ticket/7966/IndirectBayes.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Updated version of IndirectBayes
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A35%3A02%2B01%3A00&amp;precision=second" title="2013-09-18T09:35:02+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7966/JumpFit.py.html"><em>JumpFit.py</em></a><a href="../raw-attachment/ticket/7966/JumpFit.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Updated version of JumpFit wrapper algorithm
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A35%3A29%2B01%3A00&amp;precision=second" title="2013-09-18T09:35:29+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7966/JumpConvFit.py.html"><em>JumpConvFit.py</em></a><a href="../raw-attachment/ticket/7966/JumpConvFit.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+New JumpConvFit wrapper algorithm (for use with testing)
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A35%3A55%2B01%3A00&amp;precision=second" title="2013-09-18T09:35:55+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7966/irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.nxs.html"><em>irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.nxs</em></a><a href="../raw-attachment/ticket/7966/irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Reference result for JumpConvFit
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T09%3A36%3A16%2B01%3A00&amp;precision=second" title="2013-09-18T09:36:16+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7966/irs26176_graphite002_QLr_Workspace.nxs.html"><em>irs26176_graphite002_QLr_Workspace.nxs</em></a><a href="../raw-attachment/ticket/7966/irs26176_graphite002_QLr_Workspace.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Reference result for JumpFit
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="7966.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T12%3A27%3A49%2B01%3A00&amp;precision=second" title="2013-09-18T12:27:49+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Swapping JumpFit to use fit parameters from workspace.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7b34145e83ba0ec000329dd66a412d6aa1b4d54a" title="7b34145e83ba0ec000329dd66a412d6aa1b4d54a">7b34145e83ba0ec000329dd66a412d6aa1b4d54a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="7966.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T12%3A27%3A50%2B01%3A00&amp;precision=second" title="2013-09-18T12:27:50+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Updated JumpFit to use Fit algorithm.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/45e473bc3ce3ee1e2cf8a9c76d14fa5e5dc899c1" title="45e473bc3ce3ee1e2cf8a9c76d14fa5e5dc899c1">45e473bc3ce3ee1e2cf8a9c76d14fa5e5dc899c1</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="7966.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T12%3A27%3A50%2B01%3A00&amp;precision=second" title="2013-09-18T12:27:50+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Add new JumpConvFit algorithm to Mantid.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/567aeaac30de4537619b8fae2819bf0c4314e4f4" title="567aeaac30de4537619b8fae2819bf0c4314e4f4">567aeaac30de4537619b8fae2819bf0c4314e4f4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="7966.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T14%3A29%3A35%2B01%3A00&amp;precision=second" title="2013-09-18T14:29:35+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Moved JumpFit to separate file to avoid Fortran error.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/c1a9ed200a3bd6ed62a18fd0885d39f17cfd96f3" title="c1a9ed200a3bd6ed62a18fd0885d39f17cfd96f3">c1a9ed200a3bd6ed62a18fd0885d39f17cfd96f3</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="7966.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T14%3A29%3A35%2B01%3A00&amp;precision=second" title="2013-09-18T14:29:35+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Fixed import in JumpConvFit.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/def9da568e1d35a7884b8164130e35a00c58e9f6" title="def9da568e1d35a7884b8164130e35a00c58e9f6">def9da568e1d35a7884b8164130e35a00c58e9f6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="7966.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T14%3A29%3A35%2B01%3A00&amp;precision=second" title="2013-09-18T14:29:35+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Fixed one last import
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/b465d206129943c436773e250237412f203c19c9" title="b465d206129943c436773e250237412f203c19c9">b465d206129943c436773e250237412f203c19c9</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="7966.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T15%3A09%3A04%2B01%3A00&amp;precision=second" title="2013-09-18T15:09:04+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocked By</strong>
+        <em>7926</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="7966.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-18T17%3A01%3A03%2B01%3A00&amp;precision=second" title="2013-09-18T17:01:03+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Update JumpFit to accept workspace file.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7f0889792e60e00cf6179293e7fd539143885a60" title="7f0889792e60e00cf6179293e7fd539143885a60">7f0889792e60e00cf6179293e7fd539143885a60</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="7966.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T09%3A31%3A13%2B01%3A00&amp;precision=second" title="2013-09-19T09:31:13+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Updating JumpConvFit to work with new workspace.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/7977654d027be23b92d798faafd6274cf8b3a306" title="7977654d027be23b92d798faafd6274cf8b3a306">7977654d027be23b92d798faafd6274cf8b3a306</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="7966.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T14%3A32%3A41%2B01%3A00&amp;precision=second" title="2013-09-19T14:32:41+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Move JumpFit imports into PyExec.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/231d550885bbe008265922af115340d1fcd07e24" title="231d550885bbe008265922af115340d1fcd07e24">231d550885bbe008265922af115340d1fcd07e24</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="7966.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-19T14%3A53%3A32%2B01%3A00&amp;precision=second" title="2013-09-19T14:53:32+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Updated JumpFit system test.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/22b29c2f824afc7b41346f4bcb15359ce48fdec4" title="22b29c2f824afc7b41346f4bcb15359ce48fdec4">22b29c2f824afc7b41346f4bcb15359ce48fdec4</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-20T13%3A43%3A29%2B01%3A00&amp;precision=second" title="2013-09-20T13:43:29+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7966/irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.2.nxs.html"><em>irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.2.nxs</em></a><a href="../raw-attachment/ticket/7966/irs26176_graphite002_conv_1LFitF_s0_to_16_Workspace.2.nxs" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Reference result for JumpConvFit
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="7966.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-20T13%3A52%3A54%2B01%3A00&amp;precision=second" title="2013-09-20T13:52:54+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Corrected spectrum index.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fe29a257ff5ad87c0f07f42d078fecf403ac1045" title="fe29a257ff5ad87c0f07f42d078fecf403ac1045">fe29a257ff5ad87c0f07f42d078fecf403ac1045</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="7966.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-20T13%3A57%3A52%2B01%3A00&amp;precision=second" title="2013-09-20T13:57:52+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>To Tester</strong>
+</p>
+<p>
+This ticket should be tested after tickets <a class="closed ticket" href="7926.html" title="enhancement: [IDA] ConvFit - Add Additional Sample Logs (closed: fixed)">#7926</a>, <a class="closed ticket" href="7965.html" title="enhancement: [Bayes] QLines - change output WS to *_Workspace format (closed: fixed)">#7965</a> have been verified as this program takes output *_Workspace from running QLines or a sequential ConvFit as input.
+</p>
+<p>
+There is a QLines *_Workspace in the system tests you can use for testing. ConvFit output can be created by following the instructions here: 
+</p>
+<p>
+<a href="http://www.mantidproject.org/Indirect:Indirect_Data_Analysis#Running_ConvFit">http://www.mantidproject.org/Indirect:Indirect_Data_Analysis#Running_ConvFit</a>
+</p>
+<p>
+Just check that it works and that the system tests are passing. I've attached a testing script that you can use to run the routine and play with the parameters.
+</p>
+<p>
+The system tests have also been updated for this ticket so you'll need to merge the corresponding branch in the <strong>system tests</strong> into master at the same time as verifying this ticket.
+</p>
+
+    </div>
+
+                <div class="trac-lastedit ">
+                  Last edited <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-23T15%3A42%3A52%2B01%3A00&amp;precision=second" title="2013-10-23T15:42:52+01:00 in Timeline">7 years</a> ago
+                      by Samuel Jackson
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/7966?cversion=0&amp;cnum_hist=13#comment:13">previous</a>)
+                    (<a href="https://trac.mantidproject.org/mantid/ticket/7966?action=comment-diff&amp;cnum=13&amp;version=1">diff</a>)
+                </div>
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="7966.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-23T15%3A10%3A07%2B01%3A00&amp;precision=second" title="2013-09-23T15:10:07+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Refactoring JumpFit code for integration into interface.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/5ac04e317180dd611c248dce244cc977b98c487f" title="5ac04e317180dd611c248dce244cc977b98c487f">5ac04e317180dd611c248dce244cc977b98c487f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="7966.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-09-24T09%3A06%3A57%2B01%3A00&amp;precision=second" title="2013-09-24T09:06:57+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Fixing JumpFit system tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/3b57072d45760da67edc694d2e042562bf73d341" title="3b57072d45760da67edc694d2e042562bf73d341">3b57072d45760da67edc694d2e042562bf73d341</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="7966.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-18T09%3A31%3A33%2B01%3A00&amp;precision=second" title="2013-10-18T09:31:33+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> Removal of wrapper algorithms.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/52b06dfb69ffd827adc6787cd6755fd2dd50bbda" title="52b06dfb69ffd827adc6787cd6755fd2dd50bbda">52b06dfb69ffd827adc6787cd6755fd2dd50bbda</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="7966.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-23T15%3A33%3A39%2B01%3A00&amp;precision=second" title="2013-10-23T15:33:39+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="7966.html" title="enhancement: [Bayes] Jumpfit - replace Bayes fortran fitting program with Fit algorithm (closed: fixed)">#7966</a> refactored JumpFit code.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/fa5582311deeaec6928c1018c2aba893993a24f6" title="fa5582311deeaec6928c1018c2aba893993a24f6">fa5582311deeaec6928c1018c2aba893993a24f6</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-23T15%3A38%3A28%2B01%3A00&amp;precision=second" title="2013-10-23T15:38:28+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/7966/test_JumpFit.py.html"><em>test_JumpFit.py</em></a><a href="../raw-attachment/ticket/7966/test_JumpFit.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Testing script for JumpFit
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="7966.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-23T17%3A01%3A53%2B01%3A00&amp;precision=second" title="2013-10-23T17:01:53+01:00 in Timeline">7 years</a> ago by Samuel Jackson
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="7966.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-24T12%3A50%3A45%2B01%3A00&amp;precision=second" title="2013-10-24T12:50:45+01:00 in Timeline">7 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Vickie Lynch</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="7966.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-24T14%3A05%3A36%2B01%3A00&amp;precision=second" title="2013-10-24T14:05:36+01:00 in Timeline">7 years</a> ago by Vickie Lynch
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/feature/7966_jumpfit_fortran_with_fit'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/c5747658f33f4b9005338d6ca8e4b44c289b5029"><span class="icon">​</span>c5747658f33f4b9005338d6ca8e4b44c289b5029</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="7966.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2013-10-24T14%3A05%3A44%2B01%3A00&amp;precision=second" title="2013-10-24T14:05:44+01:00 in Timeline">7 years</a> ago by Vickie Lynch
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Merge remote branch 'origin/feature/7966_jumpfit_fortran_with_fit'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/systemtests/commit/fa98a39a9896cfcd2724d6b924fa11db1edd66eb"><span class="icon">​</span>fa98a39a9896cfcd2724d6b924fa11db1edd66eb</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-22">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:22" class="cnum">
+      <a href="7966.html#comment:22">comment:22</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A17%3A12%2B01%3A00&amp;precision=second" title="2015-06-04T02:17:12+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/8811"><span class="icon">​</span>8811</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7966?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7966?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/7966?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

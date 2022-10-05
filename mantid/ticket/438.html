@@ -1,0 +1,772 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #438 (Correct handling of distributions)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="437.html" title="Ticket #437" />
+        <link rel="last" href="525.html" title="Ticket #525" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/438?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/438?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/438?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="up" href="https://trac.mantidproject.org/mantid/report/27?asc=1&amp;page=1" />
+        <link rel="next" href="439.html" title="Ticket #439" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 438, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="437.html" title="Ticket #437">Previous Ticket</a></span></li><li><a href="https://trac.mantidproject.org/mantid/report/27?asc=1&amp;page=1">Back to Query</a></li><li class="last"><span><a class="next" href="439.html" title="Ticket #439">Next Ticket</a> &rarr;</span></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="438.html">Ticket #438</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-02-25T13%3A54%3A01Z&amp;precision=second" title="2009-02-25T13:54:01Z in Timeline">12 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T21%3A53%3A35%2B01%3A00&amp;precision=second" title="2015-06-03T21:53:35+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Correct handling of distributions</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Nick+Draper">Nick Draper</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Russell+Taylor">Russell Taylor</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=critical">critical</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Iteration&#32;21.html">Iteration 21</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component"></a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <br style="clear: both" />
+  </div>
+</div>
+          
+    <div id="attachments">
+        <h2 class="foldable">Attachments</h2>
+        <div>
+          <dl class="attachments">
+              <dt>
+    <a href="../attachment/ticket/438/rob-distributionproblem.py.html" title="View attachment">rob-distributionproblem.py</a><a href="../raw-attachment/ticket/438/rob-distributionproblem.py" class="trac-rawlink" title="Download">​</a>
+       (<span title="991 bytes">991 bytes</span>) -
+      added by <em>Russell Taylor</em> <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-02-04T14%3A16%3A37Z&amp;precision=second" title="2010-02-04T14:16:37Z in Timeline">11 years</a> ago.
+  </dt>
+              <dd>
+                The file showing the problem. Should end up with a flat line - didn't used to.
+              </dd>
+          </dl>
+          
+        </div>
+    </div>
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="438.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-03-04T13%3A13%3A38Z&amp;precision=second" title="2009-03-04T13:13:38Z in Timeline">12 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Priority</strong>
+        changed from <em>major</em> to <em>minor</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="438.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-04-16T16%3A41%3A46%2B01%3A00&amp;precision=second" title="2009-04-16T16:41:46+01:00 in Timeline">11 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 16</em> to <em>Iteration 17</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Batch move of tickets to Iteration 17
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="438.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-05-22T11%3A16%3A44%2B01%3A00&amp;precision=second" title="2009-05-22T11:16:44+01:00 in Timeline">11 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 17</em> to <em>Iteration 18</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved as part of iteration end
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="438.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-07-30T17%3A27%3A29%2B01%3A00&amp;precision=second" title="2009-07-30T17:27:29+01:00 in Timeline">11 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 18</em> to <em>Iteration 19</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved as part of iteration 18 end
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="438.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-08-26T13%3A09%3A27%2B01%3A00&amp;precision=second" title="2009-08-26T13:09:27+01:00 in Timeline">11 years</a> ago by Nick Draper
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+We encountered an issue in the GEM analysis where once the data was corrected against vanadium with a divide the data was essentially a distribution without being marked as one.  In this state rebin commands led to unexpedted shifting of the data.
+</p>
+<p>
+Should divide mark the workspace as a distribution if the units match?
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="438.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-09-23T15%3A50%3A12%2B01%3A00&amp;precision=second" title="2009-09-23T15:50:12+01:00 in Timeline">11 years</a> ago by Nick Draper
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Iteration 19</em> to <em>Iteration 20</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Moved as part of the end of Iteration 19
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="438.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-12-08T17%3A27%3A45Z&amp;precision=second" title="2009-12-08T17:27:45Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[3573]</a>) The rebinNonDispersive was found to be buggy in the context it was being used in the SANS analysis. In fact, the rebin function does the same job if the data are flagged as a distribution so change to using that instead (and modify the rebin function to work with cumulative rebinning as the rebinHistogram one does). Re <a class="closed ticket" href="438.html" title="defect: Correct handling of distributions (closed: fixed)">#438</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="438.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-12-09T13%3A49%3A06Z&amp;precision=second" title="2009-12-09T13:49:06Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[3580]</a>) Change DiffractionFocussing2 to use rebin instead of rebinNonDispersive in the same way as Q1D. Tests show that it makes no difference to the result (well &lt; 10<sup>-11 anyway). Re <a class="closed ticket" href="438.html" title="defect: Correct handling of distributions (closed: fixed)">#438</a>.
+</sup></p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="438.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-12-10T15%3A22%3A59Z&amp;precision=second" title="2009-12-10T15:22:59Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[3592]</a>) Now that the last known use of RebinPreserveValue has been removed in revision <a class="missing changeset" title="No default repository defined">[3951]</a>, delete the algorithm. Re <a class="closed ticket" href="438.html" title="defect: Correct handling of distributions (closed: fixed)">#438</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="438.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-12-10T15%3A26%3A02Z&amp;precision=second" title="2009-12-10T15:26:02Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+That should have been revision <a class="missing changeset" title="No default repository defined">[3591]</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="438.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-12-10T15%3A58%3A32Z&amp;precision=second" title="2009-12-10T15:58:32Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>testing</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+I think I understand why what we're doing in the SANS analysis is OK now....
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="438.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2009-12-21T11%3A18%3A47Z&amp;precision=second" title="2009-12-21T11:18:47Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>testing</em> to <em>reopened</em>
+    </li><li>
+      <strong>Priority</strong>
+        changed from <em>minor</em> to <em>critical</em>
+    </li><li>
+      <strong>type</strong>
+        changed from <em>enhancement</em> to <em>defect</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li><li>
+      <strong>Summary</strong>
+        changed from <em>SANS: Correct handling of distributions</em> to <em>Correct handling of distributions</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+OK, we still have an issue to sort out here, and I think I know what it is. Basically, there are (at least) two 'kinds' of distribution: one where the data's been divided by the bin width and another where it's dimensionless (e.g. after a divide). Our rebin gets things right, but ConvertUnits doesn't. Genie accounts for this in it's unit conversion routine (it doesn't multiply by the bin width if it's dimensionless).
+</p>
+<p>
+So there are several things we need to do:
+</p>
+<ul><li>Fix ConvertUnits
+</li><li>Perhaps enhance our YUnit to be more than just a string
+</li><li>Enhance Divide (&amp; multiply?) to adjust the Y unit and distribution flag in the general case.
+</li></ul><p>
+This all follow from the following from Rob Dalgliesh:
+</p>
+<blockquote>
+<p>
+I've been trying replicate data extraction I can do in openGenie using
+</p>
+</blockquote>
+<p>
+Mantid and have come across a show stopper....
+</p>
+<blockquote>
+<p>
+The script below illustrates the problem I have.
+</p>
+</blockquote>
+<blockquote>
+<p>
+Essentially if I take a data set full of 1s I should be able to convert
+</p>
+</blockquote>
+<p>
+to Q in distribution form and still get a straight line.
+</p>
+<blockquote>
+<p>
+This isn't the case (plot "test1" to see). It looks like the division by bin size is wrong as you get a logarithmic increase in the data.
+</p>
+<pre class="wiki">######################################################################
+#Python Script Generated by Algorithm History Display 
+######################################################################
+LoadRaw(Filename="W:/RawFiles/OFFSPEC00005588.raw",OutputWorkspace="OFFSPEC00005588",LoadLogFiles="0")
+ConvertUnits(InputWorkspace="OFFSPEC00005588",OutputWorkspace="5588lambda",Target="Wavelength")
+CropWorkspace(InputWorkspace="5588lambda",OutputWorkspace="5588spec113",StartWorkspaceIndex="113",EndWorkspaceIndex="113")
+Divide(LHSWorkspace="5588spec113",RHSWorkspace="5588spec113",OutputWorkspace="unitywksp")
+ReplaceSpecialValues(InputWorkspace="unitywksp",OutputWorkspace="unitywksp",NaNValue="1",NaNError="1",InfinityValue="1",InfinityError="1")
+ConvertUnits(InputWorkspace="unitywksp",OutputWorkspace="unityQ",Target="MomentumTransfer")
+Rebin(InputWorkspace="unityQ",OutputWorkspace="test1",Params="0.007,-0.01,5")
+ConvertToDistribution(Workspace="test1")
+</pre></blockquote>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="438.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-01-05T10%3A24%3A18Z&amp;precision=second" title="2010-01-05T10:24:18Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>accepted</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="438.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-01-11T16%3A44%3A58Z&amp;precision=second" title="2010-01-11T16:44:58Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[3672]</a>) Index error in SimpleIntegration when the input workspace is a distribution. Re <a class="closed ticket" href="438.html" title="defect: Correct handling of distributions (closed: fixed)">#438</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="438.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-01-21T14%3A48%3A51Z&amp;precision=second" title="2010-01-21T14:48:51Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[3730]</a>) Changes so that we handle distributions better. In particular, Divide now changes its output workspace to be a dimensionless distribution if the inputs have the same YUnit. ConvertUnits handles dimensionless distributions correctly. A new field is added to MatrixWorkspace (YUnitLabel) which holds a descriptive string for plotting. m_YUnit should only really be Counts or nothing. Re <a class="closed ticket" href="438.html" title="defect: Correct handling of distributions (closed: fixed)">#438</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="438.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-01-21T15%3A31%3A16Z&amp;precision=second" title="2010-01-21T15:31:16Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[3732]</a>) Fix test. Re <a class="closed ticket" href="438.html" title="defect: Correct handling of distributions (closed: fixed)">#438</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="438.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-01-22T10%3A53%3A19Z&amp;precision=second" title="2010-01-22T10:53:19Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[3739]</a>) Update reference results following changes to handling of distributions. Re <a class="closed ticket" href="438.html" title="defect: Correct handling of distributions (closed: fixed)">#438</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="438.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-02-04T13%3A46%3A41Z&amp;precision=second" title="2010-02-04T13:46:41Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="missing changeset" title="No default repository defined">[3805]</a>) Remove ability to flip workspace distribution flag from Python. Shouldn't be necessary any more. Re <a class="closed ticket" href="438.html" title="defect: Correct handling of distributions (closed: fixed)">#438</a>.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change">
+                <h3 class="change">
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-02-04T14%3A16%3A37Z&amp;precision=second" title="2010-02-04T14:16:37Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Attachment</strong>
+        <a href="../attachment/ticket/438/rob-distributionproblem.py.html"><em>rob-distributionproblem.py</em></a><a href="../raw-attachment/ticket/438/rob-distributionproblem.py" title="Download" class="trac-rawlink">​</a>
+          added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+The file showing the problem. Should end up with a flat line - didn't used to.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="438.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-02-04T14%3A17%3A08Z&amp;precision=second" title="2010-02-04T14:17:08Z in Timeline">11 years</a> ago by Russell Taylor
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>accepted</em> to <em>testing</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="438.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2010-02-05T09%3A45%3A15Z&amp;precision=second" title="2010-02-05T09:45:15Z in Timeline">11 years</a> ago by Martyn Gigg
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>testing</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="438.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-03T21%3A53%3A35%2B01%3A00&amp;precision=second" title="2015-06-03T21:53:35+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/1286"><span class="icon">​</span>1286</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/438?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/438?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/438?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>

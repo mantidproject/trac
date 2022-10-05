@@ -1,0 +1,779 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+  
+
+  
+
+
+  <head>
+    <title>
+      #8839 (Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup)
+     – Mantid Project
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if IE]><script type="text/javascript">
+      if (/^#__msie303:/.test(window.location.hash))
+        window.location.replace(window.location.hash.replace(/^#__msie303:/, '#'));
+    </script><![endif]-->
+        <link rel="search" href="../search.html" />
+        <link rel="prev" href="8838.html" title="Ticket #8838" />
+        <link rel="last" href="11888.html" title="Ticket #11888" />
+        <link rel="help" href="../wiki/TracGuide.html" />
+        <link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8839?format=csv" type="text/csv" class="csv" title="Comma-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8839?format=tab" type="text/tab-separated-values" class="tab" title="Tab-delimited Text" /><link rel="alternate" href="https://trac.mantidproject.org/mantid/ticket/8839?format=rss" type="application/rss+xml" class="rss" title="RSS Feed" />
+        <link rel="next" href="8840.html" title="Ticket #8840" />
+        <link rel="start" href="../wiki.html" />
+        <link rel="stylesheet" href="../chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="../chrome/common/css/ticket.css" type="text/css" />
+        <link rel="first" href="1.html" title="Ticket #1" />
+        <link rel="shortcut icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+        <link rel="icon" href="../chrome/common/trac.ico" type="image/x-icon" />
+      <link type="application/opensearchdescription+xml" rel="search" href="../search/opensearch" title="Search Mantid Project" />
+    <script type="text/javascript">
+      var auto_preview_timeout=2.0;
+      var form_token="a82fe30e7bef2e30fd2838e9";
+    </script>
+    <script type="text/javascript" src="../chrome/common/js/jquery.js"></script><script type="text/javascript" src="../chrome/common/js/babel.js"></script><script type="text/javascript" src="../chrome/common/js/messages/en_US.js"></script><script type="text/javascript" src="../chrome/common/js/trac.js"></script><script type="text/javascript" src="../chrome/common/js/search.js"></script><script type="text/javascript" src="../chrome/common/js/folding.js"></script><script type="text/javascript" src="../chrome/common/js/wikitoolbar.js"></script><script type="text/javascript" src="../chrome/common/js/resizer.js"></script><script type="text/javascript" src="../chrome/common/js/auto_preview.js"></script>
+    <!--[if lt IE 7]>
+    <script type="text/javascript" src="/mantid/chrome/common/js/ie_pre7_hacks.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        $("div.description").find("h1,h2,h3,h4,h5,h6").addAnchor(_("Link to this section"));
+        $(".foldable").enableFolding(false, true);
+        var args = {realm: "ticket", id: 8839, escape_newlines: 0}
+        $("#comment").autoPreview("/mantid/wiki_render", args, function(textarea, text, rendered) {
+            $("#ticketchange div.comment").html(rendered);
+            if (rendered)
+              $("#ticketchange").show();
+            else if ($("#ticketchange ul.changes").length == 0)
+              $("#ticketchange").hide();
+        });
+        $("#trac-comment-editor textarea").autoPreview("/mantid/wiki_render", args,
+                                                       function(textarea, text, rendered) {
+          var comment = $("#trac-comment-editor").next("div.comment");
+          comment.html(rendered);
+          if (rendered)
+            comment.show();
+          else
+            comment.hide();
+        });
+        $("#modify").parent().toggleClass("collapsed");
+        $(".trac-topnav a").click(function() { $("#modify").parent().removeClass("collapsed"); });
+        /* only enable control elements for the currently selected action */
+        var actions = $("#action input[name='action']");
+        function updateActionFields() {
+          actions.each(function () {
+            $(this).siblings().find("*[id]").enable($(this).checked());
+            $(this).siblings().filter("*[id]").enable($(this).checked());
+          });
+        }
+        actions.click(updateActionFields);
+        updateActionFields();
+      });
+    </script>
+    <link rel="stylesheet" type="text/css" href="../chrome/site/style.css" />
+  </head>
+  <body>
+    <div id="banner">
+      <div id="header">
+        <a id="logo" href="http://www.mantidproject.org/"><img src="../chrome/site/mantid_logo_with_name.png" alt="Mantid Logo" width="250" /></a>
+      </div>
+      <form id="search" action="../search.html" method="get">
+        <div>
+          <label for="proj-search">Search:</label>
+          <input type="text" id="proj-search" name="q" size="18" value="" />
+          <input type="submit" value="Search" />
+        </div>
+      </form>
+      <div id="metanav" class="nav">
+    <ul>
+      <li class="first"><a href="https://trac.mantidproject.org/mantid/login">Login</a></li><li><a href="../prefs.html">Preferences</a></li><li><a href="../wiki/TracGuide.html">Help/Guide</a></li><li class="last"><a href="../about.html">About Trac</a></li>
+    </ul>
+  </div>
+    </div>
+    <div id="mainnav" class="nav">
+    <ul>
+      <li class="first"><a href="../wiki.html">Wiki</a></li><li><a href="../timeline.html">Timeline</a></li><li><a href="../roadmap.html">Roadmap</a></li><li class="active"><a href="../report.html">View Tickets</a></li><li class="last"><a href="../search.html">Search</a></li>
+    </ul>
+  </div>
+    <div id="main">
+      <div id="ctxtnav" class="nav">
+        <h2>Context Navigation</h2>
+          <ul>
+              <li class="first"><span>&larr; <a class="prev" href="8838.html" title="Ticket #8838">Previous Ticket</a></span></li><li><span><a class="next" href="8840.html" title="Ticket #8840">Next Ticket</a> &rarr;</span></li><li class="last"><a href="../depgraph/8839.html">Depgraph</a></li>
+          </ul>
+        <hr />
+      </div>
+    <div id="content" class="ticket">
+      <h1 id="trac-ticket-title">
+          <a href="8839.html">Ticket #8839</a>
+          <span class="status">(closed: fixed)</span>
+      </h1>
+      <div id="ticket">
+  <div class="date">
+    <p>Opened <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T14%3A43%3A52Z&amp;precision=second" title="2014-02-03T14:43:52Z in Timeline">7 years</a> ago</p>
+    <p>Last modified <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A53%3A20%2B01%3A00&amp;precision=second" title="2015-06-04T02:53:20+01:00 in Timeline">5 years</a> ago</p>
+  </div>
+  <h2 class="summary searchable">Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup</h2>
+  <table class="properties">
+    <tr>
+      <th id="h_reporter">Reported by:</th>
+      <td headers="h_reporter" class="searchable">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;reporter=Arturs+Bekasovs">Arturs Bekasovs</a>
+      </td>
+      <th id="h_owner">Owned by:</th>
+      <td headers="h_owner">
+        <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;owner=Arturs+Bekasovs">Arturs Bekasovs</a>
+      </td>
+    </tr>
+    <tr>
+        <th id="h_priority">
+          Priority:
+        </th>
+        <td headers="h_priority">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;priority=major">major</a>
+        </td>
+        <th id="h_milestone">
+          Milestone:
+        </th>
+        <td headers="h_milestone">
+              <a class="closed milestone" href="../milestone/Release&#32;3.2.html">Release 3.2</a>
+        </td>
+    </tr><tr>
+        <th id="h_component">
+          Component:
+        </th>
+        <td headers="h_component">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;component=Muon">Muon</a>
+        </td>
+        <th id="h_keywords">
+          Keywords:
+        </th>
+        <td headers="h_keywords" class="searchable">
+              <a href="https://trac.mantidproject.org/mantid/query?status=!closed&amp;keywords=~Maintenance">Maintenance</a>
+        </td>
+    </tr><tr>
+        <th id="h_cc">
+          Cc:
+        </th>
+        <td headers="h_cc" class="searchable">
+        </td>
+        <th id="h_blockedby">
+          Blocked By:
+        </th>
+        <td headers="h_blockedby"><span></span></td>
+    </tr><tr>
+        <th id="h_blocking">
+          Blocking:
+        </th>
+        <td headers="h_blocking"><span><a class="closed ticket" href="8835.html" title="AutoGroup option of LoadMuonNexus doesn't work for multi-period data">#8835</a></span></td>
+        <th id="h_tester">
+          Tester:
+        </th>
+        <td headers="h_tester">
+              Karl Palmen
+        </td>
+    </tr>
+  </table>
+  <div class="description">
+    <h3 id="comment:description">
+      Description
+    </h3>
+    <div class="searchable">
+      <p>
+Currently AutoGroup is implemented as a separate piece of code. For sake of consistency, it should be better to use loaded grouping (which we get for DetectorGroupingTable output option) and just pass it to MuonGroupDetectors. It will allow to localize any future problems and avoid something like this: <a class="closed ticket" href="8835.html" title="defect: AutoGroup option of LoadMuonNexus doesn't work for multi-period data (closed: fixed)">#8835</a>.
+</p>
+<p>
+Should make sure the functionality is covered by unit tests before making any changes.
+</p>
+
+    </div>
+  </div>
+</div>
+          
+
+        <div>
+          <h2 class="foldable">Change History</h2>
+          <div id="changelog">
+              <div class="change" id="trac-change-1">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:1" class="cnum">
+      <a href="8839.html#comment:1">comment:1</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-03T14%3A44%3A45Z&amp;precision=second" title="2014-02-03T14:44:45Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Blocking</strong>
+        <em>8835</em> added
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+(In <a class="closed ticket" href="8835.html" title="defect: AutoGroup option of LoadMuonNexus doesn't work for multi-period data (closed: fixed)">#8835</a>) This problem should be solved when I change the way it works.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-2">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:2" class="cnum">
+      <a href="8839.html#comment:2">comment:2</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-06T10%3A58%3A38Z&amp;precision=second" title="2014-02-06T10:58:38Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Milestone</strong>
+        changed from <em>Backlog</em> to <em>Release 3.2</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-3">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:3" class="cnum">
+      <a href="8839.html#comment:3">comment:3</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T12%3A12%3A45Z&amp;precision=second" title="2014-02-12T12:12:45Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>new</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8839.html" title="enhancement: Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup (closed: fixed)">#8839</a>. Add tests for AutoGroup option.
+</p>
+<p>
+Single period one is passing. Multi period one is not, which is the
+problem in the current code (<a class="closed ticket" href="8835.html" title="defect: AutoGroup option of LoadMuonNexus doesn't work for multi-period data (closed: fixed)">#8835</a>).
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/f2a087e8c9dc871909fea38dc77b13101327f0e2" title="f2a087e8c9dc871909fea38dc77b13101327f0e2">f2a087e8c9dc871909fea38dc77b13101327f0e2</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-4">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:4" class="cnum">
+      <a href="8839.html#comment:4">comment:4</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T12%3A12%3A45Z&amp;precision=second" title="2014-02-12T12:12:45Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8839.html" title="enhancement: Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup (closed: fixed)">#8839</a>. Remove old grouping code and clean-up a bit.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/061be3e42a6579b95628b67c6c762d2fc688be5a" title="061be3e42a6579b95628b67c6c762d2fc688be5a">061be3e42a6579b95628b67c6c762d2fc688be5a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-5">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:5" class="cnum">
+      <a href="8839.html#comment:5">comment:5</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T12%3A12%3A45Z&amp;precision=second" title="2014-02-12T12:12:45Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8839.html" title="enhancement: Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup (closed: fixed)">#8839</a>. Remove commented code from the tests.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/bf6ef80524f8e7ee2e7e5de0325e2e7affedcf8c" title="bf6ef80524f8e7ee2e7e5de0325e2e7affedcf8c">bf6ef80524f8e7ee2e7e5de0325e2e7affedcf8c</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-6">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:6" class="cnum">
+      <a href="8839.html#comment:6">comment:6</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T12%3A12%3A45Z&amp;precision=second" title="2014-02-12T12:12:45Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8839.html" title="enhancement: Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup (closed: fixed)">#8839</a>. Refactor grouping loading method.
+</p>
+<p>
+It now returns the grouping, so that we can use it outside the method.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/456307c9dcd9142382cdc86365e2a2c9ab6da253" title="456307c9dcd9142382cdc86365e2a2c9ab6da253">456307c9dcd9142382cdc86365e2a2c9ab6da253</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-7">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:7" class="cnum">
+      <a href="8839.html#comment:7">comment:7</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T12%3A12%3A45Z&amp;precision=second" title="2014-02-12T12:12:45Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8839.html" title="enhancement: Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup (closed: fixed)">#8839</a>. Make test more robust against exceptions and fix typo.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/d7702f2fabea5a38d0d50788c511663da73e765a" title="d7702f2fabea5a38d0d50788c511663da73e765a">d7702f2fabea5a38d0d50788c511663da73e765a</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-8">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:8" class="cnum">
+      <a href="8839.html#comment:8">comment:8</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T12%3A12%3A46Z&amp;precision=second" title="2014-02-12T12:12:46Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8839.html" title="enhancement: Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup (closed: fixed)">#8839</a>. Add grouping code
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/e7351dad731281dbca99b6bd92069e8a9d11e1ff" title="e7351dad731281dbca99b6bd92069e8a9d11e1ff">e7351dad731281dbca99b6bd92069e8a9d11e1ff</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-9">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:9" class="cnum">
+      <a href="8839.html#comment:9">comment:9</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T12%3A12%3A46Z&amp;precision=second" title="2014-02-12T12:12:46Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8839.html" title="enhancement: Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup (closed: fixed)">#8839</a>. Fix the multi-period grouping.
+</p>
+<p>
+For some reason, previous implementation was returning grouped
+workspaces as OutputWorkspaceN while still returning ungrouped
+workspaces as OutputWorkspace. I don't really understand why we would
+need OutputWorkpsaceN properties at all when we can just return a
+group.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/ed2eb059262db047ceed78ad7928f97532930ffa" title="ed2eb059262db047ceed78ad7928f97532930ffa">ed2eb059262db047ceed78ad7928f97532930ffa</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-10">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:10" class="cnum">
+      <a href="8839.html#comment:10">comment:10</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T12%3A48%3A31Z&amp;precision=second" title="2014-02-12T12:48:31Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+<strong>Tester:</strong>
+</p>
+<p>
+Verify that sensible unit tests were added covering AutoGroup functionality.
+</p>
+<p>
+Make sure <em>AutoTestData</em> is in your user directories, and run the following script:
+</p>
+<div class="code"><pre>LoadMuonNexus<span class="p">(</span><span class="s">"emu00006473.nxs"</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">"emu_ungrouped"</span><span class="p">)</span>
+LoadMuonNexus<span class="p">(</span><span class="s">"emu00006473.nxs"</span><span class="p">,</span> AutoGroup<span class="o">=</span><span class="bp">True</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">"emu_grouped"</span><span class="p">)</span>
+
+LoadMuonNexus<span class="p">(</span><span class="s">"MUSR00015189.nxs"</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">"musr_ungrouped"</span><span class="p">)</span>
+LoadMuonNexus<span class="p">(</span><span class="s">"MUSR00015189.nxs"</span><span class="p">,</span> AutoGroup<span class="o">=</span><span class="bp">True</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">"musr_grouped"</span><span class="p">)</span>
+</pre></div><p>
+<em>emu_ungrouped</em> should have 32 spectra, <em>emu_grouped</em> should have 2 spectra. <strong>All</strong> of <em>musr_ungrouped</em> workspaces should have 64 spectra, and <strong>all</strong> of <em>musr_grouped</em> workspaces should have 2 spectra.
+</p>
+<p>
+Make sure you have <em>SystemTests/Data</em> in your user directories, and run the foloowing:
+</p>
+<div class="code"><pre>LoadMuonNexus<span class="p">(</span><span class="s">"emu00031895.nxs"</span><span class="p">,</span> AutoGroup<span class="o">=</span><span class="bp">True</span><span class="p">,</span> OutputWorkspace<span class="o">=</span><span class="s">"emu_no_groups"</span><span class="p">)</span>
+</pre></div><p>
+Warning saying "Unable to load grouping from the file. Grouping not applied." should be printed to the log and all of <em>emu_no_groups</em> workspaces should contain 96 detectors.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-11">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:11" class="cnum">
+      <a href="8839.html#comment:11">comment:11</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T13%3A49%3A42Z&amp;precision=second" title="2014-02-12T13:49:42Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-12">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:12" class="cnum">
+      <a href="8839.html#comment:12">comment:12</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T15%3A08%3A10Z&amp;precision=second" title="2014-02-12T15:08:10Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>reopened</em>
+    </li><li>
+      <strong>Resolution</strong>
+        <em>fixed</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Cpp-check warning: <a class="ext-link" href="http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/271/cppcheckResult/"><span class="icon">​</span>http://download.mantidproject.org/jenkins/view/Static%20Analysis/job/is_cppcheck_develop/271/cppcheckResult/</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-13">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:13" class="cnum">
+      <a href="8839.html#comment:13">comment:13</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T15%3A19%3A24Z&amp;precision=second" title="2014-02-12T15:19:24Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>reopened</em> to <em>inprogress</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Refs <a class="closed ticket" href="8839.html" title="enhancement: Refactor LoadMuonNexus to use MuonGroupDetectors for AutoGroup (closed: fixed)">#8839</a>. Remove unused variable declarations.
+</p>
+<p>
+Changeset: <a class="changeset" href="https://github.com/mantidproject/mantid/commit/0d7fe3664215ff36a979ead545df35fba036ee93" title="0d7fe3664215ff36a979ead545df35fba036ee93">0d7fe3664215ff36a979ead545df35fba036ee93</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-14">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:14" class="cnum">
+      <a href="8839.html#comment:14">comment:14</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-12T16%3A59%3A40Z&amp;precision=second" title="2014-02-12T16:59:40Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>inprogress</em> to <em>verify</em>
+    </li><li>
+      <strong>Resolution</strong>
+        set to <em>fixed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-15">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:15" class="cnum">
+      <a href="8839.html#comment:15">comment:15</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T15%3A26%3A18Z&amp;precision=second" title="2014-02-14T15:26:18Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Karl Palmen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-16">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:16" class="cnum">
+      <a href="8839.html#comment:16">comment:16</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-14T16%3A27%3A14Z&amp;precision=second" title="2014-02-14T16:27:14Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>verify</em>
+    </li><li>
+      <strong>Tester</strong>
+        <em>Karl Palmen</em> deleted
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Test runs OK for first script, but the grouping was not as expected. Both musr were grouped and neither emu was grouped, but test did not tell me to check grouping.
+</p>
+<p>
+I could not run the second script to check the warning, because I could not find the file to load (emu00031895.nxs). Also because of a bug in Trac, the second script was obscured by a horizontal scroll bar and could not be seen. I got at it my replying to the comment to get at the source and then cancelling the reply.
+</p>
+<p>
+Because I can't find emu00031895.nxs even in the data archive. I pass this to testing pool.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-17">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:17" class="cnum">
+      <a href="8839.html#comment:17">comment:17</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T10%3A20%3A11Z&amp;precision=second" title="2014-02-17T10:20:11Z in Timeline">7 years</a> ago by Arturs Bekasovs
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+Following Karl's comments:
+</p>
+<blockquote class="citation">
+<p>
+Test runs OK for first script, but the grouping was not as expected. Both musr were grouped and neither emu was grouped, but test did not tell me to check grouping.
+</p>
+</blockquote>
+<p>
+When I speak about grouping I mean <strong>detector grouping</strong>, not the <strong>workspace grouping</strong>. MUSR is multi-period run (read contains multiple workspaces), EMU is single-period, and the task is to check that <strong>detector grouping</strong> is applied in both cases.
+</p>
+<blockquote class="citation">
+<p>
+I could not run the second script to check the warning, because I could not find the file to load (emu00031895.nxs).
+</p>
+</blockquote>
+<p>
+One should be able to find <em>emu00031895.nxs</em> in <em>Data</em> folder of the <em>systemtests</em> repository.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-18">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:18" class="cnum">
+      <a href="8839.html#comment:18">comment:18</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T13%3A04%3A58Z&amp;precision=second" title="2014-02-17T13:04:58Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verify</em> to <em>verifying</em>
+    </li><li>
+      <strong>Tester</strong>
+        set to <em>Karl Palmen</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-19">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:19" class="cnum">
+      <a href="8839.html#comment:19">comment:19</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T14%3A32%3A06Z&amp;precision=second" title="2014-02-17T14:32:06Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+It works, but I did get Mantid to crash when running the second script with the data of the workspace of the same name being displayed I'll create a separate ticket for this.
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-20">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:20" class="cnum">
+      <a href="8839.html#comment:20">comment:20</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2014-02-17T14%3A33%3A01Z&amp;precision=second" title="2014-02-17T14:33:01Z in Timeline">7 years</a> ago by Karl Palmen
+                </h3>
+                
+  <ul class="changes">
+    <li>
+      <strong>Status</strong>
+        changed from <em>verifying</em> to <em>closed</em>
+    </li>
+  </ul>
+    <div class="comment searchable">
+      
+      <p>
+Merge remote-tracking branch 'origin/feature/8839_loadmuonnexus_autogroup_using_muongroupdet'
+</p>
+<p>
+Full changeset: <a class="ext-link" href="https://github.com/mantidproject/mantid/commit/872f7f3aef4b417bee18ea029eb6bee59431346f"><span class="icon">​</span>872f7f3aef4b417bee18ea029eb6bee59431346f</a>
+</p>
+
+    </div>
+
+              </div>
+              <div class="change" id="trac-change-21">
+                <h3 class="change">
+                  <span class="threading">
+                    <span id="comment:21" class="cnum">
+      <a href="8839.html#comment:21">comment:21</a>
+    </span>
+                  </span>
+                  Changed <a class="timeline" href="https://trac.mantidproject.org/mantid/timeline?from=2015-06-04T02%3A53%3A20%2B01%3A00&amp;precision=second" title="2015-06-04T02:53:20+01:00 in Timeline">5 years</a> ago by Stuart Campbell
+                </h3>
+                
+    <div class="comment searchable">
+      
+      <p>
+This ticket has been transferred to github issue <a class="ext-link" href="http://github.com/mantidproject/mantid/issues/9683"><span class="icon">​</span>9683</a>
+</p>
+
+    </div>
+
+              </div>
+          </div>
+        </div>
+      <div id="help"><strong>Note:</strong> See
+        <a href="../wiki/TracTickets.html">TracTickets</a> for help on using
+        tickets.</div>
+    </div>
+    <script type="text/javascript">
+        jQuery.loadStyleSheet("/mantid/pygments/trac.css", "text/css");
+    </script>
+    <div id="altlinks">
+      <h3>Download in other formats:</h3>
+      <ul>
+        <li class="first">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8839?format=csv" class="csv">Comma-delimited Text</a>
+        </li><li>
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8839?format=tab" class="tab">Tab-delimited Text</a>
+        </li><li class="last">
+          <a rel="nofollow" href="https://trac.mantidproject.org/mantid/ticket/8839?format=rss" class="rss">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer" lang="en" xml:lang="en"><hr />
+      <a id="tracpowered" href="http://trac.edgewall.org/"><img src="../chrome/common/trac_logo_mini.png" height="30" width="107" alt="Trac Powered" /></a>
+      <p class="left">Powered by <a href="../about.html"><strong>Trac 0.12.5</strong></a><br />
+        By <a href="http://www.edgewall.org/">Edgewall Software</a>.</p>
+      <p class="right">Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a></p>
+    </div>
+  </body>
+</html>
